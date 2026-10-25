@@ -1,6 +1,7 @@
 const $ = (sel) => document.querySelector(sel);
 const SOURCE = "https://github.com/SteamDatabase/GameTracking-Deadlock";
 const STRINGS_STEP = 60;
+const MODEL_VIEWER = "https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js";
 
 const state = { index: null, build: null, file: "", q: "", showEmpty: false };
 
@@ -75,6 +76,7 @@ function renderBuildList() {
         <span class="build-row">
           <span class="build-no">${b.build}</span>
           <span class="build-size">${SIZE[b.size]}</span>
+          ${b.media ? `<span class="build-media" title="Есть модели и текстуры до/после">3D</span>` : ""}
           <span class="build-when">${shortDate.format(b.time)}</span>
         </span>
         <span class="build-line">${escapeHtml(b.headline[0] || "")}</span>
@@ -117,6 +119,7 @@ function renderBuild() {
         <input type="search" id="q" placeholder="Поиск: герой, файл, строка, параметр…" autocomplete="off" value="${escapeHtml(state.q)}">
       </label>
       <nav class="jump" aria-label="Разделы билда">
+        ${b.media ? `<a href="#sec-media">Было → стало <b>${Object.keys(b.media).length}</b></a>` : ""}
         ${visual.length ? `<a href="#sec-visual">Внешний вид <b>${visual.length}</b></a>` : ""}
         ${b.stringsTotal ? `<a href="#sec-strings">Тексты <b>${num.format(b.stringsTotal)}</b></a>` : ""}
         ${b.vdataTotal ? `<a href="#sec-params">Параметры <b>${num.format(b.vdataTotal)}</b></a>` : ""}
@@ -146,7 +149,11 @@ function renderBody() {
   const strings = b.strings.filter((r) => matches(r.key, r.old, r.new, r.file));
   const params = b.vdata.filter((e) => matches(e.key, e.name, e.hero) || e.rows.some((r) => matches(r.label, r.ctx, r.old, r.new)));
 
+  const media = Object.entries(b.media || {}).filter(([p, m]) => matches(p, m.subject));
+
   const sections = [];
+  if (media.length) sections.push(section("sec-media", "Было → стало", "Изменённые модели и текстуры прямо из файлов игры. Нажмите на карточку: 3D-модели можно крутить мышью, «до» и «после» поворачиваются вместе.",
+    `<div class="gallery">${media.map(([p, m]) => mediaTile(p, m)).join("")}</div>`));
   if (visual.length) sections.push(section("sec-visual", "Внешний вид", "Модели, текстуры, материалы и эффекты — что можно увидеть в игре. Нажмите на путь файла, чтобы скопировать его для Source 2 Viewer.",
     `<div class="subjects">${visual.map((s) => subjectCard(s)).join("")}</div>`));
   if (strings.length) sections.push(section("sec-strings", "Тексты игры", "Новые и изменённые строки английской локализации: названия, описания способностей, подсказки. Часто здесь первыми появляются будущие герои и предметы.",
@@ -202,12 +209,82 @@ function fileList(s) {
         return `<li class="file st-${f.s}">
           <span class="file-mark" title="${STATUS[f.s][1]}">${STATUS[f.s][0]}</span>
           <button class="file-path" data-copy="${escapeHtml(f.p)}" title="Скопировать путь"><span class="dir">${escapeHtml(f.p.slice(0, cut))}</span>${escapeHtml(f.p.slice(cut))}</button>
+          ${state.build.media?.[f.p] ? `<button class="file-view" data-media="${escapeHtml(f.p)}">смотреть</button>` : ""}
           <span class="file-size">${bytes(f.size)}</span>
         </li>`;
       }).join("")}</ul>
       ${g.files.length < total ? `<p class="more-note">Показаны первые ${g.files.length} из ${num.format(total)} — остальные в <a href="${SOURCE}/commit/${state.build.sha}" target="_blank" rel="noopener">полном diff</a>.</p>` : ""}
     </div>`;
   }).join("");
+}
+
+// ── Before / after media ───────────────────────────────
+const mediaUrl = (name) => `media/${state.build.mediaTag}/${name}`;
+
+function mediaTile(path, m) {
+  const name = path.slice(path.lastIndexOf("/") + 1).replace(/\.\w+_c$/, "").replaceAll("_", " ");
+  const label = m.status === "a" ? "новое" : m.before ? "до / после" : "после";
+  const thumb = m.kind === "texture"
+    ? `<img src="${mediaUrl(m.after || m.before)}" alt="" loading="lazy">`
+    : `<span class="tile-3d" aria-hidden="true">3D</span>`;
+  return `<button class="tile tile-${m.kind}" data-media="${escapeHtml(path)}" title="${escapeHtml(path)}">
+    <span class="tile-thumb">${thumb}</span>
+    <span class="tile-name">${escapeHtml(name)}</span>
+    <span class="tile-meta"><span class="str-badge ${m.status === "a" ? "new" : ""}">${label}</span> ${escapeHtml(m.subject)}</span>
+  </button>`;
+}
+
+let viewerLoaded;
+function loadModelViewer() {
+  viewerLoaded ||= new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.type = "module";
+    s.src = MODEL_VIEWER;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.append(s);
+  });
+  return viewerLoaded;
+}
+
+function openMedia(path) {
+  const m = state.build.media[path];
+  const sides = [["before", "До"], ["after", m.status === "a" ? "Новое" : "После"]].filter(([k]) => m[k]);
+  const pane = ([key, title]) => `<figure class="cmp-pane">
+    <figcaption>${title}</figcaption>
+    ${m.kind === "model"
+      ? `<model-viewer src="${mediaUrl(m[key])}" camera-controls auto-rotate shadow-intensity="1" exposure="1.1" interaction-prompt="none"></model-viewer>`
+      : `<img src="${mediaUrl(m[key])}" alt="${title}">`}
+  </figure>`;
+  const dlg = $("#media-dialog");
+  dlg.innerHTML = `<div class="cmp">
+    <header class="cmp-head">
+      <strong>${escapeHtml(path.slice(path.lastIndexOf("/") + 1))}</strong>
+      <button class="link-btn" data-copy="${escapeHtml(path)}">${escapeHtml(path)}</button>
+      <button class="cmp-close" aria-label="Закрыть">×</button>
+    </header>
+    <div class="cmp-panes cmp-${sides.length}">${sides.map(pane).join("")}</div>
+    ${m.kind === "model" ? `<p class="more-note">Мышь — вращать, колесо — приблизить. Материалы упрощены: без шейдеров игры.</p>` : ""}
+  </div>`;
+  dlg.showModal();
+  if (m.kind === "model") loadModelViewer().then(() => syncCameras(dlg)).catch(() => toast("Не удалось загрузить 3D-просмотрщик"));
+}
+
+// Turning one model turns the other, so both stay comparable.
+function syncCameras(root) {
+  const views = [...root.querySelectorAll("model-viewer")];
+  for (const v of views) {
+    v.addEventListener("camera-change", (e) => {
+      if (e.detail.source !== "user-interaction") return;
+      for (const other of views) {
+        if (other === v) continue;
+        other.autoRotate = false;
+        other.cameraOrbit = v.getCameraOrbit().toString();
+        other.fieldOfView = v.getFieldOfView() + "deg";
+      }
+      v.autoRotate = false;
+    });
+  }
 }
 
 // ── Game strings ───────────────────────────────────────
@@ -327,6 +404,20 @@ function wireEvents() {
     selectBuild(btn.dataset.file).catch(showError);
     if (matchMedia("(max-width: 960px)").matches) $("#build").scrollIntoView({ behavior: "smooth" });
   });
+  const dlg = $("#media-dialog");
+  dlg.addEventListener("click", async (e) => {
+    if (e.target === dlg || e.target.closest(".cmp-close")) return dlg.close();
+    const copy = e.target.closest("[data-copy]");
+    if (copy) {
+      try {
+        await navigator.clipboard.writeText(copy.dataset.copy);
+        toast("Путь скопирован");
+      } catch {
+        toast("Не удалось скопировать");
+      }
+    }
+  });
+  dlg.addEventListener("close", () => (dlg.innerHTML = ""));
   $("#show-empty").addEventListener("change", (e) => {
     state.showEmpty = e.target.checked;
     renderBuildList();
@@ -340,6 +431,11 @@ function wireEvents() {
     d.querySelector(".files-body").innerHTML = fileList(s);
   }, true);
   $("#build").addEventListener("click", async (e) => {
+    const view = e.target.closest("[data-media]");
+    if (view) {
+      openMedia(view.dataset.media);
+      return;
+    }
     const copy = e.target.closest("[data-copy]");
     if (copy) {
       try {

@@ -29,6 +29,10 @@ jobs:
       - run: pip install -q httpx && python -m backend.static_build --no-poll
         env:
           FIREBASE_DB_URL: ${{ vars.FIREBASE_DB_URL }}
+      # Before/after models and textures live in GitHub releases, not in git.
+      - run: python -m backend.media --fetch site/media
+        env:
+          GH_TOKEN: ${{ github.token }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

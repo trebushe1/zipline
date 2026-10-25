@@ -43,6 +43,17 @@ python -m backend.patches --rebuild  # пересобрать последние
 
 На GitHub это делает `.github/workflows/patches.yml` каждые 20 минут: коммитит новые сводки и перезапускает деплой.
 
+### Модели и текстуры «до/после»
+
+`backend/media.py` для последних 10 билдов достаёт из Steam изменённые модели и текстуры (только нужные
+файлы из архивов игры, через [SteamFileDownloader](https://github.com/SteamTracking/SteamFileDownloader)),
+конвертирует их [Source2Viewer-CLI](https://github.com/ValveResourceFormat/ValveResourceFormat) в GLB и WebP
+и кладёт в GitHub-релиз `media-<билд>-<sha>`. Билды старше 10-го теряют медиа, их релизы удаляются;
+общий объём ограничен `MEDIA_BUDGET_MB` (400). В git попадает только список файлов.
+
+Нужны секреты репозитория `STEAM_USERNAME` и `STEAM_PASSWORD` — отдельный аккаунт с доступом к Deadlock
+и **выключенным Steam Guard** (иначе вход с серверов GitHub требует код). Без секретов шаг пропускается.
+
 ## Список разработчиков
 
 `backend/developers.json` — Discord ID и имена. Новые записи подхватываются при перезапуске;

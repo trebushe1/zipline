@@ -18,7 +18,7 @@ concurrency:
 jobs:
   patches:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 90
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
@@ -32,6 +32,16 @@ jobs:
         run: python -m backend.patches
         env:
           GAMETRACKING_DIR: ${{ runner.temp }}/gametracking
+
+      - name: Models and textures (before / after)
+        run: |
+          pip install -q pillow
+          python -m backend.media
+        env:
+          GAMETRACKING_DIR: ${{ runner.temp }}/gametracking
+          MEDIA_TOOLS_DIR: ${{ runner.temp }}/tools
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
 
       - name: Publish
         run: |
