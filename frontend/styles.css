@@ -435,6 +435,10 @@ ins { text-decoration: none; background: var(--green-wash); color: var(--accent)
 .tile-3d { font-family: var(--mono); font-weight: 800; font-size: 34px; color: var(--accent); letter-spacing: .04em; }
 .tile-name { font-family: var(--mono); font-size: 11.5px; font-weight: 700; overflow-wrap: anywhere; line-height: 1.3; }
 .tile-meta { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.service-maps { margin-top: 6px; padding: 14px 16px; }
+.service-maps summary { cursor: pointer; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.service-note { text-transform: none; letter-spacing: 0; color: var(--muted); font-family: var(--body); font-size: 12.5px; }
+.service-maps .gallery { margin-top: 12px; }
 .file-view { flex: none; padding: 0 5px; border: 1px solid var(--accent); background: none; color: var(--accent); font: inherit; font-size: 10px; text-transform: uppercase; cursor: zoom-in; }
 .file-view:hover { background: var(--accent); color: var(--card); }
 

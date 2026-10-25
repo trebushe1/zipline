@@ -31,10 +31,11 @@ from .patches import OUT, REPO, git, show, sync_repo
 APP, DEPOT = "1422450", "1422456"
 VPK = "game/citadel/pak01_dir.vpk"
 MEDIA_BUILDS = int(os.environ.get("MEDIA_BUILDS", "10"))
-BUDGET = int(os.environ.get("MEDIA_BUDGET_MB", "400")) * 1024 * 1024
+BUDGET = int(os.environ.get("MEDIA_BUDGET_MB", "600")) * 1024 * 1024
+MEDIA_VERSION = 2  # bump to redo the media of the kept builds after changing what is picked
 PER_RUN = int(os.environ.get("MEDIA_PER_RUN", "3"))  # each build is a few Steam logins; Steam rate limits them
 MAX_MODELS = 20
-MAX_TEXTURES = 30
+MAX_TEXTURES = 1000  # a safety cap: normally every changed texture is shown
 MAX_GLB = 25 * 1024 * 1024
 TEXTURE_SIZE = 1024
 TOOLS = Path(os.environ.get("MEDIA_TOOLS_DIR", config.ROOT / "data" / "tools"))
@@ -73,29 +74,25 @@ def tool_paths() -> tuple[str, str]:
 # ── What to show ───────────────────────────────────────
 
 SKIP_MODEL = re.compile(r"(^|/)(n\d+_lr\d|.*nomerge|.*_physbox|.*_collision)")
-SKIP_TEXTURE = re.compile(r"(normal|rough|ambientocclusion|_ao_|_ao\.|metal|height|mask|trans|selfillum|_rma|_orm|spec|_flow|_noise|_ramp)")
-COLOR_TEXTURE = re.compile(r"(color|albedo|diffuse|basecolor)")
+# Data maps of materials (normals, roughness, masks…): shown too, but folded away on the page.
+SERVICE_TEXTURE = re.compile(r"(normal|rough|ambientocclusion|_ao_|_ao\.|metal|height|mask|trans|selfillum|_rma|_orm|spec|_flow|_noise|_ramp)")
 
 
 def pick(summary: dict) -> list[dict]:
-    """The changed models and textures worth a picture, most visible subjects first."""
+    """Changed models worth a 3D view (most visible subjects first) and every changed texture."""
     models, textures = [], []
     for subject in summary["subjects"]:
-        if not subject["visual"]:
-            continue
         for group in subject["groups"]:
             for f in sorted(group["files"], key=lambda f: f["s"] != "a"):
                 path, status = f["p"], f["s"]
-                if status == "r":
-                    continue
                 item = {"path": path, "status": status, "subject": subject["title"]}
-                if path.endswith(".vmdl_c") and not SKIP_MODEL.search(path):
+                if path.endswith(".vmdl_c") and status != "r" and subject["visual"] and not SKIP_MODEL.search(path):
                     models.append(item | {"kind": "model"})
-                elif path.endswith(".vtex_c") and not SKIP_TEXTURE.search(path.rsplit("/", 1)[-1]) and (
-                        path.startswith("panorama/images/") or COLOR_TEXTURE.search(path)):
-                    textures.append(item | {"kind": "texture"})
-    # Icons and hero art first, then textures of models, particle sprites last.
-    textures.sort(key=lambda i: (not i["path"].startswith("panorama/"), "/particle" in i["path"]))
+                elif path.endswith(".vtex_c"):
+                    service = bool(SERVICE_TEXTURE.search(path.rsplit("/", 1)[-1]))
+                    textures.append(item | {"kind": "texture", "service": service})
+    # Icons and hero art first, then textures of models, particle sprites, data maps last.
+    textures.sort(key=lambda i: (i["service"], not i["path"].startswith("panorama/"), "/particle" in i["path"]))
     return models[:MAX_MODELS] + textures[:MAX_TEXTURES]
 
 
@@ -286,8 +283,10 @@ def make_media(summary: dict, sfd: str, vrf: str) -> tuple[str, dict, int] | Non
         out_dir.mkdir()
         for n, item in enumerate(items):
             entry = {"kind": item["kind"], "subject": item["subject"], "status": item["status"]}
+            if item.get("service"):
+                entry["service"] = True
             for side, manifest, sha in sides:
-                if side == "before" and item["status"] == "a":
+                if side == "before" and item["status"] == "a" or side == "after" and item["status"] == "r":
                     continue
                 citadel = game_root(files, manifest, sha, work)
                 convert = convert_model if item["kind"] == "model" else convert_texture
@@ -316,7 +315,7 @@ def make_media(summary: dict, sfd: str, vrf: str) -> tuple[str, dict, int] | Non
 def drop_media(path: Path, summary: dict) -> None:
     if summary.get("mediaTag"):
         gh("release", "delete", summary["mediaTag"], "--yes", "--cleanup-tag", check=False)
-    for key in ("media", "mediaTag", "mediaBytes", "mediaDone"):
+    for key in ("media", "mediaTag", "mediaBytes", "mediaDone", "mediaVersion"):
         summary.pop(key, None)
     path.write_text(json.dumps(summary, ensure_ascii=False, separators=(",", ":")), "utf-8")
 
@@ -346,7 +345,8 @@ def main() -> int:
                 drop_media(path, summary)
                 entry.pop("media", None)
             continue
-        if not summary.get("mediaDone") and entry["size"] != "empty" and not stopped and made_now < PER_RUN:
+        stale = summary.get("mediaVersion", 1) < MEDIA_VERSION
+        if (not summary.get("mediaDone") or stale) and entry["size"] != "empty" and not stopped and made_now < PER_RUN:
             tools = tools or tool_paths()
             log(f"build {entry['build']}: making media")
             made_now += 1
@@ -360,7 +360,13 @@ def main() -> int:
             if made:
                 summary["mediaTag"], summary["media"], summary["mediaBytes"] = made
                 log(f"  {len(made[1])} items, {made[2] / 1e6:.1f} MB")
-            summary["mediaDone"] = True
+            else:
+                if summary.get("mediaTag"):
+                    gh("release", "delete", summary["mediaTag"], "--yes", "--cleanup-tag", check=False)
+                for key in ("media", "mediaTag", "mediaBytes"):
+                    summary.pop(key, None)
+                entry.pop("media", None)
+            summary["mediaDone"], summary["mediaVersion"] = True, MEDIA_VERSION
             path.write_text(json.dumps(summary, ensure_ascii=False, separators=(",", ":")), "utf-8")
         used += summary.get("mediaBytes", 0)
         if summary.get("media"):

@@ -35,7 +35,7 @@ HEROES_VDATA = f"{GAME}/pak01_dir/scripts/heroes.vdata"
 BUILD_MSG = re.compile(r"^(\d+) \| ")
 
 # Per-group caps keep a build file small even when a patch touches 10k files.
-MAX_FILES = {"model": 300, "texture": 300, "material": 300}
+MAX_FILES = {"model": 300, "texture": 1500, "material": 300}
 MAX_FILES_DEFAULT = 60
 MAX_STRINGS = 400
 MAX_VDATA_ENTITIES = 250

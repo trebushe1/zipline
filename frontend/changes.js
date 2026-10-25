@@ -1,6 +1,7 @@
 const $ = (sel) => document.querySelector(sel);
 const SOURCE = "https://github.com/SteamDatabase/GameTracking-Deadlock";
 const STRINGS_STEP = 60;
+const TILES_STEP = 48;
 const MODEL_VIEWER = "https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js";
 
 const state = { index: null, build: null, file: "", q: "", showEmpty: false };
@@ -154,7 +155,7 @@ function renderBody() {
 
   const sections = [];
   if (media.length) sections.push(section("sec-media", "Было → стало", "Изменённые модели и текстуры прямо из файлов игры. Нажмите на карточку: 3D-модели можно крутить мышью, «до» и «после» поворачиваются вместе.",
-    `<div class="gallery">${media.map(([p, m]) => mediaTile(p, m)).join("")}</div>`));
+    galleryBlock(media)));
   if (visual.length) sections.push(section("sec-visual", "Внешний вид", "Модели, текстуры, материалы и эффекты — что можно увидеть в игре. Нажмите на путь файла, чтобы скопировать его для Source 2 Viewer.",
     `<div class="subjects">${visual.map((s) => subjectCard(s)).join("")}</div>`));
   if (strings.length) sections.push(section("sec-strings", "Тексты игры", "Новые и изменённые строки английской локализации: названия, описания способностей, подсказки. Часто здесь первыми появляются будущие герои и предметы.",
@@ -232,16 +233,29 @@ function mediaHint(b) {
 
 const mediaUrl = (name) => `media/${state.build.mediaTag}/${name}`;
 
+function galleryBlock(media) {
+  const main = media.filter(([, m]) => !m.service);
+  const service = media.filter(([, m]) => m.service);
+  const more = (list, group) => list.length > TILES_STEP
+    ? `<div class="feed-foot"><button class="btn more-tiles" data-group="${group}">Показать все ${list.length}</button></div>` : "";
+  return `${main.length ? `<div class="gallery" data-group="main">${main.slice(0, TILES_STEP).map(([p, m]) => mediaTile(p, m)).join("")}</div>${more(main, "main")}` : ""}
+    ${service.length ? `<details class="panel service-maps">
+      <summary><span class="group-title">Служебные карты</span><span class="group-count">${plural(service.length, "текстура", "текстуры", "текстур")}</span>
+        <span class="service-note">нормали, шероховатость, маски и прочие технические карты материалов</span></summary>
+      <div class="gallery" data-group="service">${service.slice(0, TILES_STEP).map(([p, m]) => mediaTile(p, m)).join("")}</div>${more(service, "service")}
+    </details>` : ""}`;
+}
+
 function mediaTile(path, m) {
   const name = path.slice(path.lastIndexOf("/") + 1).replace(/\.\w+_c$/, "").replaceAll("_", " ");
-  const label = m.status === "a" ? "новое" : m.before ? "до / после" : "после";
+  const label = m.status === "a" ? "новое" : m.status === "r" ? "удалено" : m.before ? "до / после" : "после";
   const thumb = m.kind === "texture"
     ? `<img src="${mediaUrl(m.after || m.before)}" alt="" loading="lazy">`
     : `<span class="tile-3d" aria-hidden="true">3D</span>`;
   return `<button class="tile tile-${m.kind}" data-media="${escapeHtml(path)}" title="${escapeHtml(path)}">
     <span class="tile-thumb">${thumb}</span>
     <span class="tile-name">${escapeHtml(name)}</span>
-    <span class="tile-meta"><span class="str-badge ${m.status === "a" ? "new" : ""}">${label}</span> ${escapeHtml(m.subject)}</span>
+    <span class="tile-meta"><span class="str-badge ${m.status === "a" ? "new" : m.status === "r" ? "gone" : ""}">${label}</span> ${escapeHtml(m.subject)}</span>
   </button>`;
 }
 
@@ -260,7 +274,7 @@ function loadModelViewer() {
 
 function openMedia(path) {
   const m = state.build.media[path];
-  const sides = [["before", "До"], ["after", m.status === "a" ? "Новое" : "После"]].filter(([k]) => m[k]);
+  const sides = [["before", m.status === "r" ? "Было (удалено)" : "До"], ["after", m.status === "a" ? "Новое" : "После"]].filter(([k]) => m[k]);
   const pane = ([key, title]) => `<figure class="cmp-pane">
     <figcaption>${title}</figcaption>
     ${m.kind === "model"
@@ -460,6 +474,15 @@ function wireEvents() {
       } catch {
         toast("Не удалось скопировать");
       }
+      return;
+    }
+    const moreTiles = e.target.closest(".more-tiles");
+    if (moreTiles) {
+      const group = moreTiles.dataset.group;
+      const list = Object.entries(state.build.media).filter(([p, m]) => matches(p, m.subject) && Boolean(m.service) === (group === "service"));
+      moreTiles.closest(".build-section, .service-maps").querySelector(`.gallery[data-group="${group}"]`).innerHTML =
+        list.map(([p, m]) => mediaTile(p, m)).join("");
+      moreTiles.parentElement.remove();
       return;
     }
     const more = e.target.closest(".more-strings");
