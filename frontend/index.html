@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>zipline — трекер разработчиков Deadlock</title>
+  <meta name="description" content="zipline: сообщения разработчиков Deadlock из Discord в одной ленте.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Limelight&family=Forum&family=Josefin+Sans:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="./" aria-label="zipline — на главную">
+        <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="29" fill="none" stroke="currentColor" stroke-width="2"/>
+          <circle cx="32" cy="32" r="23" fill="none" stroke="currentColor" stroke-width="1" opacity=".5"/>
+          <path d="M6 22 L58 38" stroke="currentColor" stroke-width="2.5"/>
+          <g class="brand-trolley">
+            <circle cx="26" cy="28" r="4.5" fill="var(--bg)" stroke="var(--green)" stroke-width="2"/>
+            <path d="M26 32 L26 44 M21 44 L31 44" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"/>
+          </g>
+        </svg>
+        <span class="brand-text">
+          <span class="brand-name">zipline</span>
+          <span class="brand-tag">Deadlock · новости и разведка</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Разделы">
+        <a class="nav-link active" href="./">Разработчики</a>
+        <span class="nav-link soon" title="Скоро">Патчи</span>
+        <span class="nav-link soon" title="Скоро">Серверы</span>
+        <span class="nav-link soon" title="Скоро">Статистика</span>
+      </nav>
+    </div>
+    <div class="cable" aria-hidden="true"><span class="cable-rider"></span></div>
+  </header>
+
+  <main class="wrap">
+    <div id="demo-banner" class="demo-banner" hidden>
+      <strong>Демо-режим.</strong> Сборщик Discord ещё не подключён — в ленте вымышленные авторы и сообщения.
+      Они исчезнут сами после первого реального опроса.
+    </div>
+
+    <section class="page-title">
+      <p class="eyebrow">Discord · официальный сервер Deadlock</p>
+      <h1>Трекер разработчиков</h1>
+      <div class="deco-rule" aria-hidden="true"><span></span></div>
+    </section>
+
+    <section class="stats" aria-label="Сводка">
+      <div class="stat"><span class="stat-label">За 24 часа</span><span class="stat-value" id="stat-day">—</span></div>
+      <div class="stat"><span class="stat-label">За 7 дней</span><span class="stat-value" id="stat-week">—</span></div>
+      <div class="stat"><span class="stat-label">Активнее всех (7 д)</span><span class="stat-value stat-name" id="stat-top">—</span></div>
+      <div class="stat"><span class="stat-label">Последнее сообщение</span><span class="stat-value stat-name" id="stat-last">—</span></div>
+      <div class="stat stat-spark">
+        <span class="stat-label">30 дней</span>
+        <div class="spark" id="spark" role="img" aria-label="Сообщения по дням за 30 дней"></div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="side">
+        <section class="panel">
+          <header class="panel-head">
+            <h2>Разработчики</h2>
+            <button class="link-btn" id="clear-devs" hidden>Сбросить</button>
+          </header>
+          <ul class="dev-list" id="dev-list"></ul>
+        </section>
+        <section class="panel">
+          <header class="panel-head"><h2>Каналы</h2></header>
+          <ul class="channel-list" id="channel-list"></ul>
+        </section>
+      </aside>
+
+      <section class="feed panel" aria-label="Лента сообщений">
+        <form class="feed-tools" id="filters" role="search">
+          <label class="search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5 L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input type="search" name="q" id="q" placeholder="Поиск по сообщениям и веткам…" autocomplete="off">
+          </label>
+          <div class="active-filters" id="active-filters"></div>
+        </form>
+        <button class="new-bar" id="new-bar" hidden></button>
+        <ol class="messages" id="messages" aria-live="polite"></ol>
+        <div class="feed-foot">
+          <button class="btn" id="more" hidden>Показать ещё</button>
+          <p class="empty" id="empty" hidden>Ничего не найдено. Попробуйте изменить фильтры.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name small">zipline</span>
+      <span id="collector-status" class="collector-status">—</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="app.js" type="module"></script>
+</body>
+</html>
