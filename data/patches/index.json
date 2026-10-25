@@ -130,7 +130,8 @@
     "vdata": 0,
     "code": 2
    },
-   "file": "6812-0abfe676.json"
+   "file": "6812-0abfe676.json",
+   "media": 1
   },
   {
    "build": 6810,
@@ -152,7 +153,8 @@
     "vdata": 0,
     "code": 1
    },
-   "file": "6810-c90ff498.json"
+   "file": "6810-c90ff498.json",
+   "media": 1
   },
   {
    "build": 6807,
