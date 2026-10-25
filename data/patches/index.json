@@ -64,7 +64,8 @@
     "vdata": 0,
     "code": 0
    },
-   "file": "6815-7fd2af79.json"
+   "file": "6815-7fd2af79.json",
+   "media": 2
   },
   {
    "build": 6814,
@@ -85,7 +86,8 @@
     "vdata": 0,
     "code": 1
    },
-   "file": "6814-e95b323b.json"
+   "file": "6814-e95b323b.json",
+   "media": 1
   },
   {
    "build": 6813,
