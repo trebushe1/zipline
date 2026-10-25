@@ -28,12 +28,23 @@ DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN", "")
 POLL_SECONDS = int(os.environ.get("POLL_SECONDS", "90"))
 BACKFILL_PAGES = int(os.environ.get("BACKFILL_PAGES", "8"))
 
-# Live collector (backend/live.py): fast polling of busy channels + periodic search.
-FAST_SECONDS = float(os.environ.get("FAST_SECONDS", "5"))
+DEADLOCK_CHAT = "1231286447131328544"
+ANNOUNCEMENTS = "1231311070786752579"
+
+
+def _ids(name: str, default: str) -> list[str]:
+    return [c for c in os.environ.get(name, default).split(",") if c]
+
+
+# Only messages from these channels (and their threads) are collected.
+TRACKED_CHANNELS = _ids("TRACKED_CHANNELS", f"{DEADLOCK_CHAT},{ANNOUNCEMENTS}")
+# In these channels every message counts, not only the ones from developers.json.
+OPEN_CHANNELS = _ids("OPEN_CHANNELS", ANNOUNCEMENTS)
+
+# Live collector (backend/live.py): fast polling of tracked channels + periodic search for threads.
+FAST_SECONDS = float(os.environ.get("FAST_SECONDS", "2"))
 SEARCH_SECONDS = float(os.environ.get("SEARCH_SECONDS", "60"))
 RUN_SECONDS = int(os.environ.get("RUN_SECONDS", "0"))  # 0 = run forever
-# Extra channel IDs to poll fast, comma-separated (busy dev channels are picked automatically).
-HOT_CHANNELS = [c for c in os.environ.get("HOT_CHANNELS", "").split(",") if c]
 
 # Telegram notifications about new developer messages. Empty = disabled.
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")

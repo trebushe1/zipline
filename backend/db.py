@@ -122,6 +122,21 @@ def update_developer(conn, user_id: str, name: str | None, avatar: str | None) -
     )
 
 
+def ensure_author(conn, user_id: str, name: str | None, avatar: str | None, tracked: int = 0) -> None:
+    """Keeps a name for authors outside developers.json (e.g. announcement webhooks)."""
+    conn.execute(
+        "INSERT INTO developers(user_id, name, avatar, tracked) VALUES(?, ?, ?, ?) "
+        "ON CONFLICT(user_id) DO UPDATE SET name=COALESCE(excluded.name, name), "
+        "avatar=COALESCE(excluded.avatar, avatar)",
+        (user_id, name or "Неизвестно", avatar, tracked),
+    )
+
+
+def in_tracked_channel(row: dict) -> bool:
+    allowed = config.TRACKED_CHANNELS
+    return not allowed or row["channel_id"] in allowed or row.get("parent_channel_id") in allowed
+
+
 def purge_demo(conn) -> None:
     conn.execute("DELETE FROM messages WHERE is_demo=1")
     conn.execute("DELETE FROM developers WHERE is_demo=1")

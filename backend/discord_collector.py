@@ -132,10 +132,12 @@ class DiscordCollector:
                 break
             with db.session() as conn:
                 for raw in hits:
+                    row = normalize(raw, self.channels, self.guild_id)
+                    if not db.in_tracked_channel(row):
+                        continue
                     db.update_developer(conn, raw["author"]["id"],
                                         raw["author"].get("global_name") or raw["author"].get("username"),
                                         avatar_url(raw["author"]))
-                    row = normalize(raw, self.channels, self.guild_id)
                     if db.upsert_message(conn, row):
                         new_rows.append(row)
             if (page + 1) * PAGE_SIZE >= total:

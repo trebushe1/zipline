@@ -9,62 +9,74 @@
   {
    "user_id": "1229609738828906517",
    "name": "Yoshi",
-   "avatar": "https://cdn.discordapp.com/avatars/1229609738828906517/59802f4a8812d85a4e40c63770044738.png?size=64"
+   "avatar": "https://cdn.discordapp.com/avatars/1229609738828906517/59802f4a8812d85a4e40c63770044738.png?size=64",
+   "tracked": 1
   },
   {
    "user_id": "214538443991023616",
    "name": "hopoo",
-   "avatar": "https://cdn.discordapp.com/avatars/214538443991023616/acc33d66f890bd363e31a6303686c803.png?size=64"
+   "avatar": "https://cdn.discordapp.com/avatars/214538443991023616/acc33d66f890bd363e31a6303686c803.png?size=64",
+   "tracked": 1
   },
   {
    "user_id": "87647380098252800",
    "name": "Jeff",
-   "avatar": null
+   "avatar": null,
+   "tracked": 1
   },
   {
    "user_id": "728690796907331654",
    "name": "Kaori",
-   "avatar": "https://cdn.discordapp.com/avatars/728690796907331654/cc35cab42880836bc40d4cb5a14b5b84.png?size=64"
+   "avatar": "https://cdn.discordapp.com/avatars/728690796907331654/cc35cab42880836bc40d4cb5a14b5b84.png?size=64",
+   "tracked": 1
   },
   {
    "user_id": "84010628468998144",
    "name": "MortenP",
-   "avatar": null
+   "avatar": null,
+   "tracked": 1
   },
   {
    "user_id": "586302580079198218",
    "name": "Mundungus",
-   "avatar": null
+   "avatar": null,
+   "tracked": 1
   },
   {
    "user_id": "195390578488246272",
    "name": "Paulthegoat",
-   "avatar": null
+   "avatar": null,
+   "tracked": 1
   },
   {
    "user_id": "356642495725305858",
    "name": "Dingalingadingdon",
-   "avatar": null
+   "avatar": null,
+   "tracked": 1
   },
   {
    "user_id": "97440892339621888",
    "name": "dr.boshkanovych",
-   "avatar": null
+   "avatar": null,
+   "tracked": 1
   },
   {
    "user_id": "226085602527805442",
    "name": "Kintaro",
-   "avatar": null
+   "avatar": null,
+   "tracked": 1
   },
   {
    "user_id": "226205562457686019",
    "name": "Wolfcop",
-   "avatar": null
+   "avatar": null,
+   "tracked": 1
   },
   {
    "user_id": "1227077583582007347",
    "name": "DanielJ",
-   "avatar": null
+   "avatar": null,
+   "tracked": 1
   }
  ],
  "messages": [
@@ -293,22 +305,6 @@
    "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1562229474873966715"
   },
   {
-   "id": "1562211103151231029",
-   "author_id": "728690796907331654",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1280249957722361856",
-   "channel_name": "lore-discussion",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1792530551470,
-   "edited_time": null,
-   "text": "no",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1562210763010084917",
-   "url": "https://discord.com/channels/1231286446472691825/1280249957722361856/1562211103151231029"
-  },
-  {
    "id": "1562208796934414336",
    "author_id": "1229609738828906517",
    "guild_id": "1231286446472691825",
@@ -440,22 +436,6 @@
    "embeds": [],
    "reply_to": "1559962582956245095",
    "url": "https://discord.com/channels/1231286446472691825/1279163694445625344/1560033689310863463"
-  },
-  {
-   "id": "1559719072638439517",
-   "author_id": "728690796907331654",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1280249957722361856",
-   "channel_name": "lore-discussion",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1791936405096,
-   "edited_time": null,
-   "text": "He has two lines where he talks about Cadenza",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1559706645536178299",
-   "url": "https://discord.com/channels/1231286446472691825/1280249957722361856/1559719072638439517"
   },
   {
    "id": "1559672073213837322",
@@ -1204,22 +1184,6 @@
    "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1554911941275951268"
   },
   {
-   "id": "1554910563895746713",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1532475527888113695",
-   "channel_name": "deadlock-ranked",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1790789967274,
-   "edited_time": null,
-   "text": "yeah, they'll be enabled on friday",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1554905853679636574",
-   "url": "https://discord.com/channels/1231286446472691825/1532475527888113695/1554910563895746713"
-  },
-  {
    "id": "1554906975622537300",
    "author_id": "1229609738828906517",
    "guild_id": "1231286446472691825",
@@ -1282,22 +1246,6 @@
    "embeds": [],
    "reply_to": null,
    "url": "https://discord.com/channels/1231286446472691825/1279163694445625344/1554906271952412787"
-  },
-  {
-   "id": "1554905728727384065",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1532475527888113695",
-   "channel_name": "deadlock-ranked",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1790788814480,
-   "edited_time": null,
-   "text": "No, during the short release period that rule won't apply to the new heroes",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1554872932948377611",
-   "url": "https://discord.com/channels/1231286446472691825/1532475527888113695/1554905728727384065"
   },
   {
    "id": "1554903007487987775",
@@ -1476,22 +1424,6 @@
    "url": "https://discord.com/channels/1231286446472691825/1279163694445625344/1554639212354215950"
   },
   {
-   "id": "1554612162281087089",
-   "author_id": "728690796907331654",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1280249957722361856",
-   "channel_name": "lore-discussion",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1790718822785,
-   "edited_time": null,
-   "text": "i mean, i could but that ruins the fun",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1554597084563509288",
-   "url": "https://discord.com/channels/1231286446472691825/1280249957722361856/1554612162281087089"
-  },
-  {
    "id": "1554608155621597217",
    "author_id": "1229609738828906517",
    "guild_id": "1231286446472691825",
@@ -1506,22 +1438,6 @@
    "embeds": [],
    "reply_to": "1554608116140613754",
    "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1554608155621597217"
-  },
-  {
-   "id": "1554594375047323802",
-   "author_id": "728690796907331654",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1280249957722361856",
-   "channel_name": "lore-discussion",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1790714581978,
-   "edited_time": null,
-   "text": "no",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1554593905893314582",
-   "url": "https://discord.com/channels/1231286446472691825/1280249957722361856/1554594375047323802"
   },
   {
    "id": "1554590275576533014",
@@ -2054,22 +1970,6 @@
    "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1531774739025236030"
   },
   {
-   "id": "1531759787270864926",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317192983732424734",
-   "channel_name": "mo-and-krill",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1785270392006,
-   "edited_time": null,
-   "text": "We weren't sure if we wanted Mo & Krill to work with all items or only non-movement items. Atm it works with all items, let us know what you think after you play some with it.",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": null,
-   "url": "https://discord.com/channels/1231286446472691825/1317192983732424734/1531759787270864926"
-  },
-  {
    "id": "1531759499172647112",
    "author_id": "1229609738828906517",
    "guild_id": "1231286446472691825",
@@ -2212,22 +2112,6 @@
    "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1524859513243435069"
   },
   {
-   "id": "1524438573913477150",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1407104165464768542",
-   "channel_name": "doorman",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1783524878720,
-   "edited_time": null,
-   "text": "",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1524438519420948772",
-   "url": "https://discord.com/channels/1231286446472691825/1407104165464768542/1524438573913477150"
-  },
-  {
    "id": "1524438519420948772",
    "author_id": "1229609738828906517",
    "guild_id": "1231286446472691825",
@@ -2244,38 +2128,6 @@
    "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1524438519420948772"
   },
   {
-   "id": "1522663457026212040",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1392240835768090655",
-   "channel_name": "deadlock-competitive",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1783101657874,
-   "edited_time": null,
-   "text": "We've disabled the E6 high prio queue requirement for now",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": null,
-   "url": "https://discord.com/channels/1231286446472691825/1392240835768090655/1522663457026212040"
-  },
-  {
-   "id": "1522374434688598251",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1243936067179122722",
-   "channel_name": "new-player-help",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1783032749579,
-   "edited_time": null,
-   "text": "This is fixed now",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1522280810617503796",
-   "url": "https://discord.com/channels/1231286446472691825/1243936067179122722/1522374434688598251"
-  },
-  {
    "id": "1522260368972447835",
    "author_id": "1229609738828906517",
    "guild_id": "1231286446472691825",
@@ -2290,45 +2142,6 @@
    "embeds": [],
    "reply_to": null,
    "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1522260368972447835"
-  },
-  {
-   "id": "1522012829769535568",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1782946536248,
-   "edited_time": null,
-   "text": "https://store.steampowered.com/news/app/1422450/view/688635449342693095",
-   "attachments": [],
-   "embeds": [
-    {
-     "title": "Deadlock -  Minor Update - 07-01-2026 - Steam News",
-     "description": "- Shiv: Alt Fire ammo cost reduced from 5 to 4\n- Shiv: Weapon now has fixed pellet spread\n- Shiv: Slice and Dice is now back to doing spirit damage and reducing Spirit Resistance from enemies\n- Shiv: Slice and Dice damage increased from 60 to 75\n- Shiv: Killing Blow T3 reduced from +10% Enemy Health Threshold to +8%",
-     "url": "https://store.steampowered.com/news/app/1422450/view/688635449342693095",
-     "image": "https://clan.fastly.steamstatic.com/images/45164767/568ff640318c8a81e2b5b4a22bf29e100ee144d9.png"
-    }
-   ],
-   "reply_to": null,
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1522012829769535568"
-  },
-  {
-   "id": "1521695843910946816",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1464033260592955695",
-   "channel_name": "street-brawl",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1782870960930,
-   "edited_time": null,
-   "text": "We made a Street Brawl forum for feedback specific to this mode. Would be great to hear what things you'd like to see improved in the mode. https://forums.playdeadlock.com/forums/street-brawl.251/",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": null,
-   "url": "https://discord.com/channels/1231286446472691825/1464033260592955695/1521695843910946816"
   },
   {
    "id": "1521626817142722590",
@@ -2434,310 +2247,6 @@
    "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1516706926333923368"
   },
   {
-   "id": "1515521478576312330",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781398877520,
-   "edited_time": null,
-   "text": "This is in the client update that just went out",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515443296103825539",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515521478576312330"
-  },
-  {
-   "id": "1515443296103825539",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781380237366,
-   "edited_time": null,
-   "text": "We'll work on getting this in",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515052371196117002",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515443296103825539"
-  },
-  {
-   "id": "1515130390149599384",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781305634773,
-   "edited_time": null,
-   "text": "Will fix",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515127563520049223",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515130390149599384"
-  },
-  {
-   "id": "1515126814312366200",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781304782227,
-   "edited_time": null,
-   "text": "this should be fixed now too",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515044217133469706",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515126814312366200"
-  },
-  {
-   "id": "1515126769022406780",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781304771429,
-   "edited_time": null,
-   "text": "Client updated with this",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515045056971673620",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515126769022406780"
-  },
-  {
-   "id": "1515050469662392360",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781286580244,
-   "edited_time": null,
-   "text": "What would you like to see done on his ult APs?",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515049876340347110",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515050469662392360"
-  },
-  {
-   "id": "1515045056971673620",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781285289758,
-   "edited_time": null,
-   "text": "We'll work on getting a better version in today",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515044485804069038",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515045056971673620"
-  },
-  {
-   "id": "1515044283311198389",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781285105303,
-   "edited_time": null,
-   "text": "Yeah the indicator isn't great atm",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515044229087367290",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515044283311198389"
-  },
-  {
-   "id": "1515044217133469706",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781285089525,
-   "edited_time": null,
-   "text": "So the main bug that remains with it is it counting as a failed hit when on the edge of the range?",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": null,
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515044217133469706"
-  },
-  {
-   "id": "1515044099919446036",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781285061579,
-   "edited_time": null,
-   "text": "thanks for the clip",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515043844595384491",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515044099919446036"
-  },
-  {
-   "id": "1515042365012709386",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781284647945,
-   "edited_time": null,
-   "text": "That might be indirectly fixed with the change to make it count for doing damage, lmk if not",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515042245957517476",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515042365012709386"
-  },
-  {
-   "id": "1515042208036683888",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781284610519,
-   "edited_time": null,
-   "text": "(also changed the 30% thing to count any hits for now not just executes)",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": null,
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515042208036683888"
-  },
-  {
-   "id": "1515042092924145834",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781284583074,
-   "edited_time": null,
-   "text": "with the update that just went out",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": null,
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515042092924145834"
-  },
-  {
-   "id": "1515042055850688583",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781284574235,
-   "edited_time": null,
-   "text": "We just did some speculative tweaks for shiv ult missing, can you guys see if its any better now?",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": null,
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515042055850688583"
-  },
-  {
-   "id": "1515036057710624789",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781283144167,
-   "edited_time": null,
-   "text": "I assume you dislike the change from yesterday too right?",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515035922020700231",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515036057710624789"
-  },
-  {
-   "id": "1515035814709563453",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781283086231,
-   "edited_time": null,
-   "text": "Mainly because it misses in cases it shouldn't?",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515035712213487677",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515035814709563453"
-  },
-  {
-   "id": "1515035671579066369",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781283052106,
-   "edited_time": null,
-   "text": "What would you like to see?",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515035520512561183",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515035671579066369"
-  },
-  {
-   "id": "1515033906083004508",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781282631179,
-   "edited_time": null,
-   "text": "yeah",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1515033824801722488",
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515033906083004508"
-  },
-  {
-   "id": "1515033634300625067",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1317193080163799130",
-   "channel_name": "shiv",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1781282566381,
-   "edited_time": null,
-   "text": "How do you all feel about Killing Blow currently (unrelated to yesterday's change specifically) vs it being unit target like it used to?",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": null,
-   "url": "https://discord.com/channels/1231286446472691825/1317193080163799130/1515033634300625067"
-  },
-  {
    "id": "1514796220458209412",
    "author_id": "1229609738828906517",
    "guild_id": "1231286446472691825",
@@ -2759,22 +2268,6 @@
    ],
    "reply_to": null,
    "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1514796220458209412"
-  },
-  {
-   "id": "1512889820735738022",
-   "author_id": "1229609738828906517",
-   "guild_id": "1231286446472691825",
-   "channel_id": "1392240835768090655",
-   "channel_name": "deadlock-competitive",
-   "parent_channel_id": null,
-   "thread_name": null,
-   "time": 1780771441397,
-   "edited_time": null,
-   "text": "Can you DM me your account?",
-   "attachments": [],
-   "embeds": [],
-   "reply_to": "1512889623561506896",
-   "url": "https://discord.com/channels/1231286446472691825/1392240835768090655/1512889820735738022"
   },
   {
    "id": "1512146625772912641",

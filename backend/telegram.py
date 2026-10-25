@@ -25,7 +25,12 @@ def format_message(msg: dict, author: str) -> str:
     for a in msg.get("attachments", []):
         links.append(f'<a href="{html.escape(a["url"])}">📎 {html.escape(a.get("name") or "вложение")}</a>')
     tail = "\n\n" + " · ".join(links) if links else ""
-    text = html.escape(msg.get("text") or "")
+    raw_text = msg.get("text") or ""
+    if not raw_text.strip():
+        # Announcements are often embeds only.
+        raw_text = "\n\n".join(filter(None, (
+            "\n".join(filter(None, (e.get("title"), e.get("description")))) for e in msg.get("embeds", []))))
+    text = html.escape(raw_text)
     room = LIMIT - len(head) - len(tail) - 40
     if len(text) > room:
         text = text[:room].rsplit(" ", 1)[0] + "…"

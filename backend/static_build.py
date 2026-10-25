@@ -33,7 +33,7 @@ def import_archive() -> dict:
     archive = json.loads(ARCHIVE.read_text(encoding="utf-8"))
     with db.session() as conn:
         for dev in archive.get("developers", []):
-            db.update_developer(conn, dev["user_id"], dev.get("name"), dev.get("avatar"))
+            db.ensure_author(conn, dev["user_id"], dev.get("name"), dev.get("avatar"), dev.get("tracked", 1))
         for msg in archive.get("messages", []):
             db.upsert_message(conn, msg)
     return archive
@@ -55,8 +55,9 @@ async def poll() -> dict:
 
 def export(last_poll: dict) -> None:
     with db.session() as conn:
-        devs = [dict(r) for r in conn.execute(
-            "SELECT user_id, name, avatar FROM developers WHERE tracked=1 AND is_demo=0")]
+        authors = [dict(r) for r in conn.execute(
+            "SELECT user_id, name, avatar, tracked FROM developers WHERE is_demo=0")]
+        devs = [{k: a[k] for k in ("user_id", "name", "avatar")} for a in authors if a["tracked"]]
         rows = conn.execute("""
             SELECT m.*, d.name, d.avatar FROM messages m
             LEFT JOIN developers d ON d.user_id = m.author_id
@@ -65,13 +66,15 @@ def export(last_poll: dict) -> None:
     messages = []
     for r in rows:
         msg = {k: r[k] for k in MESSAGE_FIELDS}
+        if not db.in_tracked_channel(msg):
+            continue
         msg["attachments"] = json.loads(msg["attachments"])
         msg["embeds"] = json.loads(msg["embeds"])
         messages.append(msg | {"name": r["name"], "avatar": r["avatar"], "is_demo": False})
 
     archive_messages = [{k: m[k] for k in MESSAGE_FIELDS} for m in messages]
     ARCHIVE.parent.mkdir(parents=True, exist_ok=True)
-    ARCHIVE.write_text(json.dumps({"lastPoll": last_poll, "developers": devs, "messages": archive_messages},
+    ARCHIVE.write_text(json.dumps({"lastPoll": last_poll, "developers": authors, "messages": archive_messages},
                                   ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 
     if SITE.exists():
