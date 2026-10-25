@@ -76,7 +76,7 @@ function renderBuildList() {
         <span class="build-row">
           <span class="build-no">${b.build}</span>
           <span class="build-size">${SIZE[b.size]}</span>
-          ${b.media ? `<span class="build-media" title="Есть модели и текстуры до/после">3D</span>` : ""}
+          ${b.media ? `<span class="build-media" title="Есть модели и текстуры до/после">3D · ${b.media}</span>` : ""}
           <span class="build-when">${shortDate.format(b.time)}</span>
         </span>
         <span class="build-line">${escapeHtml(b.headline[0] || "")}</span>
@@ -127,6 +127,7 @@ function renderBuild() {
       </nav>
     </form>
 
+    ${b.media ? "" : mediaHint(b)}
     <div id="build-body"></div>`;
 
   $("#build-tools").addEventListener("submit", (e) => e.preventDefault());
@@ -219,6 +220,16 @@ function fileList(s) {
 }
 
 // ── Before / after media ───────────────────────────────
+// Builds without pictures point to the nearest one that has them.
+function mediaHint(b) {
+  const withMedia = state.index.builds.find((x) => x.media);
+  if (!withMedia) return "";
+  return `<button class="panel media-hint" data-build="${withMedia.file}">
+    В этом билде нет изменённых моделей и текстур для просмотра.
+    <b>Модели «до/после» — в билде ${withMedia.build} →</b>
+  </button>`;
+}
+
 const mediaUrl = (name) => `media/${state.build.mediaTag}/${name}`;
 
 function mediaTile(path, m) {
@@ -431,6 +442,11 @@ function wireEvents() {
     d.querySelector(".files-body").innerHTML = fileList(s);
   }, true);
   $("#build").addEventListener("click", async (e) => {
+    const jump = e.target.closest("[data-build]");
+    if (jump) {
+      selectBuild(jump.dataset.build).catch(showError);
+      return;
+    }
     const view = e.target.closest("[data-media]");
     if (view) {
       openMedia(view.dataset.media);
@@ -501,9 +517,9 @@ async function init() {
   $("#source-status").classList.add("ok");
   if (!builds.length) throw new Error("no builds");
   const wanted = new URLSearchParams(location.search).get("build");
-  // By default open the newest build that actually changed game files.
+  // By default open the newest build with models to look at, else the newest that changed game files.
   const first = builds.find((b) => wanted && b.file === `${wanted}.json`)
-    || builds.find((b) => b.size !== "empty") || builds[0];
+    || builds.find((b) => b.media) || builds.find((b) => b.size !== "empty") || builds[0];
   await selectBuild(first.file, Boolean(wanted));
 }
 

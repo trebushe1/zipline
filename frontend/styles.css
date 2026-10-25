@@ -413,7 +413,14 @@ ins { text-decoration: none; background: var(--green-wash); color: var(--accent)
 .delta.up { color: var(--accent); }
 .delta.down { color: var(--danger); }
 
-.build-media { font-family: var(--mono); font-size: 9.5px; font-weight: 800; padding: 0 4px; background: var(--slab); color: #fff; }
+.build-media { margin-left: auto; font-family: var(--mono); font-size: 10px; font-weight: 800; padding: 1px 5px; background: var(--slab); color: #fff; white-space: nowrap; }
+.build-media + .build-when { margin-left: 0; }
+.media-hint {
+  display: block; width: 100%; padding: 14px 18px; text-align: left; cursor: pointer; color: var(--ink-2);
+  font: 14px/1.5 var(--body); border-color: var(--accent);
+}
+.media-hint b { display: block; margin-top: 2px; font-family: var(--mono); color: var(--accent); }
+.media-hint:hover { background: var(--green-wash); }
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
 .tile {
   display: flex; flex-direction: column; gap: 6px; padding: 8px; background: var(--card); border: 1px solid var(--frame);
