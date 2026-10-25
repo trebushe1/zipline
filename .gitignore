@@ -3,6 +3,7 @@
 .venv/
 data/*
 !data/archive.json
+!data/patches/
 site/
 __pycache__/
 .DS_Store

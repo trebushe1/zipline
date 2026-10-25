@@ -171,4 +171,7 @@ def ingest(payload: dict, x_ingest_secret: str = Header("")):
     return {"accepted": new}
 
 
+# Patch summaries written by `python -m backend.patches`; the static build copies them the same way.
+(config.ROOT / "data" / "patches").mkdir(parents=True, exist_ok=True)
+app.mount("/patches", StaticFiles(directory=config.ROOT / "data" / "patches"), name="patches")
 app.mount("/", StaticFiles(directory=config.ROOT / "frontend", html=True), name="frontend")

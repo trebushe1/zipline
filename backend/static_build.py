@@ -24,6 +24,7 @@ from .discord_collector import DiscordCollector  # noqa: E402
 
 ARCHIVE = config.ROOT / "data" / "archive.json"
 SITE = config.ROOT / "site"
+PATCHES = config.ROOT / "data" / "patches"
 MESSAGE_FIELDS = ("id", "author_id", "guild_id", "channel_id", "channel_name", "parent_channel_id",
                   "thread_name", "time", "edited_time", "text", "attachments", "embeds", "reply_to", "url")
 
@@ -91,6 +92,9 @@ def export(last_poll: dict) -> None:
         shutil.rmtree(SITE)
     shutil.copytree(config.ROOT / "frontend", SITE)
     bust_cache(SITE / "index.html", ("styles.css", "app.js"))
+    bust_cache(SITE / "changes.html", ("styles.css", "changes.js"))
+    if PATCHES.exists():
+        shutil.copytree(PATCHES, SITE / "patches")
     status = {"demo": False, "collector": "live", "ingest": False,
               "lastPoll": last_poll, "pollSeconds": None,
               "realtimeUrl": config.FIREBASE_DB_URL or None}

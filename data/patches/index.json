@@ -1,0 +1,665 @@
+{
+ "updatedAt": 1792967642282,
+ "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
+ "builds": [
+  {
+   "build": 6819,
+   "sha": "17462b250a0ca80e7f80102f2c83cc3eecff5f12",
+   "time": 1792713232000,
+   "versionDate": "Oct 22 2026 16:40:35",
+   "size": "hotfix",
+   "weight": 2,
+   "headline": [
+    "Violet: эффекты: изменено 3",
+    "Параметры: 1 значение"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 4,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 1,
+    "code": 0
+   },
+   "file": "6819-17462b25.json"
+  },
+  {
+   "build": 6817,
+   "sha": "04d261bfd6fddf07647416ab0382f9468c102830",
+   "time": 1792701523000,
+   "versionDate": "Oct 22 2026 13:30:07",
+   "size": "empty",
+   "weight": 0,
+   "headline": [
+    "Только техническое обновление"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0
+   },
+   "file": "6817-04d261bf.json"
+  },
+  {
+   "build": 6815,
+   "sha": "7fd2af7964e1fd3fd612434f0957a5fb779beb1b",
+   "time": 1792699226000,
+   "versionDate": "Oct 22 2026 12:19:38",
+   "size": "hotfix",
+   "weight": 6,
+   "headline": [
+    "The Doorman: переделаны модели: doorman luggagetrolley, doorman luggagetrolley friendly"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 2,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0
+   },
+   "file": "6815-7fd2af79.json"
+  },
+  {
+   "build": 6814,
+   "sha": "e95b323b88d48c3fc4d80066ee603fb75060b248",
+   "time": 1792695278000,
+   "versionDate": "Oct 22 2026 11:09:14",
+   "size": "hotfix",
+   "weight": 10,
+   "headline": [
+    "Nurse Harrow: переделаны модели: nurse leech"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 2,
+    "changed": 9,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 1
+   },
+   "file": "6814-e95b323b.json"
+  },
+  {
+   "build": 6813,
+   "sha": "a94d8b455203f12b176de75a5598dd8e6e8a94d4",
+   "time": 1792642457000,
+   "versionDate": "Oct 21 2026 21:03:17",
+   "size": "hotfix",
+   "weight": 1,
+   "headline": [
+    "Тексты игры: 1 строка",
+    "Параметры: 2 значения"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 1,
+    "removed": 0,
+    "strings": 1,
+    "vdata": 2,
+    "code": 0
+   },
+   "file": "6813-a94d8b45.json"
+  },
+  {
+   "build": 6812,
+   "sha": "0abfe676c64c7d24bd5340a46778e65a84be70ed",
+   "time": 1792620232000,
+   "versionDate": "Oct 21 2026 14:47:09",
+   "size": "hotfix",
+   "weight": 3,
+   "headline": [
+    "Интерфейс: текстуры: изменено 1 текстура"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 6,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 2
+   },
+   "file": "6812-0abfe676.json"
+  },
+  {
+   "build": 6810,
+   "sha": "c90ff498d244fc9a3e6722faf70e455c0b7a07f8",
+   "time": 1792611843000,
+   "versionDate": "Oct 21 2026 12:29:15",
+   "size": "update",
+   "weight": 65,
+   "headline": [
+    "Эффекты: текстуры: +6 текстур",
+    "Nurse Harrow: переделаны модели: nurse"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 20,
+    "changed": 64,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 1
+   },
+   "file": "6810-c90ff498.json"
+  },
+  {
+   "build": 6807,
+   "sha": "3207c1601bf83515155a1108b4b8def7338b1b29",
+   "time": 1792558888000,
+   "versionDate": "Oct 20 2026 21:44:53",
+   "size": "empty",
+   "weight": 0,
+   "headline": [
+    "Только техническое обновление"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0
+   },
+   "file": "6807-3207c160.json"
+  },
+  {
+   "build": 6806,
+   "sha": "67a51eaef8b9148ec02887d7b1c35657a476841e",
+   "time": 1792554747000,
+   "versionDate": "Oct 20 2026 19:19:09",
+   "size": "hotfix",
+   "weight": 1,
+   "headline": [
+    "Только техническое обновление"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 4,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0
+   },
+   "file": "6806-67a51eae.json"
+  },
+  {
+   "build": 6805,
+   "sha": "88c2fe5caca830c9cb32493df85cd113a2c22584",
+   "time": 1792538659000,
+   "versionDate": "Oct 20 2026 15:46:55",
+   "size": "hotfix",
+   "weight": 0,
+   "headline": [
+    "Тексты игры: 2 строки"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 2,
+    "vdata": 0,
+    "code": 0
+   },
+   "file": "6805-88c2fe5c.json"
+  },
+  {
+   "build": 6803,
+   "sha": "6b29d7305063ce968972348353fdcddf3bbe3b00",
+   "time": 1792535308000,
+   "versionDate": "Oct 20 2026 15:22:44",
+   "size": "empty",
+   "weight": 0,
+   "headline": [
+    "Только техническое обновление"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0
+   },
+   "file": "6803-6b29d730.json"
+  },
+  {
+   "build": 6802,
+   "sha": "be9aeb5c21f89d947158da54d1e38ea21ef2b75d",
+   "time": 1792534702000,
+   "versionDate": "Oct 20 2026 14:57:32",
+   "size": "update",
+   "weight": 111,
+   "headline": [
+    "Карта и окружение: новые модели: diner portrait 01, diner portrait 02, diner portrait 03 и ещё 9"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 16,
+    "changed": 7,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0
+   },
+   "file": "6802-be9aeb5c.json"
+  },
+  {
+   "build": 6801,
+   "sha": "37f9aebdc62766aa13748f73309b9b8120549833",
+   "time": 1792530142000,
+   "versionDate": "Oct 20 2026 13:53:46",
+   "size": "major",
+   "weight": 3647,
+   "headline": [
+    "Nurse Harrow: новые модели: nurse ampoule, piece 01, piece 10 и ещё 8",
+    "Карта и окружение: новые модели: nurse smelling salts bottle model, diner clock 01, diner kitchen pan 01 и ещё 37",
+    "Юниты и нейтралы: переделаны модели: boss tier 01 brazier guardian, boss tier 02 sun walker, neutral drain creature и ещё 27",
+    "Тексты игры: 2583 строки",
+    "Параметры: 2225 значений"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 3682,
+    "changed": 667,
+    "removed": 10,
+    "strings": 2583,
+    "vdata": 2225,
+    "code": 9
+   },
+   "file": "6801-37f9aebd.json"
+  },
+  {
+   "build": 6796,
+   "sha": "2e024f9b5d2363465cea9516c6f2e7ee039ea9f7",
+   "time": 1792438109000,
+   "versionDate": "Oct 19 2026 11:58:27",
+   "size": "hotfix",
+   "weight": 0,
+   "headline": [
+    "Тексты игры: 1 строка"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 1,
+    "vdata": 0,
+    "code": 0
+   },
+   "file": "6796-2e024f9b.json"
+  },
+  {
+   "build": 6795,
+   "sha": "19650b264547f3f95280f57e27f4ba4817fd8374",
+   "time": 1792298449000,
+   "versionDate": "Oct 17 2026 20:53:46",
+   "size": "hotfix",
+   "weight": 3,
+   "headline": [
+    "Rem: переделаны модели: familiar helper attached"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 1,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0
+   },
+   "file": "6795-19650b26.json"
+  },
+  {
+   "build": 6794,
+   "sha": "df1192043fd269aee7edf4dffdfb4cfc03d05f64",
+   "time": 1792272772000,
+   "versionDate": "Oct 17 2026 13:55:49",
+   "size": "hotfix",
+   "weight": 10,
+   "headline": [
+    "Юниты и нейтралы: переделаны модели: trooper zipline container, trooper zipline container amber, trooper zipline container sapphire",
+    "Параметры: 1 значение"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 4,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 1,
+    "code": 0
+   },
+   "file": "6794-df119204.json"
+  },
+  {
+   "build": 6793,
+   "sha": "0ba033e3eea00d658d63e03719295cf5039e8057",
+   "time": 1792192431000,
+   "versionDate": "Oct 16 2026 16:05:45",
+   "size": "update",
+   "weight": 90,
+   "headline": [
+    "Violet: переделаны модели: artist",
+    "Baba: переделаны модели: baba",
+    "Карта и окружение: переделаны модели: deadpack missile model"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 8,
+    "changed": 278,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0
+   },
+   "file": "6793-0ba033e3.json"
+  },
+  {
+   "build": 6790,
+   "sha": "9b616d3093a7f3e25e852ec93c9b818c5d2c94ed",
+   "time": 1792184516000,
+   "versionDate": "Oct 16 2026 13:44:07",
+   "size": "major",
+   "weight": 5162,
+   "headline": [
+    "Violet: новые модели: ability crane model, artist gesture paper",
+    "Юниты и нейтралы: переделаны модели: boss tier 01 brazier guardian, boss tier 02 sun walker, core amber и ещё 249",
+    "Карта и окружение: новые модели: artist ability1 brush heroselect model, artist ability1 brush model, artist charm brush model fx и ещё 28",
+    "Тексты игры: 2781 строка",
+    "Параметры: 3705 значений"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 3813,
+    "changed": 2552,
+    "removed": 7,
+    "strings": 2781,
+    "vdata": 3705,
+    "code": 72
+   },
+   "file": "6790-9b616d30.json"
+  },
+  {
+   "build": 6785,
+   "sha": "4e0f960a9d175b18757ac607c04e70f15dabe7e3",
+   "time": 1792091498000,
+   "versionDate": "Oct 14 2026 20:01:37",
+   "size": "empty",
+   "weight": 0,
+   "headline": [
+    "Изменения только в коде игры"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 77
+   },
+   "file": "6785-4e0f960a.json"
+  },
+  {
+   "build": 6785,
+   "sha": "c9e648071661aaaa794507bb304cf52679eb2a10",
+   "time": 1792034072000,
+   "versionDate": "Oct 14 2026 20:01:37",
+   "size": "hotfix",
+   "weight": 14,
+   "headline": [
+    "Параметры: 46 значений"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 2,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 46,
+    "code": 2
+   },
+   "file": "6785-c9e64807.json"
+  },
+  {
+   "build": 6782,
+   "sha": "a9e0c695d49df9b15651b8e5b02f41847e8b428d",
+   "time": 1791999906000,
+   "versionDate": "Oct 14 2026 10:09:01",
+   "size": "hotfix",
+   "weight": 0,
+   "headline": [
+    "Изменения только в коде игры"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 8,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 3
+   },
+   "file": "6782-a9e0c695.json"
+  },
+  {
+   "build": 6779,
+   "sha": "0c38f9d31c4905e0fe1a292afe91aa3d01044baf",
+   "time": 1791925330000,
+   "versionDate": "Oct 13 2026 13:33:25",
+   "size": "major",
+   "weight": 2525,
+   "headline": [
+    "Эффекты: текстуры: +25 текстур",
+    "Deadman Danny: переделаны модели: deadpack",
+    "Карта и окружение: новые модели: deadpack globules, deadpack missile model, diner chair 01 и ещё 9",
+    "Тексты игры: 2678 строк",
+    "Параметры: 2083 значения"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 3375,
+    "changed": 922,
+    "removed": 7,
+    "strings": 2678,
+    "vdata": 2083,
+    "code": 17
+   },
+   "file": "6779-0c38f9d3.json"
+  },
+  {
+   "build": 6774,
+   "sha": "130feff271b4ce5689f4d78f6ec0aa21910be6be",
+   "time": 1791897303000,
+   "versionDate": "Oct 09 2026 16:19:46",
+   "size": "empty",
+   "weight": 0,
+   "headline": [
+    "Изменения только в коде игры"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 97
+   },
+   "file": "6774-130feff2.json"
+  },
+  {
+   "build": 6774,
+   "sha": "2d87734ca5663301b9cc293131f64d80cee73d38",
+   "time": 1791588577000,
+   "versionDate": "Oct 09 2026 16:19:46",
+   "size": "hotfix",
+   "weight": 6,
+   "headline": [
+    "Solomon: переделаны модели: chessmaster hand",
+    "Тексты игры: 7 строк",
+    "Параметры: 1 значение"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 9,
+    "changed": 12,
+    "removed": 0,
+    "strings": 7,
+    "vdata": 1,
+    "code": 2
+   },
+   "file": "6774-2d87734c.json"
+  },
+  {
+   "build": 6769,
+   "sha": "9a617c88fca0e50d2338892f8e7e7d8859e8b3ab",
+   "time": 1791587378000,
+   "versionDate": "Oct 09 2026 13:38:46",
+   "size": "hotfix",
+   "weight": 6,
+   "headline": [
+    "Solomon: переделаны модели: chessmaster hand",
+    "Тексты игры: 7 строк",
+    "Параметры: 1 значение"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 12,
+    "removed": 9,
+    "strings": 7,
+    "vdata": 1,
+    "code": 2
+   },
+   "file": "6769-9a617c88.json"
+  },
+  {
+   "build": 6773,
+   "sha": "a2d10221bdebccfb3bcd8a37e08a5839b2e6bf06",
+   "time": 1791586757000,
+   "versionDate": "Oct 09 2026 15:48:07",
+   "size": "hotfix",
+   "weight": 6,
+   "headline": [
+    "Solomon: переделаны модели: chessmaster hand",
+    "Тексты игры: 7 строк",
+    "Параметры: 1 значение"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 9,
+    "changed": 12,
+    "removed": 0,
+    "strings": 7,
+    "vdata": 1,
+    "code": 2
+   },
+   "file": "6773-a2d10221.json"
+  },
+  {
+   "build": 6769,
+   "sha": "8f572f6e834a7b7d5a8678147818099074a59cf8",
+   "time": 1791579736000,
+   "versionDate": "Oct 09 2026 13:38:46",
+   "size": "major",
+   "weight": 3200,
+   "headline": [
+    "Solomon: новые модели: chessmaster board pieces fx model, chessmaster hand, chessmaster knightshield",
+    "Карта и окружение: новые модели: chessmaster rook crown fx model, campus 01 chalice 01, campus 01 entablement 01 и ещё 42",
+    "Интерфейс: текстуры: +31 текстура, изменено 1 текстура",
+    "Тексты игры: 2739 строк",
+    "Параметры: 2848 значений"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 3365,
+    "changed": 988,
+    "removed": 10,
+    "strings": 2739,
+    "vdata": 2848,
+    "code": 10
+   },
+   "file": "6769-8f572f6e.json"
+  },
+  {
+   "build": 6766,
+   "sha": "8d6e36ad340799bb17a8655dd5f180ab8084c6a8",
+   "time": 1791500768000,
+   "versionDate": "Oct 08 2026 15:58:12",
+   "size": "hotfix",
+   "weight": 4,
+   "headline": [
+    "Baba: переделаны модели: baba",
+    "Параметры: 2 значения"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 2,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 2,
+    "code": 2
+   },
+   "file": "6766-8d6e36ad.json"
+  },
+  {
+   "build": 6765,
+   "sha": "d8e74a10e98fdabd1d657e09ad4269198b836bc5",
+   "time": 1791492779000,
+   "versionDate": "Oct 08 2026 13:40:50",
+   "size": "empty",
+   "weight": 0,
+   "headline": [
+    "Изменения только в коде игры"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 2
+   },
+   "file": "6765-d8e74a10.json"
+  },
+  {
+   "build": 6763,
+   "sha": "dd758c9f6bfc56bc981a1da0ba66dc7f0cb4eb8b",
+   "time": 1791419944000,
+   "versionDate": "Oct 07 2026 17:30:07",
+   "size": "empty",
+   "weight": 0,
+   "headline": [
+    "Изменения только в коде игры"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 1
+   },
+   "file": "6763-dd758c9f.json"
+  }
+ ]
+}
