@@ -234,16 +234,14 @@ function mediaHint(b) {
 const mediaUrl = (name) => `media/${state.build.mediaTag}/${name}`;
 
 function galleryBlock(media) {
-  const main = media.filter(([, m]) => !m.service);
-  const service = media.filter(([, m]) => m.service);
-  const more = (list, group) => list.length > TILES_STEP
-    ? `<div class="feed-foot"><button class="btn more-tiles" data-group="${group}">Показать все ${list.length}</button></div>` : "";
-  return `${main.length ? `<div class="gallery" data-group="main">${main.slice(0, TILES_STEP).map(([p, m]) => mediaTile(p, m)).join("")}</div>${more(main, "main")}` : ""}
-    ${service.length ? `<details class="panel service-maps">
-      <summary><span class="group-title">Служебные карты</span><span class="group-count">${plural(service.length, "текстура", "текстуры", "текстур")}</span>
-        <span class="service-note">нормали, шероховатость, маски и прочие технические карты материалов</span></summary>
-      <div class="gallery" data-group="service">${service.slice(0, TILES_STEP).map(([p, m]) => mediaTile(p, m)).join("")}</div>${more(service, "service")}
-    </details>` : ""}`;
+  const skipped = state.build.mediaSkipped;
+  const note = skipped && (skipped.boring || skipped.unchanged)
+    ? `<p class="more-note">Отобрано для новостей: герои, способности, предметы, NPC и игровые объекты.
+        Скрыто ${[skipped.boring && `${plural(skipped.boring, "мелкий файл", "мелких файла", "мелких файлов")} (окружение, свет, частицы, служебные карты)`,
+                  skipped.unchanged && `${skipped.unchanged} без видимых изменений`].filter(Boolean).join(" и ")}.</p>` : "";
+  return `<div class="gallery">${media.slice(0, TILES_STEP).map(([p, m]) => mediaTile(p, m)).join("")}</div>
+    ${media.length > TILES_STEP ? `<div class="feed-foot"><button class="btn more-tiles">Показать все ${media.length}</button></div>` : ""}
+    ${note}`;
 }
 
 function mediaTile(path, m) {
@@ -478,10 +476,8 @@ function wireEvents() {
     }
     const moreTiles = e.target.closest(".more-tiles");
     if (moreTiles) {
-      const group = moreTiles.dataset.group;
-      const list = Object.entries(state.build.media).filter(([p, m]) => matches(p, m.subject) && Boolean(m.service) === (group === "service"));
-      moreTiles.closest(".build-section, .service-maps").querySelector(`.gallery[data-group="${group}"]`).innerHTML =
-        list.map(([p, m]) => mediaTile(p, m)).join("");
+      const list = Object.entries(state.build.media).filter(([p, m]) => matches(p, m.subject));
+      moreTiles.closest(".build-section").querySelector(".gallery").innerHTML = list.map(([p, m]) => mediaTile(p, m)).join("");
       moreTiles.parentElement.remove();
       return;
     }

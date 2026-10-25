@@ -32,10 +32,10 @@ APP, DEPOT = "1422450", "1422456"
 VPK = "game/citadel/pak01_dir.vpk"
 MEDIA_BUILDS = int(os.environ.get("MEDIA_BUILDS", "10"))
 BUDGET = int(os.environ.get("MEDIA_BUDGET_MB", "600")) * 1024 * 1024
-MEDIA_VERSION = 2  # bump to redo the media of the kept builds after changing what is picked
+MEDIA_VERSION = 3  # bump to redo the media of the kept builds after changing what is picked
 PER_RUN = int(os.environ.get("MEDIA_PER_RUN", "3"))  # each build is a few Steam logins; Steam rate limits them
-MAX_MODELS = 20
-MAX_TEXTURES = 1000  # a safety cap: normally every changed texture is shown
+MAX_MODELS = 30
+MAX_TEXTURES = 150
 MAX_GLB = 25 * 1024 * 1024
 TEXTURE_SIZE = 1024
 TOOLS = Path(os.environ.get("MEDIA_TOOLS_DIR", config.ROOT / "data" / "tools"))
@@ -73,27 +73,46 @@ def tool_paths() -> tuple[str, str]:
 
 # ── What to show ───────────────────────────────────────
 
+# Only what is worth a news post: heroes, their abilities and art, items, NPCs and gameplay objects.
+# Scenery, lighting, particle sprites, debris and material data maps are left out.
+NEWSWORTHY = ("models/heroes", "materials/models/heroes", "models/items", "materials/models/items",
+              "models/cosmetics", "models/weapons", "models/abilities", "materials/models/abilities",
+              "models/npc", "materials/models/npc", "models/props_gameplay", "materials/models/props_gameplay",
+              "models/hideout", "models/match_intro", "panorama/images/")
+NOT_NEWSWORTHY = ("particles/", "materials/particle", "models/particle")
 SKIP_MODEL = re.compile(r"(^|/)(n\d+_lr\d|.*nomerge|.*_physbox|.*_collision)")
-# Data maps of materials (normals, roughness, masks…): shown too, but folded away on the page.
-SERVICE_TEXTURE = re.compile(r"(normal|rough|ambientocclusion|_ao_|_ao\.|metal|height|mask|trans|selfillum|_rma|_orm|spec|_flow|_noise|_ramp)")
+DATA_MAP = re.compile(r"(normal|rough|ambientocclusion|_ao_|_ao\.|metal|height|mask|trans|selfillum|_rma|_orm|spec|_flow|_noise|_ramp)")
+BORING = re.compile(r"(light|lamp|dust|pollen|smoke|fog|debris|decal|grime|dirt|noise|gradient|glow|flare|spark|"
+                    r"cubemap|skybox|_lod\d|(^|_)(piece|gib|chunk|shard)s?(_|\d|$))")
 
 
-def pick(summary: dict) -> list[dict]:
-    """Changed models worth a 3D view (most visible subjects first) and every changed texture."""
-    models, textures = [], []
+def newsworthy(path: str, subject: dict) -> bool:
+    name = path.rsplit("/", 1)[-1]
+    if path.startswith(NOT_NEWSWORTHY) or BORING.search(name):
+        return False
+    if path.endswith(".vtex_c") and DATA_MAP.search(name):
+        return False
+    return subject["type"] == "hero" or path.startswith(NEWSWORTHY)
+
+
+def pick(summary: dict) -> tuple[list[dict], int]:
+    """Newsworthy changed models and textures, most visible subjects first, and how many were left out."""
+    models, textures, boring = [], [], 0
     for subject in summary["subjects"]:
         for group in subject["groups"]:
             for f in sorted(group["files"], key=lambda f: f["s"] != "a"):
                 path, status = f["p"], f["s"]
+                is_model = path.endswith(".vmdl_c") and status != "r" and not SKIP_MODEL.search(path)
+                if not (is_model or path.endswith(".vtex_c")):
+                    continue
+                if not newsworthy(path, subject):
+                    boring += 1
+                    continue
                 item = {"path": path, "status": status, "subject": subject["title"]}
-                if path.endswith(".vmdl_c") and status != "r" and subject["visual"] and not SKIP_MODEL.search(path):
-                    models.append(item | {"kind": "model"})
-                elif path.endswith(".vtex_c"):
-                    service = bool(SERVICE_TEXTURE.search(path.rsplit("/", 1)[-1]))
-                    textures.append(item | {"kind": "texture", "service": service})
-    # Icons and hero art first, then textures of models, particle sprites, data maps last.
-    textures.sort(key=lambda i: (i["service"], not i["path"].startswith("panorama/"), "/particle" in i["path"]))
-    return models[:MAX_MODELS] + textures[:MAX_TEXTURES]
+                (models if is_model else textures).append(item | {"kind": "model" if is_model else "texture"})
+    # Icons and hero art first.
+    textures.sort(key=lambda i: not i["path"].startswith("panorama/"))
+    return models[:MAX_MODELS] + textures[:MAX_TEXTURES], boring
 
 
 # ── Steam downloads ────────────────────────────────────
@@ -247,6 +266,9 @@ def pack_glb(path: Path) -> bytes:
         binary += buf.getvalue()
     for material in doc.get("materials", []):
         material.pop("extras", None)  # Source 2 shader parameters, not needed to render
+    for part in doc.get("meshes", []) + doc.get("nodes", []):
+        if "name" in part:  # names carry the absolute path of the temporary input file
+            part["name"] = part["name"].rsplit("/", 1)[-1]
     if binary:
         while len(binary) % 4:
             binary.append(0)
@@ -266,8 +288,16 @@ def asset_name(path: str, side: str, kind: str) -> str:
     return f"{hashlib.sha1(path.encode()).hexdigest()[:12]}-{side}.{'glb' if kind == 'model' else 'webp'}"
 
 
-def make_media(summary: dict, sfd: str, vrf: str) -> tuple[str, dict, int] | None:
-    items = pick(summary)
+def same_picture(a: bytes, b: bytes) -> bool:
+    """Textures that were only recompiled: equal after shrinking, give or take compression noise."""
+    from PIL import Image, ImageChops, ImageStat
+    with Image.open(io.BytesIO(a)) as x, Image.open(io.BytesIO(b)) as y:
+        x, y = (i.convert("RGBA").resize((64, 64)) for i in (x, y))
+        return max(ImageStat.Stat(ImageChops.difference(x, y)).mean) < 2
+
+
+def make_media(summary: dict, sfd: str, vrf: str) -> tuple[str, dict, int, dict] | None:
+    items, boring = pick(summary)
     if not items:
         return None
     old, new = manifest_id(summary["parent"]), manifest_id(summary["sha"])
@@ -279,12 +309,11 @@ def make_media(summary: dict, sfd: str, vrf: str) -> tuple[str, dict, int] | Non
         files = SteamFiles(sfd, work, [m for _, m, _ in sides])
         files.fetch_with_dependencies({i["path"] for i in items})
 
-        out_dir, media = work / "out", {}
+        out_dir, media, unchanged = work / "out", {}, 0
         out_dir.mkdir()
         for n, item in enumerate(items):
             entry = {"kind": item["kind"], "subject": item["subject"], "status": item["status"]}
-            if item.get("service"):
-                entry["service"] = True
+            blobs = {}
             for side, manifest, sha in sides:
                 if side == "before" and item["status"] == "a" or side == "after" and item["status"] == "r":
                     continue
@@ -292,10 +321,17 @@ def make_media(summary: dict, sfd: str, vrf: str) -> tuple[str, dict, int] | Non
                 convert = convert_model if item["kind"] == "model" else convert_texture
                 blob = convert(vrf, citadel, item["path"], work / "tmp" / f"{n}-{side}")
                 if blob:
-                    name = asset_name(item["path"], side, item["kind"])
-                    (out_dir / name).write_bytes(blob)
-                    entry[side] = name
-            if "after" in entry or "before" in entry:
+                    blobs[side] = blob
+            # Valve rebuilds hundreds of assets without touching how they look: those are not news.
+            if len(blobs) == 2 and (blobs["before"] == blobs["after"] or
+                                    item["kind"] == "texture" and same_picture(blobs["before"], blobs["after"])):
+                unchanged += 1
+                continue
+            for side, blob in blobs.items():
+                name = asset_name(item["path"], side, item["kind"])
+                (out_dir / name).write_bytes(blob)
+                entry[side] = name
+            if blobs:
                 media[item["path"]] = entry
         if not media:
             return None
@@ -307,7 +343,7 @@ def make_media(summary: dict, sfd: str, vrf: str) -> tuple[str, dict, int] | Non
         assets = sorted(out_dir.iterdir())
         for i in range(0, len(assets), 50):
             gh("release", "upload", tag, *map(str, assets[i:i + 50]))
-        return tag, media, sum(a.stat().st_size for a in assets)
+        return tag, media, sum(a.stat().st_size for a in assets), {"boring": boring, "unchanged": unchanged}
     finally:
         shutil.rmtree(work, ignore_errors=True)
 
@@ -315,7 +351,7 @@ def make_media(summary: dict, sfd: str, vrf: str) -> tuple[str, dict, int] | Non
 def drop_media(path: Path, summary: dict) -> None:
     if summary.get("mediaTag"):
         gh("release", "delete", summary["mediaTag"], "--yes", "--cleanup-tag", check=False)
-    for key in ("media", "mediaTag", "mediaBytes", "mediaDone", "mediaVersion"):
+    for key in ("media", "mediaTag", "mediaBytes", "mediaSkipped", "mediaDone", "mediaVersion"):
         summary.pop(key, None)
     path.write_text(json.dumps(summary, ensure_ascii=False, separators=(",", ":")), "utf-8")
 
@@ -358,12 +394,12 @@ def main() -> int:
                 stopped = True
                 continue
             if made:
-                summary["mediaTag"], summary["media"], summary["mediaBytes"] = made
+                summary["mediaTag"], summary["media"], summary["mediaBytes"], summary["mediaSkipped"] = made
                 log(f"  {len(made[1])} items, {made[2] / 1e6:.1f} MB")
             else:
                 if summary.get("mediaTag"):
                     gh("release", "delete", summary["mediaTag"], "--yes", "--cleanup-tag", check=False)
-                for key in ("media", "mediaTag", "mediaBytes"):
+                for key in ("media", "mediaTag", "mediaBytes", "mediaSkipped"):
                     summary.pop(key, None)
                 entry.pop("media", None)
             summary["mediaDone"], summary["mediaVersion"] = True, MEDIA_VERSION
