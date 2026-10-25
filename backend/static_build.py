@@ -7,6 +7,7 @@ developer messages, writes the archive back and builds the site into site/.
     python -m backend.static_build --no-poll  # only rebuild the site from the archive
 """
 import asyncio
+import hashlib
 import json
 import os
 import shutil
@@ -80,12 +81,26 @@ def export(last_poll: dict) -> None:
     if SITE.exists():
         shutil.rmtree(SITE)
     shutil.copytree(config.ROOT / "frontend", SITE)
+    bust_cache(SITE / "index.html", ("styles.css", "app.js"))
     status = {"demo": False, "collector": "live", "ingest": False,
               "lastPoll": last_poll, "pollSeconds": None}
     (SITE / "data.json").write_text(json.dumps(
         {"generatedAt": int(time.time() * 1000), "status": status,
          "developers": devs, "messages": messages}, ensure_ascii=False), encoding="utf-8")
     (SITE / ".nojekyll").touch()
+
+
+def bust_cache(page: Path, assets: tuple[str, ...]) -> None:
+    """Point the page at content-hashed asset URLs.
+
+    GitHub Pages lets browsers cache files for 10 minutes, so without this a
+    deploy can pair the new HTML with a stale stylesheet or script.
+    """
+    html = page.read_text(encoding="utf-8")
+    for name in assets:
+        digest = hashlib.sha1((page.parent / name).read_bytes()).hexdigest()[:10]
+        html = html.replace(f'"{name}"', f'"{name}?v={digest}"')
+    page.write_text(html, encoding="utf-8")
 
 
 def main() -> int:
