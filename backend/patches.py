@@ -587,8 +587,8 @@ def main() -> int:
     for f in OUT.glob("*.json"):
         if f.name != "index.json" and f.name not in keep:
             f.unlink()
-    index_path.write_text(json.dumps({"updatedAt": int(time.time() * 1000), "source": REPO_URL, "builds": builds},
-                                     ensure_ascii=False, indent=1) + "\n", "utf-8")
+    index |= {"updatedAt": int(time.time() * 1000), "source": REPO_URL, "builds": builds}
+    index_path.write_text(json.dumps(index, ensure_ascii=False, indent=1) + "\n", "utf-8")
     return 0
 
 

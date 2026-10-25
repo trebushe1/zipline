@@ -38,7 +38,7 @@ def format_message(msg: dict, author: str) -> str:
     return head + body + tail
 
 
-async def send(client: httpx.AsyncClient, text: str) -> None:
+async def send(client: httpx.AsyncClient, text: str) -> bool:
     resp = await client.post(
         f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/sendMessage",
         json={"chat_id": config.TELEGRAM_CHAT_ID, "text": text, "parse_mode": "HTML",
@@ -47,3 +47,4 @@ async def send(client: httpx.AsyncClient, text: str) -> None:
     )
     if resp.status_code != 200:
         log.error("telegram send failed: %s %s", resp.status_code, resp.text[:200])
+    return resp.status_code == 200

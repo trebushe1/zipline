@@ -49,6 +49,8 @@ RUN_SECONDS = int(os.environ.get("RUN_SECONDS", "0"))  # 0 = run forever
 # Telegram notifications about new developer messages. Empty = disabled.
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
+# Public address of the site, for links in notifications.
+SITE_URL = os.environ.get("SITE_URL", "https://trebushe1.github.io/zipline/").rstrip("/") + "/"
 
 # Firebase Realtime Database: the live collector pushes the newest messages there and
 # open pages receive them instantly. The URL is public; the service account JSON is secret.
