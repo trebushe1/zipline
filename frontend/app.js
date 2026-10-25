@@ -387,11 +387,12 @@ function renderStatus(st) {
   el.className = "collector-status";
   if (!st.collector) {
     el.textContent = st.ingest ? "Сборщик: ожидаю данные через /api/ingest" : "Сборщик Discord не подключён";
+  } else if (st.collector === "live") {
+    el.classList.add("ok");
+    el.textContent = `Discord: отслеживание в реальном времени · данные обновлены ${ago(st.lastPoll?.at)}`;
   } else if (st.lastPoll?.ok) {
     el.classList.add("ok");
-    el.textContent = st.pollSeconds
-      ? `Discord: последний опрос ${ago(st.lastPoll.at)}, интервал ${st.pollSeconds} с`
-      : `Discord: последний опрос ${ago(st.lastPoll.at)}`;
+    el.textContent = `Discord: последний опрос ${ago(st.lastPoll.at)}, интервал ${st.pollSeconds} с`;
   } else if (st.lastPoll) {
     el.classList.add("err");
     el.textContent = `Discord: ошибка опроса — ${st.lastPoll.error}`;

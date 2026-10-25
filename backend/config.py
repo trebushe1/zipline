@@ -28,6 +28,17 @@ DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN", "")
 POLL_SECONDS = int(os.environ.get("POLL_SECONDS", "90"))
 BACKFILL_PAGES = int(os.environ.get("BACKFILL_PAGES", "8"))
 
+# Live collector (backend/live.py): fast polling of busy channels + periodic search.
+FAST_SECONDS = float(os.environ.get("FAST_SECONDS", "5"))
+SEARCH_SECONDS = float(os.environ.get("SEARCH_SECONDS", "60"))
+RUN_SECONDS = int(os.environ.get("RUN_SECONDS", "0"))  # 0 = run forever
+# Extra channel IDs to poll fast, comma-separated (busy dev channels are picked automatically).
+HOT_CHANNELS = [c for c in os.environ.get("HOT_CHANNELS", "").split(",") if c]
+
+# Telegram notifications about new developer messages. Empty = disabled.
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
+
 # Shared secret for POST /api/ingest. Empty = endpoint disabled.
 INGEST_SECRET = os.environ.get("INGEST_SECRET", "")
 

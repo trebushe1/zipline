@@ -3,7 +3,8 @@
 Loads data/archive.json into a throwaway SQLite database, polls Discord for new
 developer messages, writes the archive back and builds the site into site/.
 
-    python -m backend.static_build
+    python -m backend.static_build            # poll once, then build
+    python -m backend.static_build --no-poll  # only rebuild the site from the archive
 """
 import asyncio
 import json
@@ -44,7 +45,7 @@ async def poll() -> dict:
         return {"ok": False, "at": started, "new": 0, "error": "DISCORD_TOKEN is not set"}
     collector = DiscordCollector()
     try:
-        new = await collector.poll_once()
+        new = len(await collector.poll_once())
         return {"ok": True, "at": started, "new": new, "error": None}
     except Exception as exc:
         return {"ok": False, "at": started, "new": 0, "error": str(exc)}
@@ -70,13 +71,13 @@ def export(last_poll: dict) -> None:
 
     archive_messages = [{k: m[k] for k in MESSAGE_FIELDS} for m in messages]
     ARCHIVE.parent.mkdir(parents=True, exist_ok=True)
-    ARCHIVE.write_text(json.dumps({"developers": devs, "messages": archive_messages},
+    ARCHIVE.write_text(json.dumps({"lastPoll": last_poll, "developers": devs, "messages": archive_messages},
                                   ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 
     if SITE.exists():
         shutil.rmtree(SITE)
     shutil.copytree(config.ROOT / "frontend", SITE)
-    status = {"demo": False, "collector": "github-actions", "ingest": False,
+    status = {"demo": False, "collector": "live", "ingest": False,
               "lastPoll": last_poll, "pollSeconds": None}
     (SITE / "data.json").write_text(json.dumps(
         {"generatedAt": int(time.time() * 1000), "status": status,
@@ -86,7 +87,11 @@ def export(last_poll: dict) -> None:
 
 def main() -> int:
     db.init()
-    import_archive()
+    archive = import_archive()
+    if "--no-poll" in sys.argv:
+        # Publish what the live collector already stored.
+        export(archive.get("lastPoll") or {"ok": True, "at": int(time.time() * 1000), "new": 0, "error": None})
+        return 0
     last_poll = asyncio.run(poll())
     export(last_poll)
     if last_poll["ok"]:

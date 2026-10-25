@@ -1,0 +1,58 @@
+name: Live collector
+
+# One long run polls Discord every few seconds for ~5h45m, then starts its own
+# successor. The hourly schedule restarts the chain if it ever breaks.
+on:
+  workflow_dispatch:
+    inputs:
+      chain:
+        description: "Started by the previous run (skip the duplicate check)"
+        type: boolean
+        default: false
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Skip if another live run is active
+        id: guard
+        if: ${{ !inputs.chain }}
+        run: |
+          others=$(gh run list -R "$GITHUB_REPOSITORY" --workflow live.yml --status in_progress \
+            --json databaseId --jq "[.[] | select(.databaseId != ${{ github.run_id }})] | length")
+          echo "skip=$([ "$others" -gt 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v4
+        if: steps.guard.outputs.skip != 'true'
+
+      - uses: actions/setup-python@v5
+        if: steps.guard.outputs.skip != 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Run live collector
+        if: steps.guard.outputs.skip != 'true'
+        run: |
+          pip install -q httpx
+          git config user.name "zipline-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python -m backend.live
+        env:
+          PUBLISH: "1"
+          RUN_SECONDS: "20400"
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+      - name: Start the next run
+        if: steps.guard.outputs.skip != 'true' && !cancelled()
+        run: gh workflow run live.yml -R "$GITHUB_REPOSITORY" -f chain=true

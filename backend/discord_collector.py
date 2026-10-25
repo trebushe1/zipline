@@ -114,7 +114,8 @@ class DiscordCollector:
                 hits.append(hit)
         return hits, data.get("total_results", 0)
 
-    async def poll_once(self) -> int:
+    async def poll_once(self) -> list[dict]:
+        """Fetches developer messages newer than the newest stored one. Returns the new rows."""
         await self.refresh_channels()
         with db.session() as conn:
             authors = db.tracked_ids(conn)
@@ -124,7 +125,7 @@ class DiscordCollector:
         # First run: backfill a limited history. Later runs: everything newer than min_id.
         max_pages = config.BACKFILL_PAGES if min_id is None else 40
 
-        new_count = 0
+        new_rows = []
         for page in range(max_pages):
             hits, total = await self.search_page(authors, page * PAGE_SIZE, min_id)
             if not hits:
@@ -134,18 +135,20 @@ class DiscordCollector:
                     db.update_developer(conn, raw["author"]["id"],
                                         raw["author"].get("global_name") or raw["author"].get("username"),
                                         avatar_url(raw["author"]))
-                    new_count += db.upsert_message(conn, normalize(raw, self.channels, self.guild_id))
+                    row = normalize(raw, self.channels, self.guild_id)
+                    if db.upsert_message(conn, row):
+                        new_rows.append(row)
             if (page + 1) * PAGE_SIZE >= total:
                 break
             await asyncio.sleep(1.5)
-        return new_count
+        return new_rows
 
     async def run_forever(self) -> None:
         log.info("Discord collector started, polling every %ss", config.POLL_SECONDS)
         while True:
             started = int(time.time() * 1000)
             try:
-                new = await self.poll_once()
+                new = len(await self.poll_once())
                 with db.session() as conn:
                     if db.kv_get(conn, "demo"):
                         db.purge_demo(conn)
