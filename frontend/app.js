@@ -54,7 +54,7 @@ function renderMarkdown(text) {
 function hue(id) {
   let h = 0;
   for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
-  return 100 + (h % 90); // greens to teals
+  return h;
 }
 
 function avatar(dev, lg = false) {
@@ -70,7 +70,7 @@ function avatar(dev, lg = false) {
   const span = document.createElement("span");
   span.className = "avatar" + (lg ? " lg" : "");
   span.textContent = name[0].toUpperCase();
-  span.style.background = `hsl(${hue(dev?.user_id || name)} 45% 55%)`;
+  span.dataset.tone = hue(dev?.user_id || name) % 3; // ink, green or navy
   span.setAttribute("aria-hidden", "true");
   return span;
 }
@@ -449,8 +449,39 @@ async function refreshSide() {
   renderStatus(status);
 }
 
+// ── Theme ──────────────────────────────────────────────
+// The inline script in <head> already set data-theme; this wires the switch.
+const systemDark = matchMedia("(prefers-color-scheme: dark)");
+
+function applyTheme(theme, animate) {
+  const root = document.documentElement;
+  if (animate) {
+    root.classList.add("theme-anim");
+    setTimeout(() => root.classList.remove("theme-anim"), 350);
+  }
+  root.dataset.theme = theme;
+  $("#theme-toggle").setAttribute("aria-checked", theme === "dark");
+  document.querySelector('meta[name="theme-color"]').content = theme === "dark" ? "#0c0d0c" : "#ebebe9";
+}
+
+function initTheme() {
+  applyTheme(document.documentElement.dataset.theme || "light", false);
+  $("#theme-toggle").addEventListener("click", () => {
+    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    try { localStorage.setItem("theme", next); } catch {}
+    applyTheme(next, true);
+  });
+  // Follow the OS switch until the visitor picks a theme themselves.
+  systemDark.addEventListener("change", (e) => {
+    let saved = null;
+    try { saved = localStorage.getItem("theme"); } catch {}
+    if (!saved) applyTheme(e.matches ? "dark" : "light", true);
+  });
+}
+
 // ── Boot ───────────────────────────────────────────────
 function init() {
+  initTheme();
   const p = new URLSearchParams(location.search);
   state.q = p.get("q") || "";
   state.channel = p.get("channel") || "";

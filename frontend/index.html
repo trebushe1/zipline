@@ -7,34 +7,39 @@
   <meta name="description" content="zipline: сообщения разработчиков Deadlock из Discord в одной ленте.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Limelight&family=Forum&family=Josefin+Sans:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/icon.png" type="image/png">
+  <meta name="theme-color" content="#ebebe9">
   <link rel="stylesheet" href="styles.css">
+  <script>
+    // Pick the theme before first paint: saved choice, else the system setting.
+    (() => {
+      let t;
+      try { t = localStorage.getItem("theme"); } catch {}
+      document.documentElement.dataset.theme = t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    })();
+  </script>
 </head>
 <body>
   <header class="masthead">
     <div class="wrap masthead-inner">
       <a class="brand" href="./" aria-label="zipline — на главную">
-        <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="29" fill="none" stroke="currentColor" stroke-width="2"/>
-          <circle cx="32" cy="32" r="23" fill="none" stroke="currentColor" stroke-width="1" opacity=".5"/>
-          <path d="M6 22 L58 38" stroke="currentColor" stroke-width="2.5"/>
-          <g class="brand-trolley">
-            <circle cx="26" cy="28" r="4.5" fill="var(--bg)" stroke="var(--green)" stroke-width="2"/>
-            <path d="M26 32 L26 44 M21 44 L31 44" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"/>
-          </g>
-        </svg>
-        <span class="brand-text">
-          <span class="brand-name">zipline</span>
-          <span class="brand-tag">Deadlock · новости и разведка</span>
-        </span>
+        <img class="brand-logo day" src="assets/logo.png" alt="Zipline" width="560" height="263">
+        <img class="brand-logo night" src="assets/logo-white.png" alt="Zipline" width="420" height="151">
+        <span class="brand-tag">Deadlock<br>новости и разведка</span>
       </a>
-      <nav class="nav" aria-label="Разделы">
-        <a class="nav-link active" href="./">Разработчики</a>
-        <span class="nav-link soon" title="Скоро">Патчи</span>
-        <span class="nav-link soon" title="Скоро">Серверы</span>
-        <span class="nav-link soon" title="Скоро">Статистика</span>
-      </nav>
+      <div class="masthead-end">
+        <nav class="nav" aria-label="Разделы">
+          <a class="nav-link active" href="./">Разработчики</a>
+          <span class="nav-link soon" title="Скоро">Патчи</span>
+          <span class="nav-link soon" title="Скоро">Серверы</span>
+          <span class="nav-link soon" title="Скоро">Статистика</span>
+        </nav>
+        <button class="theme-toggle" id="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Ночная тема">
+          <span class="t-day"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2"/></svg>День</span>
+          <span class="t-night"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="currentColor"/></svg>Ночь</span>
+        </button>
+      </div>
     </div>
     <div class="cable" aria-hidden="true"><span class="cable-rider"></span></div>
   </header>
@@ -46,15 +51,23 @@
     </div>
 
     <section class="page-title">
-      <p class="eyebrow">Discord · официальный сервер Deadlock</p>
-      <h1>Трекер разработчиков</h1>
-      <div class="deco-rule" aria-hidden="true"><span></span></div>
+      <div class="title-copy">
+        <p class="eyebrow">Discord · официальный сервер Deadlock</p>
+        <h1>
+          <span class="tag tag-ink">Трекер</span>
+          <span class="tag tag-paper">разработчиков</span>
+        </h1>
+        <p class="lede">Всё, что разработчики Valve пишут в Discord, — в одной ленте. Фильтруйте по автору и каналу, копируйте текст для поста.</p>
+      </div>
+      <figure class="title-art" aria-hidden="true">
+        <img src="assets/avatar.jpg" alt="" width="640" height="640">
+      </figure>
     </section>
 
     <section class="stats" aria-label="Сводка">
       <div class="stat"><span class="stat-label">За 24 часа</span><span class="stat-value" id="stat-day">—</span></div>
       <div class="stat"><span class="stat-label">За 7 дней</span><span class="stat-value" id="stat-week">—</span></div>
-      <div class="stat"><span class="stat-label">Активнее всех (7 д)</span><span class="stat-value stat-name" id="stat-top">—</span></div>
+      <div class="stat"><span class="stat-label">Лидер недели</span><span class="stat-value stat-name" id="stat-top">—</span></div>
       <div class="stat"><span class="stat-label">Последнее сообщение</span><span class="stat-value stat-name" id="stat-last">—</span></div>
       <div class="stat stat-spark">
         <span class="stat-label">30 дней</span>
@@ -97,8 +110,9 @@
 
   <footer class="footer">
     <div class="wrap footer-inner">
-      <span class="brand-name small">zipline</span>
+      <img class="footer-logo" src="assets/logo-white.png" alt="Zipline" width="420" height="151">
       <span id="collector-status" class="collector-status">—</span>
+      <span class="handle">@zipline</span>
     </div>
   </footer>
 
