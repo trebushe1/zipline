@@ -4,8 +4,9 @@ The tracked channels (#deadlock-chat, #announcements) are read directly every
 FAST_SECONDS, so new messages show up within seconds — no waiting for the search
 index. Threads of those channels where developers posted recently are read every
 few ticks, and a guild search every SEARCH_SECONDS catches new threads.
-New messages go to Telegram immediately; the archive is then committed and the
-site redeployed (only when running in GitHub Actions with PUBLISH=1).
+New messages go to Telegram and Firebase (open pages update instantly) right
+away; the archive is then committed and the site redeployed (only when running
+in GitHub Actions with PUBLISH=1).
 
     python -m backend.live
 """
@@ -18,7 +19,7 @@ import time
 import httpx
 
 from . import static_build  # sets up the temporary database; must come first
-from . import config, db, telegram
+from . import config, db, realtime, telegram
 from .discord_collector import DiscordCollector, avatar_url, normalize
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
@@ -109,7 +110,8 @@ async def main() -> None:
     db.init()
     static_build.import_archive()
     collector = LiveCollector()
-    tg = httpx.AsyncClient()
+    tg = httpx.AsyncClient()  # shared by Telegram and Firebase
+    live_site = realtime.Realtime()
     tracked = set()
     deadline = time.time() + config.RUN_SECONDS if config.RUN_SECONDS else float("inf")
     cursors: dict[str, str] = {}  # tracked channels, read every tick
@@ -119,19 +121,26 @@ async def main() -> None:
     unpublished = 0
     first_unpublished_at = 0.0
     publish_task: asyncio.Task | None = None
-    log.info("live collector started: fast=%ss search=%ss telegram=%s",
-             config.FAST_SECONDS, config.SEARCH_SECONDS, telegram.enabled())
+    log.info("live collector started: fast=%ss search=%ss telegram=%s firebase=%s",
+             config.FAST_SECONDS, config.SEARCH_SECONDS, telegram.enabled(), live_site.enabled)
 
-    async def handle(rows: list[dict]) -> None:
-        nonlocal unpublished, first_unpublished_at
+    async def notify_telegram(rows: list[dict]) -> None:
         for row in sorted(rows, key=lambda r: r["time"]):
             name = author_name(row["author_id"])
             log.info("NEW %s in #%s: %s", name, row.get("channel_name"), row["text"][:80])
             if telegram.enabled():
                 await telegram.send(tg, telegram.format_message(row, name))
-        if rows:
-            first_unpublished_at = first_unpublished_at or time.time()
-            unpublished += len(rows)
+
+    async def handle(rows: list[dict]) -> None:
+        nonlocal unpublished, first_unpublished_at
+        if not rows:
+            return
+        jobs = [notify_telegram(rows)]
+        if live_site.enabled:
+            jobs.append(live_site.push(tg, static_build.site_messages(realtime.LATEST)))
+        await asyncio.gather(*jobs)
+        first_unpublished_at = first_unpublished_at or time.time()
+        unpublished += len(rows)
 
     async def add_cursor(target: dict, channel_id: str) -> None:
         try:
@@ -155,6 +164,9 @@ async def main() -> None:
                     log.warning("channel %s: %s", channel_id, exc)
             except Exception as exc:
                 log.warning("channel %s: %s", channel_id, exc)
+
+    if live_site.enabled:
+        await live_site.push(tg, static_build.site_messages(realtime.LATEST))
 
     try:
         while time.time() < deadline:

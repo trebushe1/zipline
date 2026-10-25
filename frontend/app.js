@@ -187,8 +187,24 @@ async function loadMore() {
 async function checkNew() {
   if (!state.newest) return loadFeed();
   const data = await api("dev-messages", { ...filterParams(), after: state.newest, limit: 100 });
+  addIncoming(data.messages);
+}
+
+// Same filters as the feed query, for messages that arrive in real time.
+function matchesFilters(m) {
+  const q = state.q.trim().toLowerCase();
+  return (!q || m.text.toLowerCase().includes(q) || (m.thread_name || "").toLowerCase().includes(q)) &&
+    (!state.authors.size || state.authors.has(m.author_id)) &&
+    (!state.channel || m.channel_name === state.channel);
+}
+
+function addIncoming(messages) {
   const known = new Set([...state.pending, ...state.messages].map((m) => m.id));
-  state.pending = [...data.messages.filter((m) => !known.has(m.id)), ...state.pending];
+  const fresh = messages.filter((m) => !known.has(m.id) && m.time > (state.messages.at(-1)?.time || 0));
+  if (!fresh.length) return;
+  state.pending = [...fresh, ...state.pending].sort((a, b) => b.time - a.time);
+  // Reader is at the top of the feed: show right away; otherwise offer the bar.
+  if (window.scrollY < 300) return showPending();
   const bar = $("#new-bar");
   bar.hidden = !state.pending.length;
   bar.textContent = `Новых сообщений: ${state.pending.length} — показать`;
@@ -479,6 +495,26 @@ function initTheme() {
   });
 }
 
+// ── Real time ──────────────────────────────────────────
+// The live collector writes the newest messages to Firebase; the browser keeps an
+// event stream open and shows them within a second or two. If the stream is
+// unavailable, the 30-second refresh below still picks them up after a deploy.
+function subscribeRealtime() {
+  const url = staticData?.status?.realtimeUrl;
+  if (!url || !window.EventSource) return;
+  const stream = new EventSource(`${url}/live/latest.json`);
+  stream.addEventListener("put", (ev) => {
+    const { path, data } = JSON.parse(ev.data);
+    if (path !== "/" || !data?.messages) return;
+    // Firebase drops empty arrays and nulls, so restore the fields the feed expects.
+    const messages = Object.values(data.messages).map((m) => ({
+      thread_name: null, edited_time: null, url: null, avatar: null, ...m,
+      attachments: m.attachments || [], embeds: m.embeds || [], text: m.text || "",
+    }));
+    addIncoming(messages.filter(matchesFilters));
+  });
+}
+
 // ── Boot ───────────────────────────────────────────────
 function init() {
   initTheme();
@@ -508,6 +544,7 @@ function init() {
     .catch(() => false)
     .then(refreshSide)
     .then(() => loadFeed())
+    .then(subscribeRealtime)
     .catch(showError);
 
   setInterval(() => {

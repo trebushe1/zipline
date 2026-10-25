@@ -50,6 +50,11 @@ RUN_SECONDS = int(os.environ.get("RUN_SECONDS", "0"))  # 0 = run forever
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
+# Firebase Realtime Database: the live collector pushes the newest messages there and
+# open pages receive them instantly. The URL is public; the service account JSON is secret.
+FIREBASE_DB_URL = os.environ.get("FIREBASE_DB_URL", "").rstrip("/")
+FIREBASE_SERVICE_ACCOUNT = os.environ.get("FIREBASE_SERVICE_ACCOUNT", "")
+
 # Shared secret for POST /api/ingest. Empty = endpoint disabled.
 INGEST_SECRET = os.environ.get("INGEST_SECRET", "")
 

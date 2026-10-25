@@ -42,7 +42,7 @@ jobs:
       - name: Run live collector
         if: steps.guard.outputs.skip != 'true'
         run: |
-          pip install -q httpx
+          pip install -q httpx google-auth requests
           git config user.name "zipline-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           python -m backend.live
@@ -52,6 +52,8 @@ jobs:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          FIREBASE_DB_URL: ${{ vars.FIREBASE_DB_URL }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
       - name: Start the next run
         if: steps.guard.outputs.skip != 'true' && !cancelled()

@@ -54,11 +54,9 @@ async def poll() -> dict:
         await collector.client.aclose()
 
 
-def export(last_poll: dict) -> None:
+def site_messages(limit: int | None = None) -> list[dict]:
+    """Messages in the shape the site renders, newest first."""
     with db.session() as conn:
-        authors = [dict(r) for r in conn.execute(
-            "SELECT user_id, name, avatar, tracked FROM developers WHERE is_demo=0")]
-        devs = [{k: a[k] for k in ("user_id", "name", "avatar")} for a in authors if a["tracked"]]
         rows = conn.execute("""
             SELECT m.*, d.name, d.avatar FROM messages m
             LEFT JOIN developers d ON d.user_id = m.author_id
@@ -72,6 +70,17 @@ def export(last_poll: dict) -> None:
         msg["attachments"] = json.loads(msg["attachments"])
         msg["embeds"] = json.loads(msg["embeds"])
         messages.append(msg | {"name": r["name"], "avatar": r["avatar"], "is_demo": False})
+        if limit and len(messages) >= limit:
+            break
+    return messages
+
+
+def export(last_poll: dict) -> None:
+    with db.session() as conn:
+        authors = [dict(r) for r in conn.execute(
+            "SELECT user_id, name, avatar, tracked FROM developers WHERE is_demo=0")]
+    devs = [{k: a[k] for k in ("user_id", "name", "avatar")} for a in authors if a["tracked"]]
+    messages = site_messages()
 
     archive_messages = [{k: m[k] for k in MESSAGE_FIELDS} for m in messages]
     ARCHIVE.parent.mkdir(parents=True, exist_ok=True)
@@ -83,7 +92,8 @@ def export(last_poll: dict) -> None:
     shutil.copytree(config.ROOT / "frontend", SITE)
     bust_cache(SITE / "index.html", ("styles.css", "app.js"))
     status = {"demo": False, "collector": "live", "ingest": False,
-              "lastPoll": last_poll, "pollSeconds": None}
+              "lastPoll": last_poll, "pollSeconds": None,
+              "realtimeUrl": config.FIREBASE_DB_URL or None}
     (SITE / "data.json").write_text(json.dumps(
         {"generatedAt": int(time.time() * 1000), "status": status,
          "developers": devs, "messages": messages}, ensure_ascii=False), encoding="utf-8")
