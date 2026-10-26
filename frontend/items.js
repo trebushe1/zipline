@@ -332,9 +332,13 @@ function closeItem() {
 const images = new Map();
 function loadImage(src) {
   if (!images.has(src)) {
+    // onload rather than decode(): decode() can stall in a background tab.
     const img = new Image();
-    img.src = src;
-    images.set(src, img.decode().then(() => img).catch((err) => { images.delete(src); throw err; }));
+    images.set(src, new Promise((resolve, reject) => {
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error(`${src}: not loaded`));
+      img.src = src;
+    }).catch((err) => { images.delete(src); throw err; }));
   }
   return images.get(src);
 }
@@ -1042,6 +1046,11 @@ function viewHtml(b, shared) {
           ${shared ? `<button class="btn export-btn" type="button" data-view="save">Сохранить себе и редактировать</button>`
             : `<button class="btn export-btn" type="button" data-view="edit">Редактировать</button>`}
           <button class="btn" type="button" data-view="share">Скопировать ссылку</button>
+          <span class="bv-shot">
+            <span class="ctl-label">Картинка · PNG</span>
+            <button class="btn" type="button" data-shot="1080x1080">1080×1080</button>
+            <button class="btn" type="button" data-shot="1920x1080">1920×1080</button>
+          </span>
           <button class="btn" type="button" data-view="close">К магазину</button>
         </div>
       </div>
@@ -1083,6 +1092,7 @@ function viewAction(act) {
   if (!b) return;
   if (act === "share") return shareBuild(b);
   if (act === "close") return closeView();
+  if (act.startsWith("shot:")) return downloadShot(b, ...act.slice(5).split("x").map(Number));
   closeView();
   if (act === "save") {
     const copy = newBuild(b);
@@ -1093,6 +1103,284 @@ function viewAction(act) {
     openEditor(b.id);
   }
   $("#shop-layout").scrollIntoView({ block: "start" });
+}
+
+// ── Builds: a picture of the whole build ───────────────
+// Drawn on a canvas of the exact size, so it holds only the build: no buttons, no page around it.
+// The tile size is the largest at which every category (and the ability order) fits.
+const SLOT_COLOR = {
+  weapon: ["#d38a39", "#5c3a14"], vitality: ["#7cae46", "#33501b"], spirit: ["#a77ddc", "#45306a"],
+};
+const MONO = '"JetBrains Mono", ui-monospace, monospace';
+const SANS = '"IBM Plex Sans", system-ui, sans-serif';
+
+function fitLines(ctx, text, width, max) {
+  const words = String(text).split(/\s+/).filter(Boolean), lines = [];
+  let line = "";
+  for (let i = 0; i < words.length; i++) {
+    const next = line ? `${line} ${words[i]}` : words[i];
+    if (ctx.measureText(next).width <= width || !line) {
+      line = next;
+      continue;
+    }
+    lines.push(line);
+    line = words[i];
+    if (lines.length === max) break;
+  }
+  if (lines.length < max && line) lines.push(line);
+  const cut = lines.length === max && lines.join(" ").length < words.join(" ").length;
+  return lines.map((l, i) => {
+    if (!(cut && i === max - 1) && ctx.measureText(l).width <= width) return l;
+    while (l.length > 1 && ctx.measureText(`${l}…`).width > width) l = l.slice(0, -1);
+    return `${l.trimEnd()}…`;
+  });
+}
+
+const tryImage = (src) => src ? Promise.race([loadImage(src).catch(() => null), new Promise((r) => setTimeout(() => r(null), 10_000))]) : Promise.resolve(null);
+
+function shotLayout(cats, W, top, bottom, pad, gap) {
+  // Categories go into columns (each into the shortest one); try 1–4 columns and every tile size.
+  const contentW = W - pad * 2, room = bottom - top;
+  let best = null;
+  for (let cols = 1; cols <= Math.min(4, cats.length); cols++) {
+    const colW = (contentW - gap * (cols - 1)) / cols;
+    for (let size = 230; size >= 34; size -= 2) {
+      const tg = Math.max(6, size * 0.08), head = Math.max(26, size * 0.24);
+      const perRow = Math.max(1, Math.floor((colW + tg) / (size + tg)));
+      const heights = Array(cols).fill(0), place = [];
+      for (const c of cats) {
+        const notes = c.items.some((i) => i.note);
+        const tileH = size * (1.42 + (notes ? 0.3 : 0));
+        const rows = Math.max(1, Math.ceil(c.items.length / perRow));
+        const h = head + (c.desc ? size * 0.2 : 0) + rows * tileH + (rows - 1) * tg;
+        const col = heights.indexOf(Math.min(...heights));
+        place.push({ c, col, y: heights[col], h, tileH, perRow, notes });
+        heights[col] += h + gap;
+      }
+      if (Math.max(...heights) - gap <= room) {
+        if (!best || size > best.size) best = { cols, colW, size, tg, head, place };
+        break;
+      }
+    }
+  }
+  return best;
+}
+
+async function drawBuildShot(b, W, H) {
+  await Promise.all([`800 20px ${MONO}`, `600 20px ${SANS}`, `400 20px ${SANS}`].map((f) => document.fonts.load(f).catch(() => null)));
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+  ctx.imageSmoothingQuality = "high";
+  const wide = W > H, pad = Math.round(W * (wide ? 0.03 : 0.04));
+  const hero = state.heroByKey.get(b.hero);
+  const cats = b.cats.filter((c) => c.items.length);
+  const cost = buildCost(b);
+
+  // Paper-dark background like the shop board.
+  const bg = ctx.createRadialGradient(W / 2, 0, 0, W / 2, 0, Math.max(W, H));
+  bg.addColorStop(0, "#2a241c");
+  bg.addColorStop(0.7, "#15120e");
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Header: portrait, eyebrow, the name on a white label, totals.
+  const headH = Math.round(H * (wide ? 0.2 : 0.2));
+  let x = pad;
+  const heroImg = hero?.icon ? await tryImage(`heroes/icons/${hero.icon}`) : null;
+  if (heroImg) {
+    const h = headH - pad * 0.3, w = h * 0.74;
+    ctx.fillStyle = "#007d59";
+    ctx.fillRect(x, pad, w, h);
+    const scale = Math.max((w - 8) / heroImg.naturalWidth, (h - 8) / heroImg.naturalHeight);
+    const sw = (w - 8) / scale, sh = (h - 8) / scale;
+    ctx.drawImage(heroImg, (heroImg.naturalWidth - sw) / 2, 0, sw, sh, x + 4, pad + 4, w - 8, h - 8);
+    x += w + pad * 0.7;
+  }
+  const textW = W - x - pad;
+  const eyebrow = Math.round(H * 0.017);
+  ctx.textBaseline = "top";
+  ctx.font = `700 ${eyebrow}px ${MONO}`;
+  ctx.fillStyle = "#3cc493";
+  ctx.fillText(`БИЛД DEADLOCK${hero ? ` · ${hero.name.toUpperCase()}` : ""}`, x, pad);
+  let titleSize = Math.round(H * (wide ? 0.05 : 0.045));
+  ctx.font = `800 ${titleSize}px ${MONO}`;
+  while (ctx.measureText(b.name.toUpperCase()).width > textW - 20 && titleSize > 18) ctx.font = `800 ${--titleSize}px ${MONO}`;
+  const title = fitLines(ctx, b.name.toUpperCase(), textW - 20, 1)[0];
+  const ty = pad + eyebrow * 1.9, tw = ctx.measureText(title).width;
+  ctx.fillStyle = "#f6f6f4";
+  ctx.fillRect(x, ty, tw + titleSize * 0.6, titleSize * 1.3);
+  ctx.fillStyle = "#111";
+  ctx.fillText(title, x + titleSize * 0.3, ty + titleSize * 0.18);
+  let y = ty + titleSize * 1.3 + H * 0.016;
+  if (b.desc) {
+    const ds = Math.round(H * 0.018);
+    ctx.font = `400 ${ds}px ${SANS}`;
+    ctx.fillStyle = "#c4c7c0";
+    for (const line of fitLines(ctx, b.desc.replace(/\s+/g, " "), textW, wide ? 1 : 2)) {
+      ctx.fillText(line, x, y);
+      y += ds * 1.35;
+    }
+    y += H * 0.006;
+  }
+  // Totals: souls, then each section; the sections move to a second row when one does not hold them.
+  const ts = Math.round(H * 0.022), chipH = ts * 1.7, chipGap = ts * 0.5;
+  ctx.font = `800 ${ts}px ${MONO}`;
+  const total = `${souls(cost.total)} душ · ${plural(cost.count, "предмет", "предмета", "предметов")}`;
+  const totalW = ctx.measureText(total).width + ts * 1.2;
+  ctx.font = `700 ${Math.round(ts * 0.75)}px ${MONO}`;
+  const chips = SLOT_ORDER.filter((sl) => cost.bySlot[sl]).map((sl) => {
+    const label = `${SLOTS[sl].name.toUpperCase()} ${souls(cost.bySlot[sl])}`;
+    return { sl, label, w: ctx.measureText(label).width + ts * 1.6 };
+  });
+  const chipsW = chips.reduce((sum, c) => sum + c.w + chipGap, 0);
+  const oneRow = totalW + chipGap + chipsW <= textW;
+  y = Math.max(y, pad + headH - (oneRow ? chipH : chipH * 2 + chipGap));
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = "#0a4a36";
+  ctx.fillRect(x, y, totalW, chipH);
+  ctx.font = `800 ${ts}px ${MONO}`;
+  ctx.fillStyle = "#fff";
+  ctx.fillText(total, x + ts * 0.6, y + chipH / 2);
+  let cx = oneRow ? x + totalW + chipGap : x;
+  const cy = oneRow ? y : y + chipH + chipGap;
+  ctx.font = `700 ${Math.round(ts * 0.75)}px ${MONO}`;
+  for (const c of chips) {
+    if (cx + c.w > W - pad) break;
+    ctx.fillStyle = SLOT_COLOR[c.sl][1];
+    ctx.fillRect(cx, cy, c.w, chipH);
+    ctx.fillStyle = SLOT_COLOR[c.sl][0];
+    ctx.fillRect(cx, cy, ts * 0.35, chipH);
+    ctx.fillStyle = "#fff";
+    ctx.fillText(c.label, cx + ts * 0.8, cy + chipH / 2);
+    cx += c.w + chipGap;
+  }
+  const headBottom = Math.max(pad + headH, cy + chipH);
+
+  // Ability order along the bottom.
+  const abilities = hero?.abilities?.length && b.ab.length ? [...hero.abilities].sort((p, q) => p.slot - q.slot) : null;
+  const abH = abilities ? Math.round(H * (wide ? 0.11 : 0.1)) : 0;
+  const footH = Math.round(H * 0.035);
+  const top = headBottom + pad * 0.4, bottom = H - pad - footH - (abH ? abH + pad * 0.4 : 0);
+
+  const layout = shotLayout(cats, W, top, bottom, pad, Math.round(pad * 0.6));
+  if (layout) {
+    const icons = new Map(await Promise.all(cats.flatMap((c) => c.items).map(async (e) => {
+      const it = state.byKey.get(e.k);
+      return [e.k, it ? await tryImage(iconUrl(it)) : null];
+    })));
+    const { size, tg, head, colW } = layout;
+    for (const p of layout.place) {
+      const px = pad + p.col * (colW + Math.round(pad * 0.6)), py = top + p.y;
+      // Category label and its cost.
+      const hs = Math.round(head * 0.5);
+      ctx.font = `800 ${hs}px ${MONO}`;
+      ctx.textBaseline = "middle";
+      const name = fitLines(ctx, p.c.name.toUpperCase(), colW * 0.7, 1)[0];
+      ctx.fillStyle = "#ecece8";
+      ctx.fillRect(px, py, ctx.measureText(name).width + hs, head * 0.8);
+      ctx.fillStyle = "#111";
+      ctx.fillText(name, px + hs / 2, py + head * 0.4);
+      ctx.fillStyle = "#e6fbf7";
+      ctx.textAlign = "right";
+      ctx.fillText(`${souls(catCost(p.c))}`, px + colW, py + head * 0.4);
+      ctx.textAlign = "left";
+      let iy = py + head;
+      if (p.c.desc) {
+        ctx.font = `400 ${Math.round(size * 0.12)}px ${SANS}`;
+        ctx.fillStyle = "#a9ada6";
+        ctx.fillText(fitLines(ctx, p.c.desc.replace(/\s+/g, " "), colW, 1)[0], px, iy + size * 0.06);
+        iy += size * 0.2;
+      }
+      p.c.items.forEach((e, i) => {
+        const tx = px + (i % p.perRow) * (size + tg), ty2 = iy + Math.floor(i / p.perRow) * (p.tileH + tg);
+        const it = state.byKey.get(e.k);
+        const [light, deep] = SLOT_COLOR[it?.slot] || ["#666", "#333"];
+        const nameH = size * 0.42;
+        ctx.fillStyle = deep;
+        ctx.fillRect(tx, ty2, size, size + nameH);
+        const img = icons.get(e.k);
+        if (img) ctx.drawImage(img, tx + 2, ty2 + 2, size - 4, size - 4);
+        ctx.strokeStyle = light;
+        ctx.lineWidth = Math.max(2, size * 0.02);
+        ctx.strokeRect(tx + ctx.lineWidth / 2, ty2 + ctx.lineWidth / 2, size - ctx.lineWidth, size + nameH - ctx.lineWidth);
+        if (it?.active) {
+          const as = Math.round(size * 0.1);
+          ctx.font = `800 ${as}px ${MONO}`;
+          ctx.fillStyle = "#f3efe6";
+          ctx.fillRect(tx + 4, ty2 + 4, ctx.measureText("АКТ").width + as * 0.6, as * 1.4);
+          ctx.fillStyle = "#15120e";
+          ctx.fillText(it.active === "toggle" ? "ВКЛ" : "АКТ", tx + 4 + as * 0.3, ty2 + 4 + as * 0.72);
+        }
+        const ns = Math.max(10, Math.round(size * 0.115));
+        ctx.font = `600 ${ns}px ${SANS}`;
+        ctx.fillStyle = "#fff";
+        ctx.textAlign = "center";
+        const lines = fitLines(ctx, it ? nameOf(it) : e.k, size - 8, 2);
+        lines.forEach((l, li) => ctx.fillText(l, tx + size / 2, ty2 + size + nameH * (lines.length === 1 ? 0.5 : 0.3 + li * 0.38)));
+        if (e.note) {
+          ctx.font = `400 ${Math.max(10, Math.round(size * 0.1))}px ${SANS}`;
+          ctx.fillStyle = "#f3c74c";
+          fitLines(ctx, e.note, size, 2).forEach((l, li) => ctx.fillText(l, tx + size / 2, ty2 + size + nameH + size * (0.09 + li * 0.12)));
+        }
+        ctx.textAlign = "left";
+      });
+    }
+  } else if (!cats.length) {
+    ctx.font = `600 ${Math.round(H * 0.03)}px ${SANS}`;
+    ctx.fillStyle = "#8a8f88";
+    ctx.fillText("В билде пока нет предметов", pad, top + H * 0.05);
+  }
+
+  if (abilities) {
+    const glyphs = new Map(await Promise.all(abilities.map(async (a) => [a.slot, await tryImage(`heroes/abilities/${a.icon}`)])));
+    const ay = H - pad - footH - abH, ls = Math.round(abH * 0.16);
+    ctx.font = `700 ${ls}px ${MONO}`;
+    ctx.fillStyle = "#8a8f88";
+    ctx.textBaseline = "top";
+    ctx.fillText("ПОРЯДОК ПРОКАЧКИ", pad, ay);
+    const boxH = abH - ls * 1.6, n = b.ab.length;
+    const boxW = Math.min(boxH * 0.85, (W - pad * 2 - (n - 1) * 4) / n);
+    const levels = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    b.ab.forEach((slot, i) => {
+      levels[slot] = Math.min(4, levels[slot] + 1);
+      const bx = pad + i * (boxW + 4), by = ay + ls * 1.6;
+      ctx.fillStyle = "#221f1b";
+      ctx.fillRect(bx, by, boxW, boxH);
+      const g = glyphs.get(slot), gs = Math.min(boxW, boxH) * 0.5;
+      if (g) ctx.drawImage(g, bx + (boxW - gs) / 2, by + boxH * 0.22, gs, gs);
+      ctx.textAlign = "center";
+      ctx.font = `700 ${Math.round(boxH * 0.14)}px ${MONO}`;
+      ctx.fillStyle = "rgba(255,255,255,.55)";
+      ctx.fillText(String(i + 1), bx + boxW / 2, by + boxH * 0.04);
+      ctx.fillStyle = "#7ee0c3";
+      ctx.fillText(LEVEL_MARK[levels[slot]].toUpperCase(), bx + boxW / 2, by + boxH * 0.78);
+      ctx.textAlign = "left";
+    });
+  }
+
+  // Signature.
+  ctx.textBaseline = "bottom";
+  ctx.font = `700 ${Math.round(footH * 0.5)}px ${MONO}`;
+  ctx.fillStyle = "rgba(255,255,255,.45)";
+  const site = `${location.host}${location.pathname.replace(/\/[^/]*$/, "")}`;
+  ctx.fillText(`ZIPLINE · ${site} · билд игры ${state.index?.build ?? ""}`, pad, H - pad * 0.6);
+  return canvas;
+}
+
+async function downloadShot(b, W, H) {
+  try {
+    toast(`Рисуем ${W}×${H}…`);
+    const canvas = await drawBuildShot(b, W, H);
+    const blob = await new Promise((r) => canvas.toBlob(r, "image/png"));
+    const slug = b.name.toLowerCase().replace(/[^a-zа-яё0-9]+/gi, "-").replace(/^-|-$/g, "") || "build";
+    saveBlob(blob, `${slug}-${W}x${H}.png`);
+    toast(`Картинка ${W}×${H} готова`);
+  } catch (err) {
+    console.error(err);
+    toast("Не получилось нарисовать картинку");
+  }
 }
 
 // ── Drag and drop ──────────────────────────────────────
@@ -1304,6 +1592,8 @@ function wireEvents() {
   view.addEventListener("click", (e) => {
     const act = e.target.closest("[data-view]");
     if (act) return viewAction(act.dataset.view);
+    const shot = e.target.closest("[data-shot]");
+    if (shot) return viewAction(`shot:${shot.dataset.shot}`);
     const item = e.target.closest(".vi");
     if (item) openItem(item.dataset.key, false);
   });

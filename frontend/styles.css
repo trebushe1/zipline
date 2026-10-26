@@ -1142,3 +1142,5 @@ body.viewing main > :not(#build-view) { display: none; }
   .bv-actions .btn { flex: 1 1 100%; justify-content: center; }
   .bv-items { margin: 10px 8px 8px; padding: 10px; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
 }
+.bv-shot { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; padding-left: 6px; }
+@media (max-width: 640px) { .bv-shot { padding-left: 0; width: 100%; } .bv-shot .btn { flex: 1; justify-content: center; } }
