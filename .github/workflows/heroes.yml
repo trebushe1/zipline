@@ -28,8 +28,6 @@ jobs:
     timeout-minutes: 120
     env:
       GH_TOKEN: ${{ github.token }}
-      GAMETRACKING_DIR: ${{ runner.temp }}/gametracking
-      MEDIA_TOOLS_DIR: ${{ runner.temp }}/tools
       STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
       STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
       HEROES_ONLY: ${{ inputs.only }}
@@ -40,7 +38,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install -q pillow
+      - run: |
+          pip install -q pillow
+          echo "GAMETRACKING_DIR=$RUNNER_TEMP/gametracking" >> "$GITHUB_ENV"
+          echo "MEDIA_TOOLS_DIR=$RUNNER_TEMP/tools" >> "$GITHUB_ENV"
 
       - name: Raw files (debug)
         if: inputs.raw != ''
