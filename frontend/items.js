@@ -1261,8 +1261,7 @@ async function drawBuildShot(b, W, H) {
   // Ability order along the bottom.
   const abilities = hero?.abilities?.length && b.ab.length ? [...hero.abilities].sort((p, q) => p.slot - q.slot) : null;
   const abH = abilities ? Math.round(H * (wide ? 0.11 : 0.1)) : 0;
-  const footH = Math.round(H * 0.035);
-  const top = headBottom + pad * 0.4, bottom = H - pad - footH - (abH ? abH + pad * 0.4 : 0);
+  const top = headBottom + pad * 0.4, bottom = H - pad - (abH ? abH + pad * 0.4 : 0);
 
   const layout = shotLayout(cats, W, top, bottom, pad, Math.round(pad * 0.6));
   if (layout) {
@@ -1335,7 +1334,7 @@ async function drawBuildShot(b, W, H) {
 
   if (abilities) {
     const glyphs = new Map(await Promise.all(abilities.map(async (a) => [a.slot, await tryImage(`heroes/abilities/${a.icon}`)])));
-    const ay = H - pad - footH - abH, ls = Math.round(abH * 0.16);
+    const ay = H - pad - abH, ls = Math.round(abH * 0.16);
     ctx.font = `700 ${ls}px ${MONO}`;
     ctx.fillStyle = "#8a8f88";
     ctx.textBaseline = "top";
@@ -1360,12 +1359,6 @@ async function drawBuildShot(b, W, H) {
     });
   }
 
-  // Signature.
-  ctx.textBaseline = "bottom";
-  ctx.font = `700 ${Math.round(footH * 0.5)}px ${MONO}`;
-  ctx.fillStyle = "rgba(255,255,255,.45)";
-  const site = `${location.host}${location.pathname.replace(/\/[^/]*$/, "")}`;
-  ctx.fillText(`ZIPLINE · ${site} · билд игры ${state.index?.build ?? ""}`, pad, H - pad * 0.6);
   return canvas;
 }
 
