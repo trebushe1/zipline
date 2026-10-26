@@ -123,6 +123,7 @@ function tick() {
   const dt = Math.min(viewer.clock.getDelta(), 0.1);
   if (viewer.mixer && viewer.playing) viewer.mixer.update(dt * viewer.speed);
   keepInPlace();
+  updateProps();
   viewer.controls.update();
   viewer.renderer.render(viewer.scene, viewer.camera);
   if (viewer.action && viewer.playing) syncTimeline();
@@ -140,17 +141,18 @@ function keepInPlace() {
 }
 
 // Weapons and props hang off their own branch of the skeleton (root_motion → weaponPivot → weapon), not
-// off the hand. A clip that leaves that branch alone expects the game to pin the prop to the hand; without
-// that the prop would lie at the hero's feet. Each skinned mesh remembers the branch most of its vertices
-// follow; meshes on a branch other than the body's are shown only while the clip moves that branch.
+// off the hand. In the game a hand target pins them to the hand; the clips alone often leave them lying at
+// the hero's feet. So a mesh that follows such a branch is shown only while it is next to a hand.
 function markBranches(model, root) {
+  viewer.props = [];
+  viewer.hands = [];
   if (!root) return;
   const branchOf = (bone) => {
     let b = bone;
     while (b.parent && b.parent !== root && b.parent.isBone) b = b.parent;
     return b.parent === root ? b : root;
   };
-  const totals = new Map();
+  const totals = new Map(), meshes = [];
   model.traverse((o) => {
     if (!o.isSkinnedMesh) return;
     const index = o.geometry.attributes.skinIndex, weight = o.geometry.attributes.skinWeight;
@@ -158,25 +160,31 @@ function markBranches(model, root) {
     for (let i = 0; i < index.count; i++) {
       let best = 0;
       for (let c = 1; c < 4; c++) if (weight.getComponent(i, c) > weight.getComponent(i, best)) best = c;
-      const branch = branchOf(o.skeleton.bones[index.getComponent(i, best)]);
-      votes.set(branch, (votes.get(branch) || 0) + 1);
+      const bone = o.skeleton.bones[index.getComponent(i, best)];
+      votes.set(bone, (votes.get(bone) || 0) + 1);
     }
-    const [branch, count] = [...votes].sort((a, b) => b[1] - a[1])[0] || [root, 0];
-    o.userData.branch = branch;
+    const branches = new Map();
+    for (const [bone, n] of votes) branches.set(branchOf(bone), (branches.get(branchOf(bone)) || 0) + n);
+    const [branch, count] = [...branches].sort((x, y) => y[1] - x[1])[0] || [root, 0];
+    const [bone] = [...votes].sort((x, y) => y[1] - x[1])[0] || [root];
     totals.set(branch, (totals.get(branch) || 0) + count);
+    meshes.push({ mesh: o, branch, bone });
   });
-  viewer.bodyBranch = [...totals].sort((a, b) => b[1] - a[1])[0]?.[0] || root;
+  const body = [...totals].sort((x, y) => y[1] - x[1])[0]?.[0];
+  if (!body) return;
+  body.traverse((b) => { if (b.isBone && /hand/i.test(b.name) && !/weapon|target|ik/i.test(b.name)) viewer.hands.push(b); });
+  if (viewer.hands.length) viewer.props = meshes.filter((m) => m.branch !== body);
 }
 
-function showPropsFor(clip) {
-  const moved = new Set(clip.tracks.map((t) => viewer.THREE.PropertyBinding.parseTrackName(t.name).nodeName));
-  viewer.model.traverse((o) => {
-    const branch = o.userData.branch;
-    if (!o.isSkinnedMesh || !branch || branch === viewer.bodyBranch) return;
-    let animated = false;
-    branch.traverse((b) => { animated ||= moved.has(b.name); });
-    o.visible = animated;
-  });
+function updateProps() {
+  const { props, hands, THREE } = viewer;
+  if (!props?.length || !viewer.frameBox) return;
+  const reach = viewer.frameBox.getSize(new THREE.Vector3()).y * 0.3;
+  const p = new THREE.Vector3(), h = new THREE.Vector3();
+  for (const { mesh, bone } of props) {
+    bone.getWorldPosition(p);
+    mesh.visible = hands.some((hand) => hand.getWorldPosition(h).distanceTo(p) < reach);
+  }
 }
 
 function visibleBox(root) {
@@ -264,7 +272,9 @@ async function loadModel(hero) {
   viewer.mixer.update(0);
   keepInPlace();
   anchor.updateMatrixWorld(true);
-  viewer.frameBox = visibleBox(anchor);
+  viewer.frameBox = new THREE.Box3().setFromObject(anchor, true);
+  updateProps(); // the props at the feet leave the frame...
+  viewer.frameBox = visibleBox(anchor); // ...so measure again without them
   frameModel();
   setStatus("");
   $("#viewer-meta").textContent = viewer.clips.length ? plural(viewer.clips.length, "анимация", "анимации", "анимаций") : "без анимаций";
@@ -304,7 +314,6 @@ async function playClip(name) {
     return;
   }
   if (mixer !== viewer.mixer || viewer.current !== name) return; // another hero or clip was picked meanwhile
-  showPropsFor(clip);
   const prev = viewer.action;
   const action = mixer.clipAction(clip);
   action.reset().setLoop(viewer.THREE.LoopRepeat, Infinity).play();
