@@ -905,14 +905,15 @@ function webm(width, height, frames) {
 
 // ── Opening and closing ────────────────────────────────
 // ── Ability icons ──────────────────────────────────────
-// Drawn the way the game's HUD draws them (hud_ability_icon.css, a 120×120 button): the painted disc
-// .ability_bg and ring .ability_ring washed with keybindBGColor (the ring at 80%), the glyph
-// .ability_image at half the height washed offBlack at 95%, and the key number under it. All layers
-// are one-colour shapes, so their edges are re-sharpened when scaled up (the game's are 137–239 px).
+// Laid out the way the game's HUD draws them (hud_ability_icon.css, a 120×120 button): a disc in
+// keybindBGColor, the glyph .ability_image at half the height washed offBlack at 95%, and the key number
+// under it. The disc is drawn as a true circle rather than the game's painted texture, so it cuts out
+// cleanly; the glyph's edge is re-sharpened when scaled up (the game's are 137 px).
 const ICON_SIZES = [500, 300];
 const DISC = "#e8e4ea"; // keybindBGColor
 const GLYPH = "#10130d"; // offBlack
-const BOX = 120, VIEW = 0.94; // the button, and the part of it the PNG shows (disc, ring and key)
+const BOX = 120, VIEW = 0.94; // the button, and the part of it the PNG shows with the key plate
+const DISC_R = 41; // radius of the game's disc in button units (ability_frame_passive_0: 80 of 239 px)
 const assets = new Map();
 
 function loadImage(src) {
@@ -949,22 +950,25 @@ function washedLayer(img, w, h, color, opacity) {
 }
 
 async function abilityCanvas(ability, size, withKey) {
-  const [disc, ring, glyph] = await Promise.all([
-    loadImage("heroes/ui/ability_frame_0.png"),
-    loadImage("heroes/ui/ability_frame_1.png"),
-    loadImage(`heroes/abilities/${ability.icon}`),
-  ]);
+  const glyph = await loadImage(`heroes/abilities/${ability.icon}`);
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = size;
   const ctx = canvas.getContext("2d");
-  const k = size / (BOX * VIEW), o = -BOX * (1 - VIEW) / 2 * k; // button units → pixels
-  ctx.drawImage(washedLayer(disc, BOX * k, BOX * k, DISC, 1), o, o);
-  ctx.drawImage(washedLayer(ring, BOX * k, BOX * k, DISC, 0.8), o, o);
+  // Without the key the disc fills the square edge to edge (ready to cut out as an emoji); with it,
+  // the view leaves room for the key plate under the disc.
+  const view = withKey ? BOX * VIEW : DISC_R * 2 + 1;
+  const k = size / view, o = (view - BOX) / 2 * k; // button units → pixels
+  const c = o + BOX / 2 * k;
+  // A clean vector circle, so the edge is perfectly round at any size.
+  ctx.fillStyle = DISC;
+  ctx.beginPath();
+  ctx.arc(c, c, DISC_R * k, 0, Math.PI * 2);
+  ctx.fill();
   const g = BOX * 0.5 * k;
-  ctx.drawImage(washedLayer(glyph, g, g, GLYPH, 0.95), o + (BOX * k - g) / 2, o + (BOX * k - g) / 2);
+  ctx.drawImage(washedLayer(glyph, g, g, GLYPH, 0.95), c - g / 2, c - g / 2);
   if (withKey) {
     // The key hint: a small dark plate with the slot's default key (1–4), 5 px above the button's bottom.
-    const h = 17 * k, w = 16 * k, x = o + (BOX * k - w) / 2, y = o + (BOX - 5) * k - h;
+    const h = 17 * k, w = 16 * k, x = c - w / 2, y = o + (BOX - 5) * k - h;
     ctx.fillStyle = "#1d1b19";
     ctx.beginPath();
     ctx.roundRect(x, y, w, h, 3 * k);
@@ -973,7 +977,7 @@ async function abilityCanvas(ability, size, withKey) {
     ctx.font = `700 ${Math.round(13 * k)}px "IBM Plex Sans", system-ui, sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(String(ability.slot), x + w / 2, y + h / 2 + 0.5 * k);
+    ctx.fillText(String(ability.slot), c, y + h / 2 + 0.5 * k);
   }
   return canvas;
 }
