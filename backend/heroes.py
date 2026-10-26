@@ -34,11 +34,12 @@ from .patches import HEROES_VDATA, PAK_LIST, REPO, build_commits, load_loc, show
 
 OUT = config.ROOT / "data" / "heroes"
 HEROES_TAG = "heroes"
-MODEL_VERSION = 2  # bump to convert every hero again after changing the conversion
+MODEL_VERSION = 3  # bump to convert every hero again after changing the conversion
 VRF_VERSION = "20.1"  # first release that exports Deadlock's animation graph clips to glTF
 GLTFPACK_VERSION = "v1.3"
-COLOR_SIZE = 2048  # base color: details matter when zoomed in
-TEXTURE_SIZE = 1024  # normal, roughness and other maps
+COLOR_SIZE = 4096  # colour keeps the game's own resolution (2048 for most heroes, 4096 for some): quality first
+NORMAL_SIZE = 2048  # surface detail
+TEXTURE_SIZE = 1024  # roughness, metalness, occlusion and glow masks: smooth, so small is enough
 ICON_HEIGHT = 384
 
 # Not real heroes: the template every hero inherits from and the practice dummy.
@@ -144,25 +145,34 @@ def vrf_path() -> str:
 
 # ── Which animations ───────────────────────────────────
 
-# Only the clips that read at a glance. Left out: the eight-way and crouched variants of every run
-# (forward is kept), the same moves holding an item, in syphon mode or out of combat, turns in place,
-# aim layers, and the minor in-between steps of zipline, rope, mantle, knockdown and casting.
-DROP_CLIP = re.compile(
-    r"(_(ne|nw|se|sw|e|w|s|center)$"
-    r"|^(syphon|item)_|^out_of_combat_(?!stand_idle$)|crouch_(run|walk)|_aim$|_aim_|"
-    r"^turn_|_turn_|^aim_|_additive|_add$|^flinch|^corner_lean|^loco_lean"
-    r"|^landing_impact|^run_to_stop|^shoot_idle$|^mantle_(32|64|96)$|^rope_climb_(down|idle|settle)$"
-    r"|^dash_air_(back|left|right)$|^wall_attach_(left|right)$|^melee_\w*_(up|down)$|^melee_start_(up|down)$"
-    r"|^zipline_(awaiting_tether|tethered_reeling_loop|attached_boosted_loop)$|^in_air_loop_down$"
-    r"|^jump_(forced|catapult)$|^knockdown_(in_air_\w+|medium_\w+|large_loop)$|^cast_(start|end)$"
-    r"|^cast_channeling_(start|end)$|^reload_\w*_(start|end)$|^lift_start$|^pose_|^bindpose$)")
+# Only running and melee: the forward run of each stance (out of combat, with the weapon, sprint) and
+# every melee swing and parry. Strafing, crouched, item and syphon variants and aim layers are left out.
+STANCES = {"weapon", "primary", "out", "of", "combat", "outofcombat"}
+NOT_THESE = {"item", "syphon", "crouch", "barrage", "heal", "resupply", "sentry", "reload", "shoot", "death",
+             "corner", "landing", "ability", "aim", "flinch", "add", "up", "down", "dwn", "lean"}
+
+
+def keep_clip(name: str) -> bool:
+    """Clip names are file names, sometimes with the hero's code name in front (vampirebat_melee_hit)."""
+    words = name.lower().split("_")
+    if NOT_THESE & set(words):
+        return False
+    for i, word in enumerate(words):
+        if word in ("melee", "parry"):
+            return i <= 1
+        if word in ("run", "sprint"):
+            before, after = words[:i], words[i + 1:]
+            if before and before[0] not in STANCES:
+                before = before[1:]  # the hero's code name
+            return set(before) <= STANCES and after in ([], ["n"], ["fast", "n"])
+    return False
 
 
 def clip_names(paths: list[str]) -> list[str]:
     """Leaf names of the clips (out of the files the model uses) worth showing."""
     names = {p.rsplit("/", 1)[-1].split(".", 1)[0] for p in paths
              if p.endswith(".vnmclip_c") and "+" not in p.rsplit("/", 1)[-1]}
-    return sorted(n for n in names if not DROP_CLIP.search(n.lower()))
+    return sorted(n for n in names if keep_clip(n))
 
 
 # ── Conversion ─────────────────────────────────────────
@@ -197,6 +207,7 @@ def convert_model(vrf: str, citadel: Path, path: str, clips: list[str], tmp: Pat
     anims, count = animation_pack(doc, binary)
     doc["animations"] = []
     hide_off_meshes(doc, vrf, citadel / path)
+    binary = bake_materials(doc, binary, vrf, citadel, out.parent)
     (tmp / "static.glb").write_bytes(pack(doc, binary, out.parent))
     res = subprocess.run([gltfpack_path(), "-i", str(tmp / "static.glb"), "-o", str(tmp / "packed.glb"), "-cc", "-kn"],
                          capture_output=True, text=True)
@@ -204,6 +215,132 @@ def convert_model(vrf: str, citadel: Path, path: str, clips: list[str], tmp: Pat
         log(f"  gltfpack failed: {(res.stdout + res.stderr).strip()[-600:]}")
         return None
     return (tmp / "packed.glb").read_bytes(), anims, count
+
+
+def srgb_to_linear(c):
+    import numpy as np
+    c = np.clip(c, 0, None)
+    return np.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
+
+
+def linear_to_srgb(c):
+    import numpy as np
+    c = np.clip(c, 0, 1)
+    return np.where(c <= 0.0031308, c * 12.92, 1.055 * c ** (1 / 2.4) - 0.055)
+
+
+def adjust_albedo(rgb, params: dict):
+    """g_vAlbedoContrastSaturationBrightness1, on linear colour."""
+    import numpy as np
+    contrast, saturation, brightness = (params.get("g_vAlbedoContrastSaturationBrightness1") or [1, 1, 1])[:3]
+    if saturation != 1:
+        luma = rgb @ np.array([0.2126, 0.7152, 0.0722])
+        rgb = luma[..., None] + (rgb - luma[..., None]) * saturation
+    if contrast != 1:
+        rgb = (rgb - 0.5) * contrast + 0.5
+    return np.clip(rgb * brightness, 0, None)
+
+
+class Textures:
+    """Game textures decoded to images by Source2Viewer-CLI, once each."""
+
+    def __init__(self, vrf: str, citadel: Path, tmp: Path):
+        self.vrf, self.citadel, self.tmp, self.cache = vrf, citadel, tmp, {}
+
+    def get(self, resource: str | None):
+        from PIL import Image
+        if not resource:
+            return None
+        path = resource if resource.endswith("_c") else resource + "_c"
+        if path not in self.cache:
+            out = self.tmp / f"t{len(self.cache)}"
+            out.mkdir(parents=True, exist_ok=True)
+            if (self.citadel / path).exists():
+                subprocess.run([self.vrf, "-i", str(self.citadel / path), "-o", str(out / "t.png"), "-d"], capture_output=True)
+            pngs = sorted(out.rglob("*.png"))
+            self.cache[path] = Image.open(pngs[0]).convert("RGBA") if pngs else None
+        return self.cache[path]
+
+
+def bake_materials(doc: dict, binary: bytes, vrf: str, citadel: Path, folder: Path) -> bytes:
+    """Bring the colours Deadlock's shader computes into plain glTF materials. Source2Viewer exports the
+    raw colour texture, but the game multiplies it by g_vColorTint1 under a tint mask, adjusts contrast,
+    saturation and brightness, and on many meshes colours by vertex colour, which it reads as sRGB
+    (glTF vertex colours are linear). The normal map (g_tNormalRoughness) is added as well. The shader
+    maths follows Source2Viewer's renderer (complex.vert/frag): albedo × (1 − mask × (1 − vertex × tint))."""
+    import numpy as np
+    from PIL import Image
+    textures = Textures(vrf, citadel, folder / "baked")
+    materials = doc.get("materials", [])
+    with_vertex_colors = {p.get("material") for m in doc.get("meshes", []) for p in m["primitives"] if "COLOR_0" in p["attributes"]}
+    binary = bytearray(binary)
+
+    def add_accessor(values) -> int:
+        while len(binary) % 4:
+            binary.append(0)
+        data = values.astype(np.float32).tobytes()
+        doc["bufferViews"].append({"buffer": 0, "byteOffset": len(binary), "byteLength": len(data)})
+        binary.extend(data)
+        doc["accessors"].append({"bufferView": len(doc["bufferViews"]) - 1, "componentType": 5126,
+                                 "count": len(values), "type": "VEC4"})
+        return len(doc["accessors"]) - 1
+
+    def add_image(img, name: str) -> int:
+        img.save(folder / name)
+        doc.setdefault("images", []).append({"uri": name})
+        doc.setdefault("textures", []).append({"source": len(doc["images"]) - 1})
+        return len(doc["textures"]) - 1
+
+    for n, material in enumerate(materials):
+        vmat = (material.get("extras") or {}).get("vmat") or {}
+        ints, vectors, texparams = vmat.get("IntParams", {}), vmat.get("VectorParams", {}), vmat.get("TextureParams", {})
+        tint = srgb_to_linear(np.array((vectors.get("g_vColorTint1") or [1, 1, 1])[:3], float))
+        mask_img = textures.get(texparams.get("g_tTintMaskRimLightMask"))
+        pbr = material.setdefault("pbrMetallicRoughness", {})
+
+        # Vertex colours: per vertex, with the tint mask sampled at the vertex.
+        if n in with_vertex_colors:
+            for mesh in doc["meshes"]:
+                for prim in mesh["primitives"]:
+                    if prim.get("material") != n or "COLOR_0" not in prim["attributes"]:
+                        continue
+                    acc = doc["accessors"][prim["attributes"]["COLOR_0"]]
+                    if acc["componentType"] != 5126:
+                        continue
+                    colors = accessor(doc, bytes(binary), prim["attributes"]["COLOR_0"]).astype(float)
+                    rgb = srgb_to_linear(colors[:, :3]) * tint
+                    if ints.get("g_bMaskVertexColorTint1", 1) and mask_img is not None and "TEXCOORD_0" in prim["attributes"]:
+                        uv = accessor(doc, bytes(binary), prim["attributes"]["TEXCOORD_0"])
+                        mask = np.asarray(mask_img)[..., 0].astype(float) / 255
+                        h, w = mask.shape
+                        m = mask[(np.mod(uv[:, 1], 1) * h).astype(int).clip(0, h - 1), (np.mod(uv[:, 0], 1) * w).astype(int).clip(0, w - 1)]
+                        rgb = 1 - m[:, None] * (1 - rgb)
+                    rgb = adjust_albedo(rgb, vectors)
+                    alpha = colors[:, 3:4] if colors.shape[1] == 4 else np.ones((len(colors), 1))
+                    prim["attributes"]["COLOR_0"] = add_accessor(np.clip(np.hstack([rgb, alpha]), 0, 1))
+        # Colour texture: tint and adjustments baked in (vertex-coloured materials got them per vertex).
+        elif "baseColorTexture" in pbr:
+            needs_tint = not np.allclose(tint, 1, atol=0.004)
+            needs_adjust = (vectors.get("g_vAlbedoContrastSaturationBrightness1") or [1, 1, 1])[:3] != [1, 1, 1]
+            image = doc["images"][doc["textures"][pbr["baseColorTexture"]["index"]]["source"]]
+            if (needs_tint or needs_adjust) and "uri" in image and (folder / image["uri"]).exists():
+                src = Image.open(folder / image["uri"]).convert("RGBA")
+                px = np.asarray(src).astype(float) / 255
+                rgb = srgb_to_linear(px[..., :3])
+                if needs_tint:
+                    if ints.get("g_bMaskColorTint1", 1) and mask_img is not None:
+                        m = np.asarray(mask_img.resize(src.size, Image.BILINEAR))[..., 0].astype(float)[..., None] / 255
+                        rgb = rgb * (1 - m * (1 - tint))
+                    else:
+                        rgb = rgb * tint
+                rgb = adjust_albedo(rgb, vectors)
+                out = np.dstack([linear_to_srgb(rgb), px[..., 3]])
+                pbr["baseColorTexture"] = {"index": add_image(Image.fromarray((out * 255 + 0.5).astype(np.uint8), "RGBA"), f"baked_color_{n}.png")}
+        # Normal map, unless the material only has the flat default.
+        normal = textures.get(texparams.get("g_tNormalRoughness"))
+        if normal is not None and min(normal.size) > 4 and "normalTexture" not in material:
+            material["normalTexture"] = {"index": add_image(normal.convert("RGB"), f"baked_normal_{n}.png")}
+    return bytes(binary)
 
 
 def hide_off_meshes(doc: dict, vrf: str, model: Path) -> None:
@@ -336,6 +473,8 @@ def pack(doc: dict, binary: bytes, folder: Path) -> bytes:
     accessors = doc.get("accessors", [])
     color_images = {doc["textures"][m["pbrMetallicRoughness"]["baseColorTexture"]["index"]].get("source")
                     for m in doc.get("materials", []) if "baseColorTexture" in m.get("pbrMetallicRoughness", {})}
+    normal_images = {doc["textures"][m["normalTexture"]["index"]].get("source")
+                     for m in doc.get("materials", []) if "normalTexture" in m}
 
     # Rebuild the binary chunk from scratch: only what the remaining parts point at.
     new_bin, new_views, view_map = bytearray(), [], {}
@@ -399,13 +538,15 @@ def pack(doc: dict, binary: bytes, folder: Path) -> bytes:
         else:
             continue
         with Image.open(io.BytesIO(raw)) as img:
-            img.thumbnail((COLOR_SIZE, COLOR_SIZE) if n in color_images else (TEXTURE_SIZE, TEXTURE_SIZE))
+            size = COLOR_SIZE if n in color_images else NORMAL_SIZE if n in normal_images else TEXTURE_SIZE
+            img.thumbnail((size, size), Image.LANCZOS)
             buf = io.BytesIO()
             if img.mode in ("RGBA", "LA") and img.getchannel("A").getextrema()[0] < 255:
                 img.save(buf, "PNG", optimize=True)
                 image["mimeType"] = "image/png"
             else:
-                img.convert("RGB").save(buf, "JPEG", quality=85)
+                # Full chroma for colour (sharp edges between painted areas), standard for the data maps.
+                img.convert("RGB").save(buf, "JPEG", quality=92, subsampling=0 if n in color_images else 2)
                 image["mimeType"] = "image/jpeg"
         image["bufferView"] = add_blob(buf.getvalue())
         image.pop("name", None)

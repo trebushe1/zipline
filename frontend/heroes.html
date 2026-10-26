@@ -110,23 +110,23 @@
         <aside class="controls">
           <div class="ctl">
             <label class="ctl-label" for="anim-filter">Анимация <b id="anim-count"></b></label>
-            <input class="ctl-input" id="anim-filter" type="search" placeholder="Поиск: run, ability, emote…" autocomplete="off">
+            <input class="ctl-input" id="anim-filter" type="search" placeholder="Поиск: бег, удар, парирование…" autocomplete="off">
             <select class="ctl-select" id="anim-select" size="12" aria-label="Анимация"></select>
           </div>
           <div class="ctl">
             <div class="ctl-row">
-              <button class="btn ctl-btn" id="anim-play" type="button" aria-label="Пауза">❚❚</button>
-              <input class="ctl-range" id="anim-time" type="range" min="0" max="1" step="0.001" value="0" aria-label="Кадр анимации">
+              <button class="btn ctl-btn" id="anim-play" type="button" aria-label="Играть" disabled>▶</button>
+              <input class="ctl-range" id="anim-time" type="range" min="0" max="1" step="0.001" value="0" aria-label="Кадр анимации" disabled>
             </div>
             <div class="ctl-row ctl-small">
-              <span id="anim-clock">0.00 / 0.00 с</span>
-              <label>скорость
-                <select id="anim-speed">
-                  <option value="0.25">×0.25</option><option value="0.5">×0.5</option>
-                  <option value="1" selected>×1</option><option value="1.5">×1.5</option><option value="2">×2</option>
-                </select>
-              </label>
+              <span id="anim-clock">—</span>
             </div>
+            <label class="ctl-label" for="anim-speed">Скорость <b id="anim-speed-value">×1.00</b></label>
+            <div class="ctl-row">
+              <input class="ctl-range" id="anim-speed" type="range" min="0.05" max="3" step="0.05" value="1" list="speed-marks" aria-label="Скорость анимации">
+              <button class="link-btn" id="anim-speed-reset" type="button" title="Обычная скорость">×1</button>
+            </div>
+            <datalist id="speed-marks"><option value="0.25"></option><option value="0.5"></option><option value="1"></option><option value="2"></option><option value="3"></option></datalist>
             <label class="quiet-toggle"><input type="checkbox" id="in-place" checked> на месте (без перемещения)</label>
             <label class="quiet-toggle"><input type="checkbox" id="turntable"> поворачивать сам</label>
           </div>

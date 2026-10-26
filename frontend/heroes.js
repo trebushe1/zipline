@@ -32,31 +32,48 @@ function renderRoster() {
 }
 
 // ── Animation names ────────────────────────────────────
-// Clip names are the file names from the game: ability_charge_inair → «ability charge inair».
+// Only running and melee clips are converted (backend/heroes.py). Their names are file names from the
+// game, sometimes with the hero's code name in front (vampirebat_melee_hit); shown in plain Russian.
 const GROUPS = [
-  ["Способности", /^(ability|ult|abil|cast|spell)/],
-  ["Стойка и выбор героя", /^(ui_|idle|hero_?select|pick|intro|lobby|pose|showcase)|_idle$|stand/],
-  ["Эмоции", /(emote|taunt|gesture|dance|celebrat|wave|laugh|cheer|victory|gloat)/],
-  ["Ближний бой", /(melee|punch|parry|heavy|light_|slash|bash)/],
-  ["Прыжки и полёт", /(jump|land|fall|air|fly|glide|hover|double)/],
-  ["Движение", /(run|walk|sprint|jog|move|loco|strafe|turn|crouch|slide|dash|mantle|zipline|step)/],
-  ["Стрельба и оружие", /(shoot|fire|attack|reload|weapon|gun|primary|secondary|alt_fire)/],
-  ["Урон и смерть", /(death|die|dead|flinch|hit|stun|knock|ragdoll|pain|ko)/],
+  ["Бег", /(^|_)(run|sprint)(_|$)/],
+  ["Ближний бой", /(^|_)(melee|parry)(_|$)/],
+];
+const STANCE = { weapon: "с оружием", out_of_combat: "вне боя", outofcombat: "вне боя", primary: "основной" };
+const MELEE = [
+  [/^melee_quick_(\d)$/, (m) => `Быстрый удар ${m[1]}`],
+  [/^melee_start$/, () => "Тяжёлый удар: замах"],
+  [/^melee_dash$/, () => "Тяжёлый удар: рывок"],
+  [/^melee_hit$/, () => "Тяжёлый удар: удар"],
+  [/^melee_(?:in_air_)?(start|dash|hit)(?:_in_air)?$/, (m) => `Тяжёлый удар в воздухе: ${{ start: "замах", dash: "рывок", hit: "удар" }[m[1]]}`],
+  [/^melee_slide_kick_(start|dash|hit)$/, (m) => `Удар в подкате: ${{ start: "начало", dash: "рывок", hit: "удар" }[m[1]]}`],
+  [/^melee_combo_hit_(one|two|three)_(start|recover)(_x)?$/, (m) =>
+    `Комбо, удар ${{ one: 1, two: 2, three: 3 }[m[1]]}: ${m[2] === "start" ? "удар" : "возврат"}${m[3] ? " (вариант)" : ""}`],
+  [/^melee_combo_generic_recover$/, () => "Комбо: возврат"],
+  [/^parry$/, () => "Парирование"],
+  [/^parry_idle$/, () => "Парирование: стойка"],
+  [/^parry_success$/, () => "Парирование: успех"],
+  [/^parry_to_idle$/, () => "Парирование: выход"],
+  [/^parry_to_success$/, () => "Парирование: успех"],
 ];
 
-const prettyAnim = (name) => name.replace(/_/g, " ").replace(/\s+/g, " ").trim();
-const groupOf = (name) => (GROUPS.find(([, re]) => re.test(name.toLowerCase())) || ["Прочее"])[0];
+// «vampirebat_melee_hit» → «melee_hit»: drop a leading word that is not part of the move itself.
+const bareName = (name) => {
+  const n = name.toLowerCase();
+  return /^(melee|parry|run|sprint|weapon|primary|out_of_combat|outofcombat)(_|$)/.test(n) ? n : n.replace(/^[a-z0-9]+_/, "");
+};
 
-// The first pose you see: the hero select stance if there is one, else a plain idle.
-function defaultClip(clips) {
-  const names = clips.map((c) => c.name.toLowerCase());
-  const prefer = [/hero_?select|pickscreen|pick_?idle|showcase/, /^ui_pose/, /^ui_/, /stand_idle$/, /^idle$/, /^idle/, /idle/, /stand/];
-  for (const re of prefer) {
-    const i = names.findIndex((n) => re.test(n) && !/aim|additive|lower|upper/.test(n));
-    if (i >= 0) return clips[i];
+function prettyAnim(name) {
+  const n = bareName(name);
+  for (const [re, label] of MELEE) {
+    const m = n.match(re);
+    if (m) return label(m);
   }
-  return clips[0];
+  const run = n.match(/^(?:(weapon|out_of_combat|outofcombat|primary)_)?(run|sprint)(_fast)?(?:_n)?$/);
+  if (run) return `${run[2] === "sprint" ? "Спринт" : run[3] ? "Быстрый бег" : "Бег"}${run[1] ? ` ${STANCE[run[1]]}` : ""}`;
+  return n.replace(/_/g, " ");
 }
+
+const groupOf = (name) => (GROUPS.find(([, re]) => re.test(bareName(name))) || ["Прочее"])[0];
 
 // ── Viewer ─────────────────────────────────────────────
 const viewer = {
@@ -166,11 +183,15 @@ function markBranches(model, root) {
   });
   const body = [...totals].sort((x, y) => y[1] - x[1])[0]?.[0];
   if (!body) return;
-  body.traverse((b) => { if (b.isBone && /hand/i.test(b.name) && !/weapon|target|ik/i.test(b.name)) viewer.hands.push(b); });
+  // The hands themselves (hand_L, baba_hand_R, darm_hand_R), not attachment or helper bones named after them.
+  body.traverse((b) => { if (b.isBone && /(^|_)hand_[LR]$/i.test(b.name) && !/weapon|object|attach|target|ik/i.test(b.name)) viewer.hands.push(b); });
   if (!viewer.hands.length) return;
   for (const branch of totals.keys()) {
     if (branch !== body && branch !== root) viewer.propBones.push(...branch.children.filter((b) => b.isBone));
   }
+  // Some guns hang inside the body's own branch (weapon_hand_R under the spine): the topmost weapon bone.
+  const weaponish = (b) => /(^|_)(weapon|gun)(_|$)/i.test(b.name);
+  body.traverse((b) => { if (b.isBone && weaponish(b) && !(b.parent && weaponish(b.parent))) viewer.propBones.push(b); });
 }
 
 const isHidden = (bone) => {
@@ -339,11 +360,10 @@ async function loadModel(hero) {
   model.updateMatrixWorld(true);
   viewer.rootStart = skeletonRoot ? skeletonRoot.getWorldPosition(new THREE.Vector3()) : new THREE.Vector3();
 
-  viewer.clips = pack ? [...pack.clips].sort((a, b) => a.name.localeCompare(b.name)) : [];
+  // Opens still, in the pose the model was made in: an animation starts only when picked.
+  viewer.clips = pack ? [...pack.clips].sort((a, b) => prettyAnim(a.name).localeCompare(prettyAnim(b.name), "ru")) : [];
   fillAnimations(viewer.clips);
-  const first = defaultClip(viewer.clips);
-  if (first) await playClip(first.name);
-  if (token !== viewer.token) return;
+  setPlaying(false);
 
   // Frame on the starting pose, measured with skinning applied.
   viewer.mixer.update(0);
@@ -362,7 +382,7 @@ async function loadModel(hero) {
 function fillAnimations(clips) {
   const select = $("#anim-select");
   const q = $("#anim-filter").value.trim().toLowerCase().replace(/\s+/g, "_");
-  const shown = clips.filter((c) => !q || c.name.toLowerCase().includes(q));
+  const shown = clips.filter((c) => !q || c.name.toLowerCase().includes(q) || prettyAnim(c.name).toLowerCase().replace(/\s+/g, "_").includes(q));
   const groups = new Map();
   for (const c of shown) {
     const g = groupOf(c.name);
@@ -370,15 +390,30 @@ function fillAnimations(clips) {
     groups.get(g).push(c);
   }
   const order = [...GROUPS.map(([g]) => g), "Прочее"];
-  select.innerHTML = order.filter((g) => groups.has(g)).map((g) => `
+  select.innerHTML = `<option value="">Без анимации</option>` + order.filter((g) => groups.has(g)).map((g) => `
     <optgroup label="${g} · ${groups.get(g).length}">
-      ${groups.get(g).map((c) => `<option value="${escapeHtml(c.name)}">${escapeHtml(prettyAnim(c.name))}</option>`).join("")}
+      ${groups.get(g).map((c) => `<option value="${escapeHtml(c.name)}" title="${escapeHtml(c.name)}">${escapeHtml(prettyAnim(c.name))}</option>`).join("")}
     </optgroup>`).join("");
-  if (viewer.current) select.value = viewer.current;
+  select.value = viewer.current || "";
   $("#anim-count").textContent = clips.length ? (shown.length === clips.length ? clips.length : `${shown.length} из ${clips.length}`) : "";
 }
 
+// Back to the still model.
+function stopClip() {
+  const { mixer } = viewer;
+  viewer.current = viewer.action = null;
+  $("#anim-select").value = "";
+  if (!mixer) return;
+  mixer.stopAllAction();
+  mixer.update(0); // stopped clips hand the bones back to their original pose
+  hideStrays();
+  setPlaying(false);
+  $("#anim-time").value = 0;
+  $("#anim-clock").textContent = "—";
+}
+
 async function playClip(name) {
+  if (!name) return stopClip();
   const entry = viewer.clips.find((c) => c.name === name);
   if (!entry || !viewer.mixer) return;
   const mixer = viewer.mixer;
@@ -481,6 +516,7 @@ function decodeClip(bytes, nodes, entry) {
 
 function setPlaying(on) {
   viewer.playing = on;
+  $("#anim-play").disabled = $("#anim-time").disabled = !viewer.action;
   $("#anim-play").textContent = on ? "❚❚" : "▶";
   $("#anim-play").setAttribute("aria-label", on ? "Пауза" : "Играть");
 }
@@ -648,7 +684,13 @@ function wireEvents() {
     setPlaying(!viewer.playing);
   });
   $("#anim-time").addEventListener("input", (e) => scrub(Number(e.target.value)));
-  $("#anim-speed").addEventListener("change", (e) => (viewer.speed = Number(e.target.value)));
+  const setSpeed = (v) => {
+    viewer.speed = v;
+    $("#anim-speed").value = v;
+    $("#anim-speed-value").textContent = `×${v.toFixed(2)}`;
+  };
+  $("#anim-speed").addEventListener("input", (e) => setSpeed(Number(e.target.value)));
+  $("#anim-speed-reset").addEventListener("click", () => setSpeed(1));
   $("#turntable").addEventListener("change", (e) => (viewer.controls.autoRotate = e.target.checked));
   $("#reset-view").addEventListener("click", frameModel);
   for (const b of document.querySelectorAll("[data-bg]")) b.addEventListener("click", () => setBackground(b.dataset.bg));
