@@ -1,7 +1,33 @@
 {
- "updatedAt": 1792967642282,
+ "updatedAt": 1793039836546,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6821,
+   "sha": "87eb0f977d33e5b605e65b2ca18bf4f1d8d9136a",
+   "time": 1793039835457,
+   "versionDate": "Oct 26 2026 11:14:53",
+   "size": "hotfix",
+   "weight": 14,
+   "headline": [
+    "Violet: эффекты: новых 2, изменено 3",
+    "Nurse Harrow: переделаны модели: nurse",
+    "Интерфейс: текстуры: изменено 2 текстуры",
+    "Параметры: 1 значение"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 6,
+    "changed": 18,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 1,
+    "code": 0
+   },
+   "file": "6821-m97519091.json",
+   "manifest": "2676828593797519091",
+   "media": 2
+  },
   {
    "build": 6819,
    "sha": "17462b250a0ca80e7f80102f2c83cc3eecff5f12",
@@ -642,28 +668,7 @@
     "code": 2
    },
    "file": "6765-d8e74a10.json"
-  },
-  {
-   "build": 6763,
-   "sha": "dd758c9f6bfc56bc981a1da0ba66dc7f0cb4eb8b",
-   "time": 1791419944000,
-   "versionDate": "Oct 07 2026 17:30:07",
-   "size": "empty",
-   "weight": 0,
-   "headline": [
-    "Изменения только в коде игры"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 0,
-    "changed": 0,
-    "removed": 0,
-    "strings": 0,
-    "vdata": 0,
-    "code": 1
-   },
-   "file": "6763-dd758c9f.json"
   }
  ],
- "notifiedUpTo": 1792713232000
+ "notifiedUpTo": 1793039835457
 }
