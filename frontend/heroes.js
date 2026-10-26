@@ -50,7 +50,7 @@ const groupOf = (name) => (GROUPS.find(([, re]) => re.test(name.toLowerCase())) 
 // The first pose you see: the hero select stance if there is one, else a plain idle.
 function defaultClip(clips) {
   const names = clips.map((c) => c.name.toLowerCase());
-  const prefer = [/hero_?select|pickscreen|pick_?idle|showcase/, /^idle$/, /^idle/, /idle/, /stand/];
+  const prefer = [/hero_?select|pickscreen|pick_?idle|showcase/, /^ui_pose/, /^ui_/, /stand_idle$/, /^idle$/, /^idle/, /idle/, /stand/];
   for (const re of prefer) {
     const i = names.findIndex((n) => re.test(n) && !/aim|additive|lower|upper/.test(n));
     if (i >= 0) return clips[i];
