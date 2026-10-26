@@ -8,9 +8,9 @@
    "id": 6,
    "name": "Abrams",
    "icon": "atlas.webp",
-   "hash": "e2fe1e0eedc7",
-   "file": "atlas-e2fe1e0eedc7.glb",
-   "anims": "atlas-e2fe1e0eedc7.anim",
+   "hash": "8e4232543a5f",
+   "file": "atlas-8e4232543a5f.glb",
+   "anims": "atlas-8e4232543a5f.anim",
    "bytes": 7431484,
    "animations": 49
   },
@@ -30,10 +30,10 @@
    "id": 88,
    "name": "Baba",
    "icon": "baba.webp",
-   "hash": "c73a625dd95e",
-   "file": "baba-c73a625dd95e.glb",
-   "anims": "baba-c73a625dd95e.anim",
-   "bytes": 5163740,
+   "hash": "b7f560247c98",
+   "file": "baba-b7f560247c98.glb",
+   "anims": "baba-b7f560247c98.anim",
+   "bytes": 5083248,
    "animations": 93
   },
   {
@@ -426,10 +426,10 @@
    "id": 86,
    "name": "Violet",
    "icon": "artist.webp",
-   "hash": "cf5a65a45985",
-   "file": "artist-cf5a65a45985.glb",
-   "anims": "artist-cf5a65a45985.anim",
-   "bytes": 6147406,
+   "hash": "46698b559ed5",
+   "file": "artist-46698b559ed5.glb",
+   "anims": "artist-46698b559ed5.anim",
+   "bytes": 6103306,
    "animations": 82
   },
   {
