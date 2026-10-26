@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>zipline — герои Deadlock в 3D</title>
+  <meta name="description" content="zipline: все герои Deadlock — 3D-модели из файлов игры со всеми анимациями. Крутите, выбирайте позу и скачивайте PNG на прозрачном фоне.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/icon.png" type="image/png">
+  <meta name="theme-color" content="#ebebe9">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Pick the theme before first paint: saved choice, else the system setting.
+    (() => {
+      let t;
+      try { t = localStorage.getItem("theme"); } catch {}
+      document.documentElement.dataset.theme = t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    })();
+  </script>
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    } }
+  </script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="./" aria-label="zipline — на главную">
+        <img class="brand-logo day" src="assets/logo.png" alt="Zipline" width="560" height="263">
+        <img class="brand-logo night" src="assets/logo-white.png" alt="Zipline" width="420" height="151">
+        <span class="brand-tag">Deadlock<br>новости и разведка</span>
+      </a>
+      <div class="masthead-end">
+        <nav class="nav" aria-label="Разделы">
+          <a class="nav-link" href="./">Разработчики</a>
+          <a class="nav-link" href="changes.html">Изменения</a>
+          <a class="nav-link active" href="heroes.html" aria-current="page">Герои</a>
+          <span class="nav-link soon" title="Скоро">Статистика</span>
+        </nav>
+        <button class="theme-toggle" id="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Ночная тема">
+          <span class="t-day"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2"/></svg>День</span>
+          <span class="t-night"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="currentColor"/></svg>Ночь</span>
+        </button>
+      </div>
+    </div>
+    <div class="cable" aria-hidden="true"><span class="cable-rider"></span></div>
+  </header>
+
+  <main class="wrap">
+    <section class="page-title">
+      <div class="title-copy">
+        <p class="eyebrow">Файлы игры · модели и анимации</p>
+        <h1>
+          <span class="tag tag-ink">Герои</span>
+          <span class="tag tag-paper">в 3D</span>
+        </h1>
+        <p class="lede">Все герои Deadlock — модели прямо из файлов игры со всеми их анимациями. Откройте героя, покрутите его, поставьте в нужную позу и скачайте картинку на прозрачном фоне.</p>
+      </div>
+      <figure class="title-art" aria-hidden="true">
+        <img src="assets/avatar.jpg" alt="" width="640" height="640">
+      </figure>
+    </section>
+
+    <section class="panel roster-panel">
+      <header class="panel-head">
+        <h2>Выбор героя</h2>
+        <label class="search roster-search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2"/></svg>
+          <input id="hero-search" type="search" placeholder="Имя героя" autocomplete="off" aria-label="Поиск героя">
+        </label>
+      </header>
+      <ul class="roster" id="roster" aria-live="polite">
+        <li class="skeleton roster-sk"></li><li class="skeleton roster-sk"></li><li class="skeleton roster-sk"></li><li class="skeleton roster-sk"></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <img class="footer-logo" src="assets/logo-white.png" alt="Zipline" width="420" height="151">
+      <span id="source-status" class="collector-status">—</span>
+      <span class="handle">@zipline</span>
+    </div>
+  </footer>
+
+  <dialog class="viewer" id="viewer" aria-labelledby="viewer-name">
+    <div class="viewer-frame" id="viewer-frame">
+      <header class="viewer-head">
+        <img class="viewer-icon" id="viewer-icon" alt="">
+        <strong id="viewer-name">—</strong>
+        <span class="viewer-meta" id="viewer-meta"></span>
+        <div class="viewer-head-end">
+          <button class="icon-btn" id="viewer-max" type="button" title="Во весь экран" aria-label="Во весь экран">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          </button>
+          <button class="icon-btn" id="viewer-close" type="button" title="Закрыть" aria-label="Закрыть">×</button>
+        </div>
+      </header>
+      <div class="viewer-body">
+        <div class="stage" id="stage">
+          <canvas id="stage-canvas"></canvas>
+          <div class="stage-status" id="stage-status">Загрузка модели…</div>
+          <div class="stage-hint">ЛКМ — вращать · ПКМ — двигать · колесо — приблизить</div>
+        </div>
+        <aside class="controls">
+          <div class="ctl">
+            <label class="ctl-label" for="anim-filter">Анимация <b id="anim-count"></b></label>
+            <input class="ctl-input" id="anim-filter" type="search" placeholder="Поиск: run, ability, emote…" autocomplete="off">
+            <select class="ctl-select" id="anim-select" size="12" aria-label="Анимация"></select>
+          </div>
+          <div class="ctl">
+            <div class="ctl-row">
+              <button class="btn ctl-btn" id="anim-play" type="button" aria-label="Пауза">❚❚</button>
+              <input class="ctl-range" id="anim-time" type="range" min="0" max="1" step="0.001" value="0" aria-label="Кадр анимации">
+            </div>
+            <div class="ctl-row ctl-small">
+              <span id="anim-clock">0.00 / 0.00 с</span>
+              <label>скорость
+                <select id="anim-speed">
+                  <option value="0.25">×0.25</option><option value="0.5">×0.5</option>
+                  <option value="1" selected>×1</option><option value="1.5">×1.5</option><option value="2">×2</option>
+                </select>
+              </label>
+            </div>
+            <label class="quiet-toggle"><input type="checkbox" id="in-place" checked> на месте (без перемещения)</label>
+            <label class="quiet-toggle"><input type="checkbox" id="turntable"> поворачивать сам</label>
+          </div>
+          <div class="ctl">
+            <span class="ctl-label">Фон в окне</span>
+            <div class="seg" role="radiogroup" aria-label="Фон">
+              <button type="button" data-bg="checker" aria-pressed="true">клетка</button>
+              <button type="button" data-bg="paper" aria-pressed="false">бумага</button>
+              <button type="button" data-bg="dark" aria-pressed="false">тёмный</button>
+              <button type="button" data-bg="green" aria-pressed="false">зелёный</button>
+            </div>
+            <button class="link-btn" id="reset-view" type="button">Сбросить камеру</button>
+          </div>
+          <div class="ctl ctl-export">
+            <span class="ctl-label">Скачать PNG · прозрачный фон</span>
+            <div class="seg" role="radiogroup" aria-label="Размер картинки" id="export-scale">
+              <button type="button" data-scale="1" aria-pressed="false">×1</button>
+              <button type="button" data-scale="2" aria-pressed="true">×2</button>
+              <button type="button" data-scale="4" aria-pressed="false">×4</button>
+            </div>
+            <label class="quiet-toggle"><input type="checkbox" id="export-trim" checked> обрезать пустые края</label>
+            <button class="btn export-btn" id="export-png" type="button">Скачать PNG</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="heroes.js" type="module"></script>
+</body>
+</html>

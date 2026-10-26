@@ -2,16 +2,17 @@
 
 Reads the hero list from the newest build in SteamDB's GameTracking-Deadlock, downloads
 each hero's model with everything it uses (meshes, materials, textures, skeleton,
-animation graph and clips) straight from Steam, converts it with Source2Viewer-CLI into
-one GLB with all animations, and uploads it to the GitHub release HEROES_TAG. Icons go
-to data/heroes/icons/ (small, kept in git). A hero is converted again only when one of
-its files changed.
+animation graph and clips) straight from Steam and converts it with Source2Viewer-CLI.
+Each hero becomes two files in the GitHub release HEROES_TAG: the model (GLB, compressed
+with gltfpack) and a pack of its most telling animations (see animation_pack), which the
+page fetches one clip at a time. Icons go to data/heroes/icons/ (small, kept in git).
+A hero is converted again only when one of its files changed.
 
     python -m backend.heroes                  # convert new and changed heroes
     python -m backend.heroes --fetch DIR      # download the models into DIR (for the site build)
     python -m backend.heroes --raw DIR HERO   # debug: download one hero's game files into DIR
 
-Needs STEAM_USERNAME / STEAM_PASSWORD (see backend/media.py) and the gh CLI.
+Needs STEAM_USERNAME / STEAM_PASSWORD (see backend/media.py), the gh CLI, numpy and pillow.
 """
 import hashlib
 import io
@@ -24,16 +25,18 @@ import subprocess
 import sys
 import tempfile
 import zipfile
+import zlib
 from pathlib import Path
 
 from . import config
-from .media import DEPOT, TOOLS, SteamFiles, game_root, gh, log, manifest_id, references, tool_paths
+from .media import TOOLS, SteamFiles, game_root, gh, log, manifest_id, references, tool_paths
 from .patches import HEROES_VDATA, PAK_LIST, REPO, build_commits, load_loc, show, sync_repo
 
 OUT = config.ROOT / "data" / "heroes"
 HEROES_TAG = "heroes"
 MODEL_VERSION = 1  # bump to convert every hero again after changing the conversion
 VRF_VERSION = "20.1"  # first release that exports Deadlock's animation graph clips to glTF
+GLTFPACK_VERSION = "v1.3"
 COLOR_SIZE = 2048  # base color: details matter when zoomed in
 TEXTURE_SIZE = 1024  # normal, roughness and other maps
 ICON_HEIGHT = 384
@@ -138,18 +141,67 @@ def vrf_path() -> str:
     return str(exe)
 
 
+# ── Which animations ───────────────────────────────────
+
+# Only the clips that read at a glance. Left out: the eight-way and crouched variants of every run
+# (forward is kept), the same moves holding an item, in syphon mode or out of combat, turns in place,
+# aim layers, and the minor in-between steps of zipline, rope, mantle, knockdown and casting.
+DROP_CLIP = re.compile(
+    r"(_(ne|nw|se|sw|e|w|s|center)$"
+    r"|^(syphon|item)_|^out_of_combat_(?!stand_idle$)|crouch_(run|walk)|_aim$|_aim_|"
+    r"^turn_|_turn_|^aim_|_additive|_add$|^flinch|^corner_lean|^loco_lean"
+    r"|^landing_impact|^run_to_stop|^shoot_idle$|^mantle_(32|64|96)$|^rope_climb_(down|idle|settle)$"
+    r"|^dash_air_(back|left|right)$|^wall_attach_(left|right)$|^melee_\w*_(up|down)$|^melee_start_(up|down)$"
+    r"|^zipline_(awaiting_tether|tethered_reeling_loop|attached_boosted_loop)$|^in_air_loop_down$"
+    r"|^jump_(forced|catapult)$|^knockdown_(in_air_\w+|medium_\w+|large_loop)$|^cast_(start|end)$"
+    r"|^cast_channeling_(start|end)$|^reload_\w*_(start|end)$|^lift_start$|^pose_|^bindpose$)")
+
+
+def clip_names(paths: list[str]) -> list[str]:
+    """Leaf names of the clips (out of the files the model uses) worth showing."""
+    names = {p.rsplit("/", 1)[-1].split(".", 1)[0] for p in paths
+             if p.endswith(".vnmclip_c") and "+" not in p.rsplit("/", 1)[-1]}
+    return sorted(n for n in names if not DROP_CLIP.search(n.lower()))
+
+
 # ── Conversion ─────────────────────────────────────────
 
-def convert_model(vrf: str, citadel: Path, path: str, tmp: Path) -> tuple[bytes, list[str]] | None:
+def gltfpack_path() -> str:
+    if os.environ.get("GLTFPACK_PATH"):
+        return os.environ["GLTFPACK_PATH"]
+    exe = TOOLS / f"gltfpack-{GLTFPACK_VERSION}" / "gltfpack"
+    if not exe.exists():
+        exe.parent.mkdir(parents=True, exist_ok=True)
+        gh("release", "download", GLTFPACK_VERSION, "--repo", "zeux/meshoptimizer",
+           "--pattern", "gltfpack-ubuntu.zip", "--dir", str(exe.parent), "--clobber")
+        with zipfile.ZipFile(exe.parent / "gltfpack-ubuntu.zip") as z:
+            z.extractall(exe.parent)
+        exe.chmod(0o755)
+    return str(exe)
+
+
+def convert_model(vrf: str, citadel: Path, path: str, clips: list[str], tmp: Path) -> tuple[bytes, bytes, int] | None:
+    """Model (GLB, meshopt-compressed) and its animations (our own compact pack), and how many clips made it."""
     tmp.mkdir(parents=True, exist_ok=True)
     out = tmp / "model.glb"
-    res = subprocess.run([vrf, "-i", str(citadel / path), "--game", str(citadel / "gameinfo.gi"), "-o", str(out), "-d",
-                          "--gltf_export_format", "glb", "--gltf_textures_adapt", "--gltf_export_animations"],
-                         capture_output=True, text=True)
+    cmd = [vrf, "-i", str(citadel / path), "--game", str(citadel / "gameinfo.gi"), "-o", str(out), "-d",
+           "--gltf_export_format", "glb", "--gltf_export_materials", "--gltf_textures_adapt", "--gltf_export_animations"]
+    if clips:
+        cmd += ["--gltf_animation_list", ",".join(clips)]
+    res = subprocess.run(cmd, capture_output=True, text=True)
     if not out.exists():
         log(f"  conversion failed: {(res.stdout + res.stderr).strip()[-600:]}")
         return None
-    return pack(out)
+    doc, binary = read_glb(out.read_bytes())
+    anims, count = animation_pack(doc, binary)
+    doc["animations"] = []
+    (tmp / "static.glb").write_bytes(pack(doc, binary, out.parent))
+    res = subprocess.run([gltfpack_path(), "-i", str(tmp / "static.glb"), "-o", str(tmp / "packed.glb"), "-cc", "-kn"],
+                         capture_output=True, text=True)
+    if not (tmp / "packed.glb").exists():
+        log(f"  gltfpack failed: {(res.stdout + res.stderr).strip()[-600:]}")
+        return None
+    return (tmp / "packed.glb").read_bytes(), anims, count
 
 
 def read_glb(data: bytes) -> tuple[dict, bytes]:
@@ -170,22 +222,87 @@ def write_glb(doc: dict, binary: bytes) -> bytes:
     return struct.pack("<III", 0x46546C67, 2, 12 + len(chunks)) + chunks
 
 
-def keep_animation(anim: dict) -> bool:
-    """Additive layers (aim offsets, flinches) only make sense on top of another animation."""
-    extras = anim.get("extras") or {}
-    name = anim.get("name", "")
-    return not (extras.get("additive") or extras.get("isAdditive") or "+non_additive" in name or name.endswith("_additive"))
+def accessor(doc: dict, binary: bytes, i: int):
+    import numpy as np
+    a = doc["accessors"][i]
+    v = doc["bufferViews"][a["bufferView"]]
+    width = {"SCALAR": 1, "VEC2": 2, "VEC3": 3, "VEC4": 4}[a["type"]]
+    return np.frombuffer(binary, np.float32, a["count"] * width,
+                         v.get("byteOffset", 0) + a.get("byteOffset", 0)).reshape(a["count"], width)
 
 
-def pack(path: Path) -> tuple[bytes, list[str]]:
-    """One self-contained GLB: textures embedded and shrunk, standalone additive layers dropped, and
-    every buffer view that is no longer used left out."""
+PATHS = {"rotation": 0, "translation": 1, "scale": 2}
+
+
+def animation_pack(doc: dict, binary: bytes) -> tuple[bytes, int]:
+    """All clips of a hero in one file, each compressed on its own so the page fetches just the one picked
+    (HTTP range request). Layout: b"ZAN1", u32 index length, JSON index {nodes, clips: [{name, duration,
+    o, n}]}, then the zlib blobs (offset o, length n, counted from the end of the index).
+
+    A blob holds: u16 time arrays, each u16 count + count × u16 milliseconds (delta coded); u16 tracks,
+    each u16 node, u8 path (0 rotation, 1 translation, 2 scale), u16 time array, then the keys:
+    rotations as count × 4 × i16 (normalised, delta coded), the rest as f32×3 minimum, f32×3 step and
+    count × 3 × u16 (delta coded). Tracks that just hold the bind pose are left out."""
+    import numpy as np
+    nodes = doc["nodes"]
+    names, node_ids, clips, blobs, seen = [], {}, [], bytearray(), set()
+    for anim in doc.get("animations", []):
+        name = anim.get("name", "").rsplit("/", 1)[-1]
+        # Only animation graph clips (named by their file); the model's legacy sequences are older copies.
+        if "/clips/" not in anim.get("name", "") or (anim.get("extras") or {}).get("additive") or name in seen:
+            continue
+        seen.add(name)
+        times, tracks, duration = {}, [], 0.0
+        for ch in anim["channels"]:
+            node, path = ch["target"]["node"], ch["target"]["path"]
+            if path not in PATHS:
+                continue
+            s = anim["samplers"][ch["sampler"]]
+            t, o = accessor(doc, binary, s["input"])[:, 0], accessor(doc, binary, s["output"]).astype(np.float64)
+            duration = max(duration, float(t.max()))
+            n = nodes[node]
+            rest = np.array(n.get(path, {"rotation": [0, 0, 0, 1], "translation": [0, 0, 0], "scale": [1, 1, 1]}[path]))
+            if np.ptp(o, axis=0).max() < 1e-5:
+                if np.abs(o[0] - rest).max() < 1e-4 or path == "rotation" and np.abs(o[0] + rest).max() < 1e-4:
+                    continue
+                t, o = t[:1], o[:1]
+            ms = np.round(t * 1000).astype(np.uint16)
+            ti = times.setdefault(ms.tobytes(), len(times))
+            if node not in node_ids:
+                node_ids[node] = len(names)
+                names.append(n.get("name", f"node{node}"))
+            tracks.append((node_ids[node], PATHS[path], ti, o))
+        if not tracks:
+            continue
+        out = bytearray(struct.pack("<H", len(times)))
+        for key in times:
+            ms = np.frombuffer(key, np.uint16)
+            out += struct.pack("<H", len(ms)) + np.diff(ms, prepend=np.uint16(0)).astype(np.uint16).tobytes()
+        out += struct.pack("<H", len(tracks))
+        for node, path, ti, o in tracks:
+            out += struct.pack("<HBH", node, path, ti)
+            if path == 0:
+                q = np.round(np.clip(o, -1, 1) * 32767).astype(np.int16)
+                out += np.diff(q, axis=0, prepend=np.zeros((1, 4), np.int16)).astype(np.int16).tobytes()
+            else:
+                lo, hi = o.min(axis=0), o.max(axis=0)
+                step = np.where(hi > lo, (hi - lo) / 65535, 1.0)
+                q = np.round((o - lo) / step).astype(np.uint16)
+                out += lo.astype(np.float32).tobytes() + step.astype(np.float32).tobytes()
+                out += np.diff(q, axis=0, prepend=np.zeros((1, 3), np.uint16)).astype(np.uint16).tobytes()
+        blob = zlib.compress(bytes(out), 9)
+        clips.append({"name": name, "duration": round(duration, 4), "o": len(blobs), "n": len(blob)})
+        blobs += blob
+    index = json.dumps({"nodes": names, "clips": clips}, separators=(",", ":")).encode()
+    return b"ZAN1" + struct.pack("<I", len(index)) + index + bytes(blobs), len(clips)
+
+
+def pack(doc: dict, binary: bytes, folder: Path) -> bytes:
+    """One self-contained GLB: the PNGs Source2Viewer writes next to it embedded and shrunk, and every
+    buffer view that is no longer used left out."""
     from PIL import Image
-    doc, binary = read_glb(path.read_bytes())
     views = doc.get("bufferViews", [])
     accessors = doc.get("accessors", [])
-
-    doc["animations"] = [a for a in doc.get("animations", []) if keep_animation(a)]
     color_images = {doc["textures"][m["pbrMetallicRoughness"]["baseColorTexture"]["index"]].get("source")
                     for m in doc.get("materials", []) if "baseColorTexture" in m.get("pbrMetallicRoughness", {})}
 
@@ -209,23 +326,20 @@ def pack(path: Path) -> tuple[bytes, list[str]]:
                     new_views[view_map[i]][k] = v[k]
         return view_map[i]
 
-    used_accessors = set()
+    used = set()
     for mesh in doc.get("meshes", []):
         for prim in mesh.get("primitives", []):
-            used_accessors.update(prim.get("attributes", {}).values())
+            used.update(prim.get("attributes", {}).values())
             if "indices" in prim:
-                used_accessors.add(prim["indices"])
+                used.add(prim["indices"])
             for target in prim.get("targets", []):
-                used_accessors.update(target.values())
+                used.update(target.values())
     for skin in doc.get("skins", []):
         if "inverseBindMatrices" in skin:
-            used_accessors.add(skin["inverseBindMatrices"])
-    for anim in doc["animations"]:
-        for s in anim.get("samplers", []):
-            used_accessors.update((s["input"], s["output"]))
+            used.add(skin["inverseBindMatrices"])
 
     acc_map, new_accessors = {}, []
-    for i in sorted(used_accessors):
+    for i in sorted(used):
         a = dict(accessors[i])
         if "bufferView" in a:
             a["bufferView"] = remap_view(a["bufferView"])
@@ -241,14 +355,10 @@ def pack(path: Path) -> tuple[bytes, list[str]]:
     for skin in doc.get("skins", []):
         if "inverseBindMatrices" in skin:
             skin["inverseBindMatrices"] = acc_map[skin["inverseBindMatrices"]]
-    for anim in doc["animations"]:
-        for s in anim.get("samplers", []):
-            s["input"], s["output"] = acc_map[s["input"]], acc_map[s["output"]]
-        anim.pop("extras", None)
 
     for n, image in enumerate(doc.get("images", [])):
         if "uri" in image:
-            img_path = path.parent / image.pop("uri")
+            img_path = folder / image.pop("uri")
             if not img_path.exists():
                 continue
             raw = img_path.read_bytes()
@@ -258,8 +368,7 @@ def pack(path: Path) -> tuple[bytes, list[str]]:
         else:
             continue
         with Image.open(io.BytesIO(raw)) as img:
-            size = COLOR_SIZE if n in color_images else TEXTURE_SIZE
-            img.thumbnail((size, size))
+            img.thumbnail((COLOR_SIZE, COLOR_SIZE) if n in color_images else (TEXTURE_SIZE, TEXTURE_SIZE))
             buf = io.BytesIO()
             if img.mode in ("RGBA", "LA") and img.getchannel("A").getextrema()[0] < 255:
                 img.save(buf, "PNG", optimize=True)
@@ -273,11 +382,11 @@ def pack(path: Path) -> tuple[bytes, list[str]]:
     for material in doc.get("materials", []):
         material.pop("extras", None)
     for part in doc.get("meshes", []) + doc.get("nodes", []):
-        if "name" in part:
+        if "name" in part:  # names carry the absolute path of the temporary input file
             part["name"] = part["name"].rsplit("/", 1)[-1]
     doc["accessors"], doc["bufferViews"] = new_accessors, new_views
     doc["buffers"] = [{"byteLength": len(new_bin)}]
-    return write_glb(doc, bytes(new_bin)), [a.get("name", "") for a in doc["animations"]]
+    return write_glb(doc, bytes(new_bin))
 
 
 def convert_icon(vrf: str, citadel: Path, path: str, tmp: Path) -> bytes | None:
@@ -355,20 +464,25 @@ def main() -> int:
                 icon = convert_icon(vrf, citadel, h["card"], work / "tmp" / f"{key}-icon")
                 if icon:
                     (OUT / "icons" / f"{key}.webp").write_bytes(icon)
-                made = convert_model(vrf, citadel, h["model"], work / "tmp" / key)
+                # The animation graph names the clips, wherever they live.
+                used = reachable(citadel, {h["model"], h["card"]} | clip_paths(h["model"], crcs))
+                made = convert_model(vrf, citadel, h["model"], clip_names(used), work / "tmp" / key)
                 if not made:
                     continue
-                glb, animations = made
-                used = reachable(citadel, {h["model"], h["card"]} | clip_paths(h["model"], crcs))
+                glb, anims, count = made
                 deps[key] = used
                 digest = fingerprint(used, crcs)
-                name = f"{key}-{digest}.glb"
-                (work / name).write_bytes(glb)
-                gh("release", "upload", HEROES_TAG, str(work / name), "--clobber")
-                if old.get(key, {}).get("file") and old[key]["file"] != name and old[key]["file"] in existing:
-                    gh("release", "delete-asset", HEROES_TAG, old[key]["file"], "--yes", check=False)
-                old[key] = {"hash": digest, "file": name, "bytes": len(glb), "animations": len(animations)}
-                log(f"  {len(glb) / 1e6:.1f} MB, {len(animations)} animations")
+                entry = {"hash": digest, "file": f"{key}-{digest}.glb", "anims": f"{key}-{digest}.anim",
+                         "bytes": len(glb) + len(anims), "animations": count}
+                for name, blob in ((entry["file"], glb), (entry["anims"], anims)):
+                    (work / name).write_bytes(blob)
+                    gh("release", "upload", HEROES_TAG, str(work / name), "--clobber")
+                for k in ("file", "anims"):
+                    stale = old.get(key, {}).get(k)
+                    if stale and stale != entry[k] and stale in existing:
+                        gh("release", "delete-asset", HEROES_TAG, stale, "--yes", check=False)
+                old[key] = entry
+                log(f"  model {len(glb) / 1e6:.1f} MB, {count} animations {len(anims) / 1e6:.1f} MB")
                 write_index(index_path, deps_path, build, heroes, old, deps)
         finally:
             shutil.rmtree(work, ignore_errors=True)
@@ -420,7 +534,7 @@ def fetch(dest: Path) -> int:
     index_path = OUT / "index.json"
     if not index_path.exists():
         return 0
-    files = [h["file"] for h in json.loads(index_path.read_text("utf-8"))["heroes"] if h.get("file")]
+    files = [h[k] for h in json.loads(index_path.read_text("utf-8"))["heroes"] for k in ("file", "anims") if h.get(k)]
     dest.mkdir(parents=True, exist_ok=True)
     for name in files:
         res = gh("release", "download", HEROES_TAG, "--pattern", name, "--dir", str(dest), "--clobber", check=False)

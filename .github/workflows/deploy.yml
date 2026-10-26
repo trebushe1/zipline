@@ -33,6 +33,10 @@ jobs:
       - run: python -m backend.media --fetch site/media
         env:
           GH_TOKEN: ${{ github.token }}
+      # Hero models live in the «heroes» release.
+      - run: python -m backend.heroes --fetch site/heroes/models
+        env:
+          GH_TOKEN: ${{ github.token }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

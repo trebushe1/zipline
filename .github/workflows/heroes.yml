@@ -25,7 +25,7 @@ concurrency:
 jobs:
   heroes:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 300
     env:
       GH_TOKEN: ${{ github.token }}
       STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
@@ -39,7 +39,7 @@ jobs:
           python-version: "3.12"
 
       - run: |
-          pip install -q pillow
+          pip install -q pillow numpy
           echo "GAMETRACKING_DIR=$RUNNER_TEMP/gametracking" >> "$GITHUB_ENV"
           echo "MEDIA_TOOLS_DIR=$RUNNER_TEMP/tools" >> "$GITHUB_ENV"
 
@@ -60,8 +60,9 @@ jobs:
         if: inputs.raw == ''
         run: python -m backend.heroes
 
+      # Keep what was converted even if a hero failed: the next run picks up the rest.
       - name: Publish
-        if: inputs.raw == ''
+        if: inputs.raw == '' && !cancelled()
         run: |
           git add data/heroes
           if git diff --cached --quiet; then exit 0; fi

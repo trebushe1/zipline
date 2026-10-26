@@ -174,4 +174,7 @@ def ingest(payload: dict, x_ingest_secret: str = Header("")):
 # Patch summaries written by `python -m backend.patches`; the static build copies them the same way.
 (config.ROOT / "data" / "patches").mkdir(parents=True, exist_ok=True)
 app.mount("/patches", StaticFiles(directory=config.ROOT / "data" / "patches"), name="patches")
+# Hero list and icons from `python -m backend.heroes`, models from its --fetch into data/heroes/models.
+(config.ROOT / "data" / "heroes").mkdir(parents=True, exist_ok=True)
+app.mount("/heroes", StaticFiles(directory=config.ROOT / "data" / "heroes"), name="heroes")
 app.mount("/", StaticFiles(directory=config.ROOT / "frontend", html=True), name="frontend")

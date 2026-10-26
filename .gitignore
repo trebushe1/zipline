@@ -4,6 +4,8 @@
 data/*
 !data/archive.json
 !data/patches/
+!data/heroes/
+data/heroes/models/
 site/
 __pycache__/
 .DS_Store
