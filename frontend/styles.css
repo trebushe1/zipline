@@ -549,7 +549,9 @@ ins { text-decoration: none; background: var(--green-wash); color: var(--accent)
 .ctl .link-btn { align-self: flex-start; }
 .export-btn { justify-content: center; background: var(--slab); border-color: var(--slab); color: #fff; }
 .export-btn:hover { background: var(--green-deep); border-color: var(--green-deep); }
-.export-btn:disabled { opacity: .6; cursor: progress; }
+.export-btn:disabled { opacity: .6; cursor: default; }
+.export-btn:disabled:hover { background: var(--slab); border-color: var(--slab); }
+.export-btn[aria-busy="true"], #export-png:disabled { cursor: progress; }
 .viewer-frame::after {
   content: ""; position: absolute; right: 2px; bottom: 2px; width: 10px; height: 10px; pointer-events: none;
   background: linear-gradient(135deg, transparent 50%, var(--muted) 50% 60%, transparent 60% 75%, var(--muted) 75% 85%, transparent 85%);

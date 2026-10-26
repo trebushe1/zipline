@@ -1,6 +1,9 @@
 const $ = (sel) => document.querySelector(sel);
 const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const MAX_EXPORT = 8192; // longest side of a downloaded PNG, before trimming
+const MAX_VIDEO = 4096; // the same for a WebM
+const FPS = 30;
+const VP9 = "vp09.00.10.08"; // profile 0, 8 bits
 
 const state = { index: null, heroes: [], hero: null, q: "" };
 
@@ -79,7 +82,7 @@ const groupOf = (name) => (GROUPS.find(([, re]) => re.test(bareName(name))) || [
 const viewer = {
   THREE: null, renderer: null, scene: null, camera: null, controls: null, loader: null,
   model: null, anchor: null, mixer: null, action: null, clips: [], rootBone: null, rootStart: null,
-  playing: true, speed: 1, bg: "checker", scale: 2, frameBox: null, token: 0, cache: new Map(),
+  playing: true, speed: 1, bg: "checker", scale: 2, frameBox: null, token: 0, cache: new Map(), exporting: false,
 };
 
 async function initThree() {
@@ -128,7 +131,7 @@ async function initThree() {
 
 function resizeStage() {
   const { renderer, camera } = viewer;
-  if (!renderer) return;
+  if (!renderer || viewer.exporting) return; // a video export owns the canvas size until it is done
   const { clientWidth: w, clientHeight: h } = $("#stage");
   if (!w || !h) return;
   renderer.setSize(w, h, false);
@@ -524,6 +527,7 @@ function decodeClip(bytes, nodes, entry) {
 function setPlaying(on) {
   viewer.playing = on;
   $("#anim-play").disabled = $("#anim-time").disabled = !viewer.action;
+  $("#export-webm").disabled = !viewer.action || viewer.exporting;
   $("#anim-play").textContent = on ? "❚❚" : "▶";
   $("#anim-play").setAttribute("aria-label", on ? "Пауза" : "Играть");
 }
@@ -574,10 +578,7 @@ async function exportPng() {
     // on screen), copy it out, then put the canvas back.
     const size = renderer.getSize(new THREE.Vector2());
     const ratio = renderer.getPixelRatio();
-    const gl = renderer.getContext();
-    const limit = Math.min(MAX_EXPORT, gl.getParameter(gl.MAX_RENDERBUFFER_SIZE), ...gl.getParameter(gl.MAX_VIEWPORT_DIMS));
-    const scale = Math.min(viewer.scale * Math.min(devicePixelRatio, 2), limit / Math.max(size.x, size.y));
-    const w = Math.round(size.x * scale), h = Math.round(size.y * scale);
+    const [w, h] = exportSize(MAX_EXPORT);
     renderer.setPixelRatio(1);
     renderer.setSize(w, h, false);
     renderer.render(scene, camera);
@@ -592,12 +593,7 @@ async function exportPng() {
     let out = canvas;
     if ($("#export-trim").checked) out = trim(canvas, ctx.getImageData(0, 0, w, h).data) || canvas;
     const blob = await new Promise((r) => out.toBlob(r, "image/png"));
-    const anim = viewer.current || "pose";
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `${state.hero.key}-${anim}-${out.width}x${out.height}.png`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    save(blob, `${state.hero.key}-${viewer.current || "pose"}-${out.width}x${out.height}.png`);
     toast(`Сохранено: ${out.width}×${out.height}`);
   } catch (err) {
     console.error(err);
@@ -608,8 +604,26 @@ async function exportPng() {
   }
 }
 
-function trim(canvas, data) {
-  const { width: w, height: h } = canvas;
+// The stage times the chosen scale, within `max` and what the GPU can draw.
+function exportSize(max) {
+  const { renderer, THREE } = viewer;
+  const size = renderer.getSize(new THREE.Vector2());
+  const gl = renderer.getContext();
+  const limit = Math.min(max, gl.getParameter(gl.MAX_RENDERBUFFER_SIZE), ...gl.getParameter(gl.MAX_VIEWPORT_DIMS));
+  const scale = Math.min(viewer.scale * Math.min(devicePixelRatio, 2), limit / Math.max(size.x, size.y));
+  return [Math.round(size.x * scale), Math.round(size.y * scale)];
+}
+
+function save(blob, name) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
+// The visible pixels plus a 1% margin; null for an empty frame.
+function alphaBounds(data, w, h) {
   let top = h, left = w, right = -1, bottom = -1;
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
@@ -623,13 +637,286 @@ function trim(canvas, data) {
   }
   if (right < 0) return null;
   const pad = Math.round(Math.max(w, h) * 0.01);
-  left = Math.max(0, left - pad); top = Math.max(0, top - pad);
-  right = Math.min(w - 1, right + pad); bottom = Math.min(h - 1, bottom + pad);
+  return { left: Math.max(0, left - pad), top: Math.max(0, top - pad), right: Math.min(w - 1, right + pad), bottom: Math.min(h - 1, bottom + pad) };
+}
+
+function trim(canvas, data) {
+  const box = alphaBounds(data, canvas.width, canvas.height);
+  if (!box) return null;
   const out = document.createElement("canvas");
-  out.width = right - left + 1;
-  out.height = bottom - top + 1;
-  out.getContext("2d").drawImage(canvas, left, top, out.width, out.height, 0, 0, out.width, out.height);
+  out.width = box.right - box.left + 1;
+  out.height = box.bottom - box.top + 1;
+  out.getContext("2d").drawImage(canvas, box.left, box.top, out.width, out.height, 0, 0, out.width, out.height);
   return out;
+}
+
+// ── WebM export ────────────────────────────────────────
+// One loop of the current clip at 30 fps on a transparent background. Frames are posed and rendered one
+// by one rather than recorded live, so none is dropped at any size. VideoEncoder has no alpha for VP9 in
+// the browsers, so it goes the way ffmpeg does it: a second VP9 stream carries the alpha as brightness and
+// is stored with each frame as its BlockAdditional (the format of Telegram's video stickers too).
+async function exportWebm() {
+  const { renderer, camera, scene, THREE, mixer, action } = viewer;
+  if (!action || viewer.exporting) return;
+  const btn = $("#export-webm"), pngBtn = $("#export-png");
+  const [w, h] = exportSize(MAX_VIDEO);
+  const probe = { codec: VP9, width: w & ~1, height: h & ~1, framerate: FPS };
+  const supports = async (config) => !!window.VideoEncoder && !!(await VideoEncoder.isConfigSupported(config).catch(() => ({}))).supported;
+  if (!(await supports(probe))) {
+    toast("Этот браузер не умеет записывать WebM — откройте сайт в Chrome");
+    return;
+  }
+  // Constant quality where the browser has it. Under bitrate control the first frame of the alpha comes out
+  // coarse, and a faint haze (alpha 5 instead of 0) spreads over the whole background.
+  const quantizer = await supports({ ...probe, bitrateMode: "quantizer" });
+  const token = viewer.token, key = state.hero.key, name = viewer.current;
+  const stillHere = () => token === viewer.token && action === viewer.action;
+  const wasPlaying = viewer.playing, wasTime = action.time;
+  const size = renderer.getSize(new THREE.Vector2()), ratio = renderer.getPixelRatio();
+  viewer.exporting = true;
+  btn.disabled = pngBtn.disabled = true;
+  btn.setAttribute("aria-busy", "true");
+  renderer.setAnimationLoop(null); // the frames are posed by hand below
+  const encoders = [];
+  try {
+    renderer.setPixelRatio(1);
+    renderer.setSize(w, h, false);
+    // Just this clip, at full weight, even in the middle of a cross-fade.
+    for (const a of mixer._actions) if (a !== action) a.stop();
+    action.stopFading().setEffectiveWeight(1).play();
+    const duration = action.getClip().duration;
+    const count = Math.max(1, Math.round((duration / viewer.speed) * FPS));
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const trimmed = $("#export-trim").checked, passes = trimmed ? 2 : 1;
+    // Frame i of the loop: the straight RGBA pixels inside box.
+    const draw = async (i, pass, box) => {
+      btn.textContent = `Запись… ${Math.round(((pass * count + i) / (passes * count)) * 100)}%`;
+      await nextTask(); // let the label paint
+      if (!stillHere()) throw new Error("aborted");
+      action.time = (i / count) * duration;
+      mixer.update(0);
+      keepInPlace();
+      updateProps();
+      renderer.render(scene, camera);
+      ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(renderer.domElement, 0, 0);
+      return ctx.getImageData(box.left, box.top, box.right - box.left + 1, box.bottom - box.top + 1).data;
+    };
+
+    let box = { left: 0, top: 0, right: w - 1, bottom: h - 1 };
+    if (trimmed) {
+      // One frame around everything the hero reaches in the loop, so the hero doesn't jump inside it.
+      let all = null;
+      for (let i = 0; i < count; i++) {
+        const b = alphaBounds(await draw(i, 0, box), w, h);
+        if (b) all = all ? { left: Math.min(all.left, b.left), top: Math.min(all.top, b.top), right: Math.max(all.right, b.right), bottom: Math.max(all.bottom, b.bottom) } : b;
+      }
+      if (all) box = all;
+    }
+    // 4:2:0 video: even sizes only.
+    box.right -= (box.right - box.left + 1) % 2;
+    box.bottom -= (box.bottom - box.top + 1) % 2;
+    const cw = box.right - box.left + 1, ch = box.bottom - box.top + 1;
+
+    // Colour, then alpha. The alpha gets the finer quantizer: it is flat almost everywhere and costs little,
+    // and any error in it shows as a haze or holes.
+    const streams = [{ q: 30, bits: 0.12 }, { q: 4, bits: 0.12 }];
+    const chunks = [[], []];
+    let failure = null, wake = null;
+    for (const [k, { bits }] of streams.entries()) {
+      const encoder = new VideoEncoder({
+        output: (chunk) => {
+          const data = new Uint8Array(chunk.byteLength);
+          chunk.copyTo(data);
+          chunks[k].push({ key: chunk.type === "key", data });
+          wake?.();
+        },
+        error: (err) => {
+          failure = err;
+          wake?.();
+        },
+      });
+      encoder.addEventListener("dequeue", () => wake?.());
+      const rate = quantizer ? { bitrateMode: "quantizer" } : { bitrate: Math.round(Math.max(1e6, cw * ch * FPS * bits)) };
+      encoder.configure({ codec: VP9, width: cw, height: ch, framerate: FPS, ...rate });
+      encoders.push(encoder);
+    }
+    const colorSpace = { primaries: "bt709", transfer: "bt709", matrix: "bt709", fullRange: false };
+    for (let i = 0; i < count; i++) {
+      const planes = toI420(await draw(i, passes - 1, box), cw, ch);
+      const init = { format: "I420", codedWidth: cw, codedHeight: ch, timestamp: Math.round((i * 1e6) / FPS), duration: Math.round(1e6 / FPS), colorSpace };
+      planes.forEach((data, k) => {
+        const frame = new VideoFrame(data, init);
+        encoders[k].encode(frame, { keyFrame: i % (2 * FPS) === 0, ...(quantizer && { vp9: { quantizer: streams[k].q } }) });
+        frame.close();
+      });
+      // Wait on the encoders' own output rather than on timers, which a background tab slows down.
+      while (!failure && encoders.some((e) => e.encodeQueueSize > 2)) await new Promise((r) => (wake = r));
+      if (failure) throw failure;
+    }
+    await Promise.all(encoders.map((e) => e.flush()));
+    if (failure) throw failure;
+    if (chunks[0].length !== count || chunks[1].length !== count) throw new Error(`encoded ${chunks[0].length}/${chunks[1].length} of ${count} frames`);
+
+    const blob = webm(cw, ch, chunks[0].map((c, i) => ({ key: c.key && chunks[1][i].key, data: c.data, alpha: chunks[1][i].data })));
+    save(blob, `${key}-${name}-${cw}x${ch}.webm`);
+    toast(`Сохранено: ${cw}×${ch}, ${plural(count, "кадр", "кадра", "кадров")}, ${(blob.size / 2 ** 20).toFixed(1)} МБ`);
+  } catch (err) {
+    if (err.message === "aborted") {
+      toast("Запись прервана");
+    } else {
+      console.error(err);
+      toast("Не получилось записать видео");
+    }
+  } finally {
+    for (const e of encoders) if (e.state !== "closed") e.close();
+    renderer.setPixelRatio(ratio);
+    renderer.setSize(size.x, size.y, false);
+    viewer.exporting = false;
+    if (stillHere()) {
+      action.time = wasTime;
+      mixer.update(0);
+      setPlaying(wasPlaying);
+    }
+    btn.disabled = !viewer.action;
+    btn.removeAttribute("aria-busy");
+    btn.textContent = "Скачать WebM";
+    pngBtn.disabled = false;
+    resizeStage();
+    viewer.clock.getDelta();
+    renderer.setAnimationLoop(tick);
+  }
+}
+
+// A message instead of setTimeout: timers in a background tab fire once a second at best.
+const nextTask = () => new Promise((r) => {
+  const { port1, port2 } = new MessageChannel();
+  port1.onmessage = r;
+  port2.postMessage(0);
+});
+
+// Straight RGBA → two I420 frames (BT.709, limited range): the colour, and the alpha as brightness.
+function toI420(px, w, h) {
+  bleed(px, w, h);
+  const n = w * h, half = w >> 1;
+  const color = new Uint8Array(n * 1.5), alpha = new Uint8Array(n * 1.5).fill(128, n);
+  for (let i = 0; i < n; i++) {
+    const p = i * 4;
+    color[i] = 16.5 + (0.2126 * px[p] + 0.7152 * px[p + 1] + 0.0722 * px[p + 2]) * (219 / 255);
+    alpha[i] = px[p + 3];
+  }
+  const u = n, v = n + n / 4, k = 224 / 255 / 4; // chroma: the sum of each 2×2 block
+  for (let y = 0; y < h; y += 2) {
+    for (let x = 0; x < w; x += 2) {
+      const p0 = (y * w + x) * 4, p1 = p0 + 4, p2 = p0 + w * 4, p3 = p2 + 4;
+      const r = px[p0] + px[p1] + px[p2] + px[p3];
+      const g = px[p0 + 1] + px[p1 + 1] + px[p2 + 1] + px[p3 + 1];
+      const b = px[p0 + 2] + px[p1 + 2] + px[p2 + 2] + px[p3 + 2];
+      const c = (y >> 1) * half + (x >> 1);
+      color[u + c] = 128.5 + (-0.114572 * r - 0.385428 * g + 0.5 * b) * k;
+      color[v + c] = 128.5 + (0.5 * r - 0.454153 * g - 0.045847 * b) * k;
+    }
+  }
+  return [color, alpha];
+}
+
+// Transparent pixels are black. Spread the edge colours a couple of pixels into them, or compression,
+// the halved chroma and scaling in the player would mix that black into the outline of the hero.
+function bleed(px, w, h, passes = 2) {
+  // 1 where the colour is known, inside an empty 1-pixel border: neighbours need no bounds checks, and the
+  // loop stays fast (reading outside a typed array throws V8 off its fast path: ten times slower).
+  const W = w + 2, known = new Uint8Array(W * (h + 2));
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) known[(y + 1) * W + x + 1] = px[(y * w + x) * 4 + 3] > 0 ? 1 : 0;
+  const dk = [-1, 1, -W, W], dp = [-4, 4, -4 * w, 4 * w]; // left, right, up, down in known and in px
+  for (let pass = 0; pass < passes; pass++) {
+    for (let y = 0; y < h; y++) {
+      for (let x = 0, k = (y + 1) * W + 1, i = y * w * 4; x < w; x++, k++, i += 4) {
+        // Pixels filled in this same pass are 2 and don't count yet.
+        if (known[k] || !((known[k - 1] | known[k + 1] | known[k - W] | known[k + W]) & 1)) continue;
+        let r = 0, g = 0, b = 0, c = 0;
+        for (let d = 0; d < 4; d++) {
+          if (known[k + dk[d]] !== 1) continue;
+          const q = i + dp[d];
+          r += px[q]; g += px[q + 1]; b += px[q + 2]; c++;
+        }
+        px[i] = r / c; px[i + 1] = g / c; px[i + 2] = b / c;
+        known[k] = 2;
+      }
+    }
+    for (let k = 0; k < known.length; k++) if (known[k] === 2) known[k] = 1;
+  }
+}
+
+// ── WebM file ──────────────────────────────────────────
+// Just enough Matroska for one VP9 track with alpha: AlphaMode on the track, and the alpha frame as
+// BlockAdditional 1 next to each colour frame, as ffmpeg writes it.
+function cat(parts) {
+  const out = new Uint8Array(parts.reduce((n, p) => n + p.length, 0));
+  let o = 0;
+  for (const p of parts) { out.set(p, o); o += p.length; }
+  return out;
+}
+
+const bytesOf = (n, len) => {
+  const out = new Uint8Array(len);
+  for (let i = len - 1; i >= 0; i--, n = Math.floor(n / 256)) out[i] = n % 256;
+  return out;
+};
+
+const uintOf = (n) => {
+  let len = 1;
+  while (n >= 256 ** len) len++;
+  return bytesOf(n, len);
+};
+
+// One element: an unsigned number, a string, raw bytes, or a list of child elements (nulls skipped).
+function el(id, body) {
+  if (typeof body === "number") body = uintOf(body);
+  else if (typeof body === "string") body = new TextEncoder().encode(body);
+  else if (Array.isArray(body)) body = cat(body.filter(Boolean));
+  let len = 1;
+  while (body.length >= 2 ** (7 * len) - 1) len++;
+  const size = bytesOf(body.length, len);
+  size[0] |= 0x80 >> (len - 1);
+  return cat([uintOf(id), size, body]);
+}
+
+function webm(width, height, frames) {
+  const f64 = (x) => { const b = new Uint8Array(8); new DataView(b.buffer).setFloat64(0, x); return b; };
+  const i16 = (x) => { const b = new Uint8Array(2); new DataView(b.buffer).setInt16(0, x); return b; };
+  const ms = (i) => Math.round((i * 1000) / FPS);
+  // A cluster per keyframe; block times inside it are 16-bit offsets from its start.
+  const clusters = [];
+  frames.forEach((f, i) => {
+    if (f.key || !clusters.length || ms(i) - clusters.at(-1).start > 30000) clusters.push({ start: ms(i), blocks: [] });
+    const cluster = clusters.at(-1);
+    cluster.blocks.push(el(0xa0, [ // BlockGroup
+      el(0xa1, cat([new Uint8Array([0x81]), i16(ms(i) - cluster.start), new Uint8Array([0]), f.data])), // Block: track 1
+      f.key ? null : el(0xfb, i16(ms(i - 1) - ms(i))), // ReferenceBlock: the frame before; none on a keyframe
+      el(0x75a1, [el(0xa6, [el(0xee, 1), el(0xa5, f.alpha)])]), // BlockAdditions → BlockMore: id 1, the alpha
+    ]));
+  });
+  return new Blob([
+    el(0x1a45dfa3, [ // EBML header: webm, version 4 for AlphaMode
+      el(0x4286, 1), el(0x42f7, 1), el(0x42f2, 4), el(0x42f3, 8), el(0x4282, "webm"), el(0x4287, 4), el(0x4285, 2),
+    ]),
+    el(0x18538067, [ // Segment
+      el(0x1549a966, [ // Info: times in ms, duration
+        el(0x2ad7b1, 1e6), el(0x4d80, "zipline"), el(0x5741, "zipline"), el(0x4489, f64((frames.length * 1000) / FPS)),
+      ]),
+      el(0x1654ae6b, [el(0xae, [ // Tracks → TrackEntry: video track 1, VP9, frame duration in ns
+        el(0xd7, 1), el(0x73c5, 1), el(0x83, 1), el(0x9c, 0), el(0x86, "V_VP9"), el(0x23e383, Math.round(1e9 / FPS)),
+        el(0xe0, [ // Video: size, AlphaMode, Colour (BT.709, limited range)
+          el(0xb0, width), el(0xba, height), el(0x53c0, 1),
+          el(0x55b0, [el(0x55b1, 1), el(0x55b9, 1), el(0x55ba, 1), el(0x55bb, 1)]),
+        ]),
+      ])]),
+      ...clusters.map((c) => el(0x1f43b675, [el(0xe7, c.start), ...c.blocks])), // Cluster: start time, blocks
+    ]),
+  ], { type: "video/webm" });
 }
 
 // ── Opening and closing ────────────────────────────────
@@ -721,6 +1008,7 @@ function wireEvents() {
     });
   }
   $("#export-png").addEventListener("click", exportPng);
+  $("#export-webm").addEventListener("click", exportWebm);
   // Space toggles playback while the stage is focused, without scrolling the dialog.
   dialog.addEventListener("keydown", (e) => {
     if (e.code === "Space" && !e.target.matches("input, select, button")) {

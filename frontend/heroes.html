@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>zipline — герои Deadlock в 3D</title>
-  <meta name="description" content="zipline: все герои Deadlock — 3D-модели из файлов игры со всеми анимациями. Крутите, выбирайте позу и скачивайте PNG на прозрачном фоне.">
+  <meta name="description" content="zipline: все герои Deadlock — 3D-модели из файлов игры со всеми анимациями. Крутите, выбирайте позу и скачивайте PNG или WebM-видео на прозрачном фоне.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -59,7 +59,7 @@
           <span class="tag tag-ink">Герои</span>
           <span class="tag tag-paper">в 3D</span>
         </h1>
-        <p class="lede">Все герои Deadlock — модели прямо из файлов игры со всеми их анимациями. Откройте героя, покрутите его, поставьте в нужную позу и скачайте картинку на прозрачном фоне.</p>
+        <p class="lede">Все герои Deadlock — модели прямо из файлов игры со всеми их анимациями. Откройте героя, покрутите его, поставьте в нужную позу и скачайте картинку или видео на прозрачном фоне.</p>
       </div>
       <figure class="title-art" aria-hidden="true">
         <img src="assets/avatar.jpg" alt="" width="640" height="640">
@@ -141,7 +141,7 @@
             <button class="link-btn" id="reset-view" type="button">Сбросить камеру</button>
           </div>
           <div class="ctl ctl-export">
-            <span class="ctl-label">Скачать PNG · прозрачный фон</span>
+            <span class="ctl-label">Скачать · прозрачный фон</span>
             <div class="seg" role="radiogroup" aria-label="Размер картинки" id="export-scale">
               <button type="button" data-scale="1" aria-pressed="false">×1</button>
               <button type="button" data-scale="2" aria-pressed="true">×2</button>
@@ -149,6 +149,7 @@
             </div>
             <label class="quiet-toggle"><input type="checkbox" id="export-trim" checked> обрезать пустые края</label>
             <button class="btn export-btn" id="export-png" type="button">Скачать PNG</button>
+            <button class="btn export-btn" id="export-webm" type="button" title="Видео: один цикл выбранной анимации, 30 кадров/с" disabled>Скачать WebM</button>
           </div>
         </aside>
       </div>
