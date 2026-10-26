@@ -436,10 +436,9 @@ def main() -> int:
     todo = [h for h in heroes if h["key"] not in old or not deps.get(h["key"])
             or old[h["key"]].get("hash") != fingerprint(deps[h["key"]], crcs)
             or not (OUT / "icons" / f"{h['key']}.webp").exists()]
-    limit = int(os.environ.get("HEROES_PER_RUN", "0")) or len(todo)
     if only := os.environ.get("HEROES_ONLY"):  # asked for by hand: convert them again even if nothing changed
         todo = [h for h in heroes if h["key"] in only.split(",")]
-    todo = todo[:limit]
+    todo = todo[:int(os.environ.get("HEROES_PER_RUN", "0")) or len(todo)]
     log(f"build {build['build']}: {len(heroes)} heroes, {len(todo)} to convert")
 
     if todo:
