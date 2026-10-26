@@ -137,13 +137,19 @@ function resizeStage() {
 }
 
 function tick() {
-  const dt = Math.min(viewer.clock.getDelta(), 0.1);
-  if (viewer.mixer && viewer.playing) viewer.mixer.update(dt * viewer.speed);
-  keepInPlace();
-  updateProps();
+  // An error thrown here would end three.js's animation loop for good and freeze the picture on the
+  // last hero: report it and keep drawing.
+  try {
+    const dt = Math.min(viewer.clock.getDelta(), 0.1);
+    if (viewer.mixer && viewer.playing) viewer.mixer.update(dt * viewer.speed);
+    keepInPlace();
+    updateProps();
+    if (viewer.action && viewer.playing) syncTimeline();
+  } catch (err) {
+    console.error(err);
+  }
   viewer.controls.update();
   viewer.renderer.render(viewer.scene, viewer.camera);
-  if (viewer.action && viewer.playing) syncTimeline();
 }
 
 // Movement clips carry root motion: the hero would run off the screen. Pin the root bone over the start point.
@@ -201,7 +207,7 @@ const isHidden = (bone) => {
 
 function updateProps() {
   const { propBones, hands, THREE } = viewer;
-  if (!propBones?.length || !viewer.reach) return;
+  if (!viewer.model || !propBones?.length || !viewer.reach) return;
   viewer.model.updateMatrixWorld(true);
   const p = new THREE.Vector3(), h = new THREE.Vector3();
   for (const bone of propBones) {
@@ -223,6 +229,7 @@ function updateProps() {
 // whenever a clip starts, so a prop that the clip brings in stays visible.
 function hideStrays() {
   const { THREE, model } = viewer;
+  if (!model) return;
   for (const b of viewer.strays || []) {
     if (b.userData.hidden) { b.scale.copy(b.userData.hidden); b.userData.hidden = null; }
   }
@@ -317,7 +324,7 @@ async function loadModel(hero) {
   if (viewer.model) {
     scene.remove(viewer.anchor);
     viewer.mixer?.stopAllAction();
-    viewer.model = viewer.anchor = viewer.mixer = viewer.action = viewer.rootBone = viewer.current = viewer.reach = null;
+    forgetModel();
   }
   fillAnimations([]);
 
@@ -647,12 +654,25 @@ async function openHero(key, push = true) {
   }
 }
 
+// Everything that points into the current model, so nothing reaches for it once it is gone.
+function forgetModel() {
+  // The model stays cached for the next opening: give the shrunk bones their size back.
+  for (const b of [...(viewer.propBones || []), ...(viewer.strays || [])]) {
+    if (b.userData.hidden) { b.scale.copy(b.userData.hidden); b.userData.hidden = null; }
+  }
+  viewer.model = viewer.anchor = viewer.mixer = viewer.action = viewer.rootBone = viewer.current = null;
+  viewer.reach = viewer.frameBox = null;
+  viewer.propBones = [];
+  viewer.hands = [];
+  viewer.strays = [];
+}
+
 function closeViewer() {
   if ($("#viewer").open) return; // «close» arrives a task later: the viewer may already show another hero
   viewer.token++;
   viewer.mixer?.stopAllAction();
   if (viewer.anchor) viewer.scene.remove(viewer.anchor);
-  viewer.model = viewer.anchor = viewer.mixer = viewer.action = viewer.current = null;
+  forgetModel();
   $("#viewer-frame").classList.remove("max");
   history.replaceState(null, "", location.pathname + location.search);
 }
