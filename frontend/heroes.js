@@ -904,6 +904,79 @@ function webm(width, height, frames) {
 }
 
 // ── Opening and closing ────────────────────────────────
+// ── Ability icons ──────────────────────────────────────
+// The game's icons (backend/heroes.py keeps them lossless at their own size), scaled to a square PNG
+// with a transparent background.
+const ICON_SIZES = [500, 300];
+
+function renderAbilities(hero) {
+  const list = hero.abilities || [];
+  $("#abilities-ctl").hidden = !list.length;
+  $("#abilities").innerHTML = list.map((a, i) => `
+    <li class="ability">
+      <span class="ability-icon"><img src="heroes/abilities/${escapeHtml(a.icon)}" alt="" loading="lazy"></span>
+      <span class="ability-text">
+        <span class="ability-name">${escapeHtml(a.name)}</span>
+        <span class="ability-slot">${a.slot === 4 ? "ульта" : `способность ${a.slot}`}</span>
+      </span>
+      <span class="ability-dl">
+        ${ICON_SIZES.map((n) => `<button class="btn ability-btn" type="button" data-ability="${i}" data-size="${n}" title="PNG ${n}×${n}">${n}</button>`).join("")}
+      </span>
+    </li>`).join("");
+}
+
+// The icons are one-colour glyphs (137 px in the game) whose shape lives in the alpha channel.
+// Scaled up, that edge turns into a blur several pixels wide; pull it back to about one pixel so the
+// big PNG looks drawn at that size. The colour is the glyph's own (white for every hero so far).
+function sharpenSilhouette(ctx, size, scale) {
+  if (scale <= 1) return;
+  const image = ctx.getImageData(0, 0, size, size);
+  const px = image.data;
+  let r = 0, g = 0, b = 0, n = 0;
+  for (let i = 0; i < px.length; i += 4) {
+    if (px[i + 3] > 250) { r += px[i]; g += px[i + 1]; b += px[i + 2]; n++; }
+  }
+  const color = n ? [r / n, g / n, b / n] : [255, 255, 255];
+  const band = Math.min(1, 1.3 / scale); // alpha range left for the anti-aliased edge
+  for (let i = 0; i < px.length; i += 4) {
+    const a = Math.min(1, Math.max(0, (px[i + 3] / 255 - 0.5) / band + 0.5));
+    px[i] = color[0]; px[i + 1] = color[1]; px[i + 2] = color[2];
+    px[i + 3] = Math.round(a * a * (3 - 2 * a) * 255);
+  }
+  ctx.putImageData(image, 0, 0);
+}
+
+async function downloadAbility(index, size) {
+  const ability = state.hero?.abilities?.[index];
+  if (!ability) return;
+  try {
+    const img = new Image();
+    img.src = `heroes/abilities/${ability.icon}`;
+    await img.decode();
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = size;
+    const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    // Square icons fill the square; anything else is fitted in the middle.
+    const k = size / Math.max(img.naturalWidth, img.naturalHeight);
+    const w = img.naturalWidth * k, h = img.naturalHeight * k;
+    ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+    sharpenSilhouette(ctx, size, k);
+    const blob = await new Promise((r) => canvas.toBlob(r, "image/png"));
+    const slug = ability.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || ability.key;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${state.hero.key}-${slug}-${size}x${size}.png`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    toast(`Сохранено: ${ability.name}, ${size}×${size}`);
+  } catch (err) {
+    console.error(err);
+    toast("Не получилось сохранить иконку");
+  }
+}
+
 async function openHero(key, push = true) {
   const hero = state.heroes.find((h) => h.key === key);
   if (!hero?.file) return;
@@ -912,6 +985,7 @@ async function openHero(key, push = true) {
   $("#viewer-meta").textContent = "";
   $("#viewer-icon").src = hero.icon ? `heroes/icons/${hero.icon}` : "";
   $("#anim-filter").value = "";
+  renderAbilities(hero);
   const dialog = $("#viewer");
   if (!dialog.open) dialog.showModal();
   if (push) history.replaceState(null, "", `#${key}`);
@@ -994,6 +1068,10 @@ function wireEvents() {
     });
   }
   $("#export-png").addEventListener("click", exportPng);
+  $("#abilities").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-ability]");
+    if (btn) downloadAbility(Number(btn.dataset.ability), Number(btn.dataset.size));
+  });
   $("#export-webm").addEventListener("click", exportWebm);
   // Space toggles playback while the stage is focused, without scrolling the dialog.
   dialog.addEventListener("keydown", (e) => {

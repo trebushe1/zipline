@@ -553,6 +553,17 @@ ins { text-decoration: none; background: var(--green-wash); color: var(--accent)
 .export-btn:disabled { opacity: .6; cursor: default; }
 .export-btn:disabled:hover { background: var(--slab); border-color: var(--slab); }
 .export-btn[aria-busy="true"], #export-png:disabled { cursor: progress; }
+.abilities { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.ability { display: flex; align-items: center; gap: 10px; }
+/* Ability icons are light glyphs on transparency: always on a dark tile, in both themes. */
+.ability-icon { flex: none; width: 40px; height: 40px; display: grid; place-items: center; background: #141614; border: 1px solid var(--frame); }
+.ability-icon img { width: 34px; height: 34px; object-fit: contain; }
+.ability-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.ability-name { font-size: 12.5px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+.ability-slot { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.ability-dl { flex: none; display: flex; gap: 4px; }
+.ability-btn { padding: 4px 6px; font-size: 10.5px; letter-spacing: .02em; }
+
 .viewer-frame::after {
   content: ""; position: absolute; right: 2px; bottom: 2px; width: 10px; height: 10px; pointer-events: none;
   background: linear-gradient(135deg, transparent 50%, var(--muted) 50% 60%, transparent 60% 75%, var(--muted) 75% 85%, transparent 85%);
