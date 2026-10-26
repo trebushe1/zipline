@@ -20,7 +20,7 @@ import time
 import httpx
 
 from . import static_build  # sets up the temporary database; must come first
-from . import config, db, presence, realtime, reddit, telegram, translate
+from . import config, db, presence, realtime, reddit, steam_watch, telegram, translate
 from .discord_collector import DiscordCollector, avatar_url, normalize
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
@@ -130,6 +130,8 @@ async def main() -> None:
     reddit_feed = reddit.Feed(tg)
     await reddit_feed.load(live_site)
     reddit_task = asyncio.create_task(reddit.run(reddit_feed, live_site, deadline))
+    # New Deadlock builds: start the patch workflow as soon as Steam's app info changes.
+    steam_task = asyncio.create_task(steam_watch.run(tg, deadline))
 
     # Discord online status of the developers, for the dots in the site's developer list.
     with db.session() as conn:
@@ -274,6 +276,7 @@ async def main() -> None:
 
             await asyncio.sleep(max(0.5, config.FAST_SECONDS - (time.time() - started)))
     finally:
+        steam_task.cancel()
         if presence_task:
             presence_task.cancel()
         if not reddit_task.done() and time.time() < deadline:
