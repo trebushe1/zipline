@@ -102,6 +102,7 @@ def export(last_poll: dict) -> None:
     bust_cache(SITE / "heroes.html", ("styles.css", "heroes.js"))
     bust_cache(SITE / "reddit.html", ("styles.css", "reddit.js"))
     bust_cache(SITE / "items.html", ("styles.css", "items.js"))
+    bust_cache(SITE / "tierlist.html", ("styles.css", "tierlist.js"))
     (SITE / "reddit.json").write_text(json.dumps(reddit_snapshot(), ensure_ascii=False), encoding="utf-8")
     if PATCHES.exists():
         shutil.copytree(PATCHES, SITE / "patches")

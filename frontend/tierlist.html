@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>zipline — тир-лист героев Deadlock</title>
+  <meta name="description" content="zipline: соберите свой тир-лист героев Deadlock — перетащите героев по строкам S, A, B, C и D и скачайте картинку 1080×1080.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/icon.png" type="image/png">
+  <meta name="theme-color" content="#ebebe9">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Pick the theme before first paint: saved choice, else the system setting.
+    (() => {
+      let t;
+      try { t = localStorage.getItem("theme"); } catch {}
+      document.documentElement.dataset.theme = t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    })();
+  </script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="./" aria-label="zipline — на главную">
+        <img class="brand-logo day" src="assets/logo.png" alt="Zipline" width="560" height="263">
+        <img class="brand-logo night" src="assets/logo-white.png" alt="Zipline" width="420" height="151">
+        <span class="brand-tag">Deadlock<br>новости и разведка</span>
+      </a>
+      <div class="masthead-end">
+        <nav class="nav" aria-label="Разделы">
+          <a class="nav-link" href="./">Разработчики</a>
+          <a class="nav-link" href="changes.html">Изменения</a>
+          <a class="nav-link" href="heroes.html">Герои</a>
+          <a class="nav-link active" href="tierlist.html" aria-current="page">Тир-лист</a>
+          <a class="nav-link" href="items.html">Предметы</a>
+          <a class="nav-link" href="reddit.html">Reddit</a>
+          <span class="nav-link soon" title="Скоро">Статистика</span>
+        </nav>
+        <button class="theme-toggle" id="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Ночная тема">
+          <span class="t-day"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2"/></svg>День</span>
+          <span class="t-night"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="currentColor"/></svg>Ночь</span>
+        </button>
+      </div>
+    </div>
+    <div class="cable" aria-hidden="true"><span class="cable-rider"></span></div>
+  </header>
+
+  <main class="wrap">
+    <section class="page-title">
+      <div class="title-copy">
+        <p class="eyebrow">Герои · ваш рейтинг</p>
+        <h1>
+          <span class="tag tag-ink">Тир-лист</span>
+          <span class="tag tag-paper">героев</span>
+        </h1>
+        <p class="lede">Расставьте героев Deadlock по тирам от S до D: перетащите портрет из общего списка в нужную строку. Готовый тир-лист скачивается картинкой 1080×1080 — без кнопок и всего остального сайта.</p>
+      </div>
+      <figure class="title-art" aria-hidden="true">
+        <img src="assets/avatar.jpg" alt="" width="640" height="640">
+      </figure>
+    </section>
+
+    <section class="panel tl-panel" aria-label="Тир-лист">
+      <header class="panel-head tl-head">
+        <h2>Тир-лист</h2>
+        <label class="tl-title">
+          <span class="ctl-label">Название на картинке</span>
+          <input class="ctl-input" id="tl-title" type="text" maxlength="60" placeholder="Тир-лист героев" autocomplete="off">
+        </label>
+        <div class="tl-actions">
+          <button class="btn" id="tl-reset" type="button">Сбросить</button>
+          <button class="btn export-btn" id="tl-shot" type="button">Скачать 1080×1080</button>
+        </div>
+      </header>
+      <div class="tl-board" id="tl-board"></div>
+
+      <header class="panel-head tl-pool-head">
+        <h2>Все герои <b id="tl-left"></b></h2>
+        <label class="search tl-search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2"/></svg>
+          <input id="tl-q" type="search" placeholder="Имя героя" autocomplete="off" aria-label="Поиск героя">
+        </label>
+      </header>
+      <ul class="tl-zone tl-pool" id="tl-pool" data-zone="pool" aria-label="Нерасставленные герои">
+        <li class="board-loading">Собираем героев…</li>
+      </ul>
+      <p class="tl-note">Перетащите героя в строку тира, внутри строки — чтобы поменять порядок, обратно вниз — чтобы убрать. На телефоне героя нужно чуть подержать пальцем. Без перетаскивания: нажмите на героя, затем на строку, или клавиши <kbd>S</kbd> <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd>; <kbd>Delete</kbd> возвращает героя в список. Тир-лист сохраняется в этом браузере.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <img class="footer-logo" src="assets/logo-white.png" alt="Zipline" width="420" height="151">
+      <span id="source-status" class="collector-status">—</span>
+      <span class="handle">@zipline</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="tierlist.js" type="module"></script>
+</body>
+</html>
