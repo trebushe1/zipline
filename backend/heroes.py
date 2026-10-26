@@ -64,6 +64,10 @@ def resource(value: str | None) -> str | None:
 
 
 ABILITIES_VDATA = f"{GAME}/pak01_dir/scripts/abilities.vdata"
+# The disc and ring the game draws ability icons on (hud_ability_icon.css: .ability_bg, .ability_ring),
+# as vectors so they stay sharp at any size, with the bitmaps as a fallback.
+UI_ASSETS = {f"ability_frame_{n}.{ext}": f"panorama/images/hud/core/ability_frame_passive_{n}{suffix}"
+             for n in (0, 1) for ext, suffix in (("svg", ".vsvg_c"), ("png", "_psd.vtex_c"))}
 SIGNATURE_SLOT = re.compile(r'ESlot_Signature_(\d) = "(\w+)"')
 ABILITY_BLOCK = re.compile(r"^\t(\w+) = $", re.M)
 
@@ -603,6 +607,23 @@ def convert_ability_icon(vrf: str, citadel: Path, path: str, tmp: Path) -> bytes
     return buf.getvalue()
 
 
+def convert_ui_asset(vrf: str, citadel: Path, path: str, tmp: Path) -> bytes | None:
+    """A Panorama image as the game ships it: SVG for .vsvg, lossless PNG for textures."""
+    src = citadel / path
+    if not src.exists():
+        return None
+    if path.endswith(".vtex_c"):
+        return convert_ability_icon(vrf, citadel, path, tmp)
+    tmp.mkdir(parents=True, exist_ok=True)
+    subprocess.run([vrf, "-i", str(src), "-o", str(tmp / "out.svg"), "-d"], capture_output=True, text=True)
+    outs = [f for f in tmp.rglob("*") if f.is_file()]
+    svg = next((f for f in outs if f.suffix == ".svg"), outs[0] if outs else None)
+    if svg is None:
+        return None
+    data = svg.read_bytes()
+    return data if b"<svg" in data[:2000] else None
+
+
 def convert_icon(vrf: str, citadel: Path, path: str, tmp: Path) -> bytes | None:
     src = citadel / path
     if not src.exists():
@@ -660,8 +681,11 @@ def main() -> int:
     icons = [a for h in heroes for a in h["abilities"]
              if icon_crcs.get(a["key"]) != crcs.get(a["image"]) or not (OUT / "abilities" / f"{a['key']}.png").exists()]
     log(f"{len(icons)} ability icons to convert")
+    (OUT / "ui").mkdir(parents=True, exist_ok=True)
+    ui = {name: path for name, path in UI_ASSETS.items()
+          if icon_crcs.get(name) != crcs.get(path) or not (OUT / "ui" / name).exists()}
 
-    if todo or icons:
+    if todo or icons or ui:
         manifest = manifest_id(build["sha"])
         sfd, vrf = tool_paths()[0], vrf_path()
         work = Path(tempfile.mkdtemp(prefix="heroes-"))
@@ -669,8 +693,16 @@ def main() -> int:
             files = SteamFiles(sfd, work, [manifest])
             # Each SteamFileDownloader call is a Steam login: fetch every hero together, level by level.
             fetch_all(files, {h["model"] for h in todo} | {h["card"] for h in todo}
-                      | {p for h in todo for p in clip_paths(h["model"], crcs)} | {a["image"] for a in icons})
+                      | {p for h in todo for p in clip_paths(h["model"], crcs)} | {a["image"] for a in icons}
+                      | set(ui.values()))
             citadel = game_root(files, manifest, build["sha"], work)
+            for name, path in ui.items():
+                blob = convert_ui_asset(vrf, citadel, path, work / "tmp" / f"ui-{name}")
+                if blob:
+                    (OUT / "ui" / name).write_bytes(blob)
+                    icon_crcs[name] = crcs.get(path)
+                else:
+                    log(f"  could not convert {path}")
             for a in icons:
                 png = convert_ability_icon(vrf, citadel, a["image"], work / "tmp" / f"ability-{a['key']}")
                 if png:
