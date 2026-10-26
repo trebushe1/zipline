@@ -191,7 +191,7 @@ h2 { display: inline-block; padding: 3px 7px 2px; background: var(--ink); color:
 .dev-btn:hover, .channel-btn:hover { background: var(--hover); }
 .dev-btn[aria-pressed="true"], .channel-btn[aria-pressed="true"] { background: var(--ink); color: var(--card); }
 .dev-btn[aria-pressed="true"] .dev-when, .dev-btn[aria-pressed="true"] .count, .channel-btn[aria-pressed="true"] .hash, .channel-btn[aria-pressed="true"] .count { color: var(--card); opacity: .7; }
-.dev-btn.quiet { opacity: .5; }
+.dev-btn.quiet .avatar, .dev-btn.quiet .dev-meta, .dev-btn.quiet .count { opacity: .5; } /* the status dot stays bright */
 .dev-meta { display: flex; flex-direction: column; min-width: 0; flex: 1; }
 .dev-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dev-when { font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
@@ -211,6 +211,18 @@ span.avatar { filter: none; box-shadow: inset 0 0 0 1px var(--frame); }
 .avatar[data-tone="2"] { background: var(--navy); }
 .dev-btn:hover .avatar, .msg:hover .avatar { filter: none; }
 .avatar.lg { width: 44px; height: 44px; font-size: 18px; }
+
+/* Discord status dot on the developer's avatar: same colours as in Discord. */
+.avatar-wrap { position: relative; flex: none; display: inline-flex; }
+.presence-dot {
+  position: absolute; right: -3px; bottom: -3px; width: 12px; height: 12px; border-radius: 50%;
+  background: #80848e; box-shadow: 0 0 0 2.5px var(--card);
+}
+.presence-dot[data-status="online"] { background: #23a55a; }
+.presence-dot[data-status="idle"] { background: #f0b232; }
+.presence-dot[data-status="dnd"] { background: #f23f43; }
+.dev-btn:hover .presence-dot { box-shadow: 0 0 0 2.5px var(--hover); }
+.dev-btn[aria-pressed="true"] .presence-dot { box-shadow: 0 0 0 2.5px var(--ink); }
 
 /* ── Feed ─────────────────────────────────────────────── */
 .feed-tools { padding: 16px 18px 14px; border-bottom: 1px solid var(--frame); display: flex; flex-direction: column; gap: 10px; }

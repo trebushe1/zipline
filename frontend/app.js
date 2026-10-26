@@ -11,6 +11,7 @@ const state = {
   newest: 0,
   pending: [],
   devs: new Map(),
+  presence: null, // {updatedAt, users: {user_id: {status, since, lastOnline}}}
 };
 
 // ── Formatting ─────────────────────────────────────────
@@ -390,7 +391,11 @@ function renderDevs(devs) {
     const b = document.createElement("button");
     b.className = "dev-btn" + (d.total ? "" : " quiet");
     b.setAttribute("aria-pressed", state.authors.has(d.user_id));
-    b.append(avatar(d));
+    const face = document.createElement("span");
+    face.className = "avatar-wrap";
+    face.append(avatar(d));
+    face.insertAdjacentHTML("beforeend", `<span class="presence-dot" data-user="${escapeHtml(d.user_id)}" hidden></span>`);
+    b.append(face);
     b.insertAdjacentHTML("beforeend", `
       <span class="dev-meta"><span class="dev-name"></span><span class="dev-when">${ago(d.last_time)}</span></span>
       <span class="count" title="Сообщений за 7 дней">${d.week || ""}</span>`);
@@ -399,6 +404,38 @@ function renderDevs(devs) {
     li.append(b);
     list.append(li);
   }
+  paintPresence();
+}
+
+// ── Discord status ─────────────────────────────────────
+// The live collector watches the developers' Discord status and keeps it in
+// Firebase at /live/presence; the dots in the list mirror Discord's colours.
+const PRESENCE_LABELS = { online: "В сети", idle: "Отошёл", dnd: "Не беспокоить", offline: "Не в сети" };
+const PRESENCE_STALE_MS = 3 * 60_000; // collector stopped pushing: don't show old statuses
+
+function paintPresence() {
+  const p = state.presence;
+  const fresh = p?.updatedAt && Date.now() - p.updatedAt < PRESENCE_STALE_MS;
+  document.querySelectorAll(".presence-dot").forEach((dot) => {
+    const entry = fresh && p.users?.[dot.dataset.user];
+    dot.hidden = !entry;
+    if (!entry) return;
+    dot.dataset.status = entry.status;
+    let label = PRESENCE_LABELS[entry.status] || PRESENCE_LABELS.offline;
+    if (entry.status === "offline" && entry.lastOnline) label += ` · последний раз в сети ${ago(entry.lastOnline)}`;
+    dot.title = label;
+    dot.setAttribute("aria-label", label);
+  });
+}
+
+function subscribePresence(url) {
+  const stream = new EventSource(`${url}/live/presence.json`);
+  stream.addEventListener("put", (ev) => {
+    const { path, data } = JSON.parse(ev.data);
+    if (path !== "/") return;
+    state.presence = data;
+    paintPresence();
+  });
 }
 
 function renderChannels(channels) {
@@ -533,6 +570,7 @@ function initTheme() {
 function subscribeRealtime() {
   const url = staticData?.status?.realtimeUrl;
   if (!url || !window.EventSource) return;
+  subscribePresence(url);
   const stream = new EventSource(`${url}/live/latest.json`);
   stream.addEventListener("put", (ev) => {
     const { path, data } = JSON.parse(ev.data);

@@ -20,7 +20,7 @@ import time
 import httpx
 
 from . import static_build  # sets up the temporary database; must come first
-from . import config, db, realtime, reddit, telegram, translate
+from . import config, db, presence, realtime, reddit, telegram, translate
 from .discord_collector import DiscordCollector, avatar_url, normalize
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
@@ -130,6 +130,18 @@ async def main() -> None:
     reddit_feed = reddit.Feed(tg)
     await reddit_feed.load(live_site)
     reddit_task = asyncio.create_task(reddit.run(reddit_feed, live_site, deadline))
+
+    # Discord online status of the developers, for the dots in the site's developer list.
+    with db.session() as conn:
+        dev_ids = db.tracked_ids(conn)
+
+    async def presence_changed(state: dict) -> None:
+        if live_site.enabled:
+            await live_site.put(tg, "live/presence", {"updatedAt": now_ms(), "users": state})
+
+    saved = await live_site.get(tg, "live/presence") if live_site.enabled else None
+    watcher = presence.PresenceWatcher(lambda: dev_ids, presence_changed, (saved or {}).get("users"))
+    presence_task = asyncio.create_task(watcher.run_forever()) if config.DISCORD_TOKEN else None
 
     async def notify_telegram(rows: list[dict]) -> None:
         for row in sorted(rows, key=lambda r: r["time"]):
@@ -262,6 +274,8 @@ async def main() -> None:
 
             await asyncio.sleep(max(0.5, config.FAST_SECONDS - (time.time() - started)))
     finally:
+        if presence_task:
+            presence_task.cancel()
         if not reddit_task.done() and time.time() < deadline:
             reddit_task.cancel()  # stopped early: no need to finish the current wait
         try:
