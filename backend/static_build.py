@@ -28,6 +28,7 @@ ARCHIVE = config.ROOT / "data" / "archive.json"
 SITE = config.ROOT / "site"
 PATCHES = config.ROOT / "data" / "patches"
 HEROES = config.ROOT / "data" / "heroes"
+ITEMS = config.ROOT / "data" / "items"
 MESSAGE_FIELDS = ("id", "author_id", "guild_id", "channel_id", "channel_name", "parent_channel_id",
                   "thread_name", "time", "edited_time", "text", "attachments", "embeds", "reply_to", "url",
                   "text_ru", "embeds_ru")
@@ -100,6 +101,7 @@ def export(last_poll: dict) -> None:
     bust_cache(SITE / "changes.html", ("styles.css", "changes.js"))
     bust_cache(SITE / "heroes.html", ("styles.css", "heroes.js"))
     bust_cache(SITE / "reddit.html", ("styles.css", "reddit.js"))
+    bust_cache(SITE / "items.html", ("styles.css", "items.js"))
     (SITE / "reddit.json").write_text(json.dumps(reddit_snapshot(), ensure_ascii=False), encoding="utf-8")
     if PATCHES.exists():
         shutil.copytree(PATCHES, SITE / "patches")
@@ -109,6 +111,8 @@ def export(last_poll: dict) -> None:
     if HEROES.exists():
         # Models come from the «heroes» release in the deploy (backend.heroes --fetch).
         shutil.copytree(HEROES, SITE / "heroes", ignore=shutil.ignore_patterns("deps.json", "models"))
+    if ITEMS.exists():
+        shutil.copytree(ITEMS, SITE / "items", ignore=shutil.ignore_patterns("deps.json", "loc_ru.json"))
     status = {"demo": False, "collector": "live", "ingest": False,
               "lastPoll": last_poll, "pollSeconds": None,
               "realtimeUrl": config.FIREBASE_DB_URL or None}

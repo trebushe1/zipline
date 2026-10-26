@@ -184,4 +184,7 @@ app.mount("/patches", StaticFiles(directory=config.ROOT / "data" / "patches"), n
 # Hero list and icons from `python -m backend.heroes`, models from its --fetch into data/heroes/models.
 (config.ROOT / "data" / "heroes").mkdir(parents=True, exist_ok=True)
 app.mount("/heroes", StaticFiles(directory=config.ROOT / "data" / "heroes"), name="heroes")
+# Shop items and their icons from `python -m backend.items`.
+(config.ROOT / "data" / "items").mkdir(parents=True, exist_ok=True)
+app.mount("/items", StaticFiles(directory=config.ROOT / "data" / "items"), name="items")
 app.mount("/", StaticFiles(directory=config.ROOT / "frontend", html=True), name="frontend")

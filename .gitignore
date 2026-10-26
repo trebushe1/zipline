@@ -5,6 +5,7 @@ data/*
 !data/archive.json
 !data/patches/
 !data/heroes/
+!data/items/
 data/heroes/models/
 site/
 __pycache__/

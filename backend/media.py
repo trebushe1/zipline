@@ -132,14 +132,16 @@ class SteamFiles:
     def root(self, manifest: str) -> Path:
         return self.out / DEPOT / manifest / "game" / "citadel" / "pak01_dir"
 
-    def get(self, paths: set[str]) -> None:
+    def get(self, paths: set[str], loose: set[str] = frozenset()) -> None:
+        """Entries of pak01_dir.vpk and, in the same login, loose depot files (saved under <depot>/<manifest>/)."""
         paths = sorted(p for p in paths if p not in self.requested)
-        if not paths:
+        loose = sorted(p for p in loose if p not in self.requested)
+        if not paths and not loose:
             return
-        self.requested.update(paths)
+        self.requested.update(paths, loose)
         cmd = [self.sfd, "get", APP, *(f"{DEPOT}:{m}" for m in self.manifests), "--output", str(self.out),
                "--username", os.environ["STEAM_USERNAME"], "--password", os.environ["STEAM_PASSWORD"],
-               "--", *(f"{VPK}:{p}" for p in paths)]
+               "--", *(f"{VPK}:{p}" for p in paths), *loose]
         res = subprocess.run(cmd, capture_output=True, text=True)
         # 5: an old manifest is no longer served, 6: some path is gone. Both still download the rest.
         if res.returncode not in (0, 5, 6):

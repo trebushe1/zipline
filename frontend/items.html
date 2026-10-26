@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>zipline — магазин и билды Deadlock</title>
+  <meta name="description" content="zipline: все предметы магазина Deadlock из файлов игры — характеристики, описания и иконки в 100×100, 300×300 и 500×500. Собирайте свои билды по категориям, как в игре, и делитесь ими ссылкой.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/icon.png" type="image/png">
+  <meta name="theme-color" content="#ebebe9">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Pick the theme before first paint: saved choice, else the system setting.
+    (() => {
+      let t;
+      try { t = localStorage.getItem("theme"); } catch {}
+      document.documentElement.dataset.theme = t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    })();
+  </script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="./" aria-label="zipline — на главную">
+        <img class="brand-logo day" src="assets/logo.png" alt="Zipline" width="560" height="263">
+        <img class="brand-logo night" src="assets/logo-white.png" alt="Zipline" width="420" height="151">
+        <span class="brand-tag">Deadlock<br>новости и разведка</span>
+      </a>
+      <div class="masthead-end">
+        <nav class="nav" aria-label="Разделы">
+          <a class="nav-link" href="./">Разработчики</a>
+          <a class="nav-link" href="changes.html">Изменения</a>
+          <a class="nav-link" href="heroes.html">Герои</a>
+          <a class="nav-link active" href="items.html" aria-current="page">Предметы</a>
+          <a class="nav-link" href="reddit.html">Reddit</a>
+          <span class="nav-link soon" title="Скоро">Статистика</span>
+        </nav>
+        <button class="theme-toggle" id="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Ночная тема">
+          <span class="t-day"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2"/></svg>День</span>
+          <span class="t-night"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="currentColor"/></svg>Ночь</span>
+        </button>
+      </div>
+    </div>
+    <div class="cable" aria-hidden="true"><span class="cable-rider"></span></div>
+  </header>
+
+  <main class="wrap">
+    <section class="page-title">
+      <div class="title-copy">
+        <p class="eyebrow">Файлы игры · лавка диковинок</p>
+        <h1>
+          <span class="tag tag-ink">Магазин</span>
+          <span class="tag tag-paper">и билды</span>
+        </h1>
+        <p class="lede">Все предметы Deadlock прямо из файлов последнего билда: цены, характеристики и описания, как во всплывающих подсказках игры. Иконки скачиваются в 100×100, 300×300 и 500×500 — по одной или все сразу. А кнопка «Создать билд» превращает магазин в редактор билдов, как в игре.</p>
+      </div>
+      <figure class="title-art" aria-hidden="true">
+        <img src="assets/avatar.jpg" alt="" width="640" height="640">
+      </figure>
+    </section>
+
+    <div class="shop-layout" id="shop-layout">
+      <section class="panel shop" aria-label="Магазин">
+        <div class="shop-tools">
+          <div class="tools-row">
+            <div class="tabs shop-tabs" role="tablist" aria-label="Раздел магазина" id="shop-tabs">
+              <button type="button" role="tab" data-tab="all" aria-selected="true">Все</button>
+              <button type="button" role="tab" data-tab="weapon" aria-selected="false"><i class="slot-dot" data-slot="weapon"></i>Оружие</button>
+              <button type="button" role="tab" data-tab="vitality" aria-selected="false"><i class="slot-dot" data-slot="vitality"></i>Живучесть</button>
+              <button type="button" role="tab" data-tab="spirit" aria-selected="false"><i class="slot-dot" data-slot="spirit"></i>Дух</button>
+            </div>
+            <button class="btn build-new" id="build-new" type="button">+ Создать билд</button>
+          </div>
+          <div class="tools-row">
+            <label class="search shop-search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2"/></svg>
+              <input id="q" type="search" placeholder="Название предмета, по-русски или по-английски" autocomplete="off" aria-label="Поиск предмета">
+            </label>
+            <div class="shop-controls">
+              <button class="btn ghost-btn" id="filters-toggle" type="button" aria-expanded="false" aria-controls="filters">Фильтры <b id="filters-count"></b></button>
+              <label class="select-wrap">
+                <span class="ctl-label">Порядок</span>
+                <select id="sort" class="ctl-input" aria-label="Сортировка">
+                  <option value="tier">Как в игре: по тирам</option>
+                  <option value="cost-asc">Сначала дешёвые</option>
+                  <option value="cost-desc">Сначала дорогие</option>
+                  <option value="name">По названию</option>
+                  <option value="slot">По разделам</option>
+                </select>
+              </label>
+              <div class="seg lang-seg" id="lang" role="radiogroup" aria-label="Язык описаний">
+                <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+              </div>
+            </div>
+          </div>
+          <div class="filters" id="filters" hidden>
+            <div class="filters-head">
+              <span class="ctl-label">Как в игре: что даёт предмет</span>
+              <div class="seg mode-seg" id="filter-mode" role="radiogroup" aria-label="Совпадение фильтров">
+                <button type="button" data-mode="or" aria-pressed="true" title="Предмет подходит хотя бы под один фильтр">Любой</button>
+                <button type="button" data-mode="and" aria-pressed="false" title="Предмет подходит под все фильтры">Все сразу</button>
+              </div>
+              <button class="link-btn" id="filters-clear" type="button">Сбросить</button>
+            </div>
+            <div class="filter-groups" id="filter-groups"></div>
+          </div>
+          <div class="tools-row quick-row">
+            <div class="topics" id="quick" aria-label="Быстрые фильтры">
+              <button type="button" data-quick="active" aria-pressed="false">Активные</button>
+              <button type="button" data-quick="passive" aria-pressed="false">Пассивные</button>
+              <button type="button" data-quick="components" aria-pressed="false">Собираются из других</button>
+            </div>
+            <label class="quiet-toggle"><input type="checkbox" id="legendary" checked> легендарные · уличная драка</label>
+            <span class="shop-count" id="shop-count"></span>
+          </div>
+          <div class="active-filters" id="active-filters"></div>
+        </div>
+
+        <div class="shop-board" id="board" aria-live="polite">
+          <div class="board-loading">Открываем лавку…</div>
+        </div>
+
+        <footer class="shop-foot">
+          <div class="dl-all">
+            <span class="ctl-label">Иконки · PNG</span>
+            <div class="seg" id="zip-size" role="radiogroup" aria-label="Размер иконок">
+              <button type="button" data-size="100" aria-pressed="false">100×100</button>
+              <button type="button" data-size="300" aria-pressed="false">300×300</button>
+              <button type="button" data-size="500" aria-pressed="true">500×500</button>
+            </div>
+            <button class="btn export-btn" id="zip-all" type="button">Скачать все иконки</button>
+            <button class="btn" id="zip-shown" type="button" title="Только предметы, которые сейчас видны с учётом вкладки, поиска и фильтров">Только показанные</button>
+            <span class="zip-progress" id="zip-progress" hidden></span>
+          </div>
+          <p class="shop-note" id="shop-note">Наведите на предмет — подсказка, как в игре. Нажмите — карточка с иконкой для скачивания.</p>
+        </footer>
+      </section>
+
+      <aside class="panel build-panel" id="build-panel" hidden aria-label="Редактор билда">
+        <header class="panel-head build-panel-head">
+          <h2>Билд</h2>
+          <div class="build-panel-actions">
+            <button class="link-btn" id="build-share" type="button">Ссылка</button>
+            <button class="link-btn" id="build-export" type="button">JSON</button>
+            <button class="icon-btn" id="build-close" type="button" title="Закрыть редактор" aria-label="Закрыть редактор">×</button>
+          </div>
+        </header>
+        <div class="build-editor" id="build-editor"></div>
+      </aside>
+    </div>
+
+    <section class="panel builds-panel" aria-label="Мои билды">
+      <header class="panel-head">
+        <h2>Мои билды</h2>
+        <div class="builds-actions">
+          <label class="link-btn import-btn">Импорт JSON<input type="file" id="build-import" accept="application/json,.json" hidden></label>
+        </div>
+      </header>
+      <ul class="build-cards" id="build-cards"></ul>
+      <p class="builds-note">Билды хранятся в этом браузере. Чтобы перенести билд или показать другу — кнопка «Ссылка»: по ней билд откроется у любого.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <img class="footer-logo" src="assets/logo-white.png" alt="Zipline" width="420" height="151">
+      <span id="source-status" class="collector-status">—</span>
+      <span class="handle">@zipline</span>
+    </div>
+  </footer>
+
+  <div class="item-tip" id="tip" role="tooltip" hidden></div>
+  <dialog class="media-dialog item-dialog" id="item-dialog" aria-label="Предмет"></dialog>
+  <div class="item-menu" id="item-menu" role="menu" hidden></div>
+  <button class="build-fab" id="build-fab" type="button" hidden>Билд</button>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="items.js" type="module"></script>
+</body>
+</html>
