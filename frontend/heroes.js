@@ -487,6 +487,7 @@ async function openHero(key, push = true) {
 }
 
 function closeViewer() {
+  if ($("#viewer").open) return; // «close» arrives a task later: the viewer may already show another hero
   viewer.token++;
   viewer.mixer?.stopAllAction();
   if (viewer.anchor) viewer.scene.remove(viewer.anchor);
