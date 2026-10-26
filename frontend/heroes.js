@@ -605,12 +605,12 @@ async function exportPng() {
 }
 
 // The stage times the chosen scale, within `max` and what the GPU can draw.
-function exportSize(max) {
+function exportSize(max, scale = viewer.scale * Math.min(devicePixelRatio, 2)) {
   const { renderer, THREE } = viewer;
   const size = renderer.getSize(new THREE.Vector2());
   const gl = renderer.getContext();
   const limit = Math.min(max, gl.getParameter(gl.MAX_RENDERBUFFER_SIZE), ...gl.getParameter(gl.MAX_VIEWPORT_DIMS));
-  const scale = Math.min(viewer.scale * Math.min(devicePixelRatio, 2), limit / Math.max(size.x, size.y));
+  scale = Math.min(scale, limit / Math.max(size.x, size.y));
   return [Math.round(size.x * scale), Math.round(size.y * scale)];
 }
 
@@ -659,7 +659,11 @@ async function exportWebm() {
   const { renderer, camera, scene, THREE, mixer, action } = viewer;
   if (!action || viewer.exporting) return;
   const btn = $("#export-webm"), pngBtn = $("#export-png");
-  const [w, h] = exportSize(MAX_VIDEO);
+  const size = renderer.getSize(new THREE.Vector2()), ratio = renderer.getPixelRatio();
+  // A fixed square (500×500, 100×100), or the window times the scale. The square is rendered about four
+  // times bigger and scaled down, so the edges stay smooth even at 100 pixels.
+  const fit = Number(document.querySelector("[data-size][aria-pressed='true']")?.dataset.size) || 0;
+  const [w, h] = fit ? exportSize(MAX_VIDEO, Math.max(1, (fit * 4) / Math.max(size.x, size.y))) : exportSize(MAX_VIDEO);
   const probe = { codec: VP9, width: w & ~1, height: h & ~1, framerate: FPS };
   const supports = async (config) => !!window.VideoEncoder && !!(await VideoEncoder.isConfigSupported(config).catch(() => ({}))).supported;
   if (!(await supports(probe))) {
@@ -672,7 +676,6 @@ async function exportWebm() {
   const token = viewer.token, key = state.hero.key, name = viewer.current;
   const stillHere = () => token === viewer.token && action === viewer.action;
   const wasPlaying = viewer.playing, wasTime = action.time;
-  const size = renderer.getSize(new THREE.Vector2()), ratio = renderer.getPixelRatio();
   viewer.exporting = true;
   btn.disabled = pngBtn.disabled = true;
   btn.setAttribute("aria-busy", "true");
@@ -690,9 +693,9 @@ async function exportWebm() {
     canvas.width = w;
     canvas.height = h;
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
-    const trimmed = $("#export-trim").checked, passes = trimmed ? 2 : 1;
-    // Frame i of the loop: the straight RGBA pixels inside box.
-    const draw = async (i, pass, box) => {
+    const trimmed = fit > 0 || $("#export-trim").checked, passes = trimmed ? 2 : 1;
+    // Poses and renders frame i of the loop into ctx.
+    const draw = async (i, pass) => {
       btn.textContent = `Запись… ${Math.round(((pass * count + i) / (passes * count)) * 100)}%`;
       await nextTask(); // let the label paint
       if (!stillHere()) throw new Error("aborted");
@@ -703,7 +706,6 @@ async function exportWebm() {
       renderer.render(scene, camera);
       ctx.clearRect(0, 0, w, h);
       ctx.drawImage(renderer.domElement, 0, 0);
-      return ctx.getImageData(box.left, box.top, box.right - box.left + 1, box.bottom - box.top + 1).data;
     };
 
     let box = { left: 0, top: 0, right: w - 1, bottom: h - 1 };
@@ -711,15 +713,32 @@ async function exportWebm() {
       // One frame around everything the hero reaches in the loop, so the hero doesn't jump inside it.
       let all = null;
       for (let i = 0; i < count; i++) {
-        const b = alphaBounds(await draw(i, 0, box), w, h);
+        await draw(i, 0);
+        const b = alphaBounds(ctx.getImageData(0, 0, w, h).data, w, h);
         if (b) all = all ? { left: Math.min(all.left, b.left), top: Math.min(all.top, b.top), right: Math.max(all.right, b.right), bottom: Math.max(all.bottom, b.bottom) } : b;
       }
       if (all) box = all;
     }
-    // 4:2:0 video: even sizes only.
-    box.right -= (box.right - box.left + 1) % 2;
-    box.bottom -= (box.bottom - box.top + 1) % 2;
-    const cw = box.right - box.left + 1, ch = box.bottom - box.top + 1;
+    // The straight RGBA pixels of the video frame just drawn.
+    let cw, ch, read;
+    if (fit) {
+      // The frame fitted into the square and centred; the canvas scales down with its best filter.
+      const bw = box.right - box.left + 1, bh = box.bottom - box.top + 1, k = fit / Math.max(bw, bh);
+      const square = document.createElement("canvas");
+      cw = ch = square.width = square.height = fit;
+      const sq = square.getContext("2d", { willReadFrequently: true });
+      sq.imageSmoothingQuality = "high";
+      read = () => {
+        sq.clearRect(0, 0, fit, fit);
+        sq.drawImage(canvas, box.left, box.top, bw, bh, (fit - bw * k) / 2, (fit - bh * k) / 2, bw * k, bh * k);
+        return sq.getImageData(0, 0, fit, fit).data;
+      };
+    } else {
+      // 4:2:0 video: even sizes only.
+      cw = (box.right - box.left + 1) & ~1;
+      ch = (box.bottom - box.top + 1) & ~1;
+      read = () => ctx.getImageData(box.left, box.top, cw, ch).data;
+    }
 
     // Colour, then alpha. The alpha gets the finer quantizer: it is flat almost everywhere and costs little,
     // and any error in it shows as a haze or holes.
@@ -746,7 +765,8 @@ async function exportWebm() {
     }
     const colorSpace = { primaries: "bt709", transfer: "bt709", matrix: "bt709", fullRange: false };
     for (let i = 0; i < count; i++) {
-      const planes = toI420(await draw(i, passes - 1, box), cw, ch);
+      await draw(i, passes - 1);
+      const planes = toI420(read(), cw, ch);
       const init = { format: "I420", codedWidth: cw, codedHeight: ch, timestamp: Math.round((i * 1e6) / FPS), duration: Math.round(1e6 / FPS), colorSpace };
       planes.forEach((data, k) => {
         const frame = new VideoFrame(data, init);
@@ -1005,6 +1025,11 @@ function wireEvents() {
     b.addEventListener("click", () => {
       viewer.scale = Number(b.dataset.scale);
       for (const o of document.querySelectorAll("[data-scale]")) o.setAttribute("aria-pressed", o === b);
+    });
+  }
+  for (const b of document.querySelectorAll("[data-size]")) {
+    b.addEventListener("click", () => {
+      for (const o of document.querySelectorAll("[data-size]")) o.setAttribute("aria-pressed", o === b);
     });
   }
   $("#export-png").addEventListener("click", exportPng);

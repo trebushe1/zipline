@@ -526,6 +526,7 @@ ins { text-decoration: none; background: var(--green-wash); color: var(--accent)
 .ctl + .ctl { padding-top: 12px; border-top: 1px dashed var(--line-2); }
 .ctl-label { font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 .ctl-label b { color: var(--accent); margin-left: 4px; }
+.ctl-sublabel { margin-top: 6px; }
 .ctl-input, .ctl-select, .ctl-row select {
   width: 100%; padding: 7px 8px; border: 1px solid var(--frame); background: var(--surface); color: var(--ink); font: 12px var(--mono); border-radius: 0;
 }

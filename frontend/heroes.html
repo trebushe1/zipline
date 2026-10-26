@@ -149,6 +149,12 @@
             </div>
             <label class="quiet-toggle"><input type="checkbox" id="export-trim" checked> обрезать пустые края</label>
             <button class="btn export-btn" id="export-png" type="button">Скачать PNG</button>
+            <span class="ctl-label ctl-sublabel">Размер видео</span>
+            <div class="seg" role="radiogroup" aria-label="Размер видео" id="webm-size">
+              <button type="button" data-size="0" aria-pressed="true" title="Размер окна × масштаб выше">как в окне</button>
+              <button type="button" data-size="500" aria-pressed="false" title="Герой вписан в квадрат">500×500</button>
+              <button type="button" data-size="100" aria-pressed="false" title="Герой вписан в квадрат">100×100</button>
+            </div>
             <button class="btn export-btn" id="export-webm" type="button" title="Видео: один цикл выбранной анимации, 30 кадров/с" disabled>Скачать WebM</button>
           </div>
         </aside>
