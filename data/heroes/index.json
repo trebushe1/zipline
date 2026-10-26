@@ -1,6 +1,6 @@
 {
- "build": 6819,
- "sha": "17462b250a0ca80e7f80102f2c83cc3eecff5f12",
+ "build": 6821,
+ "sha": "d251cf9d9a796061c90f58724230b7e17b97121b",
  "tag": "heroes",
  "heroes": [
   {
@@ -293,11 +293,11 @@
      "icon": "ability_deadpack_ultimate.png"
     }
    ],
-   "hash": "a598ed853b43",
-   "file": "deadpack-a598ed853b43.glb",
-   "anims": "deadpack-a598ed853b43.anim",
-   "bytes": 17513547,
-   "animations": 7
+   "hash": "2896cf1e3d32",
+   "file": "deadpack-2896cf1e3d32.glb",
+   "anims": "deadpack-2896cf1e3d32.anim",
+   "bytes": 1381551,
+   "animations": 0
   },
   {
    "key": "drifter",
@@ -885,11 +885,11 @@
      "icon": "ability_nurse_fear.png"
     }
    ],
-   "hash": "55b12fa6c020",
-   "file": "nurse-55b12fa6c020.glb",
-   "anims": "nurse-55b12fa6c020.anim",
-   "bytes": 10979974,
-   "animations": 11
+   "hash": "88a6cba9d06f",
+   "file": "nurse-88a6cba9d06f.glb",
+   "anims": "nurse-88a6cba9d06f.anim",
+   "bytes": 810095,
+   "animations": 0
   },
   {
    "key": "bookworm",
@@ -1440,11 +1440,11 @@
      "icon": "ability_artist_bamboogrove.png"
     }
    ],
-   "hash": "4ec4d692804b",
-   "file": "artist-4ec4d692804b.glb",
-   "anims": "artist-4ec4d692804b.anim",
-   "bytes": 11449967,
-   "animations": 13
+   "hash": "c6ead7cddfd5",
+   "file": "artist-c6ead7cddfd5.glb",
+   "anims": "artist-c6ead7cddfd5.anim",
+   "bytes": 720295,
+   "animations": 0
   },
   {
    "key": "viscous",
