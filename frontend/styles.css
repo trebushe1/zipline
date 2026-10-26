@@ -700,7 +700,8 @@ video.rview-media { width: 100%; background: #000; }
   .nav-link.soon::after { display: none; }
   .masthead-end { width: 100%; justify-content: space-between; gap: 10px; }
   .page-title { grid-template-columns: minmax(0, 1fr); padding: 30px 0 26px; }
-  .title-art { display: none; }
+  .title-art { width: min(220px, 70%); margin: 4px auto 22px; }
+  .title-art figcaption { font-size: 13px; left: -18px; right: -18px; }
   .stat-value:not(.stat-name) { font-size: 28px; }
   .msg { grid-template-columns: 34px minmax(0, 1fr); gap: 10px; }
   .msg .avatar.lg { width: 34px; height: 34px; font-size: 14px; }
