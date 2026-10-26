@@ -905,16 +905,85 @@ function webm(width, height, frames) {
 
 // ── Opening and closing ────────────────────────────────
 // ── Ability icons ──────────────────────────────────────
-// The game's icons (backend/heroes.py keeps them lossless at their own size), scaled to a square PNG
-// with a transparent background.
+// Drawn the way the game's HUD draws them (hud_ability_icon.css, a 120×120 button): the painted disc
+// .ability_bg and ring .ability_ring washed with keybindBGColor (the ring at 80%), the glyph
+// .ability_image at half the height washed offBlack at 95%, and the key number under it. All layers
+// are one-colour shapes, so their edges are re-sharpened when scaled up (the game's are 137–239 px).
 const ICON_SIZES = [500, 300];
+const DISC = "#e8e4ea"; // keybindBGColor
+const GLYPH = "#10130d"; // offBlack
+const BOX = 120, VIEW = 0.94; // the button, and the part of it the PNG shows (disc, ring and key)
+const assets = new Map();
+
+function loadImage(src) {
+  if (!assets.has(src)) {
+    const img = new Image();
+    img.src = src;
+    assets.set(src, img.decode().then(() => img));
+  }
+  return assets.get(src);
+}
+
+const hexRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+
+// An image as a one-colour layer: its own shading times the wash colour, the alpha edge re-sharpened.
+function washedLayer(img, w, h, color, opacity) {
+  const c = document.createElement("canvas");
+  c.width = Math.max(1, Math.round(w));
+  c.height = Math.max(1, Math.round(h));
+  const ctx = c.getContext("2d", { willReadFrequently: true });
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(img, 0, 0, c.width, c.height);
+  const image = ctx.getImageData(0, 0, c.width, c.height), px = image.data;
+  const band = Math.min(1, 1.3 / Math.max(1, c.width / img.naturalWidth));
+  const [r, g, b] = hexRgb(color);
+  for (let i = 0; i < px.length; i += 4) {
+    const shade = px[i + 3] ? Math.max(px[i], px[i + 1], px[i + 2]) / 255 : 1;
+    let a = Math.min(1, Math.max(0, (px[i + 3] / 255 - 0.5) / band + 0.5));
+    a = a * a * (3 - 2 * a);
+    px[i] = r * shade; px[i + 1] = g * shade; px[i + 2] = b * shade;
+    px[i + 3] = Math.round(a * opacity * 255);
+  }
+  ctx.putImageData(image, 0, 0);
+  return c;
+}
+
+async function abilityCanvas(ability, size, withKey) {
+  const [disc, ring, glyph] = await Promise.all([
+    loadImage("heroes/ui/ability_frame_0.png"),
+    loadImage("heroes/ui/ability_frame_1.png"),
+    loadImage(`heroes/abilities/${ability.icon}`),
+  ]);
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  const k = size / (BOX * VIEW), o = -BOX * (1 - VIEW) / 2 * k; // button units → pixels
+  ctx.drawImage(washedLayer(disc, BOX * k, BOX * k, DISC, 1), o, o);
+  ctx.drawImage(washedLayer(ring, BOX * k, BOX * k, DISC, 0.8), o, o);
+  const g = BOX * 0.5 * k;
+  ctx.drawImage(washedLayer(glyph, g, g, GLYPH, 0.95), o + (BOX * k - g) / 2, o + (BOX * k - g) / 2);
+  if (withKey) {
+    // The key hint: a small dark plate with the slot's default key (1–4), 5 px above the button's bottom.
+    const h = 17 * k, w = 16 * k, x = o + (BOX * k - w) / 2, y = o + (BOX - 5) * k - h;
+    ctx.fillStyle = "#1d1b19";
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, 3 * k);
+    ctx.fill();
+    ctx.fillStyle = "#f4f1ec";
+    ctx.font = `700 ${Math.round(13 * k)}px "IBM Plex Sans", system-ui, sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(String(ability.slot), x + w / 2, y + h / 2 + 0.5 * k);
+  }
+  return canvas;
+}
 
 function renderAbilities(hero) {
   const list = hero.abilities || [];
   $("#abilities-ctl").hidden = !list.length;
   $("#abilities").innerHTML = list.map((a, i) => `
     <li class="ability">
-      <span class="ability-icon"><img src="heroes/abilities/${escapeHtml(a.icon)}" alt="" loading="lazy"></span>
+      <img class="ability-icon" data-preview="${i}" alt="" width="44" height="44">
       <span class="ability-text">
         <span class="ability-name">${escapeHtml(a.name)}</span>
         <span class="ability-slot">${a.slot === 4 ? "ульта" : `способность ${a.slot}`}</span>
@@ -923,46 +992,27 @@ function renderAbilities(hero) {
         ${ICON_SIZES.map((n) => `<button class="btn ability-btn" type="button" data-ability="${i}" data-size="${n}" title="PNG ${n}×${n}">${n}</button>`).join("")}
       </span>
     </li>`).join("");
+  renderAbilityPreviews(hero);
 }
 
-// The icons are one-colour glyphs (137 px in the game) whose shape lives in the alpha channel.
-// Scaled up, that edge turns into a blur several pixels wide; pull it back to about one pixel so the
-// big PNG looks drawn at that size. The colour is the glyph's own (white for every hero so far).
-function sharpenSilhouette(ctx, size, scale) {
-  if (scale <= 1) return;
-  const image = ctx.getImageData(0, 0, size, size);
-  const px = image.data;
-  let r = 0, g = 0, b = 0, n = 0;
-  for (let i = 0; i < px.length; i += 4) {
-    if (px[i + 3] > 250) { r += px[i]; g += px[i + 1]; b += px[i + 2]; n++; }
+async function renderAbilityPreviews(hero) {
+  const withKey = $("#ability-key").checked;
+  for (const img of document.querySelectorAll("[data-preview]")) {
+    const ability = hero.abilities[Number(img.dataset.preview)];
+    try {
+      const canvas = await abilityCanvas(ability, 88, withKey);
+      if (state.hero === hero) img.src = canvas.toDataURL("image/png");
+    } catch (err) {
+      console.error(err);
+    }
   }
-  const color = n ? [r / n, g / n, b / n] : [255, 255, 255];
-  const band = Math.min(1, 1.3 / scale); // alpha range left for the anti-aliased edge
-  for (let i = 0; i < px.length; i += 4) {
-    const a = Math.min(1, Math.max(0, (px[i + 3] / 255 - 0.5) / band + 0.5));
-    px[i] = color[0]; px[i + 1] = color[1]; px[i + 2] = color[2];
-    px[i + 3] = Math.round(a * a * (3 - 2 * a) * 255);
-  }
-  ctx.putImageData(image, 0, 0);
 }
 
 async function downloadAbility(index, size) {
   const ability = state.hero?.abilities?.[index];
   if (!ability) return;
   try {
-    const img = new Image();
-    img.src = `heroes/abilities/${ability.icon}`;
-    await img.decode();
-    const canvas = document.createElement("canvas");
-    canvas.width = canvas.height = size;
-    const ctx = canvas.getContext("2d");
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";
-    // Square icons fill the square; anything else is fitted in the middle.
-    const k = size / Math.max(img.naturalWidth, img.naturalHeight);
-    const w = img.naturalWidth * k, h = img.naturalHeight * k;
-    ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
-    sharpenSilhouette(ctx, size, k);
+    const canvas = await abilityCanvas(ability, size, $("#ability-key").checked);
     const blob = await new Promise((r) => canvas.toBlob(r, "image/png"));
     const slug = ability.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || ability.key;
     const a = document.createElement("a");
@@ -1072,6 +1122,7 @@ function wireEvents() {
     const btn = e.target.closest("[data-ability]");
     if (btn) downloadAbility(Number(btn.dataset.ability), Number(btn.dataset.size));
   });
+  $("#ability-key").addEventListener("change", () => state.hero && renderAbilityPreviews(state.hero));
   $("#export-webm").addEventListener("click", exportWebm);
   // Space toggles playback while the stage is focused, without scrolling the dialog.
   dialog.addEventListener("keydown", (e) => {
