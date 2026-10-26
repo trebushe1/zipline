@@ -33,6 +33,16 @@ jobs:
         env:
           GAMETRACKING_DIR: ${{ runner.temp }}/gametracking
 
+      - name: New builds straight from Steam
+        run: |
+          pip install -q pillow
+          python -m backend.tracker
+        env:
+          GAMETRACKING_DIR: ${{ runner.temp }}/gametracking
+          MEDIA_TOOLS_DIR: ${{ runner.temp }}/tools
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+
       - name: Models and textures (before / after)
         run: |
           pip install -q pillow

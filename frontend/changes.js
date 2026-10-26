@@ -65,6 +65,10 @@ async function getJson(path) {
   return res.json();
 }
 
+// Builds read straight from Steam have no SteamDB commit to link to (diffUrl: null).
+const diffUrl = (b) => (b.diffUrl === undefined ? `${SOURCE}/commit/${b.sha}` : b.diffUrl);
+const fullDiff = (b, text) => (diffUrl(b) ? `<a href="${diffUrl(b)}" target="_blank" rel="noopener">${text}</a>` : "");
+
 const matches = (...parts) => !state.q || parts.some((p) => p && String(p).toLowerCase().includes(state.q));
 
 // ── Build list ─────────────────────────────────────────
@@ -100,7 +104,7 @@ function renderBuild() {
       </div>
       <p class="build-meta">
         ${fullDate.format(b.time)}${b.versionDate ? ` · сборка Valve от ${escapeHtml(b.versionDate)}` : ""}
-        · <a href="${SOURCE}/commit/${b.sha}" target="_blank" rel="noopener">полный diff на GitHub</a>
+        ${diffUrl(b) ? `· ${fullDiff(b, "полный diff на GitHub")}` : "· прямо из Steam"}
         · <a href="https://steamdb.info/app/1422450/patchnotes/" target="_blank" rel="noopener">SteamDB</a>
       </p>
       <ul class="headline">${b.headline.map((h) => `<li>${escapeHtml(h)}</li>`).join("")}</ul>
@@ -215,7 +219,7 @@ function fileList(s) {
           <span class="file-size">${bytes(f.size)}</span>
         </li>`;
       }).join("")}</ul>
-      ${g.files.length < total ? `<p class="more-note">Показаны первые ${g.files.length} из ${num.format(total)} — остальные в <a href="${SOURCE}/commit/${state.build.sha}" target="_blank" rel="noopener">полном diff</a>.</p>` : ""}
+      ${g.files.length < total ? `<p class="more-note">Показаны первые ${g.files.length} из ${num.format(total)}${diffUrl(state.build) ? ` — остальные в ${fullDiff(state.build, "полном diff")}` : ""}.</p>` : ""}
     </div>`;
   }).join("");
 }
@@ -332,7 +336,7 @@ function stringsBlock(rows, total) {
     </details>`;
   }).join("");
   const cut = total > state.build.strings.length
-    ? `<p class="more-note">В билде ${plural(total, "строка", "строки", "строк")}; здесь первые ${state.build.strings.length}. Все — в <a href="${SOURCE}/commit/${state.build.sha}" target="_blank" rel="noopener">полном diff</a>.</p>` : "";
+    ? `<p class="more-note">В билде ${plural(total, "строка", "строки", "строк")}; здесь первые ${state.build.strings.length}.${diffUrl(state.build) ? ` Все — в ${fullDiff(state.build, "полном diff")}.` : ""}</p>` : "";
   return groups + cut;
 }
 

@@ -189,7 +189,7 @@ def references(data: bytes) -> list[str]:
 
 # ── Conversion ─────────────────────────────────────────
 
-def game_root(files: SteamFiles, manifest: str, sha: str, work: Path) -> Path:
+def game_root(files: SteamFiles, manifest: str, gameinfo: str, work: Path) -> Path:
     """Source2Viewer resolves dependencies through gameinfo.gi search paths: game/citadel/<path>."""
     citadel = work / f"root-{manifest}" / "game" / "citadel"
     if not citadel.exists():
@@ -198,7 +198,7 @@ def game_root(files: SteamFiles, manifest: str, sha: str, work: Path) -> Path:
         content = files.root(manifest)
         content.mkdir(parents=True, exist_ok=True)
         content.rename(citadel)
-        (citadel / "gameinfo.gi").write_text(show(sha, "game/citadel/gameinfo.gi"), "utf-8")
+        (citadel / "gameinfo.gi").write_text(gameinfo, "utf-8")
     return citadel
 
 
@@ -300,13 +300,18 @@ def make_media(summary: dict, sfd: str, vrf: str) -> tuple[str, dict, int, dict]
     items, boring = pick(summary)
     if not items:
         return None
-    old, new = manifest_id(summary["parent"]), manifest_id(summary["sha"])
+    # Builds read from Steam by backend.tracker carry their manifests; SteamDB's are in its history.
+    if summary.get("manifests"):
+        old, new = summary["manifests"]["before"], summary["manifests"]["after"]
+    else:
+        old, new = manifest_id(summary["parent"]), manifest_id(summary["sha"])
+    gameinfo = summary.get("gameinfo") or show(summary["sha"], "game/citadel/gameinfo.gi") or show("HEAD", "game/citadel/gameinfo.gi")
     if not new:
         return None
     work = Path(tempfile.mkdtemp(prefix=f"media-{summary['build']}-"))
     try:
-        sides = [("after", new, summary["sha"])] + ([("before", old, summary["parent"])] if old and old != new else [])
-        files = SteamFiles(sfd, work, [m for _, m, _ in sides])
+        sides = [("after", new)] + ([("before", old)] if old and old != new else [])
+        files = SteamFiles(sfd, work, [m for _, m in sides])
         files.fetch_with_dependencies({i["path"] for i in items})
 
         out_dir, media, unchanged = work / "out", {}, 0
@@ -314,10 +319,10 @@ def make_media(summary: dict, sfd: str, vrf: str) -> tuple[str, dict, int, dict]
         for n, item in enumerate(items):
             entry = {"kind": item["kind"], "subject": item["subject"], "status": item["status"]}
             blobs = {}
-            for side, manifest, sha in sides:
+            for side, manifest in sides:
                 if side == "before" and item["status"] == "a" or side == "after" and item["status"] == "r":
                     continue
-                citadel = game_root(files, manifest, sha, work)
+                citadel = game_root(files, manifest, gameinfo, work)
                 convert = convert_model if item["kind"] == "model" else convert_texture
                 blob = convert(vrf, citadel, item["path"], work / "tmp" / f"{n}-{side}")
                 if blob:

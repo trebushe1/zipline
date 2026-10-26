@@ -568,8 +568,14 @@ def main() -> int:
     index = json.loads(index_path.read_text("utf-8")) if index_path.exists() and "--rebuild" not in sys.argv else {}
     known = {b["sha"]: b for b in index.get("builds", [])}
 
+    # Builds read straight from Steam (backend.tracker) are not in SteamDB's history: keep them,
+    # and skip SteamDB's commit of a build we already have from Steam.
+    own = [b for b in index.get("builds", []) if b.get("manifest")]
+    own_builds = {b["build"] for b in own}
     builds = []
     for commit in build_commits()[:KEEP_BUILDS]:
+        if commit["build"] in own_builds:
+            continue
         if commit["sha"] in known:
             builds.append(known[commit["sha"]])
             continue
@@ -580,6 +586,7 @@ def main() -> int:
         builds.append(entry(summary, file))
         print(f"build {commit['build']} ({commit['sha'][:8]}): {summary['size']}, {time.time() - started:.1f}s")
 
+    builds = sorted(builds + own, key=lambda b: -b["time"])[:KEEP_BUILDS]
     if builds == index.get("builds"):
         print("no new builds")
         return 0
