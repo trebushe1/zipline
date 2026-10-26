@@ -139,25 +139,6 @@ function keepInPlace() {
   anchor.position.set(rootStart.x - p.x, 0, rootStart.z - p.z);
 }
 
-// The body and what touches it: some models also carry ability props parked at the origin, away from the
-// hero (a brush, a teapot, a cane). Those are hidden, so they neither shrink the framing nor end up in a PNG.
-function bodyBox(root) {
-  const { THREE } = viewer;
-  const parts = [];
-  root.traverse((o) => {
-    if (o.isMesh) parts.push({ mesh: o, box: new THREE.Box3().setFromObject(o, true), size: o.geometry.attributes.position.count });
-  });
-  if (!parts.length) return new THREE.Box3().setFromObject(root, true);
-  parts.sort((a, b) => b.size - a.size);
-  const box = parts[0].box.clone();
-  const reach = box.clone().expandByScalar(box.getSize(new THREE.Vector3()).length() * 0.1);
-  for (const p of parts.slice(1)) {
-    if (reach.intersectsBox(p.box)) box.union(p.box);
-    else p.mesh.visible = false;
-  }
-  return box;
-}
-
 function frameModel() {
   const { THREE, camera, controls, frameBox } = viewer;
   if (!frameBox) return;
@@ -235,7 +216,7 @@ async function loadModel(hero) {
   viewer.mixer.update(0);
   keepInPlace();
   anchor.updateMatrixWorld(true);
-  viewer.frameBox = bodyBox(anchor);
+  viewer.frameBox = new THREE.Box3().setFromObject(anchor, true);
   frameModel();
   setStatus("");
   $("#viewer-meta").textContent = viewer.clips.length ? plural(viewer.clips.length, "анимация", "анимации", "анимаций") : "без анимаций";

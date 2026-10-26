@@ -34,7 +34,7 @@ from .patches import HEROES_VDATA, PAK_LIST, REPO, build_commits, load_loc, show
 
 OUT = config.ROOT / "data" / "heroes"
 HEROES_TAG = "heroes"
-MODEL_VERSION = 1  # bump to convert every hero again after changing the conversion
+MODEL_VERSION = 2  # bump to convert every hero again after changing the conversion
 VRF_VERSION = "20.1"  # first release that exports Deadlock's animation graph clips to glTF
 GLTFPACK_VERSION = "v1.3"
 COLOR_SIZE = 2048  # base color: details matter when zoomed in
@@ -196,6 +196,7 @@ def convert_model(vrf: str, citadel: Path, path: str, clips: list[str], tmp: Pat
     doc, binary = read_glb(out.read_bytes())
     anims, count = animation_pack(doc, binary)
     doc["animations"] = []
+    hide_off_meshes(doc, vrf, citadel / path)
     (tmp / "static.glb").write_bytes(pack(doc, binary, out.parent))
     res = subprocess.run([gltfpack_path(), "-i", str(tmp / "static.glb"), "-o", str(tmp / "packed.glb"), "-cc", "-kn"],
                          capture_output=True, text=True)
@@ -203,6 +204,35 @@ def convert_model(vrf: str, citadel: Path, path: str, clips: list[str], tmp: Pat
         log(f"  gltfpack failed: {(res.stdout + res.stderr).strip()[-600:]}")
         return None
     return (tmp / "packed.glb").read_bytes(), anims, count
+
+
+def hide_off_meshes(doc: dict, vrf: str, model: Path) -> None:
+    """Drop the meshes the game does not show by default: ability props and alternative body parts
+    sit in mesh groups outside m_nDefaultMeshGroupMask (a teapot or a brush parked at the hero's feet).
+    Source2Viewer exports the meshes of the first LoD in mesh index order, so the n-th glTF mesh is
+    the n-th mesh index of that LoD."""
+    res = subprocess.run([vrf, "-i", str(model), "-b", "DATA"], capture_output=True, text=True)
+    text = res.stdout
+
+    def ints(field: str) -> list[int]:
+        m = re.search(rf"\b{field} =\s*\[([^\]]*)\]", text)
+        return [int(x) for x in re.findall(r"-?\d+", m[1])] if m else []
+
+    groups, lods = ints("m_refMeshGroupMasks"), ints("m_refLODGroupMasks")
+    default = re.search(r"\bm_nDefaultMeshGroupMask = (\d+)", text)
+    if not groups or not default:
+        return
+    lowest = min((m & -m for m in lods if m), default=1)
+    first_lod = [i for i in range(len(groups)) if not lods or i < len(lods) and lods[i] & lowest]
+    if len(first_lod) != len(doc.get("meshes", [])):
+        log(f"  mesh groups: {len(first_lod)} meshes in the first LoD, {len(doc.get('meshes', []))} exported; keeping all")
+        return
+    hidden = {n for n, i in enumerate(first_lod) if not groups[i] & int(default[1])}
+    for node in doc.get("nodes", []):
+        if node.get("mesh") in hidden:
+            log(f"  hidden by default: {doc['meshes'][node['mesh']].get('name', '').rsplit('.', 1)[-1]}")
+            node.pop("mesh")
+            node.pop("skin", None)
 
 
 def read_glb(data: bytes) -> tuple[dict, bytes]:
