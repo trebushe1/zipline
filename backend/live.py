@@ -103,6 +103,9 @@ def publish(last_poll: dict) -> None:
     if pushed.returncode != 0:
         log.error("git push failed: %s", pushed.stderr.strip())
         return
+    # On our server the push (deploy key) starts deploy.yml by itself; in GitHub Actions it does not.
+    if not os.environ.get("GITHUB_ACTIONS"):
+        return
     deployed = run("gh", "workflow", "run", "deploy.yml")
     if deployed.returncode != 0:
         log.error("deploy trigger failed: %s", deployed.stderr.strip())

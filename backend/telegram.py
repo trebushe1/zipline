@@ -87,3 +87,12 @@ async def edit(client: httpx.AsyncClient, message_id: int, text: str) -> bool:
     if resp.status_code != 200:
         log.error("telegram edit failed: %s %s", resp.status_code, resp.text[:200])
     return resp.status_code == 200
+
+
+async def send_admin(client: httpx.AsyncClient, text: str) -> None:
+    """A problem report for the owner, never to the news chat."""
+    if not (config.TELEGRAM_BOT_TOKEN and config.TELEGRAM_ADMIN_CHAT_ID):
+        log.warning("admin alert (no TELEGRAM_ADMIN_CHAT_ID): %s", text)
+        return
+    await client.post(f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/sendMessage",
+                      json={"chat_id": config.TELEGRAM_ADMIN_CHAT_ID, "text": text}, timeout=20)
