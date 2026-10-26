@@ -997,7 +997,7 @@ function renderAbilities(hero) {
 
 async function renderAbilityPreviews(hero) {
   const withKey = $("#ability-key").checked;
-  for (const img of document.querySelectorAll("[data-preview]")) {
+  await Promise.all([...document.querySelectorAll("[data-preview]")].map(async (img) => {
     const ability = hero.abilities[Number(img.dataset.preview)];
     try {
       const canvas = await abilityCanvas(ability, 88, withKey);
@@ -1005,7 +1005,7 @@ async function renderAbilityPreviews(hero) {
     } catch (err) {
       console.error(err);
     }
-  }
+  }));
 }
 
 async function downloadAbility(index, size) {
