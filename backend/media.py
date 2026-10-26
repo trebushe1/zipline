@@ -414,7 +414,7 @@ def main() -> int:
             entry["media"] = len(summary["media"])
 
     index_path.write_text(json.dumps(index, ensure_ascii=False, indent=1) + "\n", "utf-8")
-    return 0
+    return 1 if stopped else 0  # a failed run shows up in Actions (and GitHub emails the owner)
 
 
 def fetch(dest: Path) -> int:

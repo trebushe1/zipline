@@ -1,4 +1,4 @@
-"""Notices a new Deadlock build within a minute and starts the patch workflow.
+"""Notices a new Deadlock build within half a minute and starts the patch workflow.
 
 GitHub runs scheduled workflows late or skips them (every 20 minutes turned into
 every 5-6 hours), so the live collector, which runs all the time, watches Steam's
@@ -18,8 +18,8 @@ from . import config
 
 log = logging.getLogger("zipline.steam_watch")
 INFO_URL = "https://api.steamcmd.net/v1/info/1422450"
-EVERY = 60  # seconds between checks
-COOLDOWN = 300  # at most one workflow start per 5 minutes; Valve often pushes several changes in a row
+EVERY = 20  # seconds between checks
+COOLDOWN = 120  # at most one workflow start per 2 minutes; Valve often pushes several changes in a row
 
 
 async def change_number(client: httpx.AsyncClient) -> int | None:

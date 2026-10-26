@@ -59,7 +59,8 @@ def _fit(text: str, room: int) -> str:
     return html.escape(text)
 
 
-async def send(client: httpx.AsyncClient, text: str) -> bool:
+async def post(client: httpx.AsyncClient, text: str) -> int | None:
+    """Sends a message; returns its id, or None when Telegram refused it."""
     resp = await client.post(
         f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/sendMessage",
         json={"chat_id": config.TELEGRAM_CHAT_ID, "text": text, "parse_mode": "HTML",
@@ -68,4 +69,21 @@ async def send(client: httpx.AsyncClient, text: str) -> bool:
     )
     if resp.status_code != 200:
         log.error("telegram send failed: %s %s", resp.status_code, resp.text[:200])
+        return None
+    return resp.json()["result"]["message_id"]
+
+
+async def send(client: httpx.AsyncClient, text: str) -> bool:
+    return await post(client, text) is not None
+
+
+async def edit(client: httpx.AsyncClient, message_id: int, text: str) -> bool:
+    resp = await client.post(
+        f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/editMessageText",
+        json={"chat_id": config.TELEGRAM_CHAT_ID, "message_id": message_id, "text": text, "parse_mode": "HTML",
+              "disable_web_page_preview": True},
+        timeout=20,
+    )
+    if resp.status_code != 200:
+        log.error("telegram edit failed: %s %s", resp.status_code, resp.text[:200])
     return resp.status_code == 200
