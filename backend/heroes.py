@@ -63,13 +63,14 @@ def resource(value: str | None) -> str | None:
 
 
 def hero_list(sha: str) -> list[dict]:
-    """Playable heroes in the build: not disabled, not in development, with a model and a card."""
+    """Playable heroes in the build: not disabled, with a model and a card. «In development» is no filter:
+    released heroes such as Violet and Baba still carry that flag."""
     text, loc = show(sha, HEROES_VDATA), load_loc(sha)
     starts = [(m.start(), m[1]) for m in HERO_BLOCK.finditer(text)]
     heroes = []
     for i, (pos, key) in enumerate(starts):
         block = text[pos:starts[i + 1][0] if i + 1 < len(starts) else len(text)]
-        if key in NOT_HEROES or any(field(block, f) == "true" for f in ("m_bDisabled", "m_bInDevelopment", "m_bNeedsTesting")):
+        if key in NOT_HEROES or field(block, "m_bDisabled") == "true":
             continue
         model, card = resource(field(block, "m_strModelName")), resource(field(block, "m_strIconHeroCard"))
         if not (model and card):
