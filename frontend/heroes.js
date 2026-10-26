@@ -912,7 +912,7 @@ function webm(width, height, frames) {
 const ICON_SIZES = [500, 300];
 const DISC = "#e8e4ea"; // keybindBGColor
 const GLYPH = "#10130d"; // offBlack
-const BOX = 120, VIEW = 0.94; // the button, and the part of it the PNG shows with the key plate
+const BOX = 120; // the button
 const DISC_R = 41; // radius of the game's disc in button units (ability_frame_passive_0: 80 of 239 px)
 const assets = new Map();
 
@@ -954,9 +954,8 @@ async function abilityCanvas(ability, size, withKey) {
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = size;
   const ctx = canvas.getContext("2d");
-  // Without the key the disc fills the square edge to edge (ready to cut out as an emoji); with it,
-  // the view leaves room for the key plate under the disc.
-  const view = withKey ? BOX * VIEW : DISC_R * 2 + 1;
+  // The disc fills the square edge to edge (ready to cut out as an emoji).
+  const view = DISC_R * 2 + 1;
   const k = size / view, o = (view - BOX) / 2 * k; // button units → pixels
   const c = o + BOX / 2 * k;
   // A clean vector circle, so the edge is perfectly round at any size.
@@ -964,11 +963,13 @@ async function abilityCanvas(ability, size, withKey) {
   ctx.beginPath();
   ctx.arc(c, c, DISC_R * k, 0, Math.PI * 2);
   ctx.fill();
-  const g = BOX * 0.5 * k;
-  ctx.drawImage(washedLayer(glyph, g, g, GLYPH, 0.95), c - g / 2, c - g / 2);
+  // With the number on, the glyph moves up a little so the plate does not cover its bottom.
+  const g = BOX * 0.5 * k, lift = withKey ? 5 * k : 0;
+  ctx.drawImage(washedLayer(glyph, g, g, GLYPH, 0.95), c - g / 2, c - g / 2 - lift);
   if (withKey) {
-    // The key hint: a small dark plate with the slot's default key (1–4), 5 px above the button's bottom.
-    const h = 17 * k, w = 16 * k, x = c - w / 2, y = o + (BOX - 5) * k - h;
+    // The key hint: a small dark plate with the slot's default key (1–4) over the bottom of the disc,
+    // as in the game, kept inside the square.
+    const h = 17 * k, w = 16 * k, x = c - w / 2, y = size - h - 0.5 * k;
     ctx.fillStyle = "#1d1b19";
     ctx.beginPath();
     ctx.roundRect(x, y, w, h, 3 * k);
