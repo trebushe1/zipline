@@ -148,6 +148,11 @@ h1 .tag-paper { margin-left: .5em; }
 /* Avatar in a green frame with a strip of tape — from the update template. */
 .title-art { position: relative; margin: 0; padding: 10px; background: var(--slab); transform: rotate(2.5deg); box-shadow: 6px 8px 0 var(--shadow); }
 .title-art img { display: block; width: 100%; height: auto; }
+/* Caption printed as a label that overlaps the bottom of the frame, like the update template. */
+.title-art figcaption {
+  position: absolute; left: -16px; right: -10px; bottom: -20px; transform: rotate(-3.5deg);
+  padding: 6px 10px 5px; font-size: 15px; line-height: 1.2; text-align: center;
+}
 .title-art::before {
   content: ""; position: absolute; top: -14px; left: 50%; width: 96px; height: 28px; margin-left: -48px; transform: rotate(-4deg);
   background: var(--tape);
