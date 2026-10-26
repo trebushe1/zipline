@@ -197,6 +197,60 @@ function updateProps() {
   viewer.model.updateMatrixWorld(true);
 }
 
+// Anything else lying far from the hero in the current pose (Baba's pigeon parks six metres under her):
+// the bones whose vertices are all well outside the bulk of the model are shrunk the same way. Checked
+// whenever a clip starts, so a prop that the clip brings in stays visible.
+function hideStrays() {
+  const { THREE, model } = viewer;
+  for (const b of viewer.strays || []) {
+    if (b.userData.hidden) { b.scale.copy(b.userData.hidden); b.userData.hidden = null; }
+  }
+  viewer.strays = [];
+  model.updateMatrixWorld(true);
+  const points = [], v = new THREE.Vector3();
+  model.traverse((o) => {
+    if (!o.isSkinnedMesh || !o.visible) return;
+    o.skeleton.update();
+    const index = o.geometry.attributes.skinIndex, weight = o.geometry.attributes.skinWeight;
+    for (let i = 0; i < index.count; i += 2) {
+      let best = 0;
+      for (let c = 1; c < 4; c++) if (weight.getComponent(i, c) > weight.getComponent(i, best)) best = c;
+      const bone = o.skeleton.bones[index.getComponent(i, best)];
+      if (isHidden(bone)) continue;
+      o.getVertexPosition(i, v).applyMatrix4(o.matrixWorld);
+      points.push([v.x, v.y, v.z, bone]);
+    }
+  });
+  if (points.length < 100) return;
+  // The bulk: 3rd to 97th percentile on each axis, with a quarter of its size as margin.
+  const lo = [], hi = [];
+  for (let a = 0; a < 3; a++) {
+    const sorted = points.map((p) => p[a]).sort((x, y) => x - y);
+    lo.push(sorted[Math.floor(sorted.length * 0.03)]);
+    hi.push(sorted[Math.floor(sorted.length * 0.97)]);
+  }
+  const margin = Math.max(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]) * 0.25;
+  const inside = (p) => [0, 1, 2].every((a) => p[a] > lo[a] - margin && p[a] < hi[a] + margin);
+  // Per bone subtree: does any of its vertices sit in the bulk?
+  const near = new Map();
+  for (const p of points) {
+    const ok = inside(p);
+    for (let b = p[3]; b?.isBone; b = b.parent) {
+      const seen = near.get(b);
+      if (seen === true) break;
+      near.set(b, ok || seen === true);
+      if (!ok && seen === false) break;
+    }
+  }
+  for (const [bone, ok] of near) {
+    if (ok || near.get(bone.parent) === false) continue; // collapse only the top of a stray subtree
+    bone.userData.hidden = bone.scale.clone();
+    bone.scale.setScalar(1e-5);
+    viewer.strays.push(bone);
+  }
+  model.updateMatrixWorld(true);
+}
+
 // Bounds of the posed model without the hidden props.
 function poseBox(root) {
   const { THREE } = viewer;
@@ -298,6 +352,7 @@ async function loadModel(hero) {
   // Hands count as «near» within a third of the hero's height; the props at the feet then drop out.
   viewer.reach = new THREE.Box3().setFromObject(anchor, true).getSize(new THREE.Vector3()).y * 0.3;
   updateProps();
+  hideStrays();
   viewer.frameBox = poseBox(anchor);
   frameModel();
   setStatus("");
@@ -344,6 +399,10 @@ async function playClip(name) {
   if (prev && prev !== action) prev.crossFadeTo(action, 0.18, false);
   viewer.action = action;
   $("#anim-time").max = clip.duration;
+  if (viewer.reach) {
+    mixer.update(0);
+    hideStrays();
+  }
   setPlaying(true);
 }
 
@@ -658,4 +717,3 @@ init().catch((err) => {
   console.error(err);
   $("#roster").innerHTML = `<li class="empty pad">Не удалось загрузить список героев. Обновите страницу чуть позже.</li>`;
 });
-if (location.search.includes("debug")) window.__viewer = viewer; // TEMP
