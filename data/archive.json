@@ -1,8 +1,8 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1792979724836,
-  "new": 6,
+  "at": 1792985063012,
+  "new": 1,
   "error": null
  },
  "developers": [
@@ -3060,7 +3060,7 @@
    "embeds": [],
    "reply_to": "1506379468481232989",
    "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1506379895360721016",
-   "text_ru": null,
+   "text_ru": "Слишком рано, да",
    "embeds_ru": null
   },
   {
