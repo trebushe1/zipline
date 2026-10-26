@@ -248,8 +248,8 @@ def animation_pack(doc: dict, binary: bytes) -> tuple[bytes, int]:
     names, node_ids, clips, blobs, seen = [], {}, [], bytearray(), set()
     for anim in doc.get("animations", []):
         name = anim.get("name", "").rsplit("/", 1)[-1]
-        # Only animation graph clips (named by their file); the model's legacy sequences are older copies.
-        if "/clips/" not in anim.get("name", "") or (anim.get("extras") or {}).get("additive") or name in seen:
+        # Only animation graph clips (named by their file path); the model's legacy sequences are older copies.
+        if "/" not in anim.get("name", "") or (anim.get("extras") or {}).get("additive") or name in seen:
             continue
         seen.add(name)
         times, tracks, duration = {}, [], 0.0
@@ -437,8 +437,8 @@ def main() -> int:
             or old[h["key"]].get("hash") != fingerprint(deps[h["key"]], crcs)
             or not (OUT / "icons" / f"{h['key']}.webp").exists()]
     limit = int(os.environ.get("HEROES_PER_RUN", "0")) or len(todo)
-    if only := os.environ.get("HEROES_ONLY"):
-        todo = [h for h in todo if h["key"] in only.split(",")]
+    if only := os.environ.get("HEROES_ONLY"):  # asked for by hand: convert them again even if nothing changed
+        todo = [h for h in heroes if h["key"] in only.split(",")]
     todo = todo[:limit]
     log(f"build {build['build']}: {len(heroes)} heroes, {len(todo)} to convert")
 
