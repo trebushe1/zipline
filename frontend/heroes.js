@@ -171,36 +171,45 @@ function keepInPlace() {
 // the hero's feet. So each prop bone (a child of such a branch) is shown only while it is next to a hand,
 // and otherwise shrunk to nothing, together with the vertices that follow it.
 function markBranches(model, root) {
-  viewer.propBones = [];
+  viewer.props = [];
   viewer.hands = [];
   if (!root) return;
+  // A branch: the bone right under the motion root (pelvis, weaponPivot), or the top of a separate tree.
   const branchOf = (bone) => {
     let b = bone;
-    while (b.parent && b.parent !== root && b.parent.isBone) b = b.parent;
-    return b.parent === root ? b : root;
+    while (b.parent?.isBone && !(b.parent === root && /^root(_motion)?$/i.test(root.name))) b = b.parent;
+    return b;
   };
-  const totals = new Map();
+  const totals = new Map(), skinned = new Set();
   model.traverse((o) => {
     if (!o.isSkinnedMesh) return;
     const index = o.geometry.attributes.skinIndex, weight = o.geometry.attributes.skinWeight;
     for (let i = 0; i < index.count; i++) {
       let best = 0;
       for (let c = 1; c < 4; c++) if (weight.getComponent(i, c) > weight.getComponent(i, best)) best = c;
-      const branch = branchOf(o.skeleton.bones[index.getComponent(i, best)]);
-      totals.set(branch, (totals.get(branch) || 0) + 1);
+      const bone = o.skeleton.bones[index.getComponent(i, best)];
+      skinned.add(bone);
+      totals.set(branchOf(bone), (totals.get(branchOf(bone)) || 0) + 1);
     }
   });
-  const body = [...totals].sort((x, y) => y[1] - x[1])[0]?.[0];
-  if (!body) return;
   // The hands themselves (hand_L, baba_hand_R, darm_hand_R), not attachment or helper bones named after them.
-  body.traverse((b) => { if (b.isBone && /(^|_)hand_[LR]$/i.test(b.name) && !/weapon|object|attach|target|ik/i.test(b.name)) viewer.hands.push(b); });
+  root.traverse((b) => { if (b.isBone && /(^|_)hand_[LR]$/i.test(b.name) && !/weapon|object|attach|target|ik/i.test(b.name)) viewer.hands.push(b); });
   if (!viewer.hands.length) return;
+  // The body is the branch the hands are on (cloth simulation chains can carry more vertices than it).
+  const body = branchOf(viewer.hands[0]);
+  // A prop is a whole subtree, shown or hidden as one (an umbrella's ribs go with its handle). The bones
+  // that carry its vertices tell where it is.
+  const prop = (top) => {
+    const bones = [];
+    top.traverse((b) => { if (skinned.has(b)) bones.push(b); });
+    if (bones.length) viewer.props.push({ top, bones });
+  };
   for (const branch of totals.keys()) {
-    if (branch !== body && branch !== root) viewer.propBones.push(...branch.children.filter((b) => b.isBone));
+    if (branch !== body && branch !== root && /weapon|gun|offhand|prop|pivot/i.test(branch.name)) prop(branch);
   }
   // Some guns hang inside the body's own branch (weapon_hand_R under the spine): the topmost weapon bone.
   const weaponish = (b) => /(^|_)(weapon|gun)(_|$)/i.test(b.name);
-  body.traverse((b) => { if (b.isBone && weaponish(b) && !(b.parent && weaponish(b.parent))) viewer.propBones.push(b); });
+  body.traverse((b) => { if (b.isBone && weaponish(b) && !(b.parent && weaponish(b.parent))) prop(b); });
 }
 
 const isHidden = (bone) => {
@@ -208,78 +217,29 @@ const isHidden = (bone) => {
   return false;
 };
 
-function updateProps() {
-  const { propBones, hands, THREE } = viewer;
-  if (!viewer.model || !propBones?.length || !viewer.reach) return;
-  viewer.model.updateMatrixWorld(true);
-  const p = new THREE.Vector3(), h = new THREE.Vector3();
-  for (const bone of propBones) {
-    bone.getWorldPosition(p);
-    const near = hands.some((hand) => hand.getWorldPosition(h).distanceTo(p) < viewer.reach);
-    if (!near && !bone.userData.hidden) {
-      bone.userData.hidden = bone.scale.clone();
-      bone.scale.setScalar(1e-5);
-    } else if (near && bone.userData.hidden) {
-      bone.scale.copy(bone.userData.hidden);
-      bone.userData.hidden = null;
-    }
+function showProp(top, on) {
+  if (on && top.userData.hidden) {
+    top.scale.copy(top.userData.hidden);
+    top.userData.hidden = null;
+  } else if (!on && !top.userData.hidden) {
+    top.userData.hidden = top.scale.clone();
+    top.scale.setScalar(1e-5);
   }
-  viewer.model.updateMatrixWorld(true);
 }
 
-// Anything else lying far from the hero in the current pose (Baba's pigeon parks six metres under her):
-// the bones whose vertices are all well outside the bulk of the model are shrunk the same way. Checked
-// whenever a clip starts, so a prop that the clip brings in stays visible.
-function hideStrays() {
-  const { THREE, model } = viewer;
-  if (!model) return;
-  for (const b of viewer.strays || []) {
-    if (b.userData.hidden) { b.scale.copy(b.userData.hidden); b.userData.hidden = null; }
+function updateProps() {
+  const { props, hands, THREE } = viewer;
+  if (!viewer.model || !props?.length || !viewer.reach) return;
+  // Judge where the props are at full size, then shrink the ones away from the hands.
+  for (const { top } of props) showProp(top, true);
+  viewer.model.updateMatrixWorld(true);
+  const p = new THREE.Vector3(), h = new THREE.Vector3();
+  const handsAt = hands.map((hand) => hand.getWorldPosition(new THREE.Vector3()));
+  for (const { top, bones } of props) {
+    const near = bones.some((b) => (b.getWorldPosition(p), handsAt.some((at) => h.copy(at).distanceTo(p) < viewer.reach)));
+    showProp(top, near);
   }
-  viewer.strays = [];
-  model.updateMatrixWorld(true);
-  const points = [], v = new THREE.Vector3();
-  model.traverse((o) => {
-    if (!o.isSkinnedMesh || !o.visible) return;
-    o.skeleton.update();
-    const index = o.geometry.attributes.skinIndex, weight = o.geometry.attributes.skinWeight;
-    for (let i = 0; i < index.count; i += 2) {
-      let best = 0;
-      for (let c = 1; c < 4; c++) if (weight.getComponent(i, c) > weight.getComponent(i, best)) best = c;
-      const bone = o.skeleton.bones[index.getComponent(i, best)];
-      if (isHidden(bone)) continue;
-      o.getVertexPosition(i, v).applyMatrix4(o.matrixWorld);
-      points.push([v.x, v.y, v.z, bone]);
-    }
-  });
-  if (points.length < 100) return;
-  // The bulk: 10th to 90th percentile on each axis, with 60% of its size as margin.
-  const lo = [], hi = [];
-  for (let a = 0; a < 3; a++) {
-    const sorted = points.map((p) => p[a]).sort((x, y) => x - y);
-    lo.push(sorted[Math.floor(sorted.length * 0.1)]);
-    hi.push(sorted[Math.floor(sorted.length * 0.9)]);
-  }
-  const margin = Math.max(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]) * 0.6;
-  const inside = (p) => [0, 1, 2].every((a) => p[a] > lo[a] - margin && p[a] < hi[a] + margin);
-  // Per bone subtree: does any of its vertices sit in the bulk?
-  const near = new Map();
-  for (const p of points) {
-    const ok = inside(p);
-    for (let b = p[3]; b?.isBone; b = b.parent) {
-      const seen = near.get(b);
-      if (seen === true) break;
-      near.set(b, ok || seen === true);
-      if (!ok && seen === false) break;
-    }
-  }
-  for (const [bone, ok] of near) {
-    if (ok || near.get(bone.parent) === false) continue; // collapse only the top of a stray subtree
-    bone.userData.hidden = bone.scale.clone();
-    bone.scale.setScalar(1e-5);
-    viewer.strays.push(bone);
-  }
-  model.updateMatrixWorld(true);
+  viewer.model.updateMatrixWorld(true);
 }
 
 // Bounds of the posed model without the hidden props.
@@ -361,9 +321,14 @@ async function loadModel(hero) {
   viewer.anchor = anchor;
   viewer.mixer = new THREE.AnimationMixer(model);
 
-  let skeletonRoot = null;
+  // Some skeletons are several trees (root_motion, pelvis and cloth chains side by side): the one with
+  // the most bones carries the body.
+  let skeletonRoot = null, most = -1;
   model.traverse((o) => {
-    if (!skeletonRoot && o.isBone && !o.parent?.isBone) skeletonRoot = o;
+    if (!o.isBone || o.parent?.isBone) return;
+    let n = 0;
+    o.traverse(() => n++);
+    if (n > most) [skeletonRoot, most] = [o, n];
   });
   viewer.rootBone = skeletonRoot;
   markBranches(model, skeletonRoot);
@@ -382,7 +347,6 @@ async function loadModel(hero) {
   // Hands count as «near» within a third of the hero's height; the props at the feet then drop out.
   viewer.reach = new THREE.Box3().setFromObject(anchor, true).getSize(new THREE.Vector3()).y * 0.3;
   updateProps();
-  hideStrays();
   viewer.frameBox = poseBox(anchor);
   frameModel();
   setStatus("");
@@ -416,7 +380,7 @@ function stopClip() {
   if (!mixer) return;
   mixer.stopAllAction();
   mixer.update(0); // stopped clips hand the bones back to their original pose
-  hideStrays();
+  updateProps();
   setPlaying(false);
   $("#anim-time").value = 0;
   $("#anim-clock").textContent = "—";
@@ -446,7 +410,7 @@ async function playClip(name) {
   $("#anim-time").max = clip.duration;
   if (viewer.reach) {
     mixer.update(0);
-    hideStrays();
+    updateProps();
   }
   setPlaying(true);
 }
@@ -964,14 +928,11 @@ async function openHero(key, push = true) {
 // Everything that points into the current model, so nothing reaches for it once it is gone.
 function forgetModel() {
   // The model stays cached for the next opening: give the shrunk bones their size back.
-  for (const b of [...(viewer.propBones || []), ...(viewer.strays || [])]) {
-    if (b.userData.hidden) { b.scale.copy(b.userData.hidden); b.userData.hidden = null; }
-  }
+  for (const { top } of viewer.props || []) showProp(top, true);
   viewer.model = viewer.anchor = viewer.mixer = viewer.action = viewer.rootBone = viewer.current = null;
   viewer.reach = viewer.frameBox = null;
-  viewer.propBones = [];
+  viewer.props = [];
   viewer.hands = [];
-  viewer.strays = [];
 }
 
 function closeViewer() {
