@@ -4,7 +4,10 @@ const STRINGS_STEP = 60;
 const TILES_STEP = 48;
 const MODEL_VIEWER = "https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js";
 
-const state = { index: null, build: null, file: "", q: "", showEmpty: false };
+const RELEASES = "https://github.com/trebushe1/zipline/releases/download";
+
+// live: summaries pushed through Firebase (backend/patches_live.py), newer than this deploy.
+const state = { index: null, build: null, file: "", q: "", showEmpty: false, live: {} };
 
 // ── Formatting ─────────────────────────────────────────
 const fullDate = new Intl.DateTimeFormat("ru", { dateStyle: "long", timeStyle: "short" });
@@ -235,7 +238,10 @@ function mediaHint(b) {
   </button>`;
 }
 
-const mediaUrl = (name) => `media/${state.build.mediaTag}/${name}`;
+// Media of a build that is not deployed yet comes straight from its GitHub release:
+// images load from there, but 3D models need the deploy (the release host sends no CORS headers).
+const mediaUrl = (name) => (state.build.mediaFromRelease
+  ? `${RELEASES}/${state.build.mediaTag}/${name}` : `media/${state.build.mediaTag}/${name}`);
 
 function galleryBlock(media) {
   const skipped = state.build.mediaSkipped;
@@ -294,7 +300,14 @@ function openMedia(path) {
     ${m.kind === "model" ? `<p class="more-note">Мышь — вращать, колесо — приблизить. Материалы упрощены: без шейдеров игры.</p>` : ""}
   </div>`;
   dlg.showModal();
-  if (m.kind === "model") loadModelViewer().then(() => syncCameras(dlg)).catch(() => toast("Не удалось загрузить 3D-просмотрщик"));
+  if (m.kind === "model") {
+    for (const v of dlg.querySelectorAll("model-viewer")) {
+      v.addEventListener("error", () => v.replaceWith(Object.assign(document.createElement("p"), {
+        className: "empty pad", textContent: "3D-модель появится через минуту, когда обновится сайт. Пока можно посмотреть текстуры.",
+      })), { once: true });
+    }
+    loadModelViewer().then(() => syncCameras(dlg)).catch(() => toast("Не удалось загрузить 3D-просмотрщик"));
+  }
 }
 
 // Turning one model turns the other, so both stay comparable.
@@ -419,7 +432,13 @@ async function selectBuild(file, push = true) {
   state.file = file;
   renderBuildList();
   $("#build").innerHTML = `<div class="panel"><div class="skeleton" style="margin:18px"></div></div>`;
-  state.build = await getJson(`patches/${file}`);
+  const deployed = await getJson(`patches/${file}`).catch(() => null);
+  const live = state.live[file];
+  const mediaCount = (b) => Object.keys(b?.media || {}).length;
+  // Prefer the live copy while the deploy has not caught up with it (no file yet, or no media yet).
+  state.build = live && (!deployed || mediaCount(live) > mediaCount(deployed))
+    ? { ...live, mediaFromRelease: true } : deployed;
+  if (!state.build) throw new Error(`patches/${file}: not found`);
   if (push) history.replaceState(null, "", `?build=${file.replace(/\.json$/, "")}`);
   renderBuild();
 }
@@ -445,6 +464,11 @@ function wireEvents() {
     }
   });
   dlg.addEventListener("close", () => (dlg.innerHTML = ""));
+  $("#live-bar").addEventListener("click", (e) => {
+    e.currentTarget.hidden = true;
+    selectBuild(e.currentTarget.dataset.file).catch(showError);
+    $("#build").scrollIntoView({ behavior: "smooth" });
+  });
   $("#show-empty").addEventListener("change", (e) => {
     state.showEmpty = e.target.checked;
     renderBuildList();
@@ -531,12 +555,42 @@ function initTheme() {
 }
 
 // ── Boot ───────────────────────────────────────────────
+// ── Real time ──────────────────────────────────────────
+// The server pushes each new build to Firebase before the site deploy, so open pages
+// get it within seconds.
+async function subscribeLive() {
+  const { realtimeUrl } = await getJson("patches/realtime.json").catch(() => ({}));
+  if (!realtimeUrl || !window.EventSource) return;
+  const stream = new EventSource(`${realtimeUrl}/live/patches.json`);
+  stream.addEventListener("put", (ev) => {
+    const { path, data } = JSON.parse(ev.data);
+    if (path !== "/" || !data?.index || !data?.summary) return;
+    const index = JSON.parse(data.index);
+    const summary = JSON.parse(data.summary);
+    const isNew = !state.index.builds.some((b) => b.file === data.file);
+    state.live[data.file] = summary;
+    if (index.updatedAt >= state.index.updatedAt) state.index = index;
+    renderBuildList();
+    if (state.file === data.file) {
+      if (Object.keys(summary.media || {}).length > Object.keys(state.build.media || {}).length) {
+        state.build = { ...summary, mediaFromRelease: true };
+        renderBuild();
+      }
+    } else if (isNew) {
+      const bar = $("#live-bar");
+      bar.textContent = `🛠 Вышел новый билд ${summary.build} — открыть`;
+      bar.dataset.file = data.file;
+      bar.hidden = false;
+    }
+  });
+}
+
 async function init() {
   initTheme();
   wireEvents();
   state.index = await getJson("patches/index.json");
   const builds = state.index.builds;
-  $("#source-status").textContent = `Данные: SteamDB GameTracking · проверено ${shortDate.format(state.index.updatedAt)}`;
+  $("#source-status").textContent = `Данные: файлы игры из Steam · обновлено ${shortDate.format(state.index.updatedAt)}`;
   $("#source-status").classList.add("ok");
   if (!builds.length) throw new Error("no builds");
   const wanted = new URLSearchParams(location.search).get("build");
@@ -544,6 +598,7 @@ async function init() {
   const first = builds.find((b) => wanted && b.file === `${wanted}.json`)
     || builds.find((b) => b.media) || builds.find((b) => b.size !== "empty") || builds[0];
   await selectBuild(first.file, Boolean(wanted));
+  subscribeLive().catch(console.error);
 }
 
 init().catch(showError);

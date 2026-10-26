@@ -103,6 +103,9 @@ def export(last_poll: dict) -> None:
     (SITE / "reddit.json").write_text(json.dumps(reddit_snapshot(), ensure_ascii=False), encoding="utf-8")
     if PATCHES.exists():
         shutil.copytree(PATCHES, SITE / "patches")
+        # Where the changes page listens for builds that are newer than this deploy.
+        (SITE / "patches" / "realtime.json").write_text(
+            json.dumps({"realtimeUrl": config.FIREBASE_DB_URL or None}), encoding="utf-8")
     if HEROES.exists():
         # Models come from the «heroes» release in the deploy (backend.heroes --fetch).
         shutil.copytree(HEROES, SITE / "heroes", ignore=shutil.ignore_patterns("deps.json", "models"))

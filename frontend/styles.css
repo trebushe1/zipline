@@ -425,6 +425,7 @@ ins { text-decoration: none; background: var(--green-wash); color: var(--accent)
 .delta.up { color: var(--accent); }
 .delta.down { color: var(--danger); }
 
+.live-bar { width: 100%; margin: 0 0 18px; position: sticky; top: 8px; z-index: 5; }
 .build-media { margin-left: auto; font-family: var(--mono); font-size: 10px; font-weight: 800; padding: 1px 5px; background: var(--slab); color: #fff; white-space: nowrap; }
 .build-media + .build-when { margin-left: 0; }
 .media-hint {
