@@ -22,8 +22,8 @@ jobs:
     timeout-minutes: 90
     env:
       GH_TOKEN: ${{ github.token }}
-      GAMETRACKING_DIR: ${{ runner.temp }}/gametracking
-      MEDIA_TOOLS_DIR: ${{ runner.temp }}/tools
+      GAMETRACKING_DIR: /tmp/zipline/gametracking
+      MEDIA_TOOLS_DIR: /tmp/zipline/tools
       STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
       STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -38,7 +38,7 @@ jobs:
       # SteamDB's prebuilt SteamFileDownloader and Source2Viewer-CLI (~140 MB), kept between runs.
       - uses: actions/cache@v4
         with:
-          path: ${{ runner.temp }}/tools
+          path: /tmp/zipline/tools
           key: steam-tools-v1
 
       - run: pip install -q pillow httpx
