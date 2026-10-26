@@ -26,6 +26,17 @@
    "animations": 84
   },
   {
+   "key": "baba",
+   "id": 88,
+   "name": "Baba",
+   "icon": "baba.webp",
+   "hash": "c73a625dd95e",
+   "file": "baba-c73a625dd95e.glb",
+   "anims": "baba-c73a625dd95e.anim",
+   "bytes": 5163740,
+   "animations": 93
+  },
+  {
    "key": "bebop",
    "id": 15,
    "name": "Bebop",
@@ -409,6 +420,17 @@
    "anims": "hornet-2cb8321d5345.anim",
    "bytes": 2626950,
    "animations": 40
+  },
+  {
+   "key": "artist",
+   "id": 86,
+   "name": "Violet",
+   "icon": "artist.webp",
+   "hash": "cf5a65a45985",
+   "file": "artist-cf5a65a45985.glb",
+   "anims": "artist-cf5a65a45985.anim",
+   "bytes": 6147406,
+   "animations": 82
   },
   {
    "key": "viscous",
