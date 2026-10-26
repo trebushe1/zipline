@@ -39,7 +39,7 @@ const FILTER_NAME = Object.fromEntries(FILTER_GROUPS.flatMap(([, list]) => list)
 const state = {
   index: null, items: [], byKey: new Map(), upgrades: new Map(), heroes: [], heroByKey: new Map(),
   tab: "all", q: "", sort: "tier", lang: "ru", filters: new Set(), mode: "or", quick: new Set(), legendary: true,
-  builds: [], editing: null, target: null, zipSize: 500,
+  builds: [], editing: null, target: null, view: null, zipSize: 500,
 };
 
 function plural(n, one, few, many) {
@@ -606,9 +606,10 @@ function catCost(cat) {
 const AP_COST = [0, 1, 2, 5]; // an upgrade's price in ability points (the unlock is a separate currency)
 const LEVEL_MARK = ["", "откр.", "I", "II", "III"];
 
-function abilityHtml(b) {
+function abilityHtml(b, readOnly = false) {
   const hero = state.heroByKey.get(b.hero);
   if (!hero?.abilities?.length) {
+    if (readOnly) return "";
     return `<section class="be-ab"><span class="ctl-label">Порядок прокачки способностей</span><p class="be-hint">Выберите героя — появятся его способности.</p></section>`;
   }
   const abilities = [...hero.abilities].sort((x, y) => x.slot - y.slot);
@@ -627,20 +628,20 @@ function abilityHtml(b) {
         <span class="ctl-label">Порядок прокачки</span>
         <span class="be-ab-points">${plural(points, "очко", "очка", "очков")} способностей</span>
       </div>
-      <div class="ab-pick">
+      ${readOnly ? "" : `<div class="ab-pick">
         ${abilities.map((a) => `
           <button type="button" class="ab-btn" data-ab="${a.slot}" ${levels[a.slot] >= 4 ? "disabled" : ""} title="${escapeHtml(a.name)}: следующий шаг — ${levels[a.slot] ? `улучшение ${LEVEL_MARK[levels[a.slot] + 1]} (${AP_COST[levels[a.slot]]} очк.)` : "открыть"}">
             <img src="heroes/abilities/${a.icon}" alt="">
             <span class="ab-slot">${a.slot === 4 ? "ульт" : a.slot}</span>
             <span class="ab-pips">${[1, 2, 3, 4].map((n) => `<i class="${n <= levels[a.slot] ? "on" : ""}"></i>`).join("")}</span>
           </button>`).join("")}
-      </div>
+      </div>`}
       ${steps.length ? `
         <ol class="ab-seq">
           ${steps.map((s, i) => `<li title="${escapeHtml(bySlot[s.slot]?.name || "")}: ${LEVEL_MARK[s.level]}"><b>${i + 1}</b><img src="heroes/abilities/${bySlot[s.slot]?.icon}" alt=""><i>${LEVEL_MARK[s.level]}</i></li>`).join("")}
         </ol>
-        <div class="be-ab-actions"><button class="link-btn" type="button" data-act="ab-undo">Убрать последний шаг</button><button class="link-btn" type="button" data-act="ab-clear">Очистить</button></div>`
-        : `<p class="be-hint">Нажимайте на способности по порядку: первый клик открывает способность, следующие — улучшения за 1, 2 и 5 очков.</p>`}
+        ${readOnly ? "" : `<div class="be-ab-actions"><button class="link-btn" type="button" data-act="ab-undo">Убрать последний шаг</button><button class="link-btn" type="button" data-act="ab-clear">Очистить</button></div>`}`
+        : readOnly ? "" : `<p class="be-hint">Нажимайте на способности по порядку: первый клик открывает способность, следующие — улучшения за 1, 2 и 5 очков.</p>`}
     </section>`;
 }
 
@@ -895,7 +896,7 @@ function renderBuildCards() {
         </div>
         <div class="bcard-actions">
           <button class="btn" type="button" data-build-act="edit">${b.id === state.editing ? "Открыт" : "Открыть"}</button>
-          <button class="link-btn" type="button" data-build-act="share">Ссылка</button>
+          <span class="bcard-links"><button class="link-btn" type="button" data-build-act="view">На всю страницу</button><button class="link-btn" type="button" data-build-act="share">Ссылка</button></span>
         </div>
       </li>`;
   }).join("");
@@ -997,16 +998,101 @@ async function importFromHash() {
   const m = location.hash.match(/^#b=([zj][\w-]+)$/);
   if (!m) return false;
   try {
-    const b = newBuild(await unpackBuild(m[1]));
-    saveBuilds();
-    history.replaceState(null, "", location.pathname);
-    openEditor(b.id);
-    toast("Билд по ссылке сохранён в «Мои билды»");
+    openView(await unpackBuild(m[1]), true);
   } catch (err) {
     console.error(err);
     toast("Ссылка на билд повреждена");
   }
   return true;
+}
+
+// ── Builds: the whole page for one build ───────────────
+// A shared link opens here, read-only; "Save" copies it into the visitor's own builds.
+function viewItemHtml(entry) {
+  const it = state.byKey.get(entry.k);
+  if (!it) return `<li class="vi-wrap"><span class="vi-missing" title="${escapeHtml(entry.k)}">Предмета больше нет в игре</span></li>`;
+  const url = thumbUrl(it);
+  return `
+    <li class="vi-wrap">
+      <button class="item vi" type="button" data-key="${it.key}" data-slot="${it.slot}">
+        <span class="item-art">${url ? `<img src="${url}" alt="" loading="lazy">` : ""}</span>
+        <span class="item-name">${escapeHtml(nameOf(it))}</span>
+        ${it.active ? `<span class="item-active">${it.active === "toggle" ? "вкл" : "акт"}</span>` : ""}
+        <span class="item-cost">${SOUL}${souls(it.cost)}</span>
+      </button>
+      ${entry.note ? `<p class="vi-note">${escapeHtml(entry.note)}</p>` : ""}
+    </li>`;
+}
+
+function viewHtml(b, shared) {
+  const hero = state.heroByKey.get(b.hero);
+  const cost = buildCost(b);
+  return `
+    <header class="bv-head">
+      ${hero?.icon ? `<figure class="bv-hero"><img src="heroes/icons/${hero.icon}" alt="${escapeHtml(hero.name)}"></figure>` : ""}
+      <div class="bv-title">
+        <p class="eyebrow">${shared ? "Билд по ссылке" : "Мой билд"}${hero ? ` · ${escapeHtml(hero.name)}` : ""}</p>
+        <h1><span class="tag tag-ink">${escapeHtml(b.name)}</span></h1>
+        ${b.desc ? `<p class="lede bv-desc">${escapeHtml(b.desc)}</p>` : ""}
+        <div class="bv-sum">
+          <div class="bv-total"><b>${SOUL}${souls(cost.total)}</b><span>${plural(cost.count, "предмет", "предмета", "предметов")}</span></div>
+          ${SLOT_ORDER.map((s) => cost.bySlot[s] ? `<div class="bv-slot" data-slot="${s}"><i></i><span>${SLOTS[s].name}</span><b>${souls(cost.bySlot[s])}</b></div>` : "").join("")}
+        </div>
+        <div class="bv-actions">
+          ${shared ? `<button class="btn export-btn" type="button" data-view="save">Сохранить себе и редактировать</button>`
+            : `<button class="btn export-btn" type="button" data-view="edit">Редактировать</button>`}
+          <button class="btn" type="button" data-view="share">Скопировать ссылку</button>
+          <button class="btn" type="button" data-view="close">К магазину</button>
+        </div>
+      </div>
+    </header>
+    <div class="bv-cats">
+      ${b.cats.filter((c) => c.items.length || c.desc).map((c) => `
+        <section class="panel bv-cat">
+          <header class="bv-cat-head"><h2>${escapeHtml(c.name)}</h2><span class="bv-cat-cost">${SOUL}${souls(catCost(c))}</span></header>
+          ${c.desc ? `<p class="bv-cat-desc">${escapeHtml(c.desc)}</p>` : ""}
+          <ul class="bv-items">${c.items.map(viewItemHtml).join("")}</ul>
+        </section>`).join("") || `<p class="empty">В этом билде пока нет предметов.</p>`}
+    </div>
+    ${b.ab?.length && hero ? `<section class="panel bv-ab">${abilityHtml(b, true)}</section>` : ""}`;
+}
+
+function openView(b, shared) {
+  closeEditor();
+  state.view = { build: b, shared };
+  const view = $("#build-view");
+  view.innerHTML = viewHtml(b, shared);
+  view.hidden = false;
+  document.body.classList.add("viewing");
+  document.title = `${b.name} — билд Deadlock · zipline`;
+  scrollTo(0, 0);
+}
+
+function closeView() {
+  if (!state.view) return;
+  state.view = null;
+  $("#build-view").hidden = true;
+  $("#build-view").innerHTML = "";
+  document.body.classList.remove("viewing");
+  document.title = "zipline — магазин и билды Deadlock";
+  if (location.hash.startsWith("#b=")) history.replaceState(null, "", location.pathname);
+}
+
+function viewAction(act) {
+  const { build: b, shared } = state.view || {};
+  if (!b) return;
+  if (act === "share") return shareBuild(b);
+  if (act === "close") return closeView();
+  closeView();
+  if (act === "save") {
+    const copy = newBuild(b);
+    saveBuilds();
+    openEditor(copy.id);
+    toast("Билд сохранён в «Мои билды»");
+  } else if (act === "edit" && !shared) {
+    openEditor(b.id);
+  }
+  $("#shop-layout").scrollIntoView({ block: "start" });
 }
 
 // ── Drag and drop ──────────────────────────────────────
@@ -1213,6 +1299,22 @@ function wireEvents() {
     setTimeout(() => $(".be-name")?.select(), 50);
   });
   $("#build-close").addEventListener("click", closeEditor);
+  $("#build-full").addEventListener("click", () => currentBuild() && openView(currentBuild(), false));
+  const view = $("#build-view");
+  view.addEventListener("click", (e) => {
+    const act = e.target.closest("[data-view]");
+    if (act) return viewAction(act.dataset.view);
+    const item = e.target.closest(".vi");
+    if (item) openItem(item.dataset.key, false);
+  });
+  view.addEventListener("pointerover", (e) => {
+    const item = e.target.closest(".vi");
+    if (item && e.pointerType === "mouse") showTip(item);
+  });
+  view.addEventListener("pointerout", (e) => {
+    const item = e.target.closest(".vi");
+    if (item && !item.contains(e.relatedTarget)) hideTip();
+  });
   $("#build-share").addEventListener("click", () => currentBuild() && shareBuild(currentBuild()));
   $("#build-export").addEventListener("click", () => currentBuild() && exportBuild(currentBuild()));
   $("#build-fab").addEventListener("click", () => $("#build-panel").scrollIntoView({ behavior: "smooth", block: "start" }));
@@ -1317,6 +1419,7 @@ function wireEvents() {
     const b = state.builds.find((x) => x.id === card.dataset.build);
     if (!b) return;
     if (btn?.dataset.buildAct === "share") return shareBuild(b);
+    if (btn?.dataset.buildAct === "view") return openView(b, false);
     openEditor(b.id);
     $("#shop-layout").scrollIntoView({ behavior: "smooth", block: "start" });
   });
@@ -1334,6 +1437,7 @@ function wireEvents() {
   });
   addEventListener("hashchange", async () => {
     if (await importFromHash()) return;
+    if (!location.hash.startsWith("#item=")) closeView();
     const m = location.hash.match(/^#item=(\w+)$/);
     if (m) openItem(m[1], false);
   });
