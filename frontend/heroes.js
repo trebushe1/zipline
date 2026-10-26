@@ -658,3 +658,4 @@ init().catch((err) => {
   console.error(err);
   $("#roster").innerHTML = `<li class="empty pad">Не удалось загрузить список героев. Обновите страницу чуть позже.</li>`;
 });
+if (location.search.includes("debug")) window.__viewer = viewer; // TEMP
