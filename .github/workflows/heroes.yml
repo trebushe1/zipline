@@ -1,0 +1,74 @@
+name: Hero models
+
+# Converts the 3D models (with animations) and icons of every playable hero for the «Герои» page.
+# Only heroes whose game files changed are converted again; models go to the «heroes» release.
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Only these heroes (comma separated keys, e.g. atlas,haze)"
+        required: false
+      raw:
+        description: "Debug: upload the raw game files of this hero as a workflow artifact instead"
+        required: false
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: heroes
+  cancel-in-progress: false
+
+jobs:
+  heroes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GAMETRACKING_DIR: ${{ runner.temp }}/gametracking
+      MEDIA_TOOLS_DIR: ${{ runner.temp }}/tools
+      STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+      STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+      HEROES_ONLY: ${{ inputs.only }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -q pillow
+
+      - name: Raw files (debug)
+        if: inputs.raw != ''
+        run: |
+          python -m backend.heroes --raw "$RUNNER_TEMP/raw" "${{ inputs.raw }}"
+          cd "$RUNNER_TEMP/raw" && tar czf "$RUNNER_TEMP/raw.tgz" root-*
+
+      - uses: actions/upload-artifact@v4
+        if: inputs.raw != ''
+        with:
+          name: raw-${{ inputs.raw }}
+          path: ${{ runner.temp }}/raw.tgz
+          retention-days: 1
+
+      - name: Convert heroes
+        if: inputs.raw == ''
+        run: python -m backend.heroes
+
+      - name: Publish
+        if: inputs.raw == ''
+        run: |
+          git add data/heroes
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "zipline-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -q -m "data: hero models"
+          for i in 1 2 3; do
+            git pull --rebase -q && git push -q && break
+            sleep 5
+          done
+          gh workflow run deploy.yml -R "$GITHUB_REPOSITORY"
