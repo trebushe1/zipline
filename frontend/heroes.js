@@ -139,6 +139,22 @@ function keepInPlace() {
   anchor.position.set(rootStart.x - p.x, 0, rootStart.z - p.z);
 }
 
+// The body and what touches it: some models also carry ability props parked at the origin, away from the
+// hero, which would shrink the hero to a speck if the camera framed them too.
+function bodyBox(root) {
+  const { THREE } = viewer;
+  const parts = [];
+  root.traverse((o) => {
+    if (o.isMesh) parts.push({ box: new THREE.Box3().setFromObject(o, true), size: o.geometry.attributes.position.count });
+  });
+  if (!parts.length) return new THREE.Box3().setFromObject(root, true);
+  parts.sort((a, b) => b.size - a.size);
+  const box = parts[0].box.clone();
+  const reach = box.clone().expandByScalar(box.getSize(new THREE.Vector3()).length() * 0.1);
+  for (const p of parts.slice(1)) if (reach.intersectsBox(p.box)) box.union(p.box);
+  return box;
+}
+
 function frameModel() {
   const { THREE, camera, controls, frameBox } = viewer;
   if (!frameBox) return;
@@ -216,7 +232,7 @@ async function loadModel(hero) {
   viewer.mixer.update(0);
   keepInPlace();
   anchor.updateMatrixWorld(true);
-  viewer.frameBox = new THREE.Box3().setFromObject(anchor, true);
+  viewer.frameBox = bodyBox(anchor);
   frameModel();
   setStatus("");
   $("#viewer-meta").textContent = viewer.clips.length ? plural(viewer.clips.length, "анимация", "анимации", "анимаций") : "без анимаций";
