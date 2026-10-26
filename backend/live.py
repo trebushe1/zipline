@@ -6,7 +6,8 @@ index. Threads of those channels where developers posted recently are read every
 few ticks, and a guild search every SEARCH_SECONDS catches new threads.
 New messages go to Telegram and Firebase (open pages update instantly) right
 away; the archive is then committed and the site redeployed (only when running
-in GitHub Actions with PUBLISH=1).
+in GitHub Actions with PUBLISH=1). Alongside, backend/reddit.py keeps the Reddit
+page's feed fresh in Firebase.
 
     python -m backend.live
 """
@@ -19,7 +20,7 @@ import time
 import httpx
 
 from . import static_build  # sets up the temporary database; must come first
-from . import config, db, realtime, telegram, translate
+from . import config, db, realtime, reddit, telegram, translate
 from .discord_collector import DiscordCollector, avatar_url, normalize
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
@@ -124,6 +125,11 @@ async def main() -> None:
     publish_task: asyncio.Task | None = None
     log.info("live collector started: fast=%ss search=%ss telegram=%s firebase=%s",
              config.FAST_SECONDS, config.SEARCH_SECONDS, telegram.enabled(), live_site.enabled)
+
+    # Reddit runs on its own clock (one request a minute without API keys); its failures stay its own.
+    reddit_feed = reddit.Feed(tg)
+    await reddit_feed.load(live_site)
+    reddit_task = asyncio.create_task(reddit.run(reddit_feed, live_site, deadline))
 
     async def notify_telegram(rows: list[dict]) -> None:
         for row in sorted(rows, key=lambda r: r["time"]):
@@ -256,6 +262,14 @@ async def main() -> None:
 
             await asyncio.sleep(max(0.5, config.FAST_SECONDS - (time.time() - started)))
     finally:
+        if not reddit_task.done() and time.time() < deadline:
+            reddit_task.cancel()  # stopped early: no need to finish the current wait
+        try:
+            await reddit_task
+        except asyncio.CancelledError:
+            pass
+        except Exception:
+            log.exception("reddit collector failed")
         if publish_task:
             await publish_task
         if unpublished:

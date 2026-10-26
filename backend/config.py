@@ -52,6 +52,13 @@ TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 # Public address of the site, for links in notifications.
 SITE_URL = os.environ.get("SITE_URL", "https://trebushe1.github.io/zipline/").rstrip("/") + "/"
 
+# Reddit page (backend/reddit.py). With API keys the scores come from the official API,
+# without them from the public RSS feeds (one request a minute, no scores).
+REDDIT_SUBREDDIT = os.environ.get("REDDIT_SUBREDDIT", "DeadlockTheGame")
+REDDIT_CLIENT_ID = os.environ.get("REDDIT_CLIENT_ID", "")
+REDDIT_CLIENT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET", "")
+REDDIT_USER_AGENT = os.environ.get("REDDIT_USER_AGENT", f"web:zipline:1.0 (+{SITE_URL})")
+
 # Firebase Realtime Database: the live collector pushes the newest messages there and
 # open pages receive them instantly. The URL is public; the service account JSON is secret.
 FIREBASE_DB_URL = os.environ.get("FIREBASE_DB_URL", "").rstrip("/")

@@ -19,7 +19,9 @@ from pathlib import Path
 # Work on a temporary database; the JSON archive is the source of truth here.
 os.environ.setdefault("ZIPLINE_DB", str(Path(tempfile.mkdtemp()) / "zipline.db"))
 
-from . import config, db  # noqa: E402
+import httpx  # noqa: E402
+
+from . import config, db, reddit  # noqa: E402
 from .discord_collector import DiscordCollector  # noqa: E402
 
 ARCHIVE = config.ROOT / "data" / "archive.json"
@@ -97,6 +99,8 @@ def export(last_poll: dict) -> None:
     bust_cache(SITE / "index.html", ("styles.css", "app.js"))
     bust_cache(SITE / "changes.html", ("styles.css", "changes.js"))
     bust_cache(SITE / "heroes.html", ("styles.css", "heroes.js"))
+    bust_cache(SITE / "reddit.html", ("styles.css", "reddit.js"))
+    (SITE / "reddit.json").write_text(json.dumps(reddit_snapshot(), ensure_ascii=False), encoding="utf-8")
     if PATCHES.exists():
         shutil.copytree(PATCHES, SITE / "patches")
     if HEROES.exists():
@@ -109,6 +113,25 @@ def export(last_poll: dict) -> None:
         {"generatedAt": int(time.time() * 1000), "status": status,
          "developers": devs, "messages": messages}, ensure_ascii=False), encoding="utf-8")
     (SITE / ".nojekyll").touch()
+
+
+def reddit_snapshot() -> dict:
+    """The Reddit page's data as of the build; open pages then refresh it from Firebase.
+
+    The live collector keeps data/reddit.json on its runner; a plain deploy has only Firebase.
+    """
+    snapshots = []
+    if reddit.FILE.exists():
+        snapshots.append(json.loads(reddit.FILE.read_text(encoding="utf-8")))
+    if config.FIREBASE_DB_URL:
+        try:
+            resp = httpx.get(f"{config.FIREBASE_DB_URL}/{reddit.PAGE_PATH}.json", timeout=20)
+            if resp.status_code == 200 and resp.json():
+                snapshots.append(resp.json())
+        except httpx.HTTPError as exc:
+            print(f"::warning::Reddit snapshot from Firebase failed: {exc}")
+    newest = max(snapshots, key=lambda s: s.get("updatedAt", 0), default={"posts": []})
+    return reddit.page(newest) | {"realtimeUrl": config.FIREBASE_DB_URL or None}
 
 
 def bust_cache(page: Path, assets: tuple[str, ...]) -> None:

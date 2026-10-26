@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Header, HTTPException, Query
 from fastapi.staticfiles import StaticFiles
 
-from . import config, db, demo
+from . import config, db, demo, reddit
 from .discord_collector import DiscordCollector, avatar_url, normalize
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
@@ -169,6 +169,13 @@ def ingest(payload: dict, x_ingest_secret: str = Header("")):
         if new and db.kv_get(conn, "demo"):
             db.purge_demo(conn)
     return {"accepted": new}
+
+
+@app.get("/reddit.json")
+def reddit_feed():
+    """The Reddit page's data, kept fresh locally by `python -m backend.reddit`."""
+    state = json.loads(reddit.FILE.read_text(encoding="utf-8")) if reddit.FILE.exists() else {"posts": []}
+    return reddit.page(state) | {"realtimeUrl": None}
 
 
 # Patch summaries written by `python -m backend.patches`; the static build copies them the same way.

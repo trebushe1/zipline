@@ -38,14 +38,25 @@ class Realtime:
 
     async def push(self, client: httpx.AsyncClient, messages: list[dict]) -> None:
         """Replaces /live/latest with the given messages (newest first)."""
+        await self.put(client, "live/latest", {"updatedAt": int(time.time() * 1000), "messages": messages[:LATEST]})
+
+    async def put(self, client: httpx.AsyncClient, path: str, data) -> None:
         try:
-            resp = await client.put(
-                f"{config.FIREBASE_DB_URL}/live/latest.json",
-                headers={"Authorization": f"Bearer {await self._token()}"},
-                json={"updatedAt": int(time.time() * 1000), "messages": messages[:LATEST]},
-                timeout=15,
-            )
+            resp = await client.put(f"{config.FIREBASE_DB_URL}/{path}.json",
+                                    headers={"Authorization": f"Bearer {await self._token()}"},
+                                    json=data, timeout=30)
             if resp.status_code != 200:
-                log.error("firebase push failed: %s %s", resp.status_code, resp.text[:200])
+                log.error("firebase put %s failed: %s %s", path, resp.status_code, resp.text[:200])
         except Exception:
-            log.exception("firebase push failed")
+            log.exception("firebase put %s failed", path)
+
+    async def get(self, client: httpx.AsyncClient, path: str):
+        """Reads any path (the service account is not bound by the public read rules)."""
+        try:
+            resp = await client.get(f"{config.FIREBASE_DB_URL}/{path}.json",
+                                    headers={"Authorization": f"Bearer {await self._token()}"}, timeout=30)
+            resp.raise_for_status()
+            return resp.json()
+        except Exception:
+            log.exception("firebase get %s failed", path)
+            return None

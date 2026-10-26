@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>zipline — пульс Reddit по Deadlock</title>
+  <meta name="description" content="zipline: самое заметное из r/DeadlockTheGame — свежие посты, которые набирают голоса и комментарии быстрее остальных.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/icon.png" type="image/png">
+  <meta name="theme-color" content="#ebebe9">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Pick the theme before first paint: saved choice, else the system setting.
+    (() => {
+      let t;
+      try { t = localStorage.getItem("theme"); } catch {}
+      document.documentElement.dataset.theme = t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    })();
+  </script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="./" aria-label="zipline — на главную">
+        <img class="brand-logo day" src="assets/logo.png" alt="Zipline" width="560" height="263">
+        <img class="brand-logo night" src="assets/logo-white.png" alt="Zipline" width="420" height="151">
+        <span class="brand-tag">Deadlock<br>новости и разведка</span>
+      </a>
+      <div class="masthead-end">
+        <nav class="nav" aria-label="Разделы">
+          <a class="nav-link" href="./">Разработчики</a>
+          <a class="nav-link" href="changes.html">Изменения</a>
+          <a class="nav-link" href="heroes.html">Герои</a>
+          <a class="nav-link active" href="reddit.html" aria-current="page">Reddit</a>
+          <span class="nav-link soon" title="Скоро">Статистика</span>
+        </nav>
+        <button class="theme-toggle" id="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Ночная тема">
+          <span class="t-day"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2"/></svg>День</span>
+          <span class="t-night"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="currentColor"/></svg>Ночь</span>
+        </button>
+      </div>
+    </div>
+    <div class="cable" aria-hidden="true"><span class="cable-rider"></span></div>
+  </header>
+
+  <main class="wrap">
+    <section class="page-title">
+      <div class="title-copy">
+        <p class="eyebrow">Reddit · r/DeadlockTheGame</p>
+        <h1>
+          <span class="tag tag-ink">Пульс</span>
+          <span class="tag tag-paper">Reddit</span>
+        </h1>
+        <p class="lede">Самое заметное из сабреддита Deadlock. Наверху — свежие посты, которые набирают голоса и комментарии быстрее своих ровесников. Лента обновляется каждую минуту.</p>
+      </div>
+      <figure class="title-art" aria-hidden="true">
+        <img src="assets/avatar.jpg" alt="" width="640" height="640">
+      </figure>
+    </section>
+
+    <section class="stats" aria-label="Сводка">
+      <div class="stat"><span class="stat-label">Постов за 24 часа</span><span class="stat-value" id="stat-day">—</span></div>
+      <div class="stat"><span class="stat-label">Взлетают сейчас</span><span class="stat-value" id="stat-rising">—</span></div>
+      <div class="stat"><span class="stat-label">Главный пост</span><span class="stat-value stat-name" id="stat-top">—</span></div>
+      <div class="stat"><span class="stat-label">Обновлено</span><span class="stat-value stat-name" id="stat-updated">—</span></div>
+      <div class="stat stat-spark">
+        <span class="stat-label">Посты по часам · 24 ч</span>
+        <div class="spark" id="spark" role="img" aria-label="Новые посты по часам за сутки"></div>
+      </div>
+    </section>
+
+    <section class="panel reddit-feed" aria-label="Посты Reddit">
+      <form class="feed-tools" id="filters" role="search">
+        <div class="tools-row">
+          <div class="tabs" role="tablist" aria-label="Порядок">
+            <button type="button" role="tab" data-tab="pulse" aria-selected="true">Пульс</button>
+            <button type="button" role="tab" data-tab="rising" aria-selected="false">Взлетают <b id="rising-count"></b></button>
+            <button type="button" role="tab" data-tab="new" aria-selected="false">Новые</button>
+            <button type="button" role="tab" data-tab="top" aria-selected="false">Топ 24 ч</button>
+          </div>
+          <button class="link-btn" id="help-toggle" type="button" aria-expanded="false" aria-controls="pulse-help">Как считается пульс?</button>
+        </div>
+        <div class="pulse-help" id="pulse-help" hidden></div>
+        <div class="tools-row">
+          <div class="topics" id="topics" aria-label="Тема">
+            <button type="button" data-topic="" aria-pressed="true">Все</button>
+            <button type="button" data-topic="news" aria-pressed="false">Новости</button>
+            <button type="button" data-topic="clip" aria-pressed="false">Клипы</button>
+            <button type="button" data-topic="art" aria-pressed="false">Арт</button>
+            <button type="button" data-topic="talk" aria-pressed="false">Обсуждения</button>
+            <button type="button" data-topic="other" aria-pressed="false">Картинки и ссылки</button>
+          </div>
+          <label class="search reddit-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5 L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input type="search" id="q" placeholder="Поиск по постам…" autocomplete="off">
+          </label>
+        </div>
+      </form>
+      <button class="new-bar" id="new-bar" type="button" hidden></button>
+      <ol class="rposts" id="posts" aria-live="polite">
+        <li class="skeleton"></li><li class="skeleton"></li><li class="skeleton"></li>
+      </ol>
+      <div class="feed-foot">
+        <button class="btn" id="more" type="button" hidden>Показать ещё</button>
+        <p class="empty" id="empty" hidden>Ничего не найдено. Попробуйте другую вкладку или тему.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <img class="footer-logo" src="assets/logo-white.png" alt="Zipline" width="420" height="151">
+      <span id="source-status" class="collector-status">—</span>
+      <span class="handle">@zipline</span>
+    </div>
+  </footer>
+
+  <dialog class="media-dialog rviewer" id="viewer" aria-label="Просмотр поста"></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="reddit.js" type="module"></script>
+</body>
+</html>
