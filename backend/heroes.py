@@ -30,7 +30,7 @@ from pathlib import Path
 
 from . import config
 from .media import TOOLS, SteamFiles, game_root, gh, log, manifest_id, references, tool_paths
-from .patches import HEROES_VDATA, PAK_LIST, REPO, build_commits, load_loc, show, sync_repo
+from .patches import GAME, HEROES_VDATA, PAK_LIST, REPO, build_commits, load_loc, show, sync_repo
 
 OUT = config.ROOT / "data" / "heroes"
 HEROES_TAG = "heroes"
@@ -63,10 +63,32 @@ def resource(value: str | None) -> str | None:
     return m[1] if m else None
 
 
+ABILITIES_VDATA = f"{GAME}/pak01_dir/scripts/abilities.vdata"
+SIGNATURE_SLOT = re.compile(r'ESlot_Signature_(\d) = "(\w+)"')
+ABILITY_BLOCK = re.compile(r"^\t(\w+) = $", re.M)
+
+
+def panorama_path(value: str | None) -> str | None:
+    """panorama:"file://{images}/hud/abilities/bull_charge.psd" → panorama/images/hud/abilities/bull_charge_psd.vtex_c"""
+    path = resource(value)
+    return re.sub(r"^file://\{images\}/", "panorama/images/", path).replace(".", "_") + ".vtex_c" if path else None
+
+
+def ability_images(sha: str) -> dict[str, str]:
+    text = show(sha, ABILITIES_VDATA)
+    starts = [(m.start(), m[1]) for m in ABILITY_BLOCK.finditer(text)]
+    images = {}
+    for i, (pos, key) in enumerate(starts):
+        block = text[pos:starts[i + 1][0] if i + 1 < len(starts) else len(text)]
+        if image := panorama_path(field(block, "m_strAbilityImage")):
+            images[key] = image
+    return images
+
+
 def hero_list(sha: str) -> list[dict]:
     """Playable heroes in the build: not disabled, with a model and a card. «In development» is no filter:
     released heroes such as Violet and Baba still carry that flag."""
-    text, loc = show(sha, HEROES_VDATA), load_loc(sha)
+    text, loc, images = show(sha, HEROES_VDATA), load_loc(sha), ability_images(sha)
     starts = [(m.start(), m[1]) for m in HERO_BLOCK.finditer(text)]
     heroes = []
     for i, (pos, key) in enumerate(starts):
@@ -81,7 +103,10 @@ def hero_list(sha: str) -> list[dict]:
             "name": loc.get(f"{key}:n") or key[5:].capitalize(),
             "model": model + "_c",
             # file://{images}/heroes/bull_card.psd → panorama/images/heroes/bull_card_psd.vtex_c
-            "card": re.sub(r"^file://\{images\}/", "panorama/images/", card).replace(".", "_") + ".vtex_c",
+            "card": panorama_path(f'"{card}"'),
+            # The four abilities on the hero's bar, in slot order (the last one is the ultimate).
+            "abilities": [{"key": a, "slot": int(n), "name": loc.get(a) or a, "image": images[a]}
+                          for n, a in sorted(SIGNATURE_SLOT.findall(block)) if a in images],
         })
     return sorted(heroes, key=lambda h: h["name"].lower())
 
@@ -561,6 +586,23 @@ def pack(doc: dict, binary: bytes, folder: Path) -> bytes:
     return write_glb(doc, bytes(new_bin))
 
 
+def convert_ability_icon(vrf: str, citadel: Path, path: str, tmp: Path) -> bytes | None:
+    """The game's own icon, lossless at its own size: the page scales it to the size asked for."""
+    src = citadel / path
+    if not src.exists():
+        return None
+    tmp.mkdir(parents=True, exist_ok=True)
+    subprocess.run([vrf, "-i", str(src), "-o", str(tmp / "icon.png"), "-d"], capture_output=True, text=True)
+    pngs = sorted(tmp.rglob("*.png"))
+    if not pngs:
+        return None
+    from PIL import Image
+    with Image.open(pngs[0]) as img:
+        buf = io.BytesIO()
+        img.convert("RGBA").save(buf, "PNG", optimize=True)
+    return buf.getvalue()
+
+
 def convert_icon(vrf: str, citadel: Path, path: str, tmp: Path) -> bytes | None:
     src = citadel / path
     if not src.exists():
@@ -612,8 +654,14 @@ def main() -> int:
         todo = [h for h in heroes if h["key"] in only.split(",")]
     todo = todo[:int(os.environ.get("HEROES_PER_RUN", "0")) or len(todo)]
     log(f"build {build['build']}: {len(heroes)} heroes, {len(todo)} to convert")
+    # Ability icons are converted on their own: they change more often than the models.
+    (OUT / "abilities").mkdir(parents=True, exist_ok=True)
+    icon_crcs = deps.setdefault("_abilities", {})
+    icons = [a for h in heroes for a in h["abilities"]
+             if icon_crcs.get(a["key"]) != crcs.get(a["image"]) or not (OUT / "abilities" / f"{a['key']}.png").exists()]
+    log(f"{len(icons)} ability icons to convert")
 
-    if todo:
+    if todo or icons:
         manifest = manifest_id(build["sha"])
         sfd, vrf = tool_paths()[0], vrf_path()
         work = Path(tempfile.mkdtemp(prefix="heroes-"))
@@ -621,8 +669,13 @@ def main() -> int:
             files = SteamFiles(sfd, work, [manifest])
             # Each SteamFileDownloader call is a Steam login: fetch every hero together, level by level.
             fetch_all(files, {h["model"] for h in todo} | {h["card"] for h in todo}
-                      | {p for h in todo for p in clip_paths(h["model"], crcs)})
+                      | {p for h in todo for p in clip_paths(h["model"], crcs)} | {a["image"] for a in icons})
             citadel = game_root(files, manifest, build["sha"], work)
+            for a in icons:
+                png = convert_ability_icon(vrf, citadel, a["image"], work / "tmp" / f"ability-{a['key']}")
+                if png:
+                    (OUT / "abilities" / f"{a['key']}.png").write_bytes(png)
+                    icon_crcs[a["key"]] = crcs.get(a["image"])
             existing = {a["name"] for a in json.loads(gh("release", "view", HEROES_TAG, "--json", "assets").stdout)["assets"]} \
                 if gh("release", "view", HEROES_TAG, check=False).returncode == 0 else None
             if existing is None:
@@ -681,6 +734,8 @@ def write_index(index_path: Path, deps_path: Path, build: dict, heroes: list[dic
         entry = {"key": h["key"], "id": h["id"], "name": h["name"]}
         if (OUT / "icons" / f"{h['key']}.webp").exists():
             entry["icon"] = f"{h['key']}.webp"
+        entry["abilities"] = [{"key": a["key"], "slot": a["slot"], "name": a["name"], "icon": f"{a['key']}.png"}
+                              for a in h["abilities"] if (OUT / "abilities" / f"{a['key']}.png").exists()]
         entry |= made.get(h["key"], {})
         index["heroes"].append(entry)
     index_path.write_text(json.dumps(index, ensure_ascii=False, indent=1) + "\n", "utf-8")
