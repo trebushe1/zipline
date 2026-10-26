@@ -176,8 +176,8 @@
    "hash": "7612057f4fdf",
    "file": "kelvin-7612057f4fdf.glb",
    "anims": "kelvin-7612057f4fdf.anim",
-   "bytes": 2339575,
-   "animations": 0
+   "bytes": 2695467,
+   "animations": 49
   },
   {
    "key": "ghost",
@@ -352,8 +352,8 @@
    "hash": "e48723c22ec4",
    "file": "magician-e48723c22ec4.glb",
    "anims": "magician-e48723c22ec4.anim",
-   "bytes": 730951,
-   "animations": 0
+   "bytes": 1657612,
+   "animations": 41
   },
   {
    "key": "chessmaster",
@@ -418,8 +418,8 @@
    "hash": "cbad5c510078",
    "file": "viscous-cbad5c510078.glb",
    "anims": "viscous-cbad5c510078.anim",
-   "bytes": 915560,
-   "animations": 3
+   "bytes": 1239469,
+   "animations": 49
   },
   {
    "key": "viper",
@@ -440,8 +440,8 @@
    "hash": "d90978249dbe",
    "file": "warden-d90978249dbe.glb",
    "anims": "warden-d90978249dbe.anim",
-   "bytes": 1423507,
-   "animations": 0
+   "bytes": 4745987,
+   "animations": 46
   },
   {
    "key": "wraith",
