@@ -222,14 +222,14 @@ function hideStrays() {
     }
   });
   if (points.length < 100) return;
-  // The bulk: 3rd to 97th percentile on each axis, with a quarter of its size as margin.
+  // The bulk: 10th to 90th percentile on each axis, with 60% of its size as margin.
   const lo = [], hi = [];
   for (let a = 0; a < 3; a++) {
     const sorted = points.map((p) => p[a]).sort((x, y) => x - y);
-    lo.push(sorted[Math.floor(sorted.length * 0.03)]);
-    hi.push(sorted[Math.floor(sorted.length * 0.97)]);
+    lo.push(sorted[Math.floor(sorted.length * 0.1)]);
+    hi.push(sorted[Math.floor(sorted.length * 0.9)]);
   }
-  const margin = Math.max(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]) * 0.25;
+  const margin = Math.max(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]) * 0.6;
   const inside = (p) => [0, 1, 2].every((a) => p[a] > lo[a] - margin && p[a] < hi[a] + margin);
   // Per bone subtree: does any of its vertices sit in the bulk?
   const near = new Map();
