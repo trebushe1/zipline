@@ -3,6 +3,7 @@
 #   - zipline-live: the live collector (Discord, Reddit, Steam builds -> patch pipeline), restarted on failure
 #   - zipline-update: every 5 minutes pulls the repo and restarts the collector when code changed
 # Secrets live in /home/zipline/zipline/.env (see .env.example), owned by zipline, mode 600.
+# backend/config.py reads it; systemd's EnvironmentFile would mangle the JSON Firebase key.
 set -eu
 APP=/home/zipline/zipline
 TOOLS=/opt/zipline-tools/exe
@@ -22,7 +23,6 @@ Wants=network-online.target
 [Service]
 User=zipline
 WorkingDirectory=$APP
-EnvironmentFile=$APP/.env
 Environment=PUBLISH=1 PATCH_PIPELINE=local RUN_SECONDS=0
 Environment=SFD_PATH=$TOOLS/SteamFileDownloader/SteamFileDownloader VRF_PATH=$TOOLS/Source2Viewer/Source2Viewer-CLI
 ExecStart=$APP/.venv/bin/python -m backend.live
