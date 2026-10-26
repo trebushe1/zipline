@@ -25,14 +25,14 @@ import tarfile
 import tempfile
 from pathlib import Path
 
-from . import config
+from . import config, model_diff
 from .patches import OUT, REPO, git, show, sync_repo
 
 APP, DEPOT = "1422450", "1422456"
 VPK = "game/citadel/pak01_dir.vpk"
 MEDIA_BUILDS = int(os.environ.get("MEDIA_BUILDS", "10"))
 BUDGET = int(os.environ.get("MEDIA_BUDGET_MB", "600")) * 1024 * 1024
-MEDIA_VERSION = 3  # bump to redo the media of the kept builds after changing what is picked
+MEDIA_VERSION = 4  # bump to redo the media of the kept builds after changing what is picked
 PER_RUN = int(os.environ.get("MEDIA_PER_RUN", "3"))  # each build is a few Steam logins; Steam rate limits them
 MAX_MODELS = 30
 MAX_TEXTURES = 150
@@ -318,20 +318,30 @@ def make_media(summary: dict, sfd: str, vrf: str) -> tuple[str, dict, int, dict]
         out_dir.mkdir()
         for n, item in enumerate(items):
             entry = {"kind": item["kind"], "subject": item["subject"], "status": item["status"]}
-            blobs = {}
+            blobs, sources = {}, {}
             for side, manifest in sides:
                 if side == "before" and item["status"] == "a" or side == "after" and item["status"] == "r":
                     continue
                 citadel = game_root(files, manifest, gameinfo, work)
+                sources[side] = citadel / item["path"]
                 convert = convert_model if item["kind"] == "model" else convert_texture
                 blob = convert(vrf, citadel, item["path"], work / "tmp" / f"{n}-{side}")
                 if blob:
                     blobs[side] = blob
-            # Valve rebuilds hundreds of assets without touching how they look: those are not news.
-            if len(blobs) == 2 and (blobs["before"] == blobs["after"] or
-                                    item["kind"] == "texture" and same_picture(blobs["before"], blobs["after"])):
-                unchanged += 1
+            if len(blobs) == 2 and item["kind"] == "texture" and same_picture(blobs["before"], blobs["after"]):
+                unchanged += 1  # Valve rebuilds hundreds of assets without touching how they look
                 continue
+            if len(blobs) == 2 and item["kind"] == "model":
+                # A model can change only inside (ragdoll, animations, skins): say what, and that it looks the same.
+                same_look = model_diff.look_signature(blobs["before"]) == model_diff.look_signature(blobs["after"])
+                inner = model_diff.inner_changes(vrf, sources["before"], sources["after"])
+                if same_look and not inner:
+                    unchanged += 1
+                    continue
+                if same_look:
+                    entry["sameLook"] = True
+                if inner:
+                    entry["inner"] = inner
             for side, blob in blobs.items():
                 name = asset_name(item["path"], side, item["kind"])
                 (out_dir / name).write_bytes(blob)

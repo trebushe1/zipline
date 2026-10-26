@@ -249,6 +249,8 @@ function galleryBlock(media) {
     ? `<p class="more-note">Отобрано для новостей: герои, способности, предметы, NPC и игровые объекты.
         Скрыто ${[skipped.boring && `${plural(skipped.boring, "мелкий файл", "мелких файла", "мелких файлов")} (окружение, свет, частицы, служебные карты)`,
                   skipped.unchanged && `${skipped.unchanged} без видимых изменений`].filter(Boolean).join(" и ")}.</p>` : "";
+  // Visible changes first; models that only changed inside (physics, animations) after them.
+  media = [...media].sort(([, a], [, b]) => Boolean(a.sameLook) - Boolean(b.sameLook));
   return `<div class="gallery">${media.slice(0, TILES_STEP).map(([p, m]) => mediaTile(p, m)).join("")}</div>
     ${media.length > TILES_STEP ? `<div class="feed-foot"><button class="btn more-tiles">Показать все ${media.length}</button></div>` : ""}
     ${note}`;
@@ -264,6 +266,8 @@ function mediaTile(path, m) {
     <span class="tile-thumb">${thumb}</span>
     <span class="tile-name">${escapeHtml(name)}</span>
     <span class="tile-meta"><span class="str-badge ${m.status === "a" ? "new" : m.status === "r" ? "gone" : ""}">${label}</span> ${escapeHtml(m.subject)}</span>
+    ${m.sameLook ? `<span class="tile-same">Внешне без изменений</span>` : ""}
+    ${m.inner?.length ? `<span class="tile-inner">${escapeHtml(m.inner[0])}${m.inner.length > 1 ? ` · ещё ${m.inner.length - 1}` : ""}</span>` : ""}
   </button>`;
 }
 
@@ -296,6 +300,10 @@ function openMedia(path) {
       <button class="link-btn" data-copy="${escapeHtml(path)}">${escapeHtml(path)}</button>
       <button class="cmp-close" aria-label="Закрыть">×</button>
     </header>
+    ${m.sameLook || m.inner?.length ? `<div class="cmp-inner">
+      ${m.sameLook ? `<p><b>Внешне модель не изменилась</b> — геометрия, текстуры и скелет те же. Поменялось то, что в 3D не видно:</p>` : "<p><b>Кроме внешнего вида, поменялось внутри модели:</b></p>"}
+      <ul>${(m.inner || []).map((n) => `<li>${escapeHtml(n)}</li>`).join("")}</ul>
+    </div>` : ""}
     <div class="cmp-panes cmp-${sides.length}">${sides.map(pane).join("")}</div>
     ${m.kind === "model" ? `<p class="more-note">Мышь — вращать, колесо — приблизить. Материалы упрощены: без шейдеров игры.</p>` : ""}
   </div>`;
