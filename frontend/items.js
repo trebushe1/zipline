@@ -1199,6 +1199,14 @@ async function drawBuildShot(b, W, H) {
     x += w + pad * 0.7;
   }
   const textW = W - x - pad;
+  // Our logo in the top right corner; the name stops short of it.
+  const logo = await tryImage("assets/logo-white.png");
+  let titleW = textW - 20;
+  if (logo) {
+    const lh = Math.round(H * (wide ? 0.075 : 0.06)), lw = lh * logo.naturalWidth / logo.naturalHeight;
+    ctx.drawImage(logo, W - pad - lw, pad, lw, lh);
+    titleW -= lw + pad * 0.6;
+  }
   const eyebrow = Math.round(H * 0.017);
   ctx.textBaseline = "top";
   ctx.font = `700 ${eyebrow}px ${MONO}`;
@@ -1206,8 +1214,8 @@ async function drawBuildShot(b, W, H) {
   ctx.fillText(`БИЛД DEADLOCK${hero ? ` · ${hero.name.toUpperCase()}` : ""}`, x, pad);
   let titleSize = Math.round(H * (wide ? 0.05 : 0.045));
   ctx.font = `800 ${titleSize}px ${MONO}`;
-  while (ctx.measureText(b.name.toUpperCase()).width > textW - 20 && titleSize > 18) ctx.font = `800 ${--titleSize}px ${MONO}`;
-  const title = fitLines(ctx, b.name.toUpperCase(), textW - 20, 1)[0];
+  while (ctx.measureText(b.name.toUpperCase()).width > titleW && titleSize > 18) ctx.font = `800 ${--titleSize}px ${MONO}`;
+  const title = fitLines(ctx, b.name.toUpperCase(), titleW, 1)[0];
   const ty = pad + eyebrow * 1.9, tw = ctx.measureText(title).width;
   ctx.fillStyle = "#f6f6f4";
   ctx.fillRect(x, ty, tw + titleSize * 0.6, titleSize * 1.3);
