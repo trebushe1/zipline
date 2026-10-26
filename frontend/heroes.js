@@ -139,6 +139,53 @@ function keepInPlace() {
   anchor.position.set(rootStart.x - p.x, 0, rootStart.z - p.z);
 }
 
+// Weapons and props hang off their own branch of the skeleton (root_motion → weaponPivot → weapon), not
+// off the hand. A clip that leaves that branch alone expects the game to pin the prop to the hand; without
+// that the prop would lie at the hero's feet. Each skinned mesh remembers the branch most of its vertices
+// follow; meshes on a branch other than the body's are shown only while the clip moves that branch.
+function markBranches(model, root) {
+  if (!root) return;
+  const branchOf = (bone) => {
+    let b = bone;
+    while (b.parent && b.parent !== root && b.parent.isBone) b = b.parent;
+    return b.parent === root ? b : root;
+  };
+  const totals = new Map();
+  model.traverse((o) => {
+    if (!o.isSkinnedMesh) return;
+    const index = o.geometry.attributes.skinIndex, weight = o.geometry.attributes.skinWeight;
+    const votes = new Map();
+    for (let i = 0; i < index.count; i++) {
+      let best = 0;
+      for (let c = 1; c < 4; c++) if (weight.getComponent(i, c) > weight.getComponent(i, best)) best = c;
+      const branch = branchOf(o.skeleton.bones[index.getComponent(i, best)]);
+      votes.set(branch, (votes.get(branch) || 0) + 1);
+    }
+    const [branch, count] = [...votes].sort((a, b) => b[1] - a[1])[0] || [root, 0];
+    o.userData.branch = branch;
+    totals.set(branch, (totals.get(branch) || 0) + count);
+  });
+  viewer.bodyBranch = [...totals].sort((a, b) => b[1] - a[1])[0]?.[0] || root;
+}
+
+function showPropsFor(clip) {
+  const moved = new Set(clip.tracks.map((t) => viewer.THREE.PropertyBinding.parseTrackName(t.name).nodeName));
+  viewer.model.traverse((o) => {
+    const branch = o.userData.branch;
+    if (!o.isSkinnedMesh || !branch || branch === viewer.bodyBranch) return;
+    let animated = false;
+    branch.traverse((b) => { animated ||= moved.has(b.name); });
+    o.visible = animated;
+  });
+}
+
+function visibleBox(root) {
+  const { THREE } = viewer;
+  const box = new THREE.Box3();
+  root.traverse((o) => { if (o.isMesh && o.visible) box.union(new THREE.Box3().setFromObject(o, true)); });
+  return box.isEmpty() ? new THREE.Box3().setFromObject(root, true) : box;
+}
+
 function frameModel() {
   const { THREE, camera, controls, frameBox } = viewer;
   if (!frameBox) return;
@@ -203,6 +250,7 @@ async function loadModel(hero) {
     if (!skeletonRoot && o.isBone && !o.parent?.isBone) skeletonRoot = o;
   });
   viewer.rootBone = skeletonRoot;
+  markBranches(model, skeletonRoot);
   model.updateMatrixWorld(true);
   viewer.rootStart = skeletonRoot ? skeletonRoot.getWorldPosition(new THREE.Vector3()) : new THREE.Vector3();
 
@@ -216,7 +264,7 @@ async function loadModel(hero) {
   viewer.mixer.update(0);
   keepInPlace();
   anchor.updateMatrixWorld(true);
-  viewer.frameBox = new THREE.Box3().setFromObject(anchor, true);
+  viewer.frameBox = visibleBox(anchor);
   frameModel();
   setStatus("");
   $("#viewer-meta").textContent = viewer.clips.length ? plural(viewer.clips.length, "анимация", "анимации", "анимаций") : "без анимаций";
@@ -256,6 +304,7 @@ async function playClip(name) {
     return;
   }
   if (mixer !== viewer.mixer || viewer.current !== name) return; // another hero or clip was picked meanwhile
+  showPropsFor(clip);
   const prev = viewer.action;
   const action = mixer.clipAction(clip);
   action.reset().setLoop(viewer.THREE.LoopRepeat, Infinity).play();
