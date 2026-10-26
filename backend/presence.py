@@ -2,7 +2,8 @@
 
 Presence is only available over the gateway (the websocket the Discord app keeps
 open). We connect as an invisible session, ask for the developers' presences
-every POLL_SECONDS and also apply PRESENCE_UPDATE events when Discord sends them.
+every POLL_SECONDS (slowly, to stay gentle) and also apply PRESENCE_UPDATE events when
+Discord sends them.
 """
 import asyncio
 import json
@@ -18,7 +19,7 @@ from . import config
 
 log = logging.getLogger("zipline.presence")
 GATEWAY = "wss://gateway.discord.gg/?v=10&encoding=json"
-POLL_SECONDS = 30
+POLL_SECONDS = 120
 STATUSES = {"online", "idle", "dnd", "offline"}
 
 
@@ -55,15 +56,21 @@ class PresenceWatcher:
             await self.on_change(self.state)
 
     async def run_forever(self) -> None:
-        delay = 5
+        # Reconnect slowly: every new login is one more signal to Discord.
+        delay = 60
         while True:
             try:
                 await self._session()
-                delay = 5
+                delay = 60
+            except websockets.ConnectionClosed as exc:
+                if exc.rcvd and exc.rcvd.code == 4004:  # token revoked: retrying only adds failed logins
+                    log.error("presence: Discord rejected the token, stopping")
+                    return
+                log.warning("presence gateway dropped: %s", exc)
             except Exception as exc:  # network blips, gateway restarts
                 log.warning("presence gateway dropped: %s", exc)
             await asyncio.sleep(delay)
-            delay = min(delay * 2, 300)
+            delay = min(delay * 2, 900)
 
     async def _session(self) -> None:
         async with websockets.connect(GATEWAY, max_size=None, ssl=self.ssl) as ws:

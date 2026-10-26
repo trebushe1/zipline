@@ -42,8 +42,9 @@ TRACKED_CHANNELS = _ids("TRACKED_CHANNELS", f"{DEADLOCK_CHAT},{ANNOUNCEMENTS}")
 OPEN_CHANNELS = _ids("OPEN_CHANNELS", ANNOUNCEMENTS)
 
 # Live collector (backend/live.py): fast polling of tracked channels + periodic search for threads.
-FAST_SECONDS = float(os.environ.get("FAST_SECONDS", "2"))
-SEARCH_SECONDS = float(os.environ.get("SEARCH_SECONDS", "60"))
+# Gentle on purpose: the first collector account was banned after polling every 2 s.
+FAST_SECONDS = float(os.environ.get("FAST_SECONDS", "20"))
+SEARCH_SECONDS = float(os.environ.get("SEARCH_SECONDS", "120"))
 RUN_SECONDS = int(os.environ.get("RUN_SECONDS", "0"))  # 0 = run forever
 
 # Telegram notifications about new developer messages. Empty = disabled.

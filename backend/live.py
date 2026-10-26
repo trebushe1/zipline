@@ -199,11 +199,29 @@ async def main() -> None:
         first_unpublished_at = first_unpublished_at or time.time()
         unpublished += len(rows)
 
+    token_dead = False
+
+    async def token_rejected(exc: Exception) -> bool:
+        """Discord answered 401: the token was revoked. Stop using it and tell the owner once."""
+        nonlocal token_dead
+        if not (isinstance(exc, httpx.HTTPStatusError) and exc.response.status_code == 401):
+            return False
+        if not token_dead:
+            token_dead = True
+            log.error("Discord rejected the token: Discord polling stopped until a new token is set")
+            if presence_task:
+                presence_task.cancel()
+            await telegram.send_admin(tg, "⚠️ zipline: Discord отклонил токен (401). Сбор сообщений и статусов "
+                                          "разработчиков остановлен — нужен новый токен. Steam и Reddit работают.")
+        return True
+
     async def add_cursor(target: dict, channel_id: str) -> None:
         try:
             latest = await collector.latest_id(channel_id)
             target[channel_id] = latest or "0"
         except httpx.HTTPStatusError as exc:
+            if await token_rejected(exc):
+                return
             log.warning("cannot read channel %s (%s), skipping", channel_id, exc.response.status_code)
 
     async def read_all(target: dict, tracked: set[str]) -> None:
@@ -214,6 +232,8 @@ async def main() -> None:
                 target[channel_id], rows = await collector.read_channel(channel_id, after, tracked, is_open)
                 await handle(rows)
             except httpx.HTTPStatusError as exc:
+                if await token_rejected(exc):
+                    return
                 if exc.response.status_code in (403, 404):
                     log.warning("lost access to %s, dropping", channel_id)
                     target.pop(channel_id, None)
@@ -232,15 +252,16 @@ async def main() -> None:
                 tracked = set(db.tracked_ids(conn))
 
             # Search: catches threads/channels we don't poll directly, and gaps between runs.
-            if started - last_search >= config.SEARCH_SECONDS:
+            if not token_dead and started - last_search >= config.SEARCH_SECONDS:
                 last_search = started
                 try:
                     await handle(await collector.poll_once())
-                except Exception:
-                    log.exception("search failed")
+                except Exception as exc:
+                    if not await token_rejected(exc):
+                        log.exception("search failed")
 
             # Refresh the set of polled channels and threads every 10 minutes.
-            if started - last_threads >= 600:
+            if not token_dead and started - last_threads >= 600:
                 last_threads = started
                 for channel_id in config.TRACKED_CHANNELS:
                     if channel_id not in cursors:
@@ -250,8 +271,9 @@ async def main() -> None:
                         await add_cursor(thread_cursors, channel_id)
                 log.info("polling %d channels and %d threads", len(cursors), len(thread_cursors))
 
-            await read_all(cursors, tracked)
-            if tick % THREAD_EVERY == 0:
+            if not token_dead:
+                await read_all(cursors, tracked)
+            if not token_dead and tick % THREAD_EVERY == 0:
                 await read_all(thread_cursors, tracked)
             tick += 1
 

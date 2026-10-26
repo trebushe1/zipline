@@ -411,7 +411,7 @@ function renderDevs(devs) {
 // The live collector watches the developers' Discord status and keeps it in
 // Firebase at /live/presence; the dots in the list mirror Discord's colours.
 const PRESENCE_LABELS = { online: "В сети", idle: "Отошёл", dnd: "Не беспокоить", offline: "Не в сети" };
-const PRESENCE_STALE_MS = 3 * 60_000; // collector stopped pushing: don't show old statuses
+const PRESENCE_STALE_MS = 6 * 60_000; // collector stopped pushing: don't show old statuses
 
 function paintPresence() {
   const p = state.presence;
