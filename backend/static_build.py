@@ -27,7 +27,8 @@ SITE = config.ROOT / "site"
 PATCHES = config.ROOT / "data" / "patches"
 HEROES = config.ROOT / "data" / "heroes"
 MESSAGE_FIELDS = ("id", "author_id", "guild_id", "channel_id", "channel_name", "parent_channel_id",
-                  "thread_name", "time", "edited_time", "text", "attachments", "embeds", "reply_to", "url")
+                  "thread_name", "time", "edited_time", "text", "attachments", "embeds", "reply_to", "url",
+                  "text_ru", "embeds_ru")
 
 
 def import_archive() -> dict:
@@ -71,6 +72,7 @@ def site_messages(limit: int | None = None) -> list[dict]:
             continue
         msg["attachments"] = json.loads(msg["attachments"])
         msg["embeds"] = json.loads(msg["embeds"])
+        msg["embeds_ru"] = json.loads(msg["embeds_ru"]) if msg["embeds_ru"] else None
         messages.append(msg | {"name": r["name"], "avatar": r["avatar"], "is_demo": False})
         if limit and len(messages) >= limit:
             break

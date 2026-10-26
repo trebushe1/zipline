@@ -112,7 +112,8 @@ function staticApi(path, p) {
       const authors = new Set((p.authors || "").split(",").filter(Boolean));
       const limit = p.limit || PAGE;
       const rows = messages.filter((m) =>
-        (!q || m.text.toLowerCase().includes(q) || (m.thread_name || "").toLowerCase().includes(q)) &&
+        (!q || m.text.toLowerCase().includes(q) || (m.text_ru || "").toLowerCase().includes(q) ||
+          (m.thread_name || "").toLowerCase().includes(q)) &&
         (!authors.size || authors.has(m.author_id)) &&
         (!p.channel || m.channel_name === p.channel) &&
         (!p.before || m.time < p.before) &&
@@ -193,7 +194,8 @@ async function checkNew() {
 // Same filters as the feed query, for messages that arrive in real time.
 function matchesFilters(m) {
   const q = state.q.trim().toLowerCase();
-  return (!q || m.text.toLowerCase().includes(q) || (m.thread_name || "").toLowerCase().includes(q)) &&
+  return (!q || m.text.toLowerCase().includes(q) || (m.text_ru || "").toLowerCase().includes(q) ||
+      (m.thread_name || "").toLowerCase().includes(q)) &&
     (!state.authors.size || state.authors.has(m.author_id)) &&
     (!state.channel || m.channel_name === state.channel);
 }
@@ -243,7 +245,24 @@ function renderMessage(m) {
       ${m.edited_time ? '<span class="msg-edited">(изменено)</span>' : ""}
       <time class="msg-time" datetime="${new Date(m.time).toISOString()}" title="${fullDate.format(m.time)}">${ago(m.time)}</time>
     </div>
-    <div class="msg-text">${renderMarkdown(m.text || "")}</div>`;
+    <div class="msg-text"></div>`;
+
+  // Developer messages are shown in Russian when a translation exists; the reader can flip to the original.
+  const embedsRu = m.embeds_ru || [];
+  const hasRu = Boolean(m.text_ru) || Object.values(embedsRu).some((e) => e?.title || e?.description);
+  let lang = hasRu ? "ru" : "en";
+  const textEl = body.querySelector(".msg-text");
+  const embedEls = [];
+  const fillText = () => {
+    textEl.innerHTML = renderMarkdown((lang === "ru" && m.text_ru) || m.text || "");
+    m.embeds.forEach((e, i) => {
+      const ru = lang === "ru" ? embedsRu[i] || {} : {};
+      const title = ru.title || e.title;
+      const description = ru.description || e.description;
+      const head = title ? (e.url ? `<a href="${escapeHtml(e.url)}" target="_blank" rel="noopener"><strong>${escapeHtml(title)}</strong></a>` : `<strong>${escapeHtml(title)}</strong>`) : "";
+      embedEls[i].querySelector(".embed-body").innerHTML = `${head}${description ? `<p>${renderMarkdown(description)}</p>` : ""}`;
+    });
+  };
 
   for (const a of m.attachments) {
     if (a.type?.startsWith("image/")) {
@@ -274,8 +293,8 @@ function renderMessage(m) {
   for (const e of m.embeds) {
     const box = document.createElement("div");
     box.className = "msg-embed";
-    const title = e.title ? (e.url ? `<a href="${escapeHtml(e.url)}" target="_blank" rel="noopener"><strong>${escapeHtml(e.title)}</strong></a>` : `<strong>${escapeHtml(e.title)}</strong>`) : "";
-    box.innerHTML = `${title}${e.description ? `<p>${renderMarkdown(e.description)}</p>` : ""}`;
+    box.innerHTML = '<div class="embed-body"></div>';
+    embedEls.push(box);
     if (e.image) {
       const img = document.createElement("img");
       img.className = "msg-media";
@@ -292,21 +311,33 @@ function renderMessage(m) {
   actions.innerHTML = `
     <a class="act" ${m.url ? `href="${escapeHtml(m.url)}" target="_blank" rel="noopener"` : 'aria-disabled="true"'}>${icons.discord}Открыть в Discord</a>
     <button class="act" data-copy="post">${icons.copy}Текст для поста</button>
-    <button class="act" data-copy="link" ${m.url ? "" : "disabled"}>${icons.link}Ссылка</button>`;
+    <button class="act" data-copy="link" ${m.url ? "" : "disabled"}>${icons.link}Ссылка</button>
+    ${hasRu ? '<button class="act act-lang" data-lang></button>' : ""}`;
+  const langBtn = actions.querySelector("[data-lang]");
+  const fillLangBtn = () => langBtn && (langBtn.textContent = lang === "ru" ? "EN · Оригинал" : "RU · Перевод");
   actions.addEventListener("click", (ev) => {
+    if (ev.target.closest("[data-lang]")) {
+      lang = lang === "ru" ? "en" : "ru";
+      fillText();
+      fillLangBtn();
+      return;
+    }
     const btn = ev.target.closest("[data-copy]");
     if (!btn) return;
     if (btn.dataset.copy === "link") copy(m.url, "Ссылка скопирована");
-    else copy(postText(m, dev), "Текст для поста скопирован");
+    else copy(postText(m, dev, lang), "Текст для поста скопирован");
   });
+  fillText();
+  fillLangBtn();
   body.append(actions);
   li.append(body);
   return li;
 }
 
-function postText(m, dev) {
+function postText(m, dev, lang = "ru") {
   const where = m.thread_name ? `#${m.channel_name} › ${m.thread_name}` : `#${m.channel_name}`;
-  const lines = [`💬 ${dev.name} в Discord Deadlock (${where}):`, "", m.text.trim()];
+  const text = (lang === "ru" && m.text_ru) || m.text;
+  const lines = [`💬 ${dev.name} в Discord Deadlock (${where}):`, "", text.trim()];
   if (m.url) lines.push("", `🔗 ${m.url}`);
   return lines.join("\n");
 }

@@ -30,7 +30,9 @@ CREATE TABLE IF NOT EXISTS messages (
     reply_to          TEXT,
     url               TEXT,
     first_seen        INTEGER NOT NULL,
-    is_demo           INTEGER NOT NULL DEFAULT 0
+    is_demo           INTEGER NOT NULL DEFAULT 0,
+    text_ru           TEXT,
+    embeds_ru         TEXT
 );
 CREATE INDEX IF NOT EXISTS messages_time ON messages(time DESC);
 CREATE INDEX IF NOT EXISTS messages_author ON messages(author_id, time DESC);
@@ -62,6 +64,10 @@ def session():
 def init() -> None:
     with session() as conn:
         conn.executescript(SCHEMA)
+        columns = {r["name"] for r in conn.execute("PRAGMA table_info(messages)")}
+        for column in ("text_ru", "embeds_ru"):  # added after the first release
+            if column not in columns:
+                conn.execute(f"ALTER TABLE messages ADD COLUMN {column} TEXT")
         for dev in config.load_developers():
             conn.execute(
                 "INSERT INTO developers(user_id, name) VALUES(?, ?) "
@@ -94,11 +100,15 @@ def upsert_message(conn, msg: dict) -> bool:
         """
         INSERT INTO messages(id, author_id, guild_id, channel_id, channel_name, parent_channel_id,
                              thread_name, time, edited_time, text, attachments, embeds, reply_to,
-                             url, first_seen, is_demo)
+                             url, first_seen, is_demo, text_ru, embeds_ru)
         VALUES(:id, :author_id, :guild_id, :channel_id, :channel_name, :parent_channel_id,
                :thread_name, :time, :edited_time, :text, :attachments, :embeds, :reply_to,
-               :url, :first_seen, :is_demo)
+               :url, :first_seen, :is_demo, :text_ru, :embeds_ru)
         ON CONFLICT(id) DO UPDATE SET
+            -- keep the translation unless the original text was edited
+            text_ru=CASE WHEN excluded.text = messages.text
+                         THEN COALESCE(excluded.text_ru, messages.text_ru) ELSE excluded.text_ru END,
+            embeds_ru=COALESCE(excluded.embeds_ru, messages.embeds_ru),
             text=excluded.text, edited_time=excluded.edited_time,
             attachments=excluded.attachments, embeds=excluded.embeds,
             channel_name=COALESCE(excluded.channel_name, messages.channel_name),
@@ -110,9 +120,32 @@ def upsert_message(conn, msg: dict) -> bool:
             "embeds": json.dumps(msg.get("embeds", [])),
             "first_seen": int(time.time() * 1000),
             "is_demo": msg.get("is_demo", 0),
+            "text_ru": msg.get("text_ru"),
+            "embeds_ru": json.dumps(msg["embeds_ru"]) if msg.get("embeds_ru") else None,
         },
     )
     return exists is None
+
+
+def set_translation(conn, message_id: str, text_ru: str | None, embeds_ru: list[dict] | None) -> None:
+    conn.execute(
+        "UPDATE messages SET text_ru=COALESCE(?, text_ru), embeds_ru=COALESCE(?, embeds_ru) WHERE id=?",
+        (text_ru, json.dumps(embeds_ru) if embeds_ru else None, message_id),
+    )
+
+
+def untranslated(conn, limit: int, skip: set[str]) -> list[dict]:
+    """Newest messages that have no translation yet (for gradual backfill)."""
+    rows = conn.execute(
+        "SELECT id, text, embeds FROM messages WHERE is_demo=0 AND text_ru IS NULL AND embeds_ru IS NULL "
+        "ORDER BY time DESC").fetchall()
+    out = []
+    for r in rows:
+        if r["id"] not in skip:
+            out.append({"id": r["id"], "text": r["text"], "embeds": json.loads(r["embeds"])})
+            if len(out) >= limit:
+                break
+    return out
 
 
 def update_developer(conn, user_id: str, name: str | None, avatar: str | None) -> None:

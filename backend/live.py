@@ -19,7 +19,7 @@ import time
 import httpx
 
 from . import static_build  # sets up the temporary database; must come first
-from . import config, db, realtime, telegram
+from . import config, db, realtime, telegram, translate
 from .discord_collector import DiscordCollector, avatar_url, normalize
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
@@ -29,6 +29,7 @@ log = logging.getLogger("zipline.live")
 DAY = 86_400_000
 MAX_HOT_THREADS = 5
 THREAD_EVERY = 3  # threads are read every N ticks
+BACKFILL_EVERY = 8  # seconds between translations of older messages (the free translator dislikes bursts)
 PUBLISH_DEBOUNCE = 5  # seconds to gather a burst of messages into one deploy
 
 
@@ -131,10 +132,43 @@ async def main() -> None:
             if telegram.enabled():
                 await telegram.send(tg, telegram.format_message(row, name))
 
+    attempted: set[str] = set()  # messages already sent to the translator in this run
+    backfilled = 0
+    last_backfill_publish = last_backfill_at = time.time()
+
+    async def translate_rows(rows: list[dict]) -> None:
+        # Short timeout: a slow translator must not hold the notification back for long.
+        results = await asyncio.gather(*(
+            translate.translate_message(tg, r["text"], r["embeds"], timeout=3) for r in rows))
+        with db.session() as conn:
+            for row, (text_ru, embeds_ru) in zip(rows, results):
+                row["text_ru"], row["embeds_ru"] = text_ru, embeds_ru
+                db.set_translation(conn, row["id"], text_ru, embeds_ru)
+                if translate.available():
+                    attempted.add(row["id"])  # otherwise the backfill retries it after the pause
+
+    async def backfill_translations() -> bool:
+        """Translates one older message. Returns False once nothing is left."""
+        nonlocal backfilled
+        with db.session() as conn:
+            todo = db.untranslated(conn, 1, attempted)
+        for msg in todo:
+            attempted.add(msg["id"])
+            text_ru, embeds_ru = await translate.translate_message(tg, msg["text"], msg["embeds"])
+            if not translate.available():
+                attempted.discard(msg["id"])  # rate limited: try again after the pause
+                return True
+            if text_ru or embeds_ru:
+                with db.session() as conn:
+                    db.set_translation(conn, msg["id"], text_ru, embeds_ru)
+                backfilled += 1
+        return bool(todo)
+
     async def handle(rows: list[dict]) -> None:
         nonlocal unpublished, first_unpublished_at
         if not rows:
             return
+        await translate_rows(rows)
         jobs = [notify_telegram(rows)]
         if live_site.enabled:
             jobs.append(live_site.push(tg, static_build.site_messages(realtime.LATEST)))
@@ -197,6 +231,20 @@ async def main() -> None:
             if tick % THREAD_EVERY == 0:
                 await read_all(thread_cursors, tracked)
             tick += 1
+
+            # Older messages without a translation are translated gradually and
+            # published in one batch, not one deploy per message.
+            more = True
+            if translate.available() and time.time() - last_backfill_at >= BACKFILL_EVERY:
+                last_backfill_at = time.time()
+                more = await backfill_translations()
+            if backfilled and (not more or time.time() - last_backfill_publish >= 300):
+                log.info("translated %d older messages", backfilled)
+                unpublished += backfilled
+                first_unpublished_at = first_unpublished_at or 1.0
+                backfilled, last_backfill_publish = 0, time.time()
+                if live_site.enabled:
+                    await live_site.push(tg, static_build.site_messages(realtime.LATEST))
 
             publishing = publish_task is not None and not publish_task.done()
             if unpublished and not publishing and time.time() - first_unpublished_at >= PUBLISH_DEBOUNCE:
