@@ -2,7 +2,7 @@ const $ = (sel) => document.querySelector(sel);
 const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const MAX_EXPORT = 8192; // longest side of a downloaded PNG, before trimming
 const MAX_VIDEO = 4096; // the same for a WebM
-const FPS = 30;
+const FPS = 24;
 const VP9 = "vp09.00.10.08"; // profile 0, 8 bits
 
 const state = { index: null, heroes: [], hero: null, q: "" };
@@ -651,7 +651,7 @@ function trim(canvas, data) {
 }
 
 // ── WebM export ────────────────────────────────────────
-// One loop of the current clip at 30 fps on a transparent background. Frames are posed and rendered one
+// One loop of the current clip at 24 fps on a transparent background. Frames are posed and rendered one
 // by one rather than recorded live, so none is dropped at any size. VideoEncoder has no alpha for VP9 in
 // the browsers, so it goes the way ffmpeg does it: a second VP9 stream carries the alpha as brightness and
 // is stored with each frame as its BlockAdditional (the format of Telegram's video stickers too).
