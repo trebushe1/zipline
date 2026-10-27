@@ -1205,3 +1205,69 @@ body.tl-dragging, body.tl-dragging * { cursor: grabbing !important; }
   .tl-pool { margin: 0 8px; padding: 6px; }
   .tl-hero span { padding-top: 10px; font-size: 7.5px; }
 }
+
+/* ── Build tab: categories as blocks on a 12-column grid, like the game's ── */
+.build-tab { background: var(--slab) !important; color: #fff !important; }
+.build-tab[aria-selected="true"] { box-shadow: inset 0 -3px 0 #a6f5ea; }
+.shop.on-build .shop-tools > .tools-row:not(:first-child), .shop.on-build .filters, .shop.on-build .active-filters, .shop.on-build .shop-foot { display: none; }
+.shop-board[data-mode="layout"] { display: flex; flex-direction: column; gap: 12px; }
+.lay-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.lay-hint { margin: 0; font: 12px/1.5 var(--mono); color: rgba(255, 255, 255, .6); max-width: 80ch; }
+.lay-hint b { color: #fff; }
+.lay-grid { --s: 64px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: 56px; grid-auto-flow: row dense; gap: 10px; }
+.lay-grid > * { grid-column: span var(--w, 4); grid-row: span var(--h, 4); min-width: 0; }
+.lay-cat {
+  position: relative; display: flex; flex-direction: column; min-height: 0; padding: 0 !important; overflow: hidden;
+  background: rgba(255, 255, 255, .035) !important; border: 2px solid rgba(255, 255, 255, .2) !important; color: #ece6da; cursor: default;
+}
+.lay-cat.target { border-color: #3cc493 !important; box-shadow: none !important; }
+.lay-cat.drop-on { background: rgba(60, 196, 147, .12) !important; border-style: dashed !important; }
+.lay-cat.lifting { z-index: 5; opacity: .75; box-shadow: 0 14px 30px rgba(0, 0, 0, .55); cursor: grabbing; }
+.lay-cat.drop-before { box-shadow: inset 4px 0 0 #f3c74c; }
+.lay-cat.drop-after { box-shadow: inset -4px 0 0 #f3c74c; }
+.lay-cat-head { display: flex; align-items: center; gap: 6px; padding: 4px 6px; background: rgba(255, 255, 255, .08); border-bottom: 1px solid rgba(255, 255, 255, .14); cursor: grab; }
+.lay-grip { color: rgba(255, 255, 255, .55); font-size: 15px; line-height: 1; cursor: grab; user-select: none; }
+.lay-cat .be-cat-name { color: #fff; }
+.lay-cat .be-cat-name:hover { border-color: rgba(255, 255, 255, .25); }
+.lay-cat .be-cat-name:focus { background: #221f1b; }
+.lay-cat .be-cat-cost { color: #a6f5ea; }
+.lay-del { width: 22px; height: 22px; padding: 0; border: 1px solid rgba(255, 255, 255, .25); background: none; color: #fff; cursor: pointer; }
+.lay-del:hover { background: var(--danger); border-color: var(--danger); }
+.lay-items {
+  /* Tiles are sized to fit, so no scrollbar: it would take the width they were sized for. */
+  flex: 1; min-height: 0; margin: 0 !important; padding: 8px; overflow: auto; scrollbar-width: none;
+  display: grid; grid-template-columns: repeat(auto-fill, var(--s)); grid-auto-rows: var(--s); gap: 5px; align-content: start;
+}
+.lay-items::-webkit-scrollbar { display: none; }
+.lay-items .be-item { width: var(--s); }
+.lay-empty { position: absolute; inset: 38px 10px 10px; margin: 0; display: grid; place-items: center; text-align: center; font: 11.5px/1.4 var(--mono); color: rgba(255, 255, 255, .4); pointer-events: none; }
+.lay-size { position: absolute; right: 22px; bottom: 3px; font: 700 10px var(--mono); color: rgba(255, 255, 255, .35); pointer-events: none; }
+.lay-resize {
+  position: absolute; right: 0; bottom: 0; width: 20px; height: 20px; padding: 0; border: 0; cursor: nwse-resize; touch-action: none;
+  background: linear-gradient(135deg, transparent 50%, rgba(255, 255, 255, .55) 50% 60%, transparent 60% 72%, rgba(255, 255, 255, .55) 72% 82%, transparent 82%);
+}
+.lay-resize:hover, .lay-resize:focus-visible { background-color: rgba(60, 196, 147, .35); outline: 0; }
+.be-cat-actions { display: flex; gap: 8px; }
+.be-cat-actions .btn { flex: 1; justify-content: center; }
+
+/* Tier in the corner of a tile, like the game's. */
+.tier-badge {
+  position: absolute; right: 0; top: 0; width: 26%; aspect-ratio: 1; display: flex; justify-content: flex-end; align-items: flex-start;
+  padding: 1px 2px 0 0; background: var(--c); clip-path: polygon(0 0, 100% 0, 100% 100%);
+  font: 800 9px/1 var(--mono); font-style: normal; color: #15120e; pointer-events: none;
+}
+.tier-badge.legend { background: var(--legend); }
+.be-item .tier-badge { font-size: 8px; }
+.vi .tier-badge { width: 24%; font-size: 10px; }
+.vi .item-active { top: 4px; left: 4px; }
+
+/* Full page: the same blocks; a block grows instead of cutting items off. */
+.bv-cats.lay-grid { --s: 110px; grid-auto-rows: minmax(64px, auto); gap: 14px; }
+.bv-cat { display: flex; flex-direction: column; border: 2px solid var(--frame); background: var(--card); }
+.bv-cat .bv-cat-head { padding: 8px 12px; background: var(--hover); border-bottom: 1px solid var(--frame); }
+.bv-cats .bv-items { flex: 1; margin: 0; padding: 12px; grid-template-columns: repeat(auto-fill, var(--s)); align-content: start; }
+.bv-cats .vi-wrap { width: var(--s); }
+@media (max-width: 760px) {
+  .lay-grid > * { grid-column: 1 / -1; }
+  .bv-cats.lay-grid > * { grid-row: auto; }
+}

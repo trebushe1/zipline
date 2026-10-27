@@ -158,10 +158,80 @@ function tierColumns(items) {
   }).join("")).join("");
 }
 
+// Where each block lands: the grid fills row by row, every block in the first gap it fits (CSS grid "dense").
+function placeCats(cats) {
+  const rows = [];
+  const free = (r, c, w, h) => {
+    for (let y = r; y < r + h; y++) for (let x = c; x < c + w; x++) if (rows[y]?.[x]) return false;
+    return true;
+  };
+  const out = cats.map((cat) => {
+    const w = catW(cat), h = catH(cat);
+    for (let r = 0; ; r++) {
+      for (let c = 0; c + w <= GRID_COLS; c++) {
+        if (!free(r, c, w, h)) continue;
+        for (let y = r; y < r + h; y++) {
+          rows[y] ||= [];
+          for (let x = c; x < c + w; x++) rows[y][x] = true;
+        }
+        return { cat, x: c, y: r, w, h };
+      }
+    }
+  });
+  return { blocks: out, rows: rows.length };
+}
+
+function layoutHtml(b) {
+  return `
+    <div class="lay-head">
+      <p class="lay-hint">Раскладка, как во вкладке «Билд» в игре: тяните блок за <b>⠿</b>, чтобы переставить, и за уголок <b>◢</b>, чтобы изменить ширину и высоту. Предметы перетаскиваются между блоками.</p>
+      <button class="btn" type="button" data-act="cat-add">+ Категория</button>
+    </div>
+    <div class="lay-grid" id="lay-grid">
+      ${b.cats.map((c) => `
+        <section class="lay-cat be-cat${c.id === state.target ? " target" : ""}" data-cat="${c.id}" style="--w:${catW(c)};--h:${catH(c)}">
+          <header class="lay-cat-head">
+            <span class="lay-grip" title="Перетащите, чтобы переставить блок" aria-hidden="true">⠿</span>
+            <input class="be-cat-name" data-cat-field="name" value="${escapeHtml(c.name)}" maxlength="60" aria-label="Название категории">
+            <span class="be-cat-cost">${SOUL}${souls(catCost(c))}</span>
+            <button type="button" class="lay-del" data-act="cat-del" title="Удалить категорию" aria-label="Удалить категорию">×</button>
+          </header>
+          <ul class="be-items lay-items" data-cat="${c.id}">${c.items.map((e, i) => beItemHtml(c, e, i)).join("")}</ul>
+          ${c.items.length ? "" : `<p class="lay-empty">Перетащите сюда предметы или выберите блок и кликайте по магазину</p>`}
+          <span class="lay-size">${catW(c)}×${catH(c)}</span>
+          <button type="button" class="lay-resize" title="Размер блока: тяните или стрелками" aria-label="Размер блока ${escapeHtml(c.name)}"></button>
+        </section>`).join("")}
+    </div>`;
+}
+
+// The largest square tile at which all of a block's items fit in it.
+function fitTiles(width, height, count, { min = 22, max = 96, gap = 5, ratio = 1, extra = 0 } = {}) {
+  for (let s = max; s > min; s--) {
+    const cols = Math.max(1, Math.floor((width + gap) / (s + gap)));
+    const rows = Math.ceil(count / cols);
+    if (rows * (s * ratio + extra) + (rows - 1) * gap <= height) return s;
+  }
+  return min;
+}
+
+function fitLayout(root = document) {
+  const lists = $$(".lay-items", root).filter((l) => l.children.length);
+  // clientWidth/Height include the list's padding (8 px on each side); 2 px more for fractional pixels.
+  const size = Math.min(72, ...lists.map((l) => fitTiles(l.clientWidth - 18, l.clientHeight - 18, l.children.length, { max: 72 })));
+  $("#lay-grid", root)?.style.setProperty("--s", `${size}px`);
+}
+
 function renderBoard() {
-  const items = visibleItems();
   const board = $("#board");
   hideTip();
+  if (state.tab === "build" && currentBuild()) {
+    board.dataset.mode = "layout";
+    board.innerHTML = layoutHtml(currentBuild());
+    fitLayout(board);
+    $("#shop-count").textContent = "";
+    return;
+  }
+  const items = visibleItems();
   board.dataset.mode = state.sort === "tier" ? (state.tab === "all" ? "columns" : "rows") : "flat";
   if (!items.length) {
     board.innerHTML = `<p class="board-empty">Ничего не нашлось. Попробуйте другое название или сбросьте фильтры.</p>`;
@@ -487,6 +557,11 @@ async function downloadZip(items, label) {
 // ── Builds: storage ────────────────────────────────────
 const uid = () => Math.random().toString(36).slice(2, 10);
 const DEFAULT_CATS = ["Ранняя игра", "Середина игры", "Поздняя игра"];
+// Categories are blocks on a grid, like the game's Build tab: a width in columns and a height in rows.
+const GRID_COLS = 12;
+const clampInt = (v, lo, hi, fallback) => Number.isFinite(Number(v)) ? Math.max(lo, Math.min(hi, Math.round(Number(v)))) : fallback;
+const catW = (c) => clampInt(c.w, 2, GRID_COLS, 4);
+const catH = (c) => clampInt(c.h, 1, 12, 4);
 
 function loadBuilds() {
   try {
@@ -530,7 +605,8 @@ function newBuild(from = {}) {
   const b = {
     id: uid(), hero: from.hero || null, name: from.name || "Новый билд", desc: from.desc || "",
     cats: (from.cats || DEFAULT_CATS.map((name) => ({ name }))).map((c) => ({
-      id: uid(), name: c.name || "Категория", desc: c.desc || "", items: (c.items || []).map((i) => ({ k: i.k, note: i.note || "" })),
+      id: uid(), name: c.name || "Категория", desc: c.desc || "", w: catW(c), h: catH(c),
+      items: (c.items || []).map((i) => ({ k: i.k, note: i.note || "" })),
     })),
     ab: Array.isArray(from.ab) ? from.ab.filter((n) => n >= 1 && n <= 4) : [],
     created: Date.now(), updated: Date.now(),
@@ -599,6 +675,7 @@ function beItemHtml(cat, entry, index) {
     <li class="be-item" data-cat="${cat.id}" data-index="${index}" data-key="${it.key}" data-slot="${it.slot}" draggable="true" tabindex="0"
         title="${escapeHtml(nameOf(it))}${entry.note ? ` — ${escapeHtml(entry.note)}` : ""}">
       ${it.icon ? `<img src="${thumbUrl(it)}" alt="" draggable="false">` : `<span>${escapeHtml(nameOf(it).slice(0, 2))}</span>`}
+      <i class="tier-badge${it.tier >= 5 ? " legend" : ""}">${TIER[it.tier]}</i>
       ${entry.note ? '<i class="be-note-dot" aria-label="Есть заметка"></i>' : ""}
     </li>`;
 }
@@ -655,6 +732,9 @@ function renderEditor() {
   $("#shop-layout").classList.toggle("editing", !!b);
   panel.hidden = !b;
   $("#build-new").textContent = b ? "+ Новый билд" : "+ Создать билд";
+  const buildTab = $("#shop-tabs [data-tab='build']");
+  buildTab.hidden = !b;
+  if (!b && state.tab === "build") selectTab("all");
   $("#shop-note").textContent = b
     ? "Клик по предмету — в выбранную категорию билда. Можно перетащить в любую категорию. Правый клик или Shift+клик — карточка предмета."
     : "Наведите на предмет — подсказка, как в игре. Нажмите — карточка с иконкой для скачивания.";
@@ -698,7 +778,10 @@ function renderEditor() {
           ${c.items.length ? "" : `<p class="be-hint">Пусто. Выберите категорию и нажимайте на предметы в магазине — или перетащите их сюда.</p>`}
         </li>`).join("")}
     </ol>
-    <button class="btn be-add-cat" type="button" data-act="cat-add">+ Добавить категорию</button>
+    <div class="be-cat-actions">
+      <button class="btn be-add-cat" type="button" data-act="cat-add">+ Добавить категорию</button>
+      <button class="btn be-layout" type="button" data-act="layout">Раскладка блоков</button>
+    </div>
     ${abilityHtml(b)}
     <div class="be-foot">
       <button class="link-btn" type="button" data-act="duplicate">Сделать копию</button>
@@ -716,7 +799,7 @@ function addToBuild(key, catId = null, index = null) {
   const b = currentBuild();
   const it = state.byKey.get(key);
   if (!b || !it) return;
-  if (!b.cats.length) b.cats.push({ id: uid(), name: "Категория 1", desc: "", items: [] });
+  if (!b.cats.length) b.cats.push({ id: uid(), name: "Категория 1", desc: "", w: 4, h: 4, items: [] });
   const cat = b.cats.find((c) => c.id === (catId || state.target)) || b.cats[0];
   if (cat.items.some((i) => i.k === key)) {
     toast(`«${nameOf(it)}» уже есть в «${cat.name}»`);
@@ -759,8 +842,12 @@ function editorAction(act, catId) {
       btn.setAttribute("aria-expanded", !grid.hidden);
       return;
     }
+    case "layout":
+      selectTab("build");
+      $("#shop-layout").scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
     case "cat-add":
-      b.cats.push({ id: uid(), name: `Категория ${b.cats.length + 1}`, desc: "", items: [] });
+      b.cats.push({ id: uid(), name: `Категория ${b.cats.length + 1}`, desc: "", w: 4, h: 3, items: [] });
       state.target = b.cats.at(-1).id;
       break;
     case "cat-up":
@@ -924,7 +1011,7 @@ function fromBase64Url(text) {
 async function packBuild(b) {
   const data = {
     v: 1, h: b.hero || undefined, n: b.name, d: b.desc || undefined, a: b.ab.join("") || undefined,
-    c: b.cats.map((c) => [c.name, c.desc || "", c.items.map((i) => i.note ? [short(i.k), i.note] : short(i.k))]),
+    c: b.cats.map((c) => [c.name, c.desc || "", c.items.map((i) => i.note ? [short(i.k), i.note] : short(i.k)), catW(c), catH(c)]),
   };
   const bytes = new TextEncoder().encode(JSON.stringify(data));
   if (typeof CompressionStream === "function") {
@@ -946,8 +1033,8 @@ async function unpackBuild(code) {
     name: String(data.n || "Билд по ссылке").slice(0, 80),
     desc: String(data.d || "").slice(0, 2000),
     ab: String(data.a || "").split("").map(Number),
-    cats: (Array.isArray(data.c) ? data.c : []).slice(0, 30).map(([name, desc, items]) => ({
-      name: String(name || "Категория").slice(0, 60), desc: String(desc || "").slice(0, 500),
+    cats: (Array.isArray(data.c) ? data.c : []).slice(0, 30).map(([name, desc, items, w, h]) => ({
+      name: String(name || "Категория").slice(0, 60), desc: String(desc || "").slice(0, 500), w: catW({ w }), h: catH({ h }),
       items: (Array.isArray(items) ? items : []).slice(0, 60).map((i) => Array.isArray(i)
         ? { k: long(String(i[0])), note: String(i[1] || "").slice(0, 300) } : { k: long(String(i)) }),
     })),
@@ -970,7 +1057,7 @@ function exportBuild(b) {
     format: "zipline-build", version: 1, game_build: state.index?.build,
     hero: b.hero, name: b.name, description: b.desc,
     categories: b.cats.map((c) => ({
-      name: c.name, description: c.desc,
+      name: c.name, description: c.desc, width: catW(c), height: catH(c),
       items: c.items.map((i) => ({ key: i.k, name: state.byKey.get(i.k)?.name.en, note: i.note || undefined })),
     })),
     ability_order: b.ab,
@@ -989,6 +1076,7 @@ function importBuild(data) {
       ab: Array.isArray(d.ability_order) ? d.ability_order.map(Number) : [],
       cats: d.categories.slice(0, 30).map((c) => ({
         name: String(c.name || "Категория").slice(0, 60), desc: String(c.description || "").slice(0, 500),
+        w: catW({ w: c.width }), h: catH({ h: c.height }),
         items: (Array.isArray(c.items) ? c.items : []).slice(0, 60).map((i) => ({ k: String(i.key || i), note: String(i.note || "").slice(0, 300) })),
       })),
     });
@@ -1022,6 +1110,7 @@ function viewItemHtml(entry) {
         <span class="item-art">${url ? `<img src="${url}" alt="" loading="lazy">` : ""}</span>
         <span class="item-name">${escapeHtml(nameOf(it))}</span>
         ${it.active ? `<span class="item-active">${it.active === "toggle" ? "вкл" : "акт"}</span>` : ""}
+        <span class="tier-badge${it.tier >= 5 ? " legend" : ""}">${TIER[it.tier]}</span>
         <span class="item-cost">${SOUL}${souls(it.cost)}</span>
       </button>
       ${entry.note ? `<p class="vi-note">${escapeHtml(entry.note)}</p>` : ""}
@@ -1055,12 +1144,12 @@ function viewHtml(b, shared) {
         </div>
       </div>
     </header>
-    <div class="bv-cats">
+    <div class="bv-cats lay-grid">
       ${b.cats.filter((c) => c.items.length || c.desc).map((c) => `
-        <section class="panel bv-cat">
+        <section class="bv-cat" style="--w:${catW(c)};--h:${catH(c)}">
           <header class="bv-cat-head"><h2>${escapeHtml(c.name)}</h2><span class="bv-cat-cost">${SOUL}${souls(catCost(c))}</span></header>
           ${c.desc ? `<p class="bv-cat-desc">${escapeHtml(c.desc)}</p>` : ""}
-          <ul class="bv-items">${c.items.map(viewItemHtml).join("")}</ul>
+          <ul class="bv-items" data-notes="${c.items.some((i) => i.note) ? 1 : 0}">${c.items.map(viewItemHtml).join("")}</ul>
         </section>`).join("") || `<p class="empty">В этом билде пока нет предметов.</p>`}
     </div>
     ${b.ab?.length && hero ? `<section class="panel bv-ab">${abilityHtml(b, true)}</section>` : ""}`;
@@ -1075,6 +1164,15 @@ function openView(b, shared) {
   document.body.classList.add("viewing");
   document.title = `${b.name} — билд Deadlock · zipline`;
   scrollTo(0, 0);
+  fitView();
+}
+
+// Tiles in each block take the size at which the block holds them; a block never cuts items off, it grows.
+function fitView() {
+  const lists = $$("#build-view .bv-items").filter((l) => l.children.length);
+  const fits = lists.map((l) => fitTiles(l.clientWidth - 26, l.clientHeight - 26, l.children.length,
+    { min: 72, max: 120, gap: 10, ratio: 1.42, extra: l.dataset.notes === "1" ? 40 : 0 }));
+  $("#build-view .bv-cats")?.style.setProperty("--s", `${Math.min(120, ...fits)}px`);
 }
 
 function closeView() {
@@ -1137,34 +1235,6 @@ function fitLines(ctx, text, width, max) {
 }
 
 const tryImage = (src) => src ? Promise.race([loadImage(src).catch(() => null), new Promise((r) => setTimeout(() => r(null), 10_000))]) : Promise.resolve(null);
-
-function shotLayout(cats, W, top, bottom, pad, gap) {
-  // Categories go into columns (each into the shortest one); try 1–4 columns and every tile size.
-  const contentW = W - pad * 2, room = bottom - top;
-  let best = null;
-  for (let cols = 1; cols <= Math.min(4, cats.length); cols++) {
-    const colW = (contentW - gap * (cols - 1)) / cols;
-    for (let size = 230; size >= 34; size -= 2) {
-      const tg = Math.max(6, size * 0.08), head = Math.max(26, size * 0.24);
-      const perRow = Math.max(1, Math.floor((colW + tg) / (size + tg)));
-      const heights = Array(cols).fill(0), place = [];
-      for (const c of cats) {
-        const notes = c.items.some((i) => i.note);
-        const tileH = size * (1.42 + (notes ? 0.3 : 0));
-        const rows = Math.max(1, Math.ceil(c.items.length / perRow));
-        const h = head + (c.desc ? size * 0.2 : 0) + rows * tileH + (rows - 1) * tg;
-        const col = heights.indexOf(Math.min(...heights));
-        place.push({ c, col, y: heights[col], h, tileH, perRow, notes });
-        heights[col] += h + gap;
-      }
-      if (Math.max(...heights) - gap <= room) {
-        if (!best || size > best.size) best = { cols, colW, size, tg, head, place };
-        break;
-      }
-    }
-  }
-  return best;
-}
 
 async function drawBuildShot(b, W, H) {
   await Promise.all([`800 20px ${MONO}`, `600 20px ${SANS}`, `400 20px ${SANS}`].map((f) => document.fonts.load(f).catch(() => null)));
@@ -1271,37 +1341,65 @@ async function drawBuildShot(b, W, H) {
   const abH = abilities ? Math.round(H * (wide ? 0.11 : 0.1)) : 0;
   const top = headBottom + pad * 0.4, bottom = H - pad - (abH ? abH + pad * 0.4 : 0);
 
-  const layout = shotLayout(cats, W, top, bottom, pad, Math.round(pad * 0.6));
-  if (layout) {
+  const { blocks, rows } = placeCats(cats);
+  if (blocks.length) {
     const icons = new Map(await Promise.all(cats.flatMap((c) => c.items).map(async (e) => {
       const it = state.byKey.get(e.k);
       return [e.k, it ? await tryImage(iconUrl(it)) : null];
     })));
-    const { size, tg, head, colW } = layout;
-    for (const p of layout.place) {
-      const px = pad + p.col * (colW + Math.round(pad * 0.6)), py = top + p.y;
-      // Category label and its cost.
-      const hs = Math.round(head * 0.5);
+    const gap = Math.round(pad * 0.45), contentW = W - pad * 2;
+    const col = (contentW - gap * (GRID_COLS - 1)) / GRID_COLS;
+    const row = Math.min((bottom - top - gap * (rows - 1)) / rows, col * 1.6);
+    const head = Math.max(24, Math.min(40, H * 0.032)), tg = Math.max(4, Math.round(gap * 0.5));
+    const room = (p) => {
+      const bh = p.h * row + (p.h - 1) * gap;
+      const descH = p.cat.desc ? Math.max(11, Math.round(head * 0.38)) * 1.5 : 0;
+      return { inner: p.w * col + (p.w - 1) * gap - gap * 1.2, height: bh - head - gap * 1.2 - descH };
+    };
+    const size = Math.min(...blocks.map((p) => {
+      const { inner, height } = room(p);
+      return fitTiles(inner, height, p.cat.items.length, { min: 12, max: 200, gap: tg, ratio: p.cat.items.some((i) => i.note) ? 1.72 : 1.42 });
+    }));
+    for (const p of blocks) {
+      const bx = pad + p.x * (col + gap), by = top + p.y * (row + gap);
+      const bw = p.w * col + (p.w - 1) * gap, bh = p.h * row + (p.h - 1) * gap;
+      // The block: a frame with a header strip, like the game's categories.
+      ctx.fillStyle = "rgba(255,255,255,.035)";
+      ctx.fillRect(bx, by, bw, bh);
+      ctx.strokeStyle = "rgba(255,255,255,.22)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(bx + 1, by + 1, bw - 2, bh - 2);
+      ctx.fillStyle = "rgba(255,255,255,.08)";
+      ctx.fillRect(bx + 2, by + 2, bw - 4, head);
+      const hs = Math.round(head * 0.46);
       ctx.font = `800 ${hs}px ${MONO}`;
       ctx.textBaseline = "middle";
-      const name = fitLines(ctx, p.c.name.toUpperCase(), colW * 0.7, 1)[0];
-      ctx.fillStyle = "#ecece8";
-      ctx.fillRect(px, py, ctx.measureText(name).width + hs, head * 0.8);
-      ctx.fillStyle = "#111";
-      ctx.fillText(name, px + hs / 2, py + head * 0.4);
-      ctx.fillStyle = "#e6fbf7";
+      ctx.fillStyle = "#fff";
+      const costText = souls(catCost(p.cat));
+      const costW = ctx.measureText(costText).width;
+      ctx.fillText(fitLines(ctx, p.cat.name.toUpperCase(), bw - costW - hs * 3, 1)[0], bx + hs * 0.7, by + 2 + head / 2);
+      ctx.fillStyle = "#a6f5ea";
       ctx.textAlign = "right";
-      ctx.fillText(`${souls(catCost(p.c))}`, px + colW, py + head * 0.4);
+      ctx.fillText(costText, bx + bw - hs * 0.7, by + 2 + head / 2);
       ctx.textAlign = "left";
-      let iy = py + head;
-      if (p.c.desc) {
-        ctx.font = `400 ${Math.round(size * 0.12)}px ${SANS}`;
+      let iy = by + head + gap * 0.6;
+      const inner = bw - gap * 1.2;
+      if (p.cat.desc) {
+        const ds = Math.max(11, Math.round(head * 0.38));
+        ctx.font = `400 ${ds}px ${SANS}`;
         ctx.fillStyle = "#a9ada6";
-        ctx.fillText(fitLines(ctx, p.c.desc.replace(/\s+/g, " "), colW, 1)[0], px, iy + size * 0.06);
-        iy += size * 0.2;
+        ctx.fillText(fitLines(ctx, p.cat.desc.replace(/\s+/g, " "), inner, 1)[0], bx + gap * 0.6, iy + ds * 0.6);
+        iy += ds * 1.5;
       }
-      p.c.items.forEach((e, i) => {
-        const tx = px + (i % p.perRow) * (size + tg), ty2 = iy + Math.floor(i / p.perRow) * (p.tileH + tg);
+      const notes = p.cat.items.some((i) => i.note);
+      const perRow = Math.max(1, Math.floor((inner + tg) / (size + tg)));
+      const tileH = size * (notes ? 1.72 : 1.42);
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(bx, by, bw, bh);
+      ctx.clip();
+      p.cat.items.forEach((e, i) => {
+        const tx = bx + gap * 0.6 + (i % perRow) * (size + tg), ty2 = iy + Math.floor(i / perRow) * (tileH + tg);
         const it = state.byKey.get(e.k);
         const [light, deep] = SLOT_COLOR[it?.slot] || ["#666", "#333"];
         const nameH = size * 0.42;
@@ -1310,29 +1408,48 @@ async function drawBuildShot(b, W, H) {
         const img = icons.get(e.k);
         if (img) ctx.drawImage(img, tx + 2, ty2 + 2, size - 4, size - 4);
         ctx.strokeStyle = light;
-        ctx.lineWidth = Math.max(2, size * 0.02);
+        ctx.lineWidth = Math.max(1.5, size * 0.02);
         ctx.strokeRect(tx + ctx.lineWidth / 2, ty2 + ctx.lineWidth / 2, size - ctx.lineWidth, size + nameH - ctx.lineWidth);
-        if (it?.active) {
+        if (it && size >= 30) {
+          const ts2 = size * 0.26;
+          ctx.fillStyle = it.tier >= 5 ? "#e2b955" : light;
+          ctx.beginPath();
+          ctx.moveTo(tx + size - ts2, ty2);
+          ctx.lineTo(tx + size, ty2);
+          ctx.lineTo(tx + size, ty2 + ts2);
+          ctx.closePath();
+          ctx.fill();
+          ctx.font = `800 ${Math.round(size * 0.1)}px ${MONO}`;
+          ctx.fillStyle = "#15120e";
+          ctx.textAlign = "right";
+          ctx.textBaseline = "top";
+          ctx.fillText(TIER[it.tier], tx + size - size * 0.025, ty2 + size * 0.02);
+          ctx.textAlign = "left";
+        }
+        if (it?.active && size >= 40) {
           const as = Math.round(size * 0.1);
           ctx.font = `800 ${as}px ${MONO}`;
+          ctx.textBaseline = "middle";
           ctx.fillStyle = "#f3efe6";
           ctx.fillRect(tx + 4, ty2 + 4, ctx.measureText("АКТ").width + as * 0.6, as * 1.4);
           ctx.fillStyle = "#15120e";
           ctx.fillText(it.active === "toggle" ? "ВКЛ" : "АКТ", tx + 4 + as * 0.3, ty2 + 4 + as * 0.72);
         }
-        const ns = Math.max(10, Math.round(size * 0.115));
+        const ns = Math.max(8, Math.round(size * 0.115));
         ctx.font = `600 ${ns}px ${SANS}`;
         ctx.fillStyle = "#fff";
         ctx.textAlign = "center";
-        const lines = fitLines(ctx, it ? nameOf(it) : e.k, size - 8, 2);
+        ctx.textBaseline = "middle";
+        const lines = fitLines(ctx, it ? nameOf(it) : e.k, size - 6, 2);
         lines.forEach((l, li) => ctx.fillText(l, tx + size / 2, ty2 + size + nameH * (lines.length === 1 ? 0.5 : 0.3 + li * 0.38)));
         if (e.note) {
-          ctx.font = `400 ${Math.max(10, Math.round(size * 0.1))}px ${SANS}`;
+          ctx.font = `400 ${Math.max(8, Math.round(size * 0.1))}px ${SANS}`;
           ctx.fillStyle = "#f3c74c";
           fitLines(ctx, e.note, size, 2).forEach((l, li) => ctx.fillText(l, tx + size / 2, ty2 + size + nameH + size * (0.09 + li * 0.12)));
         }
         ctx.textAlign = "left";
       });
+      ctx.restore();
     }
   } else if (!cats.length) {
     ctx.font = `600 ${Math.round(H * 0.03)}px ${SANS}`;
@@ -1411,25 +1528,122 @@ function wireDrag() {
     dragging = null;
     $$(".drop-on").forEach((el) => el.classList.remove("drop-on"));
   });
-  const editor = $("#build-editor");
-  editor.addEventListener("dragover", (e) => {
-    const cat = e.target.closest(".be-cat");
-    if (!dragging || !cat) return;
+  for (const editor of [$("#build-editor"), $("#board")]) {
+    editor.addEventListener("dragover", (e) => {
+      const cat = e.target.closest(".be-cat");
+      if (!dragging || !cat) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = dragging.key ? "copy" : "move";
+      $$(".drop-on").forEach((el) => el !== cat && el.classList.remove("drop-on"));
+      cat.classList.add("drop-on");
+    });
+    editor.addEventListener("drop", (e) => {
+      const cat = e.target.closest(".be-cat");
+      if (!dragging || !cat) return;
+      e.preventDefault();
+      const index = dropIndex($(".be-items", cat), e.clientX, e.clientY);
+      const from = dragging;
+      dragging = null;
+      if (from.key) addToBuild(from.key, cat.dataset.cat, index);
+      else moveEntry(from.cat, from.index, cat.dataset.cat, index);
+    });
+  }
+}
+
+// ── Moving and resizing blocks on the Build tab ───────
+function gridMetrics(grid) {
+  const cs = getComputedStyle(grid);
+  const gap = parseFloat(cs.columnGap) || 0;
+  return { gap, col: (grid.clientWidth - gap * (GRID_COLS - 1)) / GRID_COLS, row: parseFloat(cs.gridAutoRows) || 56 };
+}
+
+function wireLayout() {
+  const board = $("#board");
+  let op = null;
+  board.addEventListener("pointerdown", (e) => {
+    const block = e.target.closest(".lay-cat");
+    const b = currentBuild();
+    if (!block || !b || e.button !== 0) return;
+    const cat = b.cats.find((c) => c.id === block.dataset.cat);
+    if (e.target.closest(".lay-resize")) {
+      const r = block.getBoundingClientRect();
+      op = { kind: "size", block, cat, left: r.left, top: r.top, m: gridMetrics($("#lay-grid")) };
+    } else if (e.target.closest(".lay-grip") || (e.target.closest(".lay-cat-head") && !e.target.closest("input, button"))) {
+      op = { kind: "move", block, cat, x: e.clientX, y: e.clientY, target: null, after: false };
+      block.classList.add("lifting");
+    } else {
+      return;
+    }
     e.preventDefault();
-    e.dataTransfer.dropEffect = dragging.key ? "copy" : "move";
-    $$(".drop-on").forEach((el) => el !== cat && el.classList.remove("drop-on"));
-    cat.classList.add("drop-on");
+    try { board.setPointerCapture(e.pointerId); } catch {}
+    hideTip();
   });
-  editor.addEventListener("drop", (e) => {
-    const cat = e.target.closest(".be-cat");
-    if (!dragging || !cat) return;
+  board.addEventListener("pointermove", (e) => {
+    if (!op) return;
+    if (op.kind === "size") {
+      const { gap, col, row } = op.m;
+      op.cat.w = clampInt((e.clientX - op.left + gap / 2) / (col + gap), 2, GRID_COLS, 4);
+      op.cat.h = clampInt((e.clientY - op.top + gap / 2) / (row + gap), 1, 12, 4);
+      op.block.style.setProperty("--w", catW(op.cat));
+      op.block.style.setProperty("--h", catH(op.cat));
+      $(".lay-size", op.block).textContent = `${catW(op.cat)}×${catH(op.cat)}`;
+      fitLayout(board);
+      return;
+    }
+    op.block.style.translate = `${e.clientX - op.x}px ${e.clientY - op.y}px`;
+    op.block.style.pointerEvents = "none";
+    const under = document.elementFromPoint(e.clientX, e.clientY)?.closest(".lay-cat");
+    $$(".lay-cat.drop-before, .lay-cat.drop-after").forEach((el) => el.classList.remove("drop-before", "drop-after"));
+    op.target = under && under !== op.block ? under : null;
+    if (op.target) {
+      const r = op.target.getBoundingClientRect();
+      op.after = e.clientX > r.left + r.width / 2;
+      op.target.classList.add(op.after ? "drop-after" : "drop-before");
+    }
+  });
+  const finish = () => {
+    if (!op) return;
+    const b = currentBuild(), done = op;
+    op = null;
+    if (done.kind === "move" && done.target && b) {
+      const from = b.cats.indexOf(done.cat);
+      b.cats.splice(from, 1);
+      let to = b.cats.findIndex((c) => c.id === done.target.dataset.cat);
+      if (done.after) to++;
+      b.cats.splice(to, 0, done.cat);
+    }
+    if (b) touch(b);
+    refreshEditor();
+  };
+  board.addEventListener("pointerup", finish);
+  board.addEventListener("pointercancel", finish);
+  // Arrow keys on the corner: one column or row at a time.
+  board.addEventListener("keydown", (e) => {
+    const handle = e.target.closest(".lay-resize");
+    const b = currentBuild();
+    if (!handle || !b) return;
+    const cat = b.cats.find((c) => c.id === handle.closest(".lay-cat").dataset.cat);
+    const step = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+    if (!step) return;
     e.preventDefault();
-    const index = dropIndex($(".be-items", cat), e.clientX, e.clientY);
-    const from = dragging;
-    dragging = null;
-    if (from.key) addToBuild(from.key, cat.dataset.cat, index);
-    else moveEntry(from.cat, from.index, cat.dataset.cat, index);
+    cat.w = clampInt(catW(cat) + step[0], 2, GRID_COLS, 4);
+    cat.h = clampInt(catH(cat) + step[1], 1, 12, 4);
+    touch(b);
+    renderBoard();
+    $(`.lay-cat[data-cat="${cat.id}"] .lay-resize`)?.focus();
   });
+  addEventListener("resize", () => {
+    if (state.tab === "build") fitLayout(board);
+    if (state.view) fitView();
+  });
+}
+
+function selectTab(tab) {
+  state.tab = tab === "build" && !currentBuild() ? "all" : tab;
+  for (const b of $$("#shop-tabs [data-tab]")) b.setAttribute("aria-selected", b.dataset.tab === state.tab);
+  try { localStorage.setItem("zipline.shop.tab", state.tab === "build" ? "all" : state.tab); } catch {}
+  $(".shop").classList.toggle("on-build", state.tab === "build");
+  renderBoard();
 }
 
 // ── Events ─────────────────────────────────────────────
@@ -1447,11 +1661,7 @@ function updateFab() {
 function wireEvents() {
   $("#shop-tabs").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-tab]");
-    if (!btn) return;
-    state.tab = btn.dataset.tab;
-    for (const b of $$("#shop-tabs [data-tab]")) b.setAttribute("aria-selected", b === btn);
-    try { localStorage.setItem("zipline.shop.tab", state.tab); } catch {}
-    renderBoard();
+    if (btn) selectTab(btn.dataset.tab);
   });
   $("#q").addEventListener("input", (e) => {
     state.q = e.target.value;
@@ -1612,74 +1822,75 @@ function wireEvents() {
   addEventListener("scroll", updateFab, { passive: true });
   addEventListener("resize", updateFab);
 
-  const editor = $("#build-editor");
-  editor.addEventListener("input", (e) => {
-    const b = currentBuild();
-    if (!b) return;
-    if (e.target.dataset.field) b[e.target.dataset.field] = e.target.value;
-    const catEl = e.target.closest(".be-cat");
-    if (catEl && e.target.dataset.catField) {
-      const cat = b.cats.find((c) => c.id === catEl.dataset.cat);
-      if (cat) cat[e.target.dataset.catField] = e.target.value;
-    }
-    clearTimeout(editor.timer);
-    editor.timer = setTimeout(() => {
-      touch(b);
-      renderBuildCards();
-    }, 400);
-  });
-  editor.addEventListener("click", (e) => {
-    const b = currentBuild();
-    if (!b) return;
-    const heroBtn = e.target.closest("[data-hero]");
-    if (heroBtn) {
-      const hero = heroBtn.dataset.hero || null;
-      if (hero !== b.hero) b.ab = []; // another hero, other abilities
-      b.hero = hero;
-      touch(b);
-      refreshEditor();
-      return;
-    }
-    const ab = e.target.closest("[data-ab]");
-    if (ab) {
-      b.ab.push(Number(ab.dataset.ab));
-      touch(b);
-      renderEditor();
-      return;
-    }
-    const act = e.target.closest("[data-act]");
-    if (act) return editorAction(act.dataset.act, act.closest(".be-cat")?.dataset.cat);
-    const be = e.target.closest(".be-item");
-    if (be) return openItemMenu(be);
-    // A click on a category makes it the one shop clicks go to.
-    const cat = e.target.closest(".be-cat");
-    if (cat && state.target !== cat.dataset.cat) {
-      state.target = cat.dataset.cat;
-      for (const el of $$(".be-cat", editor)) el.classList.toggle("target", el === cat);
-    }
-  });
-  editor.addEventListener("keydown", (e) => {
-    const be = e.target.closest(".be-item");
-    if (be && (e.key === "Enter" || e.key === " ")) {
-      e.preventDefault();
-      openItemMenu(be);
-    }
-    if (be && (e.key === "Delete" || e.key === "Backspace")) {
+  for (const editor of [$("#build-editor"), board]) {
+    editor.addEventListener("input", (e) => {
       const b = currentBuild();
-      const cat = b.cats.find((c) => c.id === be.dataset.cat);
-      cat.items.splice(Number(be.dataset.index), 1);
-      touch(b);
-      refreshEditor();
-    }
-  });
-  editor.addEventListener("pointerover", (e) => {
-    const be = e.target.closest(".be-item[data-key]");
-    if (be && e.pointerType === "mouse" && !dragging && $("#item-menu").hidden) showTip(be);
-  });
-  editor.addEventListener("pointerout", (e) => {
-    const be = e.target.closest(".be-item");
-    if (be && !be.contains(e.relatedTarget)) hideTip();
-  });
+      if (!b) return;
+      if (e.target.dataset.field) b[e.target.dataset.field] = e.target.value;
+      const catEl = e.target.closest(".be-cat");
+      if (catEl && e.target.dataset.catField) {
+        const cat = b.cats.find((c) => c.id === catEl.dataset.cat);
+        if (cat) cat[e.target.dataset.catField] = e.target.value;
+      }
+      clearTimeout(editor.timer);
+      editor.timer = setTimeout(() => {
+        touch(b);
+        renderBuildCards();
+      }, 400);
+    });
+    editor.addEventListener("click", (e) => {
+      const b = currentBuild();
+      if (!b) return;
+      const heroBtn = e.target.closest("[data-hero]");
+      if (heroBtn) {
+        const hero = heroBtn.dataset.hero || null;
+        if (hero !== b.hero) b.ab = []; // another hero, other abilities
+        b.hero = hero;
+        touch(b);
+        refreshEditor();
+        return;
+      }
+      const ab = e.target.closest("[data-ab]");
+      if (ab) {
+        b.ab.push(Number(ab.dataset.ab));
+        touch(b);
+        renderEditor();
+        return;
+      }
+      const act = e.target.closest("[data-act]");
+      if (act) return editorAction(act.dataset.act, act.closest(".be-cat")?.dataset.cat);
+      const be = e.target.closest(".be-item");
+      if (be) return openItemMenu(be);
+      // A click on a category makes it the one shop clicks go to.
+      const cat = e.target.closest(".be-cat");
+      if (cat && state.target !== cat.dataset.cat) {
+        state.target = cat.dataset.cat;
+        for (const el of $$(".be-cat")) el.classList.toggle("target", el.dataset.cat === cat.dataset.cat);
+      }
+    });
+    editor.addEventListener("keydown", (e) => {
+      const be = e.target.closest(".be-item");
+      if (be && (e.key === "Enter" || e.key === " ")) {
+        e.preventDefault();
+        openItemMenu(be);
+      }
+      if (be && (e.key === "Delete" || e.key === "Backspace")) {
+        const b = currentBuild();
+        const cat = b.cats.find((c) => c.id === be.dataset.cat);
+        cat.items.splice(Number(be.dataset.index), 1);
+        touch(b);
+        refreshEditor();
+      }
+    });
+    editor.addEventListener("pointerover", (e) => {
+      const be = e.target.closest(".be-item[data-key]");
+      if (be && e.pointerType === "mouse" && !dragging && $("#item-menu").hidden) showTip(be);
+    });
+    editor.addEventListener("pointerout", (e) => {
+      const be = e.target.closest(".be-item");
+      if (be && !be.contains(e.relatedTarget)) hideTip();
+    });
+  }
 
   const menu = $("#item-menu");
   menu.addEventListener("click", (e) => {
@@ -1779,6 +1990,7 @@ async function init() {
   for (const b of $$("#shop-tabs [data-tab]")) b.setAttribute("aria-selected", b.dataset.tab === state.tab);
   wireEvents();
   wireDrag();
+  wireLayout();
 
   const [items, heroes] = await Promise.all([
     fetch("items/index.json", { cache: "no-cache" }).then((r) => {
