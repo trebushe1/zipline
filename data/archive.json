@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793203698361,
+  "at": 1793204558197,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,24 @@
   }
  ],
  "messages": [
+  {
+   "id": "1565037967549014067",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231286447131328544",
+   "channel_name": "deadlock-chat",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1793204528463,
+   "edited_time": null,
+   "text": "will look into it",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": "1565036579733373039",
+   "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1565037967549014067",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1565034344555356181",
    "author_id": "1229609738828906517",
