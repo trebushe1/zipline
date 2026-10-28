@@ -1,20 +1,22 @@
-"""Publish the emoji pack (data/emoji, see backend/emoji.py) as a Telegram custom emoji set, and keep it in step.
+"""Publish the emoji pack (data/emoji, see backend/emoji.py) as Telegram custom emoji sets, and keep them in step.
 
-The set is made by our bot (TELEGRAM_BOT_TOKEN), so its name ends in _by_<bot>, and belongs to the user in
-TELEGRAM_CHAT_ID (the owner's private chat with the bot: there the chat id is the user id). The first run
-creates it from every emoji in data/emoji/index.json. Later runs change only what changed: a redrawn emoji
-is replaced in place, a new ability is added, a removed one deleted, and the order follows the pack's.
-What is in the set is remembered in data/emoji/telegram.json, by ability key: checksum and Telegram's id.
+A set holds at most 200 emoji, so the pack is split by the hero's first letter (SETS); inside a set the
+order is the pack's: each hero's head, then abilities 1–4. The sets are made by our bot (TELEGRAM_BOT_TOKEN),
+so their names end in _by_<bot>, and belong to the user in TELEGRAM_CHAT_ID (the owner's private chat with
+the bot: there the chat id is the user id). A missing set is created; otherwise only what changed is changed:
+a redrawn emoji is replaced in place, a new one added, one that left the set deleted, the order and the title
+follow SETS. What is in each set is remembered in data/emoji/telegram.json, by emoji key (ability key, or
+hero_<hero> for a head): checksum and Telegram's id.
 
 Each emoji also carries an ordinary emoji (ALT): Telegram shows it where custom emoji are not drawn and
 offers the custom one when it is typed; and keywords for search (the hero in English and Russian, the ability).
 
-    python -m backend.emoji_telegram --dry-run       # what would change; only reads from Telegram
-    python -m backend.emoji_telegram                 # create or update the set
-    python -m backend.emoji_telegram --title "..."   # the set's title (on creation TITLE when not given)
+    python -m backend.emoji_telegram --dry-run   # what would change; only reads from Telegram
+    python -m backend.emoji_telegram             # create or update the sets
 """
 import hashlib
 import json
+import re
 import sys
 import time
 
@@ -26,8 +28,12 @@ from .media import log
 
 PACK = config.ROOT / "data" / "emoji"
 STATE = PACK / "telegram.json"
-SET_NAME = "deadlock_abilities"  # Telegram wants "_by_<bot username>" after it
-TITLE = "@zipline ability"
+# (first letters of the hero, set name, title). Telegram appends nothing: "_by_<bot username>" is added here.
+# A set's name is its link and can never change; its title follows this list.
+SETS = [
+    ("abcdefghijkl", "deadlock_abilities", "@zipline ability A–L"),
+    ("mnopqrstuvwxyz", "deadlock_abilities_2", "@zipline ability M–Z"),
+]
 FIRST_BATCH = 50  # createNewStickerSet takes at most 50, the rest are added one by one
 MAX_SET = 200  # Telegram's limit for a custom emoji set
 KEYWORDS_LENGTH = 64  # Telegram's limit for all keywords of one emoji together
@@ -44,8 +50,52 @@ HERO_RU = {
     "viper": "вайпер", "warden": "варден", "wraith": "рейт", "yamato": "ямато",
 }
 
-# The ordinary emoji behind each custom one, by ability key (stable when an ability is renamed).
+# The ordinary emoji behind each custom one, by emoji key (stable when an ability is renamed).
 ALT = {
+    "hero_atlas": "🐂",                                      # Abrams
+    "hero_fencer": "🤺",                                     # Apollo
+    "hero_baba": "👵",                                       # Baba
+    "hero_bebop": "🤖",                                      # Bebop
+    "hero_punkgoat": "🐐",                                   # Billy
+    "hero_nano": "🐈‍⬛",                                      # Calico
+    "hero_unicorn": "🦄",                                    # Celeste
+    "hero_deadpack": "💀",                                   # Deadman Danny
+    "hero_doorman": "🛎️",                                    # The Doorman
+    "hero_drifter": "🧛",                                    # Drifter
+    "hero_dynamo": "🌌",                                     # Dynamo
+    "hero_necro": "🪦",                                      # Graves
+    "hero_orion": "🦉",                                      # Grey Talon
+    "hero_haze": "🥷",                                       # Haze
+    "hero_astro": "🤠",                                      # Holliday
+    "hero_inferno": "🔥",                                    # Infernus
+    "hero_tengu": "🗿",                                      # Ivy
+    "hero_kelvin": "❄️",                                     # Kelvin
+    "hero_ghost": "👻",                                      # Lady Geist
+    "hero_lash": "💪",                                       # Lash
+    "hero_forge": "🔧",                                      # McGinnis
+    "hero_vampirebat": "🦇",                                 # Mina
+    "hero_mirage": "🧞",                                     # Mirage
+    "hero_krill": "🦡",                                      # Mo & Krill
+    "hero_nurse": "🩺",                                      # Nurse Harrow
+    "hero_bookworm": "📚",                                   # Paige
+    "hero_chrono": "⏳",                                     # Paradox
+    "hero_synth": "💼",                                      # Pocket
+    "hero_ratking": "🐀",                                    # Rat King
+    "hero_familiar": "😴",                                   # Rem
+    "hero_gigawatt": "⚡",                                   # Seven
+    "hero_shiv": "🔪",                                       # Shiv
+    "hero_werewolf": "🐺",                                   # Silver
+    "hero_magician": "🎩",                                   # Sinclair
+    "hero_chessmaster": "♟️",                                # Solomon
+    "hero_priest": "✝️",                                     # Venator
+    "hero_frank": "🧟",                                      # Victor
+    "hero_hornet": "🦅",                                     # Vindicta
+    "hero_artist": "🎨",                                     # Violet
+    "hero_viscous": "🟢",                                    # Viscous
+    "hero_viper": "🐍",                                      # Vyper
+    "hero_warden": "👮",                                     # Warden
+    "hero_wraith": "🃏",                                     # Wraith
+    "hero_yamato": "⚔️",                                     # Yamato
     "citadel_ability_bull_heal": "🩸",                       # Abrams: Siphon Life
     "citadel_ability_bull_charge": "🐂",                     # Abrams: Shoulder Charge
     "citadel_ability_passive_beefy": "❤️‍🔥",                # Abrams: Infernal Resilience
@@ -223,7 +273,7 @@ ALT = {
     "citadel_ability_healing_slash": "🩸",                   # Yamato: Crimson Slash
     "citadel_ability_infinity_slash": "🌑",                  # Yamato: Shadow Transformation
 }
-NO_ALT = "🎮"  # a new ability before it gets its own emoji here
+NO_ALT = "🎮"  # a new hero or ability before it gets its own emoji here
 
 
 class TelegramError(Exception):
@@ -262,13 +312,13 @@ def checksum(entry: dict) -> str:
 
 
 def alt(entry: dict) -> list[str]:
-    return [ALT.get(entry["ability"], NO_ALT)]
+    return [ALT.get(entry["key"], NO_ALT)]
 
 
 def keywords(entry: dict) -> list[str]:
     out, total = [], 0
     for k in (entry["hero_name"].lower(), HERO_RU.get(entry["hero"], ""), entry["name"].lower()):
-        if k and total + len(k) <= KEYWORDS_LENGTH:
+        if k and k not in out and total + len(k) <= KEYWORDS_LENGTH:
             out.append(k)
             total += len(k)
     return out
@@ -290,13 +340,19 @@ def save(state: dict) -> None:
 
 # ── Sync ───────────────────────────────────────────────
 
+def set_of(entry: dict) -> int:
+    """Which of SETS a pack entry goes to: by the hero's first letter, The Doorman under D."""
+    letter = re.sub(r"^the ", "", entry["hero_name"].lower())[:1]
+    return next((i for i, (letters, _, _) in enumerate(SETS) if letter in letters), len(SETS) - 1)
+
+
 def plan(pack: list[dict], known: dict, current: dict) -> list[tuple[str, dict | str]]:
-    """What to do so the set holds exactly the pack: (op, entry) or ("delete", ability key)."""
+    """What to do so the set holds exactly `pack`: (op, entry) or ("delete", emoji key)."""
     in_set = {s["file_unique_id"] for s in current["stickers"]}
-    wanted = {e["ability"] for e in pack}
+    wanted = {e["key"] for e in pack}
     ops = [("delete", key) for key, k in known.items() if key not in wanted and k["id"] in in_set]
     for e in pack:
-        k = known.get(e["ability"])
+        k = known.get(e["key"])
         if not k or k["id"] not in in_set:
             ops.append(("add", e))
         elif k["sha"] != checksum(e):
@@ -306,8 +362,8 @@ def plan(pack: list[dict], known: dict, current: dict) -> list[tuple[str, dict |
     return ops
 
 
-def run(bot: Bot, owner: str, name: str, pack: list[dict], state: dict) -> None:
-    known = state["emoji"]
+def run(bot: Bot, owner: str, name: str, pack: list[dict], state: dict, known: dict) -> None:
+    """Bring set `name` to `pack`; `known` is its part of `state`."""
 
     def file_id(uid: str) -> str:
         return next(s["file_id"] for s in bot.sticker_set(name)["stickers"] if s["file_unique_id"] == uid)
@@ -318,7 +374,7 @@ def run(bot: Bot, owner: str, name: str, pack: list[dict], state: dict) -> None:
         sticker, part = upload(e, "e")
         bot.call(method, {"user_id": owner, "name": name, "sticker": json.dumps(sticker, ensure_ascii=False), **extra}, {"e": part})
         new = [s["file_unique_id"] for s in bot.sticker_set(name)["stickers"] if s["file_unique_id"] not in before]
-        known[e["ability"]] = record(e, new[0])
+        known[e["key"]] = record(e, new[0])
         save(state)
 
     for op, e in plan(pack, known, bot.sticker_set(name)):
@@ -331,27 +387,29 @@ def run(bot: Bot, owner: str, name: str, pack: list[dict], state: dict) -> None:
             put("addStickerToSet", e)
         elif op == "replace":
             log(f"  replace {e['file']}")
-            put("replaceStickerInSet", e, old_sticker=file_id(known[e["ability"]]["id"]))
+            put("replaceStickerInSet", e, old_sticker=file_id(known[e["key"]]["id"]))
         else:
             log(f"  retag {e['file']}")
-            fid = file_id(known[e["ability"]]["id"])
+            fid = file_id(known[e["key"]]["id"])
             bot.call("setStickerEmojiList", {"sticker": fid, "emoji_list": json.dumps(alt(e), ensure_ascii=False)})
             bot.call("setStickerKeywords", {"sticker": fid, "keywords": json.dumps(keywords(e), ensure_ascii=False)})
-            known[e["ability"]] = record(e, known[e["ability"]]["id"])
+            known[e["key"]] = record(e, known[e["key"]]["id"])
             save(state)
+    for key in set(known) - {e["key"] for e in pack}:  # gone from Telegram some other way
+        del known[key]
 
     # Order: the pack's, stickers added by hand stay after it.
     stickers = bot.sticker_set(name)["stickers"]
     ids, fids = [s["file_unique_id"] for s in stickers], {s["file_unique_id"]: s["file_id"] for s in stickers}
     for pos, e in enumerate(pack):
-        uid = known[e["ability"]]["id"]
+        uid = known[e["key"]]["id"]
         if ids[pos] != uid:
             bot.call("setStickerPositionInSet", {"sticker": fids[uid], "position": pos})
             ids.remove(uid)
             ids.insert(pos, uid)
 
 
-def create(bot: Bot, owner: str, name: str, title: str, pack: list[dict], state: dict) -> None:
+def create(bot: Bot, owner: str, name: str, title: str, pack: list[dict], state: dict, known: dict) -> None:
     """A new set from the first FIRST_BATCH emoji; run() adds the rest."""
     first = pack[:FIRST_BATCH]
     parts = [upload(e, f"e{i}") for i, e in enumerate(first)]
@@ -360,21 +418,36 @@ def create(bot: Bot, owner: str, name: str, title: str, pack: list[dict], state:
         "stickers": json.dumps([s for s, _ in parts], ensure_ascii=False),
     }, {f"e{i}": part for i, (_, part) in enumerate(parts)})
     stickers = bot.sticker_set(name)["stickers"]
-    state["emoji"] = {e["ability"]: record(e, s["file_unique_id"]) for e, s in zip(first, stickers)}
+    known.update({e["key"]: record(e, s["file_unique_id"]) for e, s in zip(first, stickers)})
     save(state)
 
 
 # ── Main ───────────────────────────────────────────────
 
-def problems(pack: list[dict]) -> list[str]:
-    out = []
-    if len(pack) > MAX_SET:
-        out.append(f"{len(pack)} emoji, Telegram takes at most {MAX_SET} in one set")
-    for e in pack:
+def problems(parts: list[list[dict]]) -> list[str]:
+    out = [f"{SETS[i][2]}: {len(p)} emoji, Telegram takes at most {MAX_SET} in one set: split SETS further"
+           for i, p in enumerate(parts) if len(p) > MAX_SET]
+    for e in (e for p in parts for e in p):
         with Image.open(PACK / e["file"]) as im:
             if im.size != (100, 100):
                 out.append(f"{e['file']} is {im.size[0]}×{im.size[1]}, must be 100×100")
     return out
+
+
+def load_state() -> dict:
+    state = json.loads(STATE.read_text("utf-8")) if STATE.exists() else {}
+    if "set" in state:  # one set, before the pack was split
+        state = {"sets": {state["set"]: {"title": state.get("title"), "emoji": state.get("emoji", {})}}}
+    state.setdefault("sets", {})
+    return state
+
+
+def summary(ops: list, known: dict) -> str:
+    groups = {}
+    for op, e in ops:
+        groups.setdefault(op, []).append(known[e]["file"] if op == "delete" else e["file"])
+    return "\n".join(f"  {op} {len(files)}: " + ", ".join(files[:6]) + (", …" if len(files) > 6 else "")
+                     for op, files in groups.items())
 
 
 def main() -> int:
@@ -384,50 +457,49 @@ def main() -> int:
         log("TELEGRAM_BOT_TOKEN is not set")
         return 1
     if not owner.isdigit():
-        log("TELEGRAM_CHAT_ID must be the owner's private chat with the bot (a positive id): the set belongs to that user")
+        log("TELEGRAM_CHAT_ID must be the owner's private chat with the bot (a positive id): the sets belong to that user")
         return 1
     pack = json.loads((PACK / "index.json").read_text("utf-8"))["emoji"]
-    if issues := problems(pack):
+    parts = [[e for e in pack if set_of(e) == i] for i in range(len(SETS))]
+    if issues := problems(parts):
         log("the pack cannot go to Telegram:\n  " + "\n  ".join(issues))
         return 1
     for e in pack:
-        if e["ability"] not in ALT:
-            log(f"no ordinary emoji for {e['hero_name']}: {e['name']} ({e['ability']}): {NO_ALT} until it is added to ALT")
+        if e["key"] not in ALT:
+            log(f"no ordinary emoji for {e['hero_name']}: {e['name']} ({e['key']}): {NO_ALT} until it is added to ALT")
 
     bot = Bot(token)
-    state = json.loads(STATE.read_text("utf-8")) if STATE.exists() else {}
-    name = state.get("set") or f"{SET_NAME}_by_{bot.call('getMe')['username']}"
-    title = sys.argv[sys.argv.index("--title") + 1] if "--title" in sys.argv else None
-    current = bot.sticker_set(name)
-    link = f"https://t.me/addemoji/{name}"
-
-    if current is None:
-        title = title or TITLE
-        log(f"{name}: not in Telegram yet; {'would create' if dry else 'creating'} \"{title}\" with {len(pack)} emoji")
-        if dry:
-            return 0
-        state = {"set": name, "title": title, "emoji": {}}
-        create(bot, owner, name, title, pack, state)
-    else:
-        state.setdefault("set", name)
-        state.setdefault("emoji", {})
-        ops = plan(pack, state["emoji"], current)
-        mine = {k["id"] for k in state["emoji"].values()}
-        foreign = sum(1 for s in current["stickers"] if s["file_unique_id"] not in mine)
-        log(f"{name}: {len(current['stickers'])} emoji in Telegram"
-            + (f" ({foreign} not from this pack, left alone)" if foreign else "")
-            + f"; {len(ops) or 'nothing'} to change")
-        if dry:
-            for op, e in ops:
-                log(f"  {op} {state['emoji'][e]['file'] if op == 'delete' else e['file']}")
-            return 0
-        if title and title != current["title"]:  # only when asked: a title changed in @Stickers stays
-            bot.call("setStickerSetTitle", {"name": name, "title": title})
-        state["title"] = title or current["title"]
-
-    run(bot, owner, name, pack, state)
-    save(state)
-    log(f"done: {link}")
+    bot_name = bot.call("getMe")["username"]
+    state = load_state()
+    for (_, base, title), part in zip(SETS, parts):
+        name = f"{base}_by_{bot_name}"
+        mine = state["sets"].setdefault(name, {"title": title, "emoji": {}})
+        known = mine["emoji"]
+        current = bot.sticker_set(name)
+        if current is None:
+            log(f"{name}: not in Telegram yet; {'would create' if dry else 'creating'} \"{title}\" with {len(part)} emoji")
+            if dry:
+                continue
+            known.clear()
+            create(bot, owner, name, title, part, state, known)
+        else:
+            ops = plan(part, known, current)
+            ids = {k["id"] for k in known.values()}
+            foreign = sum(1 for s in current["stickers"] if s["file_unique_id"] not in ids)
+            retitle = current["title"] != title
+            log(f"{name}: {len(current['stickers'])} emoji in Telegram, {len(part)} in the pack"
+                + (f" ({foreign} not from the pack, left alone)" if foreign else "")
+                + f"; {len(ops) or 'nothing'} to change" + (f", title \"{current['title']}\" → \"{title}\"" if retitle else ""))
+            if ops:
+                log(summary(ops, known))
+            if dry:
+                continue
+            if retitle:
+                bot.call("setStickerSetTitle", {"name": name, "title": title})
+        mine["title"] = title
+        run(bot, owner, name, part, state, known)
+        save(state)
+        log(f"done: https://t.me/addemoji/{name}")
     return 0
 
 

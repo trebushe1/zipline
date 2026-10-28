@@ -1,17 +1,22 @@
-"""Telegram emoji pack: every hero ability as a 100×100 custom emoji.
+"""Telegram emoji pack: every hero's head and every ability as a 100×100 custom emoji.
 
-Each emoji is our post template in miniature: a printed photo card taped to the chat. From the outside in:
+An ability is our post template in miniature: a printed photo card taped to the chat. From the outside in:
 a dark ink line, a paper rim, a frame in the hero's colour, a near-black inside with a dry-brush stroke,
 and the game's ability icon printed on top. The four cards of a hero lean at four different angles; the
 ultimate (slot 4) gets a second strip of tape on its bottom corner.
+
+A head is cut out of the hero's card portrait like a magazine clipping, with no background: the card's own
+silhouette above, a round cut through the shoulders, the same ink line and paper rim, and a second print in
+the hero's colour slightly off register. In the pack each head comes right before its hero's abilities.
 
 The double edge (ink line + paper rim) is what lets one design work on every Telegram theme: on a dark
 chat the rim stands out, on a light one the line, on the mid-tone default wallpaper both. `--check` measures
 it against Telegram's backgrounds. The frame keeps the hero's own colour (bordeaux stays dark, yellow
 stays light); its tones are derived in CIELAB from one PALETTE entry per hero.
 
-Reads data/heroes/index.json and the ability icons in data/heroes/abilities/ (see backend/heroes.py),
-writes data/emoji/<hero>-<slot>-<ability>.png and data/emoji/index.json. All noise is seeded, so the same
+Reads data/heroes/index.json, the card portraits in data/heroes/icons/ and the ability icons in
+data/heroes/abilities/ (see backend/heroes.py), writes data/emoji/<hero>-0-head.png,
+data/emoji/<hero>-<slot>-<ability>.png and data/emoji/index.json. All noise is seeded, so the same
 icons and palette give the same pixels.
 
     python -m backend.emoji            # draw the whole pack
@@ -24,7 +29,6 @@ import math
 import random
 import re
 import sys
-from statistics import median
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
@@ -146,8 +150,8 @@ def tones(entry: str) -> dict[str, tuple[int, int, int]]:
     frame, _, stroke = entry.partition("/")
     L, C, h = to_lch(rgb(frame))
     sL, sC, sh = to_lch(rgb(stroke)) if stroke else (L + 14, C, h)
-    return {"frame": from_lch(L * .72 + 46 * .28, C * .92, h),
-            "stroke": from_lch(min(68, max(50, sL)), sC, sh),
+    frame_c, stroke_c = from_lch(L * .72 + 46 * .28, C * .92, h), from_lch(min(68, max(50, sL)), sC, sh)
+    return {"frame": frame_c, "stroke": stroke_c, "accent": stroke_c if stroke else frame_c,
             "core": from_lch(6.5, min(C, 30) * .35, h),
             "ink": from_lch(9, min(C, 30) * .5, h)}
 
@@ -233,7 +237,7 @@ def tape(img: Image.Image, cx: float, cy: float, ang: float, w: float = 34, h: f
     over(img, solid((120, 116, 104), edge.point(lambda v: round(v * .35))))
 
 
-# ── The emoji ──────────────────────────────────────────
+# ── Abilities ──────────────────────────────────────────
 
 LINE, RIM, FRAME = 1.6, 2.2, 5.0  # ink line (thinner smears to half-tone once the card leans), paper rim, frame
 CARD = (11, 12, 89, 90)
@@ -266,6 +270,60 @@ def draw(icon: str, t: dict, slot: int, seed: int) -> Image.Image:
     return grain(img.resize((SIZE, SIZE), Image.LANCZOS), 5)
 
 
+# ── Hero heads ─────────────────────────────────────────
+
+HEAD, HEAD_TOP = 84, 5  # the head circle's diameter and top in emoji pixels
+OFFSET = 2.6  # the second print in the hero's colour, down and right
+# The head on the hero's 280×380 card as a circle (centre x, centre y, radius), picked by eye: from the top of the
+# hair, hat, horns or ears to the chin, both characters for Calico and Mo & Krill. The emoji shows this circle
+# full size; below its centre the shoulders are cut along it, above it the card's own silhouette stays.
+HEADS = {
+    "atlas": (140, 155, 138), "fencer": (150, 145, 130), "baba": (160, 150, 132), "bebop": (140, 135, 110),
+    "punkgoat": (160, 140, 130), "nano": (150, 165, 140), "unicorn": (138, 160, 150), "deadpack": (145, 165, 140),
+    "doorman": (145, 165, 130), "drifter": (150, 150, 125), "dynamo": (150, 140, 105), "necro": (135, 148, 125),
+    "orion": (150, 145, 110), "haze": (140, 150, 125), "astro": (150, 145, 120), "inferno": (150, 140, 125),
+    "tengu": (150, 150, 125), "kelvin": (125, 175, 130), "ghost": (140, 140, 120), "lash": (140, 140, 115),
+    "forge": (140, 140, 115), "vampirebat": (145, 155, 115), "mirage": (130, 140, 115), "krill": (150, 160, 145),
+    "nurse": (140, 135, 125), "bookworm": (140, 130, 125), "chrono": (140, 140, 105), "synth": (150, 140, 115),
+    "ratking": (140, 162, 158), "familiar": (150, 145, 125), "gigawatt": (140, 165, 150), "shiv": (130, 135, 120),
+    "werewolf": (150, 150, 120), "magician": (125, 125, 115), "chessmaster": (145, 150, 135), "priest": (145, 145, 120),
+    "frank": (140, 150, 120), "hornet": (140, 135, 115), "artist": (140, 135, 125), "viscous": (140, 170, 135),
+    "viper": (150, 150, 125), "warden": (140, 140, 125), "wraith": (150, 140, 120), "yamato": (135, 150, 125),
+}
+NO_HEAD = (140, 150, 135)  # a new hero before its circle is picked: roughly where the cards put the head
+
+
+def grow(mask: Image.Image, r: float) -> Image.Image:
+    """The mask grown by r emoji pixels with a round pen (a blur cut at 7 % reaches 1.47 σ)."""
+    return mask.filter(ImageFilter.GaussianBlur(r * K / 1.47)).point(lambda v: 255 if v > 18 else 0)
+
+
+def draw_head(card_file: str, t: dict, key: str) -> Image.Image:
+    card = Image.open(HEROES / "icons" / card_file).convert("RGBA")
+    cx, cy, r = HEADS.get(key, NO_HEAD)
+    px, oy = round(HEAD * K), round(HEAD_TOP * K)
+    layer = Image.new("RGBA", (S, S), (0, 0, 0, 0))  # outside the card the crop is transparent
+    layer.paste(card.crop((cx - r, cy - r, cx + r, cy + r)).resize((px, px), Image.LANCZOS), ((S - px) // 2, oy))
+    # the card's own cut-out above the circle's centre, the circle through the shoulders below it
+    sil = layer.getchannel("A").point(lambda v: 255 if v > 128 else 0)
+    keep = Image.new("L", (S, S), 0)
+    mid = oy + px / 2
+    ImageDraw.Draw(keep).rectangle([0, 0, S, mid], fill=255)
+    ImageDraw.Draw(keep).ellipse([(S - px) / 2, oy, (S + px) / 2, oy + px], fill=255)
+    sil = ImageChops.multiply(sil, keep)
+    layer.putalpha(ImageChops.multiply(layer.getchannel("A"), sil))
+    rim = grow(sil, RIM)
+    line = grow(rim, LINE)
+    img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    over(img, solid(t["accent"], shifted(line, OFFSET, OFFSET)))
+    over(img, solid(t["ink"], line))
+    over(img, solid(PAPER, rim))
+    over(img, layer)
+    return grain(img.resize((SIZE, SIZE), Image.LANCZOS), 5)
+
+
+# ── Pack ───────────────────────────────────────────────
+
 def slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", text.lower().replace("'", "")).strip("-")
 
@@ -287,22 +345,33 @@ BACKGROUNDS = {
 MIN_CONTRAST = 3.0  # WCAG's threshold for shapes
 
 
+EDGE_DEPTH = 3  # px inward from the silhouette in which a contrasting line has to be found
+
+
 def edge_contrast(emoji: Image.Image, bg) -> float:
-    """The best of the outer four 1 px rings of the silhouette: median contrast ratio against `bg`.
-    A double edge passes when either of its lines stands out."""
+    """How well the outline separates from `bg`: at each point of the silhouette's edge, the strongest
+    contrast ratio within EDGE_DEPTH px inward (a double edge is fine whichever of its lines stands out,
+    and the line may run deeper where something lies outside it, like a head's coloured offset); the
+    result is the median over the edge, so a soft strip of tape sticking out does not count as a fault."""
     comp = Image.new("RGBA", emoji.size, (*bg, 255))
     comp.alpha_composite(emoji)
     px, lb = comp.load(), luminance(bg)
-    ratio = lambda c: (max(luminance(c), lb) + .05) / (min(luminance(c), lb) + .05)
-    cur, best = emoji.getchannel("A").point(lambda v: 255 if v >= 200 else 0), 0.0
-    for _ in range(4):
-        nxt = cur.filter(ImageFilter.MinFilter(3))
-        ring = ImageChops.subtract(cur, nxt).load()
-        vals = [ratio(px[x, y][:3]) for y in range(emoji.height) for x in range(emoji.width) if ring[x, y]]
-        if len(vals) > 20:
-            best = max(best, median(vals))
-        cur = nxt
-    return best
+    sil = emoji.getchannel("A").point(lambda v: 255 if v >= 200 else 0)
+    inner = sil
+    for _ in range(EDGE_DEPTH + 1):
+        inner = inner.filter(ImageFilter.MinFilter(3))
+    band = ImageChops.subtract(sil, inner).load()
+    contrast = Image.new("L", emoji.size, 0)  # ratio × 12, 0 outside the band
+    cp = contrast.load()
+    for y in range(emoji.height):
+        for x in range(emoji.width):
+            if band[x, y]:
+                c = luminance(px[x, y][:3])
+                cp[x, y] = min(255, round((max(c, lb) + .05) / (min(c, lb) + .05) * 12))
+    near = contrast.filter(ImageFilter.MaxFilter(EDGE_DEPTH * 2 + 1)).load()
+    outline = ImageChops.subtract(sil, sil.filter(ImageFilter.MinFilter(3))).load()
+    scores = sorted(near[x, y] / 12 for y in range(emoji.height) for x in range(emoji.width) if outline[x, y])
+    return scores[len(scores) // 2] if scores else 0.0
 
 
 def check(files) -> int:
@@ -321,16 +390,23 @@ def main() -> int:
     index = json.loads((HEROES / "index.json").read_text("utf-8"))
     OUT.mkdir(parents=True, exist_ok=True)
     entries, written = [], set()
-    for h in sorted(index["heroes"], key=hero_order):  # the Telegram set keeps this order: hero by hero, slots 1–4
+    for h in sorted(index["heroes"], key=hero_order):  # the Telegram sets keep this order: head, then slots 1–4
         if h["key"] not in PALETTE:
             log(f"no colour for {h['name']} ({h['key']}): drawn grey, add it to PALETTE")
         t = tones(PALETTE.get(h["key"], NO_COLOUR))
+
+        def add(img: Image.Image, slot: int, key: str, name: str, file: str) -> None:
+            img.save(OUT / file, optimize=True)
+            written.add(file)
+            entries.append({"hero": h["key"], "hero_name": h["name"], "slot": slot, "key": key, "name": name, "file": file})
+
+        if h.get("icon"):
+            add(draw_head(h["icon"], t, h["key"]), 0, f"hero_{h['key']}", h["name"], f"{slug(h['name'])}-0-head.png")
+        else:
+            log(f"no card portrait for {h['name']}: no head emoji")
         for a in sorted(h["abilities"], key=lambda a: a["slot"]):
-            name = f"{slug(h['name'])}-{a['slot']}-{slug(a['name'])}.png"
-            draw(a["icon"], t, a["slot"], seed=h["id"]).save(OUT / name, optimize=True)
-            written.add(name)
-            entries.append({"hero": h["key"], "hero_name": h["name"], "slot": a["slot"],
-                            "ability": a["key"], "name": a["name"], "file": name})
+            add(draw(a["icon"], t, a["slot"], seed=h["id"]), a["slot"], a["key"], a["name"],
+                f"{slug(h['name'])}-{a['slot']}-{slug(a['name'])}.png")
     for old in OUT.glob("*.png"):
         if old.name not in written:
             old.unlink()
