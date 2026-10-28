@@ -1,9 +1,10 @@
 """Publish the emoji pack (data/emoji, see backend/emoji.py) as Telegram custom emoji sets, and keep them in step.
 
 A set holds at most 200 emoji, so the pack is split by the hero's first letter (SETS); inside a set the
-order is the pack's: each hero's head, then abilities 1–4. The sets are made by our bot (TELEGRAM_BOT_TOKEN),
-so their names end in _by_<bot>, and belong to the user in TELEGRAM_CHAT_ID (the owner's private chat with
-the bot: there the chat id is the user id). A missing set is created; otherwise only what changed is changed:
+order is the pack's: each hero's head, then abilities 1–4. The sets are made by a bot of their own
+(TELEGRAM_EMOJI_BOT_TOKEN): Telegram ends a bot's set names in _by_<bot>, and the name is the public link, so
+the notification bot never makes them. They belong to the user in TELEGRAM_CHAT_ID (the owner's private chat
+with the notification bot: there the chat id is the user id), who has to press Start in the emoji bot once. A missing set is created; otherwise only what changed is changed:
 a redrawn emoji is replaced in place, a new one added, one that left the set deleted, the order and the title
 follow SETS. What is in each set is remembered in data/emoji/telegram.json, by emoji key (ability key, or
 hero_<hero> for a head): checksum and Telegram's id.
@@ -31,8 +32,8 @@ STATE = PACK / "telegram.json"
 # (first letters of the hero, set name, title). Telegram appends nothing: "_by_<bot username>" is added here.
 # A set's name is its link and can never change; its title follows this list.
 SETS = [
-    ("abcdefghijkl", "deadlock_abilities", "@zipline ability A–L"),
-    ("mnopqrstuvwxyz", "deadlock_abilities_2", "@zipline ability M–Z"),
+    ("abcdefghijkl", "zipline_ability_al", "@zipline ability A–L"),
+    ("mnopqrstuvwxyz", "zipline_ability_mz", "@zipline ability M–Z"),
 ]
 FIRST_BATCH = 50  # createNewStickerSet takes at most 50, the rest are added one by one
 MAX_SET = 200  # Telegram's limit for a custom emoji set
@@ -413,10 +414,15 @@ def create(bot: Bot, owner: str, name: str, title: str, pack: list[dict], state:
     """A new set from the first FIRST_BATCH emoji; run() adds the rest."""
     first = pack[:FIRST_BATCH]
     parts = [upload(e, f"e{i}") for i, e in enumerate(first)]
-    bot.call("createNewStickerSet", {
-        "user_id": owner, "name": name, "title": title, "sticker_type": "custom_emoji",
-        "stickers": json.dumps([s for s, _ in parts], ensure_ascii=False),
-    }, {f"e{i}": part for i, (_, part) in enumerate(parts)})
+    try:
+        bot.call("createNewStickerSet", {
+            "user_id": owner, "name": name, "title": title, "sticker_type": "custom_emoji",
+            "stickers": json.dumps([s for s, _ in parts], ensure_ascii=False),
+        }, {f"e{i}": part for i, (_, part) in enumerate(parts)})
+    except TelegramError as e:
+        if "PEER_ID_INVALID" in str(e) or "user not found" in str(e).lower():
+            raise TelegramError(f"{e}: the owner has to press Start in @{name.rsplit('_by_', 1)[1]} first") from e
+        raise
     stickers = bot.sticker_set(name)["stickers"]
     known.update({e["key"]: record(e, s["file_unique_id"]) for e, s in zip(first, stickers)})
     save(state)
@@ -452,9 +458,12 @@ def summary(ops: list, known: dict) -> str:
 
 def main() -> int:
     dry = "--dry-run" in sys.argv
-    token, owner = config.TELEGRAM_BOT_TOKEN, config.TELEGRAM_CHAT_ID
+    token, owner = config.TELEGRAM_EMOJI_BOT_TOKEN, config.TELEGRAM_CHAT_ID
     if not token:
-        log("TELEGRAM_BOT_TOKEN is not set")
+        log("TELEGRAM_EMOJI_BOT_TOKEN is not set: make a bot for the emoji sets in @BotFather and put its token in .env")
+        return 1
+    if token == config.TELEGRAM_BOT_TOKEN:
+        log("TELEGRAM_EMOJI_BOT_TOKEN is the notification bot: its name would be in the sets' public links")
         return 1
     if not owner.isdigit():
         log("TELEGRAM_CHAT_ID must be the owner's private chat with the bot (a positive id): the sets belong to that user")

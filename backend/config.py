@@ -52,6 +52,9 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 # Private chat for problems of the bot itself (failed Steam login, crashed pipeline). Empty = log only.
 TELEGRAM_ADMIN_CHAT_ID = os.environ.get("TELEGRAM_ADMIN_CHAT_ID", "")
+# A separate bot that only owns the emoji sets (backend/emoji_telegram.py): its username is in their public
+# links, so the notification bot's stays private.
+TELEGRAM_EMOJI_BOT_TOKEN = os.environ.get("TELEGRAM_EMOJI_BOT_TOKEN", "")
 # Public address of the site, for links in notifications.
 SITE_URL = os.environ.get("SITE_URL", "https://trebushe1.github.io/zipline/").rstrip("/") + "/"
 
