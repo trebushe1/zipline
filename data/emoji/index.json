@@ -258,6 +258,38 @@
    "file": "deadman-danny-4-close-the-deal.png"
   },
   {
+   "hero": "doorman",
+   "hero_name": "The Doorman",
+   "slot": 1,
+   "ability": "ability_doorman_bomb",
+   "name": "Call Bell",
+   "file": "the-doorman-1-call-bell.png"
+  },
+  {
+   "hero": "doorman",
+   "hero_name": "The Doorman",
+   "slot": 2,
+   "ability": "ability_doorman_doorway",
+   "name": "Doorway",
+   "file": "the-doorman-2-doorway.png"
+  },
+  {
+   "hero": "doorman",
+   "hero_name": "The Doorman",
+   "slot": 3,
+   "ability": "ability_doorman_luggage_cart",
+   "name": "Luggage Cart",
+   "file": "the-doorman-3-luggage-cart.png"
+  },
+  {
+   "hero": "doorman",
+   "hero_name": "The Doorman",
+   "slot": 4,
+   "ability": "ability_doorman_hotel",
+   "name": "Hotel Guest",
+   "file": "the-doorman-4-hotel-guest.png"
+  },
+  {
    "hero": "drifter",
    "hero_name": "Drifter",
    "slot": 1,
@@ -1088,38 +1120,6 @@
    "ability": "ability_chessmaster_queen",
    "name": "Develop Queen",
    "file": "solomon-4-develop-queen.png"
-  },
-  {
-   "hero": "doorman",
-   "hero_name": "The Doorman",
-   "slot": 1,
-   "ability": "ability_doorman_bomb",
-   "name": "Call Bell",
-   "file": "the-doorman-1-call-bell.png"
-  },
-  {
-   "hero": "doorman",
-   "hero_name": "The Doorman",
-   "slot": 2,
-   "ability": "ability_doorman_doorway",
-   "name": "Doorway",
-   "file": "the-doorman-2-doorway.png"
-  },
-  {
-   "hero": "doorman",
-   "hero_name": "The Doorman",
-   "slot": 3,
-   "ability": "ability_doorman_luggage_cart",
-   "name": "Luggage Cart",
-   "file": "the-doorman-3-luggage-cart.png"
-  },
-  {
-   "hero": "doorman",
-   "hero_name": "The Doorman",
-   "slot": 4,
-   "ability": "ability_doorman_hotel",
-   "name": "Hotel Guest",
-   "file": "the-doorman-4-hotel-guest.png"
   },
   {
    "hero": "priest",

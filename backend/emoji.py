@@ -270,6 +270,11 @@ def slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", text.lower().replace("'", "")).strip("-")
 
 
+def hero_order(hero: dict) -> str:
+    """Alphabetical, the way one looks for a hero: The Doorman under D."""
+    return re.sub(r"^the ", "", hero["name"].lower())
+
+
 # ── Edge check ─────────────────────────────────────────
 
 # Where emoji end up: message bubbles, and the bare chat background for a message of emoji only.
@@ -316,11 +321,11 @@ def main() -> int:
     index = json.loads((HEROES / "index.json").read_text("utf-8"))
     OUT.mkdir(parents=True, exist_ok=True)
     entries, written = [], set()
-    for h in sorted(index["heroes"], key=lambda h: h["name"]):
+    for h in sorted(index["heroes"], key=hero_order):  # the Telegram set keeps this order: hero by hero, slots 1–4
         if h["key"] not in PALETTE:
             log(f"no colour for {h['name']} ({h['key']}): drawn grey, add it to PALETTE")
         t = tones(PALETTE.get(h["key"], NO_COLOUR))
-        for a in h["abilities"]:
+        for a in sorted(h["abilities"], key=lambda a: a["slot"]):
             name = f"{slug(h['name'])}-{a['slot']}-{slug(a['name'])}.png"
             draw(a["icon"], t, a["slot"], seed=h["id"]).save(OUT / name, optimize=True)
             written.add(name)

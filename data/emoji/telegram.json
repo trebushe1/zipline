@@ -1,0 +1,2294 @@
+{
+ "set": "deadlock_abilities_by_<bot>",
+ "title": "@zipline ability",
+ "emoji": {
+  "citadel_ability_bull_heal": {
+   "file": "abrams-1-siphon-life.png",
+   "sha": "48f3f8106d49c7c7",
+   "id": "AgADWsUAAjlQCEs",
+   "alt": [
+    "🩸"
+   ],
+   "keywords": [
+    "abrams",
+    "абрамс",
+    "siphon life"
+   ]
+  },
+  "citadel_ability_bull_charge": {
+   "file": "abrams-2-shoulder-charge.png",
+   "sha": "72af3bab48557ae2",
+   "id": "AgAD2a8AApxQCUs",
+   "alt": [
+    "🐂"
+   ],
+   "keywords": [
+    "abrams",
+    "абрамс",
+    "shoulder charge"
+   ]
+  },
+  "citadel_ability_passive_beefy": {
+   "file": "abrams-3-infernal-resilience.png",
+   "sha": "1889c8a05c95080e",
+   "id": "AgADt7QAAjYFCUs",
+   "alt": [
+    "❤️‍🔥"
+   ],
+   "keywords": [
+    "abrams",
+    "абрамс",
+    "infernal resilience"
+   ]
+  },
+  "citadel_ability_bull_leap": {
+   "file": "abrams-4-seismic-impact.png",
+   "sha": "f9803ae0d3ec8b4c",
+   "id": "AgAD768AAmRiCUs",
+   "alt": [
+    "💥"
+   ],
+   "keywords": [
+    "abrams",
+    "абрамс",
+    "seismic impact"
+   ]
+  },
+  "ability_fencer_throwblade": {
+   "file": "apollo-1-disengaging-sigil.png",
+   "sha": "6c1a788c417a2e71",
+   "id": "AgADJqEAAsN9EUs",
+   "alt": [
+    "✴️"
+   ],
+   "keywords": [
+    "apollo",
+    "аполло",
+    "disengaging sigil"
+   ]
+  },
+  "ability_fencer_riposte": {
+   "file": "apollo-2-riposte.png",
+   "sha": "cf8012ced2811f22",
+   "id": "AgADsrEAAi0aEEs",
+   "alt": [
+    "⚔️"
+   ],
+   "keywords": [
+    "apollo",
+    "аполло",
+    "riposte"
+   ]
+  },
+  "ability_fencer_lunge": {
+   "file": "apollo-3-flawless-advance.png",
+   "sha": "00eea77a87dfb302",
+   "id": "AgADaLgAAkKyCUs",
+   "alt": [
+    "🤺"
+   ],
+   "keywords": [
+    "apollo",
+    "аполло",
+    "flawless advance"
+   ]
+  },
+  "ability_fencer_ultimate": {
+   "file": "apollo-4-itani-lo-sahn.png",
+   "sha": "20a1a063144f5e1b",
+   "id": "AgADhqYAAmCNEUs",
+   "alt": [
+    "🗡️"
+   ],
+   "keywords": [
+    "apollo",
+    "аполло",
+    "itani lo sahn"
+   ]
+  },
+  "ability_baba_bubbling_brew": {
+   "file": "baba-1-threadsap.png",
+   "sha": "df4cba8798f4a1f8",
+   "id": "AgADnq0AAnTrCEs",
+   "alt": [
+    "🧵"
+   ],
+   "keywords": [
+    "baba",
+    "баба",
+    "threadsap"
+   ]
+  },
+  "ability_baba_bench_run": {
+   "file": "baba-2-granny-long-legs.png",
+   "sha": "2a10f790645399a1",
+   "id": "AgADSaEAAkmYEUs",
+   "alt": [
+    "🦵"
+   ],
+   "keywords": [
+    "baba",
+    "баба",
+    "granny long legs"
+   ]
+  },
+  "ability_baba_hexing_brew": {
+   "file": "baba-3-babas-brew.png",
+   "sha": "ff7a424d67893e94",
+   "id": "AgADdqgAAhX7EUs",
+   "alt": [
+    "🫖"
+   ],
+   "keywords": [
+    "baba",
+    "баба",
+    "baba's brew"
+   ]
+  },
+  "ability_baba_ultimate_2": {
+   "file": "baba-4-feed-the-birds.png",
+   "sha": "75f06eb6f6bdc4cf",
+   "id": "AgAD0LcAAnSeCUs",
+   "alt": [
+    "🐦"
+   ],
+   "keywords": [
+    "baba",
+    "баба",
+    "feed the birds"
+   ]
+  },
+  "citadel_ability_uppercut": {
+   "file": "bebop-1-exploding-uppercut.png",
+   "sha": "a77c33ce315d57ae",
+   "id": "AgADusMAAry7CUs",
+   "alt": [
+    "👊"
+   ],
+   "keywords": [
+    "bebop",
+    "бибоп",
+    "exploding uppercut"
+   ]
+  },
+  "citadel_ability_sticky_bomb": {
+   "file": "bebop-2-sticky-bomb.png",
+   "sha": "82cb40bc5d278604",
+   "id": "AgADlaYAAkEXCUs",
+   "alt": [
+    "💣"
+   ],
+   "keywords": [
+    "bebop",
+    "бибоп",
+    "sticky bomb"
+   ]
+  },
+  "citadel_ability_hook": {
+   "file": "bebop-3-grapple-arm.png",
+   "sha": "3a1abc04ac6f39aa",
+   "id": "AgADuqUAArJYCEs",
+   "alt": [
+    "🦾"
+   ],
+   "keywords": [
+    "bebop",
+    "бибоп",
+    "grapple arm"
+   ]
+  },
+  "citadel_ability_bebop_laser_beam": {
+   "file": "bebop-4-hyper-beam.png",
+   "sha": "0cd05e7eb9544948",
+   "id": "AgADtbYAAv14CUs",
+   "alt": [
+    "🔆"
+   ],
+   "keywords": [
+    "bebop",
+    "бибоп",
+    "hyper beam"
+   ]
+  },
+  "ability_punkgoat_ult": {
+   "file": "billy-1-bashdown.png",
+   "sha": "e0c59fd5ab8d2007",
+   "id": "AgADR6EAAiKVEEs",
+   "alt": [
+    "🏏"
+   ],
+   "keywords": [
+    "billy",
+    "билли",
+    "bashdown"
+   ]
+  },
+  "ability_punkgoat_goatflip": {
+   "file": "billy-2-rising-ram.png",
+   "sha": "b85d1b5a10f79562",
+   "id": "AgADSqMAAlHQEEs",
+   "alt": [
+    "🐐"
+   ],
+   "keywords": [
+    "billy",
+    "билли",
+    "rising ram"
+   ]
+  },
+  "ability_punkgoat_blasted": {
+   "file": "billy-3-blasted.png",
+   "sha": "c5cfa3c8c554dde1",
+   "id": "AgADk6EAAqUfEEs",
+   "alt": [
+    "💥"
+   ],
+   "keywords": [
+    "billy",
+    "билли",
+    "blasted"
+   ]
+  },
+  "ability_punkgoat_tether": {
+   "file": "billy-4-chain-gang.png",
+   "sha": "eabe30b53d5b7263",
+   "id": "AgADFrEAAhnYCUs",
+   "alt": [
+    "⛓️"
+   ],
+   "keywords": [
+    "billy",
+    "билли",
+    "chain gang"
+   ]
+  },
+  "ability_nano_clustergrenade": {
+   "file": "calico-1-gloom-bombs.png",
+   "sha": "ac0d1836cce8793b",
+   "id": "AgAD5qkAAtLgCUs",
+   "alt": [
+    "💣"
+   ],
+   "keywords": [
+    "calico",
+    "калико",
+    "gloom bombs"
+   ]
+  },
+  "ability_nano_dash": {
+   "file": "calico-2-leaping-slash.png",
+   "sha": "7d544d57db03d64e",
+   "id": "AgADRaQAAjzaCEs",
+   "alt": [
+    "🐾"
+   ],
+   "keywords": [
+    "calico",
+    "калико",
+    "leaping slash"
+   ]
+  },
+  "ability_nano_catform": {
+   "file": "calico-3-ava.png",
+   "sha": "d129b96e0970ee72",
+   "id": "AgAD_bgAAj-fCEs",
+   "alt": [
+    "🐈‍⬛"
+   ],
+   "keywords": [
+    "calico",
+    "калико",
+    "ava"
+   ]
+  },
+  "ability_nano_shadow_pulse": {
+   "file": "calico-4-return-to-shadows.png",
+   "sha": "b86ca74e9ff0ea89",
+   "id": "AgADxqYAAjLCCEs",
+   "alt": [
+    "🌑"
+   ],
+   "keywords": [
+    "calico",
+    "калико",
+    "return to shadows"
+   ]
+  },
+  "ability_unicorn_radiantblast": {
+   "file": "celeste-1-light-eater.png",
+   "sha": "582f085bbe140236",
+   "id": "AgADcaUAAoegEUs",
+   "alt": [
+    "🦄"
+   ],
+   "keywords": [
+    "celeste",
+    "селеста",
+    "light eater"
+   ]
+  },
+  "ability_unicorn_prismaticguard": {
+   "file": "celeste-2-dazzling-trick.png",
+   "sha": "94f4f21302ddaf87",
+   "id": "AgADrp8AAqA4EEs",
+   "alt": [
+    "✨"
+   ],
+   "keywords": [
+    "celeste",
+    "селеста",
+    "dazzling trick"
+   ]
+  },
+  "ability_unicorn_luminousstrike": {
+   "file": "celeste-3-radiant-daggers.png",
+   "sha": "61d8a5f58ddcb6a7",
+   "id": "AgADHa4AAs68CUs",
+   "alt": [
+    "🗡️"
+   ],
+   "keywords": [
+    "celeste",
+    "селеста",
+    "radiant daggers"
+   ]
+  },
+  "ability_unicorn_dazzlingorb": {
+   "file": "celeste-4-shining-wonder.png",
+   "sha": "f00cfcb46c294ba2",
+   "id": "AgADkasAApS1CEs",
+   "alt": [
+    "🌟"
+   ],
+   "keywords": [
+    "celeste",
+    "селеста",
+    "shining wonder"
+   ]
+  },
+  "ability_deadpack_chargeblast": {
+   "file": "deadman-danny-1-strix-salvo.png",
+   "sha": "ade7554983142105",
+   "id": "AgADyaoAAgYlCEs",
+   "alt": [
+    "🚀"
+   ],
+   "keywords": [
+    "deadman danny",
+    "дэнни",
+    "strix salvo"
+   ]
+  },
+  "ability_deadpack_rocketeer": {
+   "file": "deadman-danny-2-chimera-mk1.png",
+   "sha": "16d4a1845700b057",
+   "id": "AgAD97IAAlqVCEs",
+   "alt": [
+    "🔫"
+   ],
+   "keywords": [
+    "deadman danny",
+    "дэнни",
+    "chimera mk1"
+   ]
+  },
+  "ability_deadpack_flamethrower": {
+   "file": "deadman-danny-3-jettison-fuel.png",
+   "sha": "30a3c9225ecdc1ba",
+   "id": "AgAD_JwAAtlWEEs",
+   "alt": [
+    "⛽"
+   ],
+   "keywords": [
+    "deadman danny",
+    "дэнни",
+    "jettison fuel"
+   ]
+  },
+  "ability_deadpack_ultimate": {
+   "file": "deadman-danny-4-close-the-deal.png",
+   "sha": "db12493a25842e42",
+   "id": "AgADn7UAAgsrCEs",
+   "alt": [
+    "🤝"
+   ],
+   "keywords": [
+    "deadman danny",
+    "дэнни",
+    "close the deal"
+   ]
+  },
+  "ability_doorman_bomb": {
+   "file": "the-doorman-1-call-bell.png",
+   "sha": "4f85069f430fdadd",
+   "id": "AgADzJ4AAtuvEEs",
+   "alt": [
+    "🛎️"
+   ],
+   "keywords": [
+    "the doorman",
+    "дорман",
+    "call bell"
+   ]
+  },
+  "ability_doorman_doorway": {
+   "file": "the-doorman-2-doorway.png",
+   "sha": "891728745357b72a",
+   "id": "AgADtqUAAuR1EUs",
+   "alt": [
+    "🚪"
+   ],
+   "keywords": [
+    "the doorman",
+    "дорман",
+    "doorway"
+   ]
+  },
+  "ability_doorman_luggage_cart": {
+   "file": "the-doorman-3-luggage-cart.png",
+   "sha": "e5cf1f53ef8e2b60",
+   "id": "AgADyKcAArcrCEs",
+   "alt": [
+    "🧳"
+   ],
+   "keywords": [
+    "the doorman",
+    "дорман",
+    "luggage cart"
+   ]
+  },
+  "ability_doorman_hotel": {
+   "file": "the-doorman-4-hotel-guest.png",
+   "sha": "2ca082360b8ce027",
+   "id": "AgADpq4AApKwCEs",
+   "alt": [
+    "🏨"
+   ],
+   "keywords": [
+    "the doorman",
+    "дорман",
+    "hotel guest"
+   ]
+  },
+  "drifter_blood_blast": {
+   "file": "drifter-1-rend.png",
+   "sha": "2bc94ecb1ccd6968",
+   "id": "AgAD9q0AArvhCEs",
+   "alt": [
+    "🔪"
+   ],
+   "keywords": [
+    "drifter",
+    "дрифтер",
+    "rend"
+   ]
+  },
+  "drifter_shadow_mark": {
+   "file": "drifter-2-stalkers-mark.png",
+   "sha": "c01ea7b8a4b8829c",
+   "id": "AgADELYAAr7dCEs",
+   "alt": [
+    "🎯"
+   ],
+   "keywords": [
+    "drifter",
+    "дрифтер",
+    "stalker's mark"
+   ]
+  },
+  "ability_drifter_hunger": {
+   "file": "drifter-3-bloodscent.png",
+   "sha": "e60325575abe3141",
+   "id": "AgADlj0BAAFXYghL",
+   "alt": [
+    "🧛"
+   ],
+   "keywords": [
+    "drifter",
+    "дрифтер",
+    "bloodscent"
+   ]
+  },
+  "drifter_darkness": {
+   "file": "drifter-4-eternal-night.png",
+   "sha": "86347bb4da1f54af",
+   "id": "AgADDK4AAkIECEs",
+   "alt": [
+    "🌘"
+   ],
+   "keywords": [
+    "drifter",
+    "дрифтер",
+    "eternal night"
+   ]
+  },
+  "citadel_ability_stomp": {
+   "file": "dynamo-1-kinetic-pulse.png",
+   "sha": "cfc78ef9e888c45e",
+   "id": "AgADjbIAAnajCUs",
+   "alt": [
+    "💫"
+   ],
+   "keywords": [
+    "dynamo",
+    "динамо",
+    "kinetic pulse"
+   ]
+  },
+  "citadel_ability_void_sphere": {
+   "file": "dynamo-2-quantum-entanglement.png",
+   "sha": "e7fbbb098ed411ce",
+   "id": "AgADFKkAAjELCUs",
+   "alt": [
+    "🌌"
+   ],
+   "keywords": [
+    "dynamo",
+    "динамо",
+    "quantum entanglement"
+   ]
+  },
+  "citadel_ability_nikuman": {
+   "file": "dynamo-3-rejuvenating-aurora.png",
+   "sha": "0cc0a6f2a2b77d2f",
+   "id": "AgADJaoAAhMKCEs",
+   "alt": [
+    "💚"
+   ],
+   "keywords": [
+    "dynamo",
+    "динамо",
+    "rejuvenating aurora"
+   ]
+  },
+  "citadel_ability_self_vacuum": {
+   "file": "dynamo-4-singularity.png",
+   "sha": "be821714b686cd33",
+   "id": "AgAD56EAApLxEUs",
+   "alt": [
+    "🌀"
+   ],
+   "keywords": [
+    "dynamo",
+    "динамо",
+    "singularity"
+   ]
+  },
+  "ability_necro_hauntingskull": {
+   "file": "graves-1-jar-of-dead.png",
+   "sha": "1a9ff659a5e904d5",
+   "id": "AgADUrEAAmQaCUs",
+   "alt": [
+    "⚱️"
+   ],
+   "keywords": [
+    "graves",
+    "грейвс",
+    "jar of dead"
+   ]
+  },
+  "ability_necro_zombiewall": {
+   "file": "graves-2-grasping-hands.png",
+   "sha": "6ceb46b2187afc8a",
+   "id": "AgADKq0AAp7bCUs",
+   "alt": [
+    "🧟"
+   ],
+   "keywords": [
+    "graves",
+    "грейвс",
+    "grasping hands"
+   ]
+  },
+  "ability_necro_fear": {
+   "file": "graves-3-essence-theft.png",
+   "sha": "054ce52018d9d130",
+   "id": "AgADiqwAAmqtEEs",
+   "alt": [
+    "👻"
+   ],
+   "keywords": [
+    "graves",
+    "грейвс",
+    "essence theft"
+   ]
+  },
+  "ability_necro_gravestone": {
+   "file": "graves-4-borrowed-decree.png",
+   "sha": "2c9ef3f1ef6e1e75",
+   "id": "AgADLbYAAsi-CEs",
+   "alt": [
+    "🪦"
+   ],
+   "keywords": [
+    "graves",
+    "грейвс",
+    "borrowed decree"
+   ]
+  },
+  "ability_charged_shot": {
+   "file": "grey-talon-1-charged-shot.png",
+   "sha": "344b3e054ee47df6",
+   "id": "AgADQKoAAt5WCEs",
+   "alt": [
+    "🏹"
+   ],
+   "keywords": [
+    "grey talon",
+    "грей тэлон",
+    "charged shot"
+   ]
+  },
+  "ability_power_jump": {
+   "file": "grey-talon-2-rain-of-arrows.png",
+   "sha": "12b45f55a776a7de",
+   "id": "AgADqL4AApPBCEs",
+   "alt": [
+    "🌧️"
+   ],
+   "keywords": [
+    "grey talon",
+    "грей тэлон",
+    "rain of arrows"
+   ]
+  },
+  "ability_immobilize_trap": {
+   "file": "grey-talon-3-spirit-snare.png",
+   "sha": "9f9c85cdbae97643",
+   "id": "AgADvqwAAk4KCEs",
+   "alt": [
+    "🪤"
+   ],
+   "keywords": [
+    "grey talon",
+    "грей тэлон",
+    "spirit snare"
+   ]
+  },
+  "ability_guided_arrow": {
+   "file": "grey-talon-4-guided-owl.png",
+   "sha": "08d05dc34a33c5cd",
+   "id": "AgADU7EAAooLCUs",
+   "alt": [
+    "🦉"
+   ],
+   "keywords": [
+    "grey talon",
+    "грей тэлон",
+    "guided owl"
+   ]
+  },
+  "ability_sleep_dagger": {
+   "file": "haze-1-sleep-dagger.png",
+   "sha": "e639e7282081a5f9",
+   "id": "AgADW6wAAlnRCEs",
+   "alt": [
+    "😴"
+   ],
+   "keywords": [
+    "haze",
+    "хейз",
+    "sleep dagger"
+   ]
+  },
+  "ability_smoke_bomb": {
+   "file": "haze-2-smoke-bomb.png",
+   "sha": "ffb38d8ab00ee8d0",
+   "id": "AgADJ6gAArNqCUs",
+   "alt": [
+    "💨"
+   ],
+   "keywords": [
+    "haze",
+    "хейз",
+    "smoke bomb"
+   ]
+  },
+  "ability_stacking_damage": {
+   "file": "haze-3-fixation.png",
+   "sha": "6fbef6c403412f9c",
+   "id": "AgAD2qMAAjfsCUs",
+   "alt": [
+    "🎯"
+   ],
+   "keywords": [
+    "haze",
+    "хейз",
+    "fixation"
+   ]
+  },
+  "ability_bullet_flurry": {
+   "file": "haze-4-bullet-dance.png",
+   "sha": "c52a9e4b83277ba2",
+   "id": "AgADFLIAAlz3CUs",
+   "alt": [
+    "🔫"
+   ],
+   "keywords": [
+    "haze",
+    "хейз",
+    "bullet dance"
+   ]
+  },
+  "ability_explosive_barrel": {
+   "file": "holliday-1-powder-keg.png",
+   "sha": "2e4c06d9fe5ad2eb",
+   "id": "AgAD36sAAs_3CEs",
+   "alt": [
+    "🛢️"
+   ],
+   "keywords": [
+    "holliday",
+    "холлидей",
+    "powder keg"
+   ]
+  },
+  "ability_bounce_pad": {
+   "file": "holliday-2-bounce-pad.png",
+   "sha": "56657a2796ea579f",
+   "id": "AgAD2K0AAkmuCEs",
+   "alt": [
+    "🆙"
+   ],
+   "keywords": [
+    "holliday",
+    "холлидей",
+    "bounce pad"
+   ]
+  },
+  "ability_crackshot": {
+   "file": "holliday-3-crackshot.png",
+   "sha": "4c7f26e13e958f8e",
+   "id": "AgADPqIAAuDlCUs",
+   "alt": [
+    "🎯"
+   ],
+   "keywords": [
+    "holliday",
+    "холлидей",
+    "crackshot"
+   ]
+  },
+  "ability_gravity_lasso": {
+   "file": "holliday-4-spirit-lasso.png",
+   "sha": "cf8002f40045719a",
+   "id": "AgADq6IAAtYYCUs",
+   "alt": [
+    "🤠"
+   ],
+   "keywords": [
+    "holliday",
+    "холлидей",
+    "spirit lasso"
+   ]
+  },
+  "ability_incendiary_projectile": {
+   "file": "infernus-1-napalm.png",
+   "sha": "b63d8af6daeecaa4",
+   "id": "AgADn6EAAqJWEUs",
+   "alt": [
+    "🧨"
+   ],
+   "keywords": [
+    "infernus",
+    "инфернус",
+    "napalm"
+   ]
+  },
+  "ability_flame_dash": {
+   "file": "infernus-2-flame-dash.png",
+   "sha": "e6f32feecd72df66",
+   "id": "AgAD4K0AAo7oCEs",
+   "alt": [
+    "🏃"
+   ],
+   "keywords": [
+    "infernus",
+    "инфернус",
+    "flame dash"
+   ]
+  },
+  "ability_afterburn": {
+   "file": "infernus-3-afterburn.png",
+   "sha": "5aa1f0b7df8eb70d",
+   "id": "AgAD_6oAAllUCEs",
+   "alt": [
+    "🔥"
+   ],
+   "keywords": [
+    "infernus",
+    "инфернус",
+    "afterburn"
+   ]
+  },
+  "ability_fire_bomb": {
+   "file": "infernus-4-concussive-combustion.png",
+   "sha": "e4d108d1c2ecd360",
+   "id": "AgADXLMAAoMTCUs",
+   "alt": [
+    "💥"
+   ],
+   "keywords": [
+    "infernus",
+    "инфернус",
+    "concussive combustion"
+   ]
+  },
+  "citadel_ability_tengu_urn": {
+   "file": "ivy-1-entangling-thorns.png",
+   "sha": "01ee4fbfcbdd7f74",
+   "id": "AgADM60AAgpGCUs",
+   "alt": [
+    "🌿"
+   ],
+   "keywords": [
+    "ivy",
+    "айви",
+    "entangling thorns"
+   ]
+  },
+  "citadel_ability_tangotether": {
+   "file": "ivy-2-kudzu-connection.png",
+   "sha": "c065d997ee66f545",
+   "id": "AgADnqEAAqfKCUs",
+   "alt": [
+    "🔗"
+   ],
+   "keywords": [
+    "ivy",
+    "айви",
+    "kudzu connection"
+   ]
+  },
+  "citadel_ability_tengu_stone_form": {
+   "file": "ivy-3-stone-form.png",
+   "sha": "888467b223aead32",
+   "id": "AgAD_rMAAkR0CEs",
+   "alt": [
+    "🗿"
+   ],
+   "keywords": [
+    "ivy",
+    "айви",
+    "stone form"
+   ]
+  },
+  "citadel_ability_tengu_airlift": {
+   "file": "ivy-4-air-drop.png",
+   "sha": "82585fb3b28da363",
+   "id": "AgADMaQAAi9HCEs",
+   "alt": [
+    "🪂"
+   ],
+   "keywords": [
+    "ivy",
+    "айви",
+    "air drop"
+   ]
+  },
+  "ability_ice_grenade": {
+   "file": "kelvin-1-frost-grenade.png",
+   "sha": "f04b9fc0e64d2a79",
+   "id": "AgADG7EAAjMaCUs",
+   "alt": [
+    "❄️"
+   ],
+   "keywords": [
+    "kelvin",
+    "кельвин",
+    "frost grenade"
+   ]
+  },
+  "ability_icepath": {
+   "file": "kelvin-2-ice-path.png",
+   "sha": "daf93f2ff2ec1ff7",
+   "id": "AgADuqwAAsSuCUs",
+   "alt": [
+    "⛸️"
+   ],
+   "keywords": [
+    "kelvin",
+    "кельвин",
+    "ice path"
+   ]
+  },
+  "ability_icebeam": {
+   "file": "kelvin-3-arctic-beam.png",
+   "sha": "fc20dcf68263c5fd",
+   "id": "AgADzbEAAmd0CEs",
+   "alt": [
+    "🌬️"
+   ],
+   "keywords": [
+    "kelvin",
+    "кельвин",
+    "arctic beam"
+   ]
+  },
+  "ability_ice_dome": {
+   "file": "kelvin-4-frozen-shelter.png",
+   "sha": "3ea24a88c67a163a",
+   "id": "AgADLq8AAiD9CEs",
+   "alt": [
+    "🧊"
+   ],
+   "keywords": [
+    "kelvin",
+    "кельвин",
+    "frozen shelter"
+   ]
+  },
+  "ability_blood_bomb": {
+   "file": "lady-geist-1-essence-bomb.png",
+   "sha": "d73c2b4d1839819f",
+   "id": "AgADfqgAAk_yCEs",
+   "alt": [
+    "🩸"
+   ],
+   "keywords": [
+    "lady geist",
+    "леди гейст",
+    "essence bomb"
+   ]
+  },
+  "ability_life_drain": {
+   "file": "lady-geist-2-life-drain.png",
+   "sha": "8cf88357221529d3",
+   "id": "AgADQ6kAAmStEUs",
+   "alt": [
+    "💔"
+   ],
+   "keywords": [
+    "lady geist",
+    "леди гейст",
+    "life drain"
+   ]
+  },
+  "ability_blood_shards": {
+   "file": "lady-geist-3-malice.png",
+   "sha": "b08c47b6d59bfb5e",
+   "id": "AgAD56AAAkJ0EUs",
+   "alt": [
+    "🗡️"
+   ],
+   "keywords": [
+    "lady geist",
+    "леди гейст",
+    "malice"
+   ]
+  },
+  "ability_health_swap": {
+   "file": "lady-geist-4-soul-exchange.png",
+   "sha": "1014decc9382aa40",
+   "id": "AgAD78IAAgTKCEs",
+   "alt": [
+    "🔄"
+   ],
+   "keywords": [
+    "lady geist",
+    "леди гейст",
+    "soul exchange"
+   ]
+  },
+  "citadel_ability_lash_down_strike": {
+   "file": "lash-1-ground-strike.png",
+   "sha": "6059fb7b4d0b0c00",
+   "id": "AgADx6wAAs2kCUs",
+   "alt": [
+    "⬇️"
+   ],
+   "keywords": [
+    "lash",
+    "лэш",
+    "ground strike"
+   ]
+  },
+  "citadel_ability_lash": {
+   "file": "lash-2-grapple.png",
+   "sha": "ae9e59d968b07a1f",
+   "id": "AgADfZoAAlG6EUs",
+   "alt": [
+    "🪝"
+   ],
+   "keywords": [
+    "lash",
+    "лэш",
+    "grapple"
+   ]
+  },
+  "ability_lash_flog": {
+   "file": "lash-3-flog.png",
+   "sha": "0a0deb3c56326d91",
+   "id": "AgADHLUAAl9bCUs",
+   "alt": [
+    "🪢"
+   ],
+   "keywords": [
+    "lash",
+    "лэш",
+    "flog"
+   ]
+  },
+  "citadel_ability_lash_ultimate": {
+   "file": "lash-4-death-slam.png",
+   "sha": "f13d026554735f4b",
+   "id": "AgADMZ0AAky6EUs",
+   "alt": [
+    "💀"
+   ],
+   "keywords": [
+    "lash",
+    "лэш",
+    "death slam"
+   ]
+  },
+  "citadel_ability_shieldedsentry": {
+   "file": "mcginnis-1-mini-turret.png",
+   "sha": "181db0269931439f",
+   "id": "AgADwa0AAoqKCEs",
+   "alt": [
+    "🤖"
+   ],
+   "keywords": [
+    "mcginnis",
+    "макгиннис",
+    "mini turret"
+   ]
+  },
+  "citadel_ability_mobile_resupply": {
+   "file": "mcginnis-2-medicinal-specter.png",
+   "sha": "8fe80c5e923f8e29",
+   "id": "AgADZKkAAiMGCUs",
+   "alt": [
+    "💊"
+   ],
+   "keywords": [
+    "mcginnis",
+    "макгиннис",
+    "medicinal specter"
+   ]
+  },
+  "citadel_ability_fissure_wall": {
+   "file": "mcginnis-3-spectral-wall.png",
+   "sha": "c98965d33102a1ff",
+   "id": "AgADfLMAAs00CUs",
+   "alt": [
+    "🧱"
+   ],
+   "keywords": [
+    "mcginnis",
+    "макгиннис",
+    "spectral wall"
+   ]
+  },
+  "citadel_ability_rocket_barrage": {
+   "file": "mcginnis-4-heavy-barrage.png",
+   "sha": "c7e453bdaef89180",
+   "id": "AgAD_LEAAqOgCUs",
+   "alt": [
+    "🚀"
+   ],
+   "keywords": [
+    "mcginnis",
+    "макгиннис",
+    "heavy barrage"
+   ]
+  },
+  "ability_vampirebat_steallife": {
+   "file": "mina-1-rake.png",
+   "sha": "9e052fe47a87a193",
+   "id": "AgAD1akAAqRECEs",
+   "alt": [
+    "🩸"
+   ],
+   "keywords": [
+    "mina",
+    "мина",
+    "rake"
+   ]
+  },
+  "ability_vampirebat_batblink": {
+   "file": "mina-2-sanguine-retreat.png",
+   "sha": "858125ea3151827d",
+   "id": "AgADl6gAAkz9CEs",
+   "alt": [
+    "🦇"
+   ],
+   "keywords": [
+    "mina",
+    "мина",
+    "sanguine retreat"
+   ]
+  },
+  "ability_vampirebat_lovebites": {
+   "file": "mina-3-love-bites.png",
+   "sha": "cf3ed584a74df96a",
+   "id": "AgADNKUAAuzGEUs",
+   "alt": [
+    "💋"
+   ],
+   "keywords": [
+    "mina",
+    "мина",
+    "love bites"
+   ]
+  },
+  "ability_vampirebat_batswarm": {
+   "file": "mina-4-nox-nostra.png",
+   "sha": "8191c7e63225a87c",
+   "id": "AgADCrAAAvyvCUs",
+   "alt": [
+    "🌀"
+   ],
+   "keywords": [
+    "mina",
+    "мина",
+    "nox nostra"
+   ]
+  },
+  "mirage_fire_beetles": {
+   "file": "mirage-1-fire-scarabs.png",
+   "sha": "75f7cf32418bd3d9",
+   "id": "AgADq7sAArfhCUs",
+   "alt": [
+    "🪲"
+   ],
+   "keywords": [
+    "mirage",
+    "мираж",
+    "fire scarabs"
+   ]
+  },
+  "mirage_tornado": {
+   "file": "mirage-2-dust-devil.png",
+   "sha": "e1330ca90d9a16dd",
+   "id": "AgADBLYAAuPACUs",
+   "alt": [
+    "🌪️"
+   ],
+   "keywords": [
+    "mirage",
+    "мираж",
+    "dust devil"
+   ]
+  },
+  "mirage_sand_phantom": {
+   "file": "mirage-3-djinns-mark.png",
+   "sha": "45ce22aac8fc1d6b",
+   "id": "AgADOq4AAnu6CUs",
+   "alt": [
+    "👁️"
+   ],
+   "keywords": [
+    "mirage",
+    "мираж",
+    "djinn's mark"
+   ]
+  },
+  "mirage_teleport": {
+   "file": "mirage-4-traveler.png",
+   "sha": "9196c933691a7d47",
+   "id": "AgADPLsAAu2LCEs",
+   "alt": [
+    "🧞"
+   ],
+   "keywords": [
+    "mirage",
+    "мираж",
+    "traveler"
+   ]
+  },
+  "ability_intimidate": {
+   "file": "mo-krill-1-scorn.png",
+   "sha": "6f315e07c76e9323",
+   "id": "AgAD-qUAApRcEUs",
+   "alt": [
+    "💢"
+   ],
+   "keywords": [
+    "mo & krill",
+    "мо и крилл",
+    "scorn"
+   ]
+  },
+  "ability_burrow": {
+   "file": "mo-krill-2-burrow.png",
+   "sha": "0678c901c3e01174",
+   "id": "AgAD6qUAAmOJEEs",
+   "alt": [
+    "🕳️"
+   ],
+   "keywords": [
+    "mo & krill",
+    "мо и крилл",
+    "burrow"
+   ]
+  },
+  "ability_throw_sand": {
+   "file": "mo-krill-3-sand-blast.png",
+   "sha": "98425933d51c7fc3",
+   "id": "AgADlaAAAs3QCUs",
+   "alt": [
+    "🏜️"
+   ],
+   "keywords": [
+    "mo & krill",
+    "мо и крилл",
+    "sand blast"
+   ]
+  },
+  "ability_ult_combo": {
+   "file": "mo-krill-4-combo.png",
+   "sha": "fdfcdbad1585a941",
+   "id": "AgADuqEAAoiICUs",
+   "alt": [
+    "🥊"
+   ],
+   "keywords": [
+    "mo & krill",
+    "мо и крилл",
+    "combo"
+   ]
+  },
+  "ability_nurse_leech_therapy": {
+   "file": "nurse-harrow-1-leech-therapy.png",
+   "sha": "76c00160b46cf591",
+   "id": "AgAD7KYAAoC1CUs",
+   "alt": [
+    "🪱"
+   ],
+   "keywords": [
+    "nurse harrow",
+    "харроу",
+    "leech therapy"
+   ]
+  },
+  "ability_nurse_adrenaline_rush": {
+   "file": "nurse-harrow-2-wretched-vapors.png",
+   "sha": "0bb2e52e93b7d504",
+   "id": "AgAD-rYAAle-CUs",
+   "alt": [
+    "💨"
+   ],
+   "keywords": [
+    "nurse harrow",
+    "харроу",
+    "wretched vapors"
+   ]
+  },
+  "ability_nurse_healing_needles": {
+   "file": "nurse-harrow-3-healing-needles.png",
+   "sha": "46502030b7916ff3",
+   "id": "AgADyq0AAtfZCUs",
+   "alt": [
+    "💉"
+   ],
+   "keywords": [
+    "nurse harrow",
+    "харроу",
+    "healing needles"
+   ]
+  },
+  "ability_nurse_fear": {
+   "file": "nurse-harrow-4-lurking-terrors.png",
+   "sha": "eaf2e44697b81bc7",
+   "id": "AgADk6sAAl7QCEs",
+   "alt": [
+    "👹"
+   ],
+   "keywords": [
+    "nurse harrow",
+    "харроу",
+    "lurking terrors"
+   ]
+  },
+  "ability_bookworm_dragonfire": {
+   "file": "paige-1-bookwyrm.png",
+   "sha": "9bfea916526560b8",
+   "id": "AgADkLkAAvO2CUs",
+   "alt": [
+    "🐉"
+   ],
+   "keywords": [
+    "paige",
+    "пейдж",
+    "bookwyrm"
+   ]
+  },
+  "ability_bookworm_knightbarrier": {
+   "file": "paige-2-plot-armor.png",
+   "sha": "f4da4dc5ac7397d2",
+   "id": "AgADeZ8AAjqMCEs",
+   "alt": [
+    "🛡️"
+   ],
+   "keywords": [
+    "paige",
+    "пейдж",
+    "plot armor"
+   ]
+  },
+  "ability_bookworm_aoemagic": {
+   "file": "paige-3-captivating-read.png",
+   "sha": "f3eeb5604ec01b86",
+   "id": "AgADW7MAAnz7CEs",
+   "alt": [
+    "📖"
+   ],
+   "keywords": [
+    "paige",
+    "пейдж",
+    "captivating read"
+   ]
+  },
+  "ability_bookworm_knightcharge": {
+   "file": "paige-4-rallying-charge.png",
+   "sha": "3fb5fa6c6d7e81d1",
+   "id": "AgADcJ4AAkddEEs",
+   "alt": [
+    "🐴"
+   ],
+   "keywords": [
+    "paige",
+    "пейдж",
+    "rallying charge"
+   ]
+  },
+  "citadel_ability_chrono_pulse_grenade": {
+   "file": "paradox-1-pulse-grenade.png",
+   "sha": "fd83a1a2c7402ac8",
+   "id": "AgADRbYAAqw7CEs",
+   "alt": [
+    "⏳"
+   ],
+   "keywords": [
+    "paradox",
+    "парадокс",
+    "pulse grenade"
+   ]
+  },
+  "citadel_ability_chrono_time_wall": {
+   "file": "paradox-2-time-wall.png",
+   "sha": "be477214834267be",
+   "id": "AgADXqUAApOZCUs",
+   "alt": [
+    "⌛"
+   ],
+   "keywords": [
+    "paradox",
+    "парадокс",
+    "time wall"
+   ]
+  },
+  "citadel_ability_chrono_kinetic_carbine": {
+   "file": "paradox-3-kinetic-carbine.png",
+   "sha": "2a73f02792f93a9b",
+   "id": "AgADh6sAAof2CEs",
+   "alt": [
+    "🔫"
+   ],
+   "keywords": [
+    "paradox",
+    "парадокс",
+    "kinetic carbine"
+   ]
+  },
+  "citadel_ability_chrono_swap": {
+   "file": "paradox-4-paradoxical-swap.png",
+   "sha": "4cdb78d3aa30d88a",
+   "id": "AgADDaoAAhzCCEs",
+   "alt": [
+    "🔄"
+   ],
+   "keywords": [
+    "paradox",
+    "парадокс",
+    "paradoxical swap"
+   ]
+  },
+  "synth_barrage": {
+   "file": "pocket-1-barrage.png",
+   "sha": "ae511a59716c86a6",
+   "id": "AgADY6YAAl_9CEs",
+   "alt": [
+    "☄️"
+   ],
+   "keywords": [
+    "pocket",
+    "покет",
+    "barrage"
+   ]
+  },
+  "synth_plasma_flux": {
+   "file": "pocket-2-flying-cloak.png",
+   "sha": "9dc694d5bc036c3f",
+   "id": "AgADUK8AAlf7CEs",
+   "alt": [
+    "🧥"
+   ],
+   "keywords": [
+    "pocket",
+    "покет",
+    "flying cloak"
+   ]
+  },
+  "synth_pulse": {
+   "file": "pocket-3-enchanters-satchel.png",
+   "sha": "ea07b30dfdec96f7",
+   "id": "AgADQ7AAAr6LCEs",
+   "alt": [
+    "💼"
+   ],
+   "keywords": [
+    "pocket",
+    "покет",
+    "enchanter's satchel"
+   ]
+  },
+  "synth_affliction": {
+   "file": "pocket-4-affliction.png",
+   "sha": "46b81a02dbd7f80c",
+   "id": "AgADULAAAm2NCUs",
+   "alt": [
+    "🐸"
+   ],
+   "keywords": [
+    "pocket",
+    "покет",
+    "affliction"
+   ]
+  },
+  "ability_ratking_scrap_grenade": {
+   "file": "rat-king-1-scrap-grenade.png",
+   "sha": "c5b42994c143f99c",
+   "id": "AgADtLoAAutvCEs",
+   "alt": [
+    "💣"
+   ],
+   "keywords": [
+    "rat king",
+    "крысиный король",
+    "scrap grenade"
+   ]
+  },
+  "ability_ratking_ratnibble": {
+   "file": "rat-king-2-rat-swarm.png",
+   "sha": "24ed446600086377",
+   "id": "AgADgKgAAiTOCEs",
+   "alt": [
+    "🐀"
+   ],
+   "keywords": [
+    "rat king",
+    "крысиный король",
+    "rat swarm"
+   ]
+  },
+  "ability_ratking_ratarmor": {
+   "file": "rat-king-3-royal-pestments.png",
+   "sha": "8c878e5b4f663d9c",
+   "id": "AgADAakAAj6cCEs",
+   "alt": [
+    "👑"
+   ],
+   "keywords": [
+    "rat king",
+    "крысиный король",
+    "royal pestments"
+   ]
+  },
+  "ability_ratking_standard_bearer": {
+   "file": "rat-king-4-rule-ratannia.png",
+   "sha": "29cfc0efd6454dc7",
+   "id": "AgAD37YAApUlCEs",
+   "alt": [
+    "🚩"
+   ],
+   "keywords": [
+    "rat king",
+    "крысиный король",
+    "rule, ratannia!"
+   ]
+  },
+  "ability_familiar_ability02": {
+   "file": "rem-1-pillow-toss.png",
+   "sha": "5039f69ed181aa68",
+   "id": "AgADqaMAAqguCUs",
+   "alt": [
+    "💤"
+   ],
+   "keywords": [
+    "rem",
+    "рем",
+    "pillow toss"
+   ]
+  },
+  "ability_familiar_attach": {
+   "file": "rem-2-tag-along.png",
+   "sha": "fce15b3981e835ef",
+   "id": "AgADyqUAAjOrEUs",
+   "alt": [
+    "🫂"
+   ],
+   "keywords": [
+    "rem",
+    "рем",
+    "tag along"
+   ]
+  },
+  "ability_familiar_helpinghands": {
+   "file": "rem-3-lil-helpers.png",
+   "sha": "aef3eb8b27864d58",
+   "id": "AgADjbAAAjoOCEs",
+   "alt": [
+    "👻"
+   ],
+   "keywords": [
+    "rem",
+    "рем",
+    "lil helpers"
+   ]
+  },
+  "ability_familiar_ability01": {
+   "file": "rem-4-naptime.png",
+   "sha": "c521010b7eb2708f",
+   "id": "AgAD050AAqN-EEs",
+   "alt": [
+    "🌙"
+   ],
+   "keywords": [
+    "rem",
+    "рем",
+    "naptime"
+   ]
+  },
+  "citadel_ability_lightning_ball": {
+   "file": "seven-1-lightning-ball.png",
+   "sha": "1c8835109b19c706",
+   "id": "AgADvqcAAsJqCEs",
+   "alt": [
+    "⚡"
+   ],
+   "keywords": [
+    "seven",
+    "севен",
+    "lightning ball"
+   ]
+  },
+  "citadel_ability_static_charge": {
+   "file": "seven-2-static-charge.png",
+   "sha": "5fe3c782dfc66914",
+   "id": "AgADgKwAAuQZCUs",
+   "alt": [
+    "🧲"
+   ],
+   "keywords": [
+    "seven",
+    "севен",
+    "static charge"
+   ]
+  },
+  "ability_power_surge": {
+   "file": "seven-3-power-surge.png",
+   "sha": "5e7b6488b69c8208",
+   "id": "AgADQLQAAgrKCUs",
+   "alt": [
+    "🔋"
+   ],
+   "keywords": [
+    "seven",
+    "севен",
+    "power surge"
+   ]
+  },
+  "citadel_ability_storm_cloud": {
+   "file": "seven-4-storm-cloud.png",
+   "sha": "172f8f67faa3044a",
+   "id": "AgADQ7QAAjbQCUs",
+   "alt": [
+    "⛈️"
+   ],
+   "keywords": [
+    "seven",
+    "севен",
+    "storm cloud"
+   ]
+  },
+  "citadel_ability_shiv_dagger": {
+   "file": "shiv-1-serrated-knives.png",
+   "sha": "d873a58799943e1f",
+   "id": "AgAD6rMAApVnCEs",
+   "alt": [
+    "🔪"
+   ],
+   "keywords": [
+    "shiv",
+    "шив",
+    "serrated knives"
+   ]
+  },
+  "citadel_ability_shiv_dash": {
+   "file": "shiv-2-slice-and-dice.png",
+   "sha": "77d6e1bce9f67b00",
+   "id": "AgADs6MAAh8pEEs",
+   "alt": [
+    "🗡️"
+   ],
+   "keywords": [
+    "shiv",
+    "шив",
+    "slice and dice"
+   ]
+  },
+  "citadel_ability_shiv_defer_damage": {
+   "file": "shiv-3-bloodletting.png",
+   "sha": "f73273a29a7f410a",
+   "id": "AgADSKcAAn7PCEs",
+   "alt": [
+    "🩸"
+   ],
+   "keywords": [
+    "shiv",
+    "шив",
+    "bloodletting"
+   ]
+  },
+  "citadel_ability_shiv_killing_blow": {
+   "file": "shiv-4-killing-blow.png",
+   "sha": "dc05d28b4fe9fdf2",
+   "id": "AgADi7MAAohzCUs",
+   "alt": [
+    "☠️"
+   ],
+   "keywords": [
+    "shiv",
+    "шив",
+    "killing blow"
+   ]
+  },
+  "ability_werewolf_unloadgun": {
+   "file": "silver-1-slam-fire.png",
+   "sha": "892b1875d6f486fc",
+   "id": "AgAD4bgAArjYCUs",
+   "alt": [
+    "🔫"
+   ],
+   "keywords": [
+    "silver",
+    "сильвер",
+    "slam fire"
+   ]
+  },
+  "ability_werewolf_kickflip": {
+   "file": "silver-2-boot-kick.png",
+   "sha": "71b2fc16cdbef3fe",
+   "id": "AgADb68AAiScCUs",
+   "alt": [
+    "🥾"
+   ],
+   "keywords": [
+    "silver",
+    "сильвер",
+    "boot kick"
+   ]
+  },
+  "ability_werewolf_netshot": {
+   "file": "silver-3-entangling-bola.png",
+   "sha": "99516c0d323970eb",
+   "id": "AgADJLMAAiiLCUs",
+   "alt": [
+    "🪢"
+   ],
+   "keywords": [
+    "silver",
+    "сильвер",
+    "entangling bola"
+   ]
+  },
+  "ability_werewolf_transformation": {
+   "file": "silver-4-lycan-curse.png",
+   "sha": "b342177e9090c27a",
+   "id": "AgADb6wAAhxJCUs",
+   "alt": [
+    "🐺"
+   ],
+   "keywords": [
+    "silver",
+    "сильвер",
+    "lycan curse"
+   ]
+  },
+  "ability_magician_magicbolt": {
+   "file": "sinclair-1-vexing-bolt.png",
+   "sha": "b698caadffd835a4",
+   "id": "AgADvusAAuFNCUs",
+   "alt": [
+    "✨"
+   ],
+   "keywords": [
+    "sinclair",
+    "синклер",
+    "vexing bolt"
+   ]
+  },
+  "ability_magician_cloneturret": {
+   "file": "sinclair-2-spectral-assistant.png",
+   "sha": "400faf5fa751785c",
+   "id": "AgADu6QAAs4pEEs",
+   "alt": [
+    "💃"
+   ],
+   "keywords": [
+    "sinclair",
+    "синклер",
+    "spectral assistant"
+   ]
+  },
+  "ability_magician_animalhexarea": {
+   "file": "sinclair-3-rabbit-hex.png",
+   "sha": "428d83febaff29d7",
+   "id": "AgADLrUAApcLCUs",
+   "alt": [
+    "🐇"
+   ],
+   "keywords": [
+    "sinclair",
+    "синклер",
+    "rabbit hex"
+   ]
+  },
+  "ability_magician_copyult": {
+   "file": "sinclair-4-audience-participation.png",
+   "sha": "282704116667f06d",
+   "id": "AgADsrQAAoY4CUs",
+   "alt": [
+    "🎩"
+   ],
+   "keywords": [
+    "sinclair",
+    "синклер",
+    "audience participation"
+   ]
+  },
+  "ability_chessmaster_throwbishop": {
+   "file": "solomon-1-setup-bishop.png",
+   "sha": "396f3fa1fa36c4bb",
+   "id": "AgADRrcAAoRlCEs",
+   "alt": [
+    "♟️"
+   ],
+   "keywords": [
+    "solomon",
+    "соломон",
+    "setup bishop"
+   ]
+  },
+  "ability_chessmaster_knightbuff": {
+   "file": "solomon-2-kingside-knight.png",
+   "sha": "c311c213703d5424",
+   "id": "AgADXbQAAnbFCUs",
+   "alt": [
+    "🐴"
+   ],
+   "keywords": [
+    "solomon",
+    "соломон",
+    "kingside knight"
+   ]
+  },
+  "ability_chessmaster_forkpiece": {
+   "file": "solomon-3-rook-battery.png",
+   "sha": "eb356bcc02ebe835",
+   "id": "AgADxLYAAnsNCUs",
+   "alt": [
+    "🏰"
+   ],
+   "keywords": [
+    "solomon",
+    "соломон",
+    "rook battery"
+   ]
+  },
+  "ability_chessmaster_queen": {
+   "file": "solomon-4-develop-queen.png",
+   "sha": "3f62b4d25c7a828e",
+   "id": "AgADq7UAAm01CEs",
+   "alt": [
+    "👑"
+   ],
+   "keywords": [
+    "solomon",
+    "соломон",
+    "develop queen"
+   ]
+  },
+  "ability_priest_flashbang": {
+   "file": "venator-1-consecrating-grenade.png",
+   "sha": "a2be62d3c4e18943",
+   "id": "AgAD3LgAAtHHCEs",
+   "alt": [
+    "🧪"
+   ],
+   "keywords": [
+    "venator",
+    "венатор",
+    "consecrating grenade"
+   ]
+  },
+  "ability_priest_knockback": {
+   "file": "venator-2-gutshot.png",
+   "sha": "39db668e54f4da48",
+   "id": "AgAD-6UAAu5UCEs",
+   "alt": [
+    "💥"
+   ],
+   "keywords": [
+    "venator",
+    "венатор",
+    "gutshot"
+   ]
+  },
+  "ability_priest_beartrap": {
+   "file": "venator-3-hex-lined-snap-trap.png",
+   "sha": "8359ec7b227538f8",
+   "id": "AgADfKsAAqk5EEs",
+   "alt": [
+    "🪤"
+   ],
+   "keywords": [
+    "venator",
+    "венатор",
+    "hex-lined snap trap"
+   ]
+  },
+  "ability_priest_weaponswap": {
+   "file": "venator-4-ira-domini.png",
+   "sha": "36d2253a7a170433",
+   "id": "AgADgKgAAjewCUs",
+   "alt": [
+    "✝️"
+   ],
+   "keywords": [
+    "venator",
+    "венатор",
+    "ira domini"
+   ]
+  },
+  "ability_frank_shocktarget2": {
+   "file": "victor-1-pain-battery.png",
+   "sha": "3b8d8366725369c6",
+   "id": "AgADwq8AAkHbCUs",
+   "alt": [
+    "🔋"
+   ],
+   "keywords": [
+    "victor",
+    "виктор",
+    "pain battery"
+   ]
+  },
+  "ability_frank_selfzap": {
+   "file": "victor-2-jumpstart.png",
+   "sha": "476c730a0ebb5b42",
+   "id": "AgADaLIAAjQrCEs",
+   "alt": [
+    "⚡"
+   ],
+   "keywords": [
+    "victor",
+    "виктор",
+    "jumpstart"
+   ]
+  },
+  "ability_frank_painaura": {
+   "file": "victor-3-aura-of-suffering.png",
+   "sha": "6b9ea1536a82eee4",
+   "id": "AgADuKcAAqNpCUs",
+   "alt": [
+    "😖"
+   ],
+   "keywords": [
+    "victor",
+    "виктор",
+    "aura of suffering"
+   ]
+  },
+  "ability_frank_revive": {
+   "file": "victor-4-shocking-reanimation.png",
+   "sha": "15480b08ae8014a0",
+   "id": "AgAD6aQAAmIfCUs",
+   "alt": [
+    "🧟"
+   ],
+   "keywords": [
+    "victor",
+    "виктор",
+    "shocking reanimation"
+   ]
+  },
+  "citadel_ability_hornet_chain": {
+   "file": "vindicta-1-stake.png",
+   "sha": "ab03434c3bdf5080",
+   "id": "AgADdKEAAlPfEUs",
+   "alt": [
+    "📍"
+   ],
+   "keywords": [
+    "vindicta",
+    "виндикта",
+    "stake"
+   ]
+  },
+  "citadel_ability_hornet_leap": {
+   "file": "vindicta-2-flight.png",
+   "sha": "52ec6f4f306a285e",
+   "id": "AgADO6kAAv6qCEs",
+   "alt": [
+    "🕊️"
+   ],
+   "keywords": [
+    "vindicta",
+    "виндикта",
+    "flight"
+   ]
+  },
+  "citadel_ability_hornet_sting": {
+   "file": "vindicta-3-crow-familiar.png",
+   "sha": "14faa300cb5ad1bc",
+   "id": "AgADbpsAAh03EUs",
+   "alt": [
+    "🐦"
+   ],
+   "keywords": [
+    "vindicta",
+    "виндикта",
+    "crow familiar"
+   ]
+  },
+  "citadel_ability_hornet_snipe": {
+   "file": "vindicta-4-assassinate.png",
+   "sha": "9da1cbca17973dcd",
+   "id": "AgADDLgAAqOBCUs",
+   "alt": [
+    "🎯"
+   ],
+   "keywords": [
+    "vindicta",
+    "виндикта",
+    "assassinate"
+   ]
+  },
+  "ability_artist_homingbrush": {
+   "file": "violet-1-living-ink.png",
+   "sha": "48cdb89e8d504838",
+   "id": "AgADbbEAAlJQCUs",
+   "alt": [
+    "🖋️"
+   ],
+   "keywords": [
+    "violet",
+    "вайолет",
+    "living ink"
+   ]
+  },
+  "ability_artist_rollingprojectile": {
+   "file": "violet-2-flow-state.png",
+   "sha": "a87c6a89b47f3eea",
+   "id": "AgADjbUAAjQQCEs",
+   "alt": [
+    "🖌️"
+   ],
+   "keywords": [
+    "violet",
+    "вайолет",
+    "flow state"
+   ]
+  },
+  "ability_artist_tether": {
+   "file": "violet-3-still-life.png",
+   "sha": "cf53ea7b801ff650",
+   "id": "AgADm6QAAvVtEUs",
+   "alt": [
+    "🖼️"
+   ],
+   "keywords": [
+    "violet",
+    "вайолет",
+    "still life"
+   ]
+  },
+  "ability_artist_bamboogrove": {
+   "file": "violet-4-abstract-landscape.png",
+   "sha": "d36ff7aeb0739445",
+   "id": "AgADZ6sAAqw3CEs",
+   "alt": [
+    "🎨"
+   ],
+   "keywords": [
+    "violet",
+    "вайолет",
+    "abstract landscape"
+   ]
+  },
+  "viscous_goo_grenade": {
+   "file": "viscous-1-splatter.png",
+   "sha": "009fc195e1d779d2",
+   "id": "AgADr7UAAu29CUs",
+   "alt": [
+    "💦"
+   ],
+   "keywords": [
+    "viscous",
+    "вискоз",
+    "splatter"
+   ]
+  },
+  "viscous_restorative_goo": {
+   "file": "viscous-2-the-cube.png",
+   "sha": "70ac995315e916e7",
+   "id": "AgAD_qoAApVDCEs",
+   "alt": [
+    "🧊"
+   ],
+   "keywords": [
+    "viscous",
+    "вискоз",
+    "the cube"
+   ]
+  },
+  "viscous_telepunch": {
+   "file": "viscous-3-puddle-punch.png",
+   "sha": "e38568afdc9409c2",
+   "id": "AgADbLQAAuXBCEs",
+   "alt": [
+    "👊"
+   ],
+   "keywords": [
+    "viscous",
+    "вискоз",
+    "puddle punch"
+   ]
+  },
+  "viscous_goo_bowling_ball": {
+   "file": "viscous-4-goo-ball.png",
+   "sha": "837584c201661178",
+   "id": "AgADL7MAAhZTCEs",
+   "alt": [
+    "🟢"
+   ],
+   "keywords": [
+    "viscous",
+    "вискоз",
+    "goo ball"
+   ]
+  },
+  "ability_viper_debuffdagger": {
+   "file": "vyper-1-screwjab-dagger.png",
+   "sha": "aecbbece5c3b82c3",
+   "id": "AgADF6gAAh2CEEs",
+   "alt": [
+    "🗡️"
+   ],
+   "keywords": [
+    "vyper",
+    "вайпер",
+    "screwjab dagger"
+   ]
+  },
+  "ability_viper_venom": {
+   "file": "vyper-2-lethal-venom.png",
+   "sha": "1841b4e85ddb47f5",
+   "id": "AgADoq0AArvjCUs",
+   "alt": [
+    "🐍"
+   ],
+   "keywords": [
+    "vyper",
+    "вайпер",
+    "lethal venom"
+   ]
+  },
+  "ability_viper_snakedash": {
+   "file": "vyper-3-slither.png",
+   "sha": "7c1699e52f1710a7",
+   "id": "AgADwq0AAgHfCUs",
+   "alt": [
+    "💨"
+   ],
+   "keywords": [
+    "vyper",
+    "вайпер",
+    "slither"
+   ]
+  },
+  "ability_viper_petrifybola": {
+   "file": "vyper-4-petrifying-bola.png",
+   "sha": "3d474be11921e433",
+   "id": "AgADI6oAAi6jCEs",
+   "alt": [
+    "🗿"
+   ],
+   "keywords": [
+    "vyper",
+    "вайпер",
+    "petrifying bola"
+   ]
+  },
+  "ability_warden_crowd_control": {
+   "file": "warden-1-alchemical-flask.png",
+   "sha": "eafb1fd90b77bbf5",
+   "id": "AgADGq0AAp-dCUs",
+   "alt": [
+    "🧪"
+   ],
+   "keywords": [
+    "warden",
+    "варден",
+    "alchemical flask"
+   ]
+  },
+  "ability_warden_high_alert": {
+   "file": "warden-2-willpower.png",
+   "sha": "996b87b93ff9bebd",
+   "id": "AgADK6IAAha0EEs",
+   "alt": [
+    "🛡️"
+   ],
+   "keywords": [
+    "warden",
+    "варден",
+    "willpower"
+   ]
+  },
+  "ability_warden_lock_down": {
+   "file": "warden-3-binding-word.png",
+   "sha": "60bde6bdc0bda2f4",
+   "id": "AgADKKYAAtAMEUs",
+   "alt": [
+    "⛓️"
+   ],
+   "keywords": [
+    "warden",
+    "варден",
+    "binding word"
+   ]
+  },
+  "ability_warden_riot_protocol": {
+   "file": "warden-4-last-stand.png",
+   "sha": "ed6aa5041506377b",
+   "id": "AgADzqYAAnMTCEs",
+   "alt": [
+    "🚨"
+   ],
+   "keywords": [
+    "warden",
+    "варден",
+    "last stand"
+   ]
+  },
+  "citadel_ability_card_toss": {
+   "file": "wraith-1-card-trick.png",
+   "sha": "81ea93f633255f1c",
+   "id": "AgAD_6sAAj9fCEs",
+   "alt": [
+    "🃏"
+   ],
+   "keywords": [
+    "wraith",
+    "рейт",
+    "card trick"
+   ]
+  },
+  "citadel_ability_projectmind": {
+   "file": "wraith-2-project-mind.png",
+   "sha": "0dac079a3327327b",
+   "id": "AgAD2K0AAnJaEEs",
+   "alt": [
+    "🌀"
+   ],
+   "keywords": [
+    "wraith",
+    "рейт",
+    "project mind"
+   ]
+  },
+  "citadel_ability_wraith_rapidfire": {
+   "file": "wraith-3-full-auto.png",
+   "sha": "34601b31370645ff",
+   "id": "AgADlqcAArlJCEs",
+   "alt": [
+    "🔫"
+   ],
+   "keywords": [
+    "wraith",
+    "рейт",
+    "full auto"
+   ]
+  },
+  "citadel_ability_psychic_lift": {
+   "file": "wraith-4-telekinesis.png",
+   "sha": "c5d4dd39a7c97b07",
+   "id": "AgADiaoAArPrCUs",
+   "alt": [
+    "✋"
+   ],
+   "keywords": [
+    "wraith",
+    "рейт",
+    "telekinesis"
+   ]
+  },
+  "citadel_ability_power_slash": {
+   "file": "yamato-1-power-slash.png",
+   "sha": "b0ded0bb537de234",
+   "id": "AgAD8rIAAvBWCEs",
+   "alt": [
+    "⚔️"
+   ],
+   "keywords": [
+    "yamato",
+    "ямато",
+    "power slash"
+   ]
+  },
+  "citadel_ability_flying_strike": {
+   "file": "yamato-2-flying-slash.png",
+   "sha": "f0f3faea9137e023",
+   "id": "AgADQ7UAAhDNCEs",
+   "alt": [
+    "🗡️"
+   ],
+   "keywords": [
+    "yamato",
+    "ямато",
+    "flying slash"
+   ]
+  },
+  "citadel_ability_healing_slash": {
+   "file": "yamato-3-crimson-slash.png",
+   "sha": "64cbbe8066f21187",
+   "id": "AgADZaIAAsFWEEs",
+   "alt": [
+    "🩸"
+   ],
+   "keywords": [
+    "yamato",
+    "ямато",
+    "crimson slash"
+   ]
+  },
+  "citadel_ability_infinity_slash": {
+   "file": "yamato-4-shadow-transformation.png",
+   "sha": "ec8dc1a289cf3ea1",
+   "id": "AgADtKgAAqDaCUs",
+   "alt": [
+    "🌑"
+   ],
+   "keywords": [
+    "yamato",
+    "ямато",
+    "shadow transformation"
+   ]
+  }
+ }
+}
