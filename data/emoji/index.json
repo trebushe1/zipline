@@ -1,0 +1,1413 @@
+{
+ "build": 6821,
+ "emoji": [
+  {
+   "hero": "atlas",
+   "hero_name": "Abrams",
+   "slot": 1,
+   "ability": "citadel_ability_bull_heal",
+   "name": "Siphon Life",
+   "file": "abrams-1-siphon-life.png"
+  },
+  {
+   "hero": "atlas",
+   "hero_name": "Abrams",
+   "slot": 2,
+   "ability": "citadel_ability_bull_charge",
+   "name": "Shoulder Charge",
+   "file": "abrams-2-shoulder-charge.png"
+  },
+  {
+   "hero": "atlas",
+   "hero_name": "Abrams",
+   "slot": 3,
+   "ability": "citadel_ability_passive_beefy",
+   "name": "Infernal Resilience",
+   "file": "abrams-3-infernal-resilience.png"
+  },
+  {
+   "hero": "atlas",
+   "hero_name": "Abrams",
+   "slot": 4,
+   "ability": "citadel_ability_bull_leap",
+   "name": "Seismic Impact",
+   "file": "abrams-4-seismic-impact.png"
+  },
+  {
+   "hero": "fencer",
+   "hero_name": "Apollo",
+   "slot": 1,
+   "ability": "ability_fencer_throwblade",
+   "name": "Disengaging Sigil",
+   "file": "apollo-1-disengaging-sigil.png"
+  },
+  {
+   "hero": "fencer",
+   "hero_name": "Apollo",
+   "slot": 2,
+   "ability": "ability_fencer_riposte",
+   "name": "Riposte",
+   "file": "apollo-2-riposte.png"
+  },
+  {
+   "hero": "fencer",
+   "hero_name": "Apollo",
+   "slot": 3,
+   "ability": "ability_fencer_lunge",
+   "name": "Flawless Advance",
+   "file": "apollo-3-flawless-advance.png"
+  },
+  {
+   "hero": "fencer",
+   "hero_name": "Apollo",
+   "slot": 4,
+   "ability": "ability_fencer_ultimate",
+   "name": "Itani Lo Sahn",
+   "file": "apollo-4-itani-lo-sahn.png"
+  },
+  {
+   "hero": "baba",
+   "hero_name": "Baba",
+   "slot": 1,
+   "ability": "ability_baba_bubbling_brew",
+   "name": "Threadsap",
+   "file": "baba-1-threadsap.png"
+  },
+  {
+   "hero": "baba",
+   "hero_name": "Baba",
+   "slot": 2,
+   "ability": "ability_baba_bench_run",
+   "name": "Granny Long Legs",
+   "file": "baba-2-granny-long-legs.png"
+  },
+  {
+   "hero": "baba",
+   "hero_name": "Baba",
+   "slot": 3,
+   "ability": "ability_baba_hexing_brew",
+   "name": "Baba's Brew",
+   "file": "baba-3-babas-brew.png"
+  },
+  {
+   "hero": "baba",
+   "hero_name": "Baba",
+   "slot": 4,
+   "ability": "ability_baba_ultimate_2",
+   "name": "Feed The Birds",
+   "file": "baba-4-feed-the-birds.png"
+  },
+  {
+   "hero": "bebop",
+   "hero_name": "Bebop",
+   "slot": 1,
+   "ability": "citadel_ability_uppercut",
+   "name": "Exploding Uppercut",
+   "file": "bebop-1-exploding-uppercut.png"
+  },
+  {
+   "hero": "bebop",
+   "hero_name": "Bebop",
+   "slot": 2,
+   "ability": "citadel_ability_sticky_bomb",
+   "name": "Sticky Bomb",
+   "file": "bebop-2-sticky-bomb.png"
+  },
+  {
+   "hero": "bebop",
+   "hero_name": "Bebop",
+   "slot": 3,
+   "ability": "citadel_ability_hook",
+   "name": "Grapple Arm",
+   "file": "bebop-3-grapple-arm.png"
+  },
+  {
+   "hero": "bebop",
+   "hero_name": "Bebop",
+   "slot": 4,
+   "ability": "citadel_ability_bebop_laser_beam",
+   "name": "Hyper Beam",
+   "file": "bebop-4-hyper-beam.png"
+  },
+  {
+   "hero": "punkgoat",
+   "hero_name": "Billy",
+   "slot": 1,
+   "ability": "ability_punkgoat_ult",
+   "name": "Bashdown",
+   "file": "billy-1-bashdown.png"
+  },
+  {
+   "hero": "punkgoat",
+   "hero_name": "Billy",
+   "slot": 2,
+   "ability": "ability_punkgoat_goatflip",
+   "name": "Rising Ram",
+   "file": "billy-2-rising-ram.png"
+  },
+  {
+   "hero": "punkgoat",
+   "hero_name": "Billy",
+   "slot": 3,
+   "ability": "ability_punkgoat_blasted",
+   "name": "Blasted",
+   "file": "billy-3-blasted.png"
+  },
+  {
+   "hero": "punkgoat",
+   "hero_name": "Billy",
+   "slot": 4,
+   "ability": "ability_punkgoat_tether",
+   "name": "Chain Gang",
+   "file": "billy-4-chain-gang.png"
+  },
+  {
+   "hero": "nano",
+   "hero_name": "Calico",
+   "slot": 1,
+   "ability": "ability_nano_clustergrenade",
+   "name": "Gloom Bombs",
+   "file": "calico-1-gloom-bombs.png"
+  },
+  {
+   "hero": "nano",
+   "hero_name": "Calico",
+   "slot": 2,
+   "ability": "ability_nano_dash",
+   "name": "Leaping Slash",
+   "file": "calico-2-leaping-slash.png"
+  },
+  {
+   "hero": "nano",
+   "hero_name": "Calico",
+   "slot": 3,
+   "ability": "ability_nano_catform",
+   "name": "Ava",
+   "file": "calico-3-ava.png"
+  },
+  {
+   "hero": "nano",
+   "hero_name": "Calico",
+   "slot": 4,
+   "ability": "ability_nano_shadow_pulse",
+   "name": "Return to Shadows",
+   "file": "calico-4-return-to-shadows.png"
+  },
+  {
+   "hero": "unicorn",
+   "hero_name": "Celeste",
+   "slot": 1,
+   "ability": "ability_unicorn_radiantblast",
+   "name": "Light Eater",
+   "file": "celeste-1-light-eater.png"
+  },
+  {
+   "hero": "unicorn",
+   "hero_name": "Celeste",
+   "slot": 2,
+   "ability": "ability_unicorn_prismaticguard",
+   "name": "Dazzling Trick",
+   "file": "celeste-2-dazzling-trick.png"
+  },
+  {
+   "hero": "unicorn",
+   "hero_name": "Celeste",
+   "slot": 3,
+   "ability": "ability_unicorn_luminousstrike",
+   "name": "Radiant Daggers",
+   "file": "celeste-3-radiant-daggers.png"
+  },
+  {
+   "hero": "unicorn",
+   "hero_name": "Celeste",
+   "slot": 4,
+   "ability": "ability_unicorn_dazzlingorb",
+   "name": "Shining Wonder",
+   "file": "celeste-4-shining-wonder.png"
+  },
+  {
+   "hero": "deadpack",
+   "hero_name": "Deadman Danny",
+   "slot": 1,
+   "ability": "ability_deadpack_chargeblast",
+   "name": "Strix Salvo",
+   "file": "deadman-danny-1-strix-salvo.png"
+  },
+  {
+   "hero": "deadpack",
+   "hero_name": "Deadman Danny",
+   "slot": 2,
+   "ability": "ability_deadpack_rocketeer",
+   "name": "Chimera Mk1",
+   "file": "deadman-danny-2-chimera-mk1.png"
+  },
+  {
+   "hero": "deadpack",
+   "hero_name": "Deadman Danny",
+   "slot": 3,
+   "ability": "ability_deadpack_flamethrower",
+   "name": "Jettison Fuel",
+   "file": "deadman-danny-3-jettison-fuel.png"
+  },
+  {
+   "hero": "deadpack",
+   "hero_name": "Deadman Danny",
+   "slot": 4,
+   "ability": "ability_deadpack_ultimate",
+   "name": "Close The Deal",
+   "file": "deadman-danny-4-close-the-deal.png"
+  },
+  {
+   "hero": "drifter",
+   "hero_name": "Drifter",
+   "slot": 1,
+   "ability": "drifter_blood_blast",
+   "name": "Rend",
+   "file": "drifter-1-rend.png"
+  },
+  {
+   "hero": "drifter",
+   "hero_name": "Drifter",
+   "slot": 2,
+   "ability": "drifter_shadow_mark",
+   "name": "Stalker's Mark",
+   "file": "drifter-2-stalkers-mark.png"
+  },
+  {
+   "hero": "drifter",
+   "hero_name": "Drifter",
+   "slot": 3,
+   "ability": "ability_drifter_hunger",
+   "name": "Bloodscent",
+   "file": "drifter-3-bloodscent.png"
+  },
+  {
+   "hero": "drifter",
+   "hero_name": "Drifter",
+   "slot": 4,
+   "ability": "drifter_darkness",
+   "name": "Eternal Night",
+   "file": "drifter-4-eternal-night.png"
+  },
+  {
+   "hero": "dynamo",
+   "hero_name": "Dynamo",
+   "slot": 1,
+   "ability": "citadel_ability_stomp",
+   "name": "Kinetic Pulse",
+   "file": "dynamo-1-kinetic-pulse.png"
+  },
+  {
+   "hero": "dynamo",
+   "hero_name": "Dynamo",
+   "slot": 2,
+   "ability": "citadel_ability_void_sphere",
+   "name": "Quantum Entanglement",
+   "file": "dynamo-2-quantum-entanglement.png"
+  },
+  {
+   "hero": "dynamo",
+   "hero_name": "Dynamo",
+   "slot": 3,
+   "ability": "citadel_ability_nikuman",
+   "name": "Rejuvenating Aurora",
+   "file": "dynamo-3-rejuvenating-aurora.png"
+  },
+  {
+   "hero": "dynamo",
+   "hero_name": "Dynamo",
+   "slot": 4,
+   "ability": "citadel_ability_self_vacuum",
+   "name": "Singularity",
+   "file": "dynamo-4-singularity.png"
+  },
+  {
+   "hero": "necro",
+   "hero_name": "Graves",
+   "slot": 1,
+   "ability": "ability_necro_hauntingskull",
+   "name": "Jar of Dead",
+   "file": "graves-1-jar-of-dead.png"
+  },
+  {
+   "hero": "necro",
+   "hero_name": "Graves",
+   "slot": 2,
+   "ability": "ability_necro_zombiewall",
+   "name": "Grasping Hands",
+   "file": "graves-2-grasping-hands.png"
+  },
+  {
+   "hero": "necro",
+   "hero_name": "Graves",
+   "slot": 3,
+   "ability": "ability_necro_fear",
+   "name": "Essence Theft",
+   "file": "graves-3-essence-theft.png"
+  },
+  {
+   "hero": "necro",
+   "hero_name": "Graves",
+   "slot": 4,
+   "ability": "ability_necro_gravestone",
+   "name": "Borrowed Decree",
+   "file": "graves-4-borrowed-decree.png"
+  },
+  {
+   "hero": "orion",
+   "hero_name": "Grey Talon",
+   "slot": 1,
+   "ability": "ability_charged_shot",
+   "name": "Charged Shot",
+   "file": "grey-talon-1-charged-shot.png"
+  },
+  {
+   "hero": "orion",
+   "hero_name": "Grey Talon",
+   "slot": 2,
+   "ability": "ability_power_jump",
+   "name": "Rain of Arrows",
+   "file": "grey-talon-2-rain-of-arrows.png"
+  },
+  {
+   "hero": "orion",
+   "hero_name": "Grey Talon",
+   "slot": 3,
+   "ability": "ability_immobilize_trap",
+   "name": "Spirit Snare",
+   "file": "grey-talon-3-spirit-snare.png"
+  },
+  {
+   "hero": "orion",
+   "hero_name": "Grey Talon",
+   "slot": 4,
+   "ability": "ability_guided_arrow",
+   "name": "Guided Owl",
+   "file": "grey-talon-4-guided-owl.png"
+  },
+  {
+   "hero": "haze",
+   "hero_name": "Haze",
+   "slot": 1,
+   "ability": "ability_sleep_dagger",
+   "name": "Sleep Dagger",
+   "file": "haze-1-sleep-dagger.png"
+  },
+  {
+   "hero": "haze",
+   "hero_name": "Haze",
+   "slot": 2,
+   "ability": "ability_smoke_bomb",
+   "name": "Smoke Bomb",
+   "file": "haze-2-smoke-bomb.png"
+  },
+  {
+   "hero": "haze",
+   "hero_name": "Haze",
+   "slot": 3,
+   "ability": "ability_stacking_damage",
+   "name": "Fixation",
+   "file": "haze-3-fixation.png"
+  },
+  {
+   "hero": "haze",
+   "hero_name": "Haze",
+   "slot": 4,
+   "ability": "ability_bullet_flurry",
+   "name": "Bullet Dance",
+   "file": "haze-4-bullet-dance.png"
+  },
+  {
+   "hero": "astro",
+   "hero_name": "Holliday",
+   "slot": 1,
+   "ability": "ability_explosive_barrel",
+   "name": "Powder Keg",
+   "file": "holliday-1-powder-keg.png"
+  },
+  {
+   "hero": "astro",
+   "hero_name": "Holliday",
+   "slot": 2,
+   "ability": "ability_bounce_pad",
+   "name": "Bounce Pad",
+   "file": "holliday-2-bounce-pad.png"
+  },
+  {
+   "hero": "astro",
+   "hero_name": "Holliday",
+   "slot": 3,
+   "ability": "ability_crackshot",
+   "name": "Crackshot",
+   "file": "holliday-3-crackshot.png"
+  },
+  {
+   "hero": "astro",
+   "hero_name": "Holliday",
+   "slot": 4,
+   "ability": "ability_gravity_lasso",
+   "name": "Spirit Lasso",
+   "file": "holliday-4-spirit-lasso.png"
+  },
+  {
+   "hero": "inferno",
+   "hero_name": "Infernus",
+   "slot": 1,
+   "ability": "ability_incendiary_projectile",
+   "name": "Napalm",
+   "file": "infernus-1-napalm.png"
+  },
+  {
+   "hero": "inferno",
+   "hero_name": "Infernus",
+   "slot": 2,
+   "ability": "ability_flame_dash",
+   "name": "Flame Dash",
+   "file": "infernus-2-flame-dash.png"
+  },
+  {
+   "hero": "inferno",
+   "hero_name": "Infernus",
+   "slot": 3,
+   "ability": "ability_afterburn",
+   "name": "Afterburn",
+   "file": "infernus-3-afterburn.png"
+  },
+  {
+   "hero": "inferno",
+   "hero_name": "Infernus",
+   "slot": 4,
+   "ability": "ability_fire_bomb",
+   "name": "Concussive Combustion",
+   "file": "infernus-4-concussive-combustion.png"
+  },
+  {
+   "hero": "tengu",
+   "hero_name": "Ivy",
+   "slot": 1,
+   "ability": "citadel_ability_tengu_urn",
+   "name": "Entangling Thorns",
+   "file": "ivy-1-entangling-thorns.png"
+  },
+  {
+   "hero": "tengu",
+   "hero_name": "Ivy",
+   "slot": 2,
+   "ability": "citadel_ability_tangotether",
+   "name": "Kudzu Connection",
+   "file": "ivy-2-kudzu-connection.png"
+  },
+  {
+   "hero": "tengu",
+   "hero_name": "Ivy",
+   "slot": 3,
+   "ability": "citadel_ability_tengu_stone_form",
+   "name": "Stone Form",
+   "file": "ivy-3-stone-form.png"
+  },
+  {
+   "hero": "tengu",
+   "hero_name": "Ivy",
+   "slot": 4,
+   "ability": "citadel_ability_tengu_airlift",
+   "name": "Air Drop",
+   "file": "ivy-4-air-drop.png"
+  },
+  {
+   "hero": "kelvin",
+   "hero_name": "Kelvin",
+   "slot": 1,
+   "ability": "ability_ice_grenade",
+   "name": "Frost Grenade",
+   "file": "kelvin-1-frost-grenade.png"
+  },
+  {
+   "hero": "kelvin",
+   "hero_name": "Kelvin",
+   "slot": 2,
+   "ability": "ability_icepath",
+   "name": "Ice Path",
+   "file": "kelvin-2-ice-path.png"
+  },
+  {
+   "hero": "kelvin",
+   "hero_name": "Kelvin",
+   "slot": 3,
+   "ability": "ability_icebeam",
+   "name": "Arctic Beam",
+   "file": "kelvin-3-arctic-beam.png"
+  },
+  {
+   "hero": "kelvin",
+   "hero_name": "Kelvin",
+   "slot": 4,
+   "ability": "ability_ice_dome",
+   "name": "Frozen Shelter",
+   "file": "kelvin-4-frozen-shelter.png"
+  },
+  {
+   "hero": "ghost",
+   "hero_name": "Lady Geist",
+   "slot": 1,
+   "ability": "ability_blood_bomb",
+   "name": "Essence Bomb",
+   "file": "lady-geist-1-essence-bomb.png"
+  },
+  {
+   "hero": "ghost",
+   "hero_name": "Lady Geist",
+   "slot": 2,
+   "ability": "ability_life_drain",
+   "name": "Life Drain",
+   "file": "lady-geist-2-life-drain.png"
+  },
+  {
+   "hero": "ghost",
+   "hero_name": "Lady Geist",
+   "slot": 3,
+   "ability": "ability_blood_shards",
+   "name": "Malice",
+   "file": "lady-geist-3-malice.png"
+  },
+  {
+   "hero": "ghost",
+   "hero_name": "Lady Geist",
+   "slot": 4,
+   "ability": "ability_health_swap",
+   "name": "Soul Exchange",
+   "file": "lady-geist-4-soul-exchange.png"
+  },
+  {
+   "hero": "lash",
+   "hero_name": "Lash",
+   "slot": 1,
+   "ability": "citadel_ability_lash_down_strike",
+   "name": "Ground Strike",
+   "file": "lash-1-ground-strike.png"
+  },
+  {
+   "hero": "lash",
+   "hero_name": "Lash",
+   "slot": 2,
+   "ability": "citadel_ability_lash",
+   "name": "Grapple",
+   "file": "lash-2-grapple.png"
+  },
+  {
+   "hero": "lash",
+   "hero_name": "Lash",
+   "slot": 3,
+   "ability": "ability_lash_flog",
+   "name": "Flog",
+   "file": "lash-3-flog.png"
+  },
+  {
+   "hero": "lash",
+   "hero_name": "Lash",
+   "slot": 4,
+   "ability": "citadel_ability_lash_ultimate",
+   "name": "Death Slam",
+   "file": "lash-4-death-slam.png"
+  },
+  {
+   "hero": "forge",
+   "hero_name": "McGinnis",
+   "slot": 1,
+   "ability": "citadel_ability_shieldedsentry",
+   "name": "Mini Turret",
+   "file": "mcginnis-1-mini-turret.png"
+  },
+  {
+   "hero": "forge",
+   "hero_name": "McGinnis",
+   "slot": 2,
+   "ability": "citadel_ability_mobile_resupply",
+   "name": "Medicinal Specter",
+   "file": "mcginnis-2-medicinal-specter.png"
+  },
+  {
+   "hero": "forge",
+   "hero_name": "McGinnis",
+   "slot": 3,
+   "ability": "citadel_ability_fissure_wall",
+   "name": "Spectral Wall",
+   "file": "mcginnis-3-spectral-wall.png"
+  },
+  {
+   "hero": "forge",
+   "hero_name": "McGinnis",
+   "slot": 4,
+   "ability": "citadel_ability_rocket_barrage",
+   "name": "Heavy Barrage",
+   "file": "mcginnis-4-heavy-barrage.png"
+  },
+  {
+   "hero": "vampirebat",
+   "hero_name": "Mina",
+   "slot": 1,
+   "ability": "ability_vampirebat_steallife",
+   "name": "Rake",
+   "file": "mina-1-rake.png"
+  },
+  {
+   "hero": "vampirebat",
+   "hero_name": "Mina",
+   "slot": 2,
+   "ability": "ability_vampirebat_batblink",
+   "name": "Sanguine Retreat",
+   "file": "mina-2-sanguine-retreat.png"
+  },
+  {
+   "hero": "vampirebat",
+   "hero_name": "Mina",
+   "slot": 3,
+   "ability": "ability_vampirebat_lovebites",
+   "name": "Love Bites",
+   "file": "mina-3-love-bites.png"
+  },
+  {
+   "hero": "vampirebat",
+   "hero_name": "Mina",
+   "slot": 4,
+   "ability": "ability_vampirebat_batswarm",
+   "name": "Nox Nostra",
+   "file": "mina-4-nox-nostra.png"
+  },
+  {
+   "hero": "mirage",
+   "hero_name": "Mirage",
+   "slot": 1,
+   "ability": "mirage_fire_beetles",
+   "name": "Fire Scarabs",
+   "file": "mirage-1-fire-scarabs.png"
+  },
+  {
+   "hero": "mirage",
+   "hero_name": "Mirage",
+   "slot": 2,
+   "ability": "mirage_tornado",
+   "name": "Dust Devil",
+   "file": "mirage-2-dust-devil.png"
+  },
+  {
+   "hero": "mirage",
+   "hero_name": "Mirage",
+   "slot": 3,
+   "ability": "mirage_sand_phantom",
+   "name": "Djinn's Mark",
+   "file": "mirage-3-djinns-mark.png"
+  },
+  {
+   "hero": "mirage",
+   "hero_name": "Mirage",
+   "slot": 4,
+   "ability": "mirage_teleport",
+   "name": "Traveler",
+   "file": "mirage-4-traveler.png"
+  },
+  {
+   "hero": "krill",
+   "hero_name": "Mo & Krill",
+   "slot": 1,
+   "ability": "ability_intimidate",
+   "name": "Scorn",
+   "file": "mo-krill-1-scorn.png"
+  },
+  {
+   "hero": "krill",
+   "hero_name": "Mo & Krill",
+   "slot": 2,
+   "ability": "ability_burrow",
+   "name": "Burrow",
+   "file": "mo-krill-2-burrow.png"
+  },
+  {
+   "hero": "krill",
+   "hero_name": "Mo & Krill",
+   "slot": 3,
+   "ability": "ability_throw_sand",
+   "name": "Sand Blast",
+   "file": "mo-krill-3-sand-blast.png"
+  },
+  {
+   "hero": "krill",
+   "hero_name": "Mo & Krill",
+   "slot": 4,
+   "ability": "ability_ult_combo",
+   "name": "Combo",
+   "file": "mo-krill-4-combo.png"
+  },
+  {
+   "hero": "nurse",
+   "hero_name": "Nurse Harrow",
+   "slot": 1,
+   "ability": "ability_nurse_leech_therapy",
+   "name": "Leech Therapy",
+   "file": "nurse-harrow-1-leech-therapy.png"
+  },
+  {
+   "hero": "nurse",
+   "hero_name": "Nurse Harrow",
+   "slot": 2,
+   "ability": "ability_nurse_adrenaline_rush",
+   "name": "Wretched Vapors",
+   "file": "nurse-harrow-2-wretched-vapors.png"
+  },
+  {
+   "hero": "nurse",
+   "hero_name": "Nurse Harrow",
+   "slot": 3,
+   "ability": "ability_nurse_healing_needles",
+   "name": "Healing Needles",
+   "file": "nurse-harrow-3-healing-needles.png"
+  },
+  {
+   "hero": "nurse",
+   "hero_name": "Nurse Harrow",
+   "slot": 4,
+   "ability": "ability_nurse_fear",
+   "name": "Lurking Terrors",
+   "file": "nurse-harrow-4-lurking-terrors.png"
+  },
+  {
+   "hero": "bookworm",
+   "hero_name": "Paige",
+   "slot": 1,
+   "ability": "ability_bookworm_dragonfire",
+   "name": "Bookwyrm",
+   "file": "paige-1-bookwyrm.png"
+  },
+  {
+   "hero": "bookworm",
+   "hero_name": "Paige",
+   "slot": 2,
+   "ability": "ability_bookworm_knightbarrier",
+   "name": "Plot Armor",
+   "file": "paige-2-plot-armor.png"
+  },
+  {
+   "hero": "bookworm",
+   "hero_name": "Paige",
+   "slot": 3,
+   "ability": "ability_bookworm_aoemagic",
+   "name": "Captivating Read",
+   "file": "paige-3-captivating-read.png"
+  },
+  {
+   "hero": "bookworm",
+   "hero_name": "Paige",
+   "slot": 4,
+   "ability": "ability_bookworm_knightcharge",
+   "name": "Rallying Charge",
+   "file": "paige-4-rallying-charge.png"
+  },
+  {
+   "hero": "chrono",
+   "hero_name": "Paradox",
+   "slot": 1,
+   "ability": "citadel_ability_chrono_pulse_grenade",
+   "name": "Pulse Grenade",
+   "file": "paradox-1-pulse-grenade.png"
+  },
+  {
+   "hero": "chrono",
+   "hero_name": "Paradox",
+   "slot": 2,
+   "ability": "citadel_ability_chrono_time_wall",
+   "name": "Time Wall",
+   "file": "paradox-2-time-wall.png"
+  },
+  {
+   "hero": "chrono",
+   "hero_name": "Paradox",
+   "slot": 3,
+   "ability": "citadel_ability_chrono_kinetic_carbine",
+   "name": "Kinetic Carbine",
+   "file": "paradox-3-kinetic-carbine.png"
+  },
+  {
+   "hero": "chrono",
+   "hero_name": "Paradox",
+   "slot": 4,
+   "ability": "citadel_ability_chrono_swap",
+   "name": "Paradoxical Swap",
+   "file": "paradox-4-paradoxical-swap.png"
+  },
+  {
+   "hero": "synth",
+   "hero_name": "Pocket",
+   "slot": 1,
+   "ability": "synth_barrage",
+   "name": "Barrage",
+   "file": "pocket-1-barrage.png"
+  },
+  {
+   "hero": "synth",
+   "hero_name": "Pocket",
+   "slot": 2,
+   "ability": "synth_plasma_flux",
+   "name": "Flying Cloak",
+   "file": "pocket-2-flying-cloak.png"
+  },
+  {
+   "hero": "synth",
+   "hero_name": "Pocket",
+   "slot": 3,
+   "ability": "synth_pulse",
+   "name": "Enchanter's Satchel",
+   "file": "pocket-3-enchanters-satchel.png"
+  },
+  {
+   "hero": "synth",
+   "hero_name": "Pocket",
+   "slot": 4,
+   "ability": "synth_affliction",
+   "name": "Affliction",
+   "file": "pocket-4-affliction.png"
+  },
+  {
+   "hero": "ratking",
+   "hero_name": "Rat King",
+   "slot": 1,
+   "ability": "ability_ratking_scrap_grenade",
+   "name": "Scrap Grenade",
+   "file": "rat-king-1-scrap-grenade.png"
+  },
+  {
+   "hero": "ratking",
+   "hero_name": "Rat King",
+   "slot": 2,
+   "ability": "ability_ratking_ratnibble",
+   "name": "Rat Swarm",
+   "file": "rat-king-2-rat-swarm.png"
+  },
+  {
+   "hero": "ratking",
+   "hero_name": "Rat King",
+   "slot": 3,
+   "ability": "ability_ratking_ratarmor",
+   "name": "Royal Pestments",
+   "file": "rat-king-3-royal-pestments.png"
+  },
+  {
+   "hero": "ratking",
+   "hero_name": "Rat King",
+   "slot": 4,
+   "ability": "ability_ratking_standard_bearer",
+   "name": "Rule, Ratannia!",
+   "file": "rat-king-4-rule-ratannia.png"
+  },
+  {
+   "hero": "familiar",
+   "hero_name": "Rem",
+   "slot": 1,
+   "ability": "ability_familiar_ability02",
+   "name": "Pillow Toss",
+   "file": "rem-1-pillow-toss.png"
+  },
+  {
+   "hero": "familiar",
+   "hero_name": "Rem",
+   "slot": 2,
+   "ability": "ability_familiar_attach",
+   "name": "Tag Along",
+   "file": "rem-2-tag-along.png"
+  },
+  {
+   "hero": "familiar",
+   "hero_name": "Rem",
+   "slot": 3,
+   "ability": "ability_familiar_helpinghands",
+   "name": "Lil Helpers",
+   "file": "rem-3-lil-helpers.png"
+  },
+  {
+   "hero": "familiar",
+   "hero_name": "Rem",
+   "slot": 4,
+   "ability": "ability_familiar_ability01",
+   "name": "Naptime",
+   "file": "rem-4-naptime.png"
+  },
+  {
+   "hero": "gigawatt",
+   "hero_name": "Seven",
+   "slot": 1,
+   "ability": "citadel_ability_lightning_ball",
+   "name": "Lightning Ball",
+   "file": "seven-1-lightning-ball.png"
+  },
+  {
+   "hero": "gigawatt",
+   "hero_name": "Seven",
+   "slot": 2,
+   "ability": "citadel_ability_static_charge",
+   "name": "Static Charge",
+   "file": "seven-2-static-charge.png"
+  },
+  {
+   "hero": "gigawatt",
+   "hero_name": "Seven",
+   "slot": 3,
+   "ability": "ability_power_surge",
+   "name": "Power Surge",
+   "file": "seven-3-power-surge.png"
+  },
+  {
+   "hero": "gigawatt",
+   "hero_name": "Seven",
+   "slot": 4,
+   "ability": "citadel_ability_storm_cloud",
+   "name": "Storm Cloud",
+   "file": "seven-4-storm-cloud.png"
+  },
+  {
+   "hero": "shiv",
+   "hero_name": "Shiv",
+   "slot": 1,
+   "ability": "citadel_ability_shiv_dagger",
+   "name": "Serrated Knives",
+   "file": "shiv-1-serrated-knives.png"
+  },
+  {
+   "hero": "shiv",
+   "hero_name": "Shiv",
+   "slot": 2,
+   "ability": "citadel_ability_shiv_dash",
+   "name": "Slice and Dice",
+   "file": "shiv-2-slice-and-dice.png"
+  },
+  {
+   "hero": "shiv",
+   "hero_name": "Shiv",
+   "slot": 3,
+   "ability": "citadel_ability_shiv_defer_damage",
+   "name": "Bloodletting",
+   "file": "shiv-3-bloodletting.png"
+  },
+  {
+   "hero": "shiv",
+   "hero_name": "Shiv",
+   "slot": 4,
+   "ability": "citadel_ability_shiv_killing_blow",
+   "name": "Killing Blow",
+   "file": "shiv-4-killing-blow.png"
+  },
+  {
+   "hero": "werewolf",
+   "hero_name": "Silver",
+   "slot": 1,
+   "ability": "ability_werewolf_unloadgun",
+   "name": "Slam Fire",
+   "file": "silver-1-slam-fire.png"
+  },
+  {
+   "hero": "werewolf",
+   "hero_name": "Silver",
+   "slot": 2,
+   "ability": "ability_werewolf_kickflip",
+   "name": "Boot Kick",
+   "file": "silver-2-boot-kick.png"
+  },
+  {
+   "hero": "werewolf",
+   "hero_name": "Silver",
+   "slot": 3,
+   "ability": "ability_werewolf_netshot",
+   "name": "Entangling Bola",
+   "file": "silver-3-entangling-bola.png"
+  },
+  {
+   "hero": "werewolf",
+   "hero_name": "Silver",
+   "slot": 4,
+   "ability": "ability_werewolf_transformation",
+   "name": "Lycan Curse",
+   "file": "silver-4-lycan-curse.png"
+  },
+  {
+   "hero": "magician",
+   "hero_name": "Sinclair",
+   "slot": 1,
+   "ability": "ability_magician_magicbolt",
+   "name": "Vexing Bolt",
+   "file": "sinclair-1-vexing-bolt.png"
+  },
+  {
+   "hero": "magician",
+   "hero_name": "Sinclair",
+   "slot": 2,
+   "ability": "ability_magician_cloneturret",
+   "name": "Spectral Assistant",
+   "file": "sinclair-2-spectral-assistant.png"
+  },
+  {
+   "hero": "magician",
+   "hero_name": "Sinclair",
+   "slot": 3,
+   "ability": "ability_magician_animalhexarea",
+   "name": "Rabbit Hex",
+   "file": "sinclair-3-rabbit-hex.png"
+  },
+  {
+   "hero": "magician",
+   "hero_name": "Sinclair",
+   "slot": 4,
+   "ability": "ability_magician_copyult",
+   "name": "Audience Participation",
+   "file": "sinclair-4-audience-participation.png"
+  },
+  {
+   "hero": "chessmaster",
+   "hero_name": "Solomon",
+   "slot": 1,
+   "ability": "ability_chessmaster_throwbishop",
+   "name": "Setup Bishop",
+   "file": "solomon-1-setup-bishop.png"
+  },
+  {
+   "hero": "chessmaster",
+   "hero_name": "Solomon",
+   "slot": 2,
+   "ability": "ability_chessmaster_knightbuff",
+   "name": "Kingside Knight",
+   "file": "solomon-2-kingside-knight.png"
+  },
+  {
+   "hero": "chessmaster",
+   "hero_name": "Solomon",
+   "slot": 3,
+   "ability": "ability_chessmaster_forkpiece",
+   "name": "Rook Battery",
+   "file": "solomon-3-rook-battery.png"
+  },
+  {
+   "hero": "chessmaster",
+   "hero_name": "Solomon",
+   "slot": 4,
+   "ability": "ability_chessmaster_queen",
+   "name": "Develop Queen",
+   "file": "solomon-4-develop-queen.png"
+  },
+  {
+   "hero": "doorman",
+   "hero_name": "The Doorman",
+   "slot": 1,
+   "ability": "ability_doorman_bomb",
+   "name": "Call Bell",
+   "file": "the-doorman-1-call-bell.png"
+  },
+  {
+   "hero": "doorman",
+   "hero_name": "The Doorman",
+   "slot": 2,
+   "ability": "ability_doorman_doorway",
+   "name": "Doorway",
+   "file": "the-doorman-2-doorway.png"
+  },
+  {
+   "hero": "doorman",
+   "hero_name": "The Doorman",
+   "slot": 3,
+   "ability": "ability_doorman_luggage_cart",
+   "name": "Luggage Cart",
+   "file": "the-doorman-3-luggage-cart.png"
+  },
+  {
+   "hero": "doorman",
+   "hero_name": "The Doorman",
+   "slot": 4,
+   "ability": "ability_doorman_hotel",
+   "name": "Hotel Guest",
+   "file": "the-doorman-4-hotel-guest.png"
+  },
+  {
+   "hero": "priest",
+   "hero_name": "Venator",
+   "slot": 1,
+   "ability": "ability_priest_flashbang",
+   "name": "Consecrating Grenade",
+   "file": "venator-1-consecrating-grenade.png"
+  },
+  {
+   "hero": "priest",
+   "hero_name": "Venator",
+   "slot": 2,
+   "ability": "ability_priest_knockback",
+   "name": "Gutshot",
+   "file": "venator-2-gutshot.png"
+  },
+  {
+   "hero": "priest",
+   "hero_name": "Venator",
+   "slot": 3,
+   "ability": "ability_priest_beartrap",
+   "name": "Hex-Lined Snap Trap",
+   "file": "venator-3-hex-lined-snap-trap.png"
+  },
+  {
+   "hero": "priest",
+   "hero_name": "Venator",
+   "slot": 4,
+   "ability": "ability_priest_weaponswap",
+   "name": "Ira Domini",
+   "file": "venator-4-ira-domini.png"
+  },
+  {
+   "hero": "frank",
+   "hero_name": "Victor",
+   "slot": 1,
+   "ability": "ability_frank_shocktarget2",
+   "name": "Pain Battery",
+   "file": "victor-1-pain-battery.png"
+  },
+  {
+   "hero": "frank",
+   "hero_name": "Victor",
+   "slot": 2,
+   "ability": "ability_frank_selfzap",
+   "name": "Jumpstart",
+   "file": "victor-2-jumpstart.png"
+  },
+  {
+   "hero": "frank",
+   "hero_name": "Victor",
+   "slot": 3,
+   "ability": "ability_frank_painaura",
+   "name": "Aura of Suffering",
+   "file": "victor-3-aura-of-suffering.png"
+  },
+  {
+   "hero": "frank",
+   "hero_name": "Victor",
+   "slot": 4,
+   "ability": "ability_frank_revive",
+   "name": "Shocking Reanimation",
+   "file": "victor-4-shocking-reanimation.png"
+  },
+  {
+   "hero": "hornet",
+   "hero_name": "Vindicta",
+   "slot": 1,
+   "ability": "citadel_ability_hornet_chain",
+   "name": "Stake",
+   "file": "vindicta-1-stake.png"
+  },
+  {
+   "hero": "hornet",
+   "hero_name": "Vindicta",
+   "slot": 2,
+   "ability": "citadel_ability_hornet_leap",
+   "name": "Flight",
+   "file": "vindicta-2-flight.png"
+  },
+  {
+   "hero": "hornet",
+   "hero_name": "Vindicta",
+   "slot": 3,
+   "ability": "citadel_ability_hornet_sting",
+   "name": "Crow Familiar",
+   "file": "vindicta-3-crow-familiar.png"
+  },
+  {
+   "hero": "hornet",
+   "hero_name": "Vindicta",
+   "slot": 4,
+   "ability": "citadel_ability_hornet_snipe",
+   "name": "Assassinate",
+   "file": "vindicta-4-assassinate.png"
+  },
+  {
+   "hero": "artist",
+   "hero_name": "Violet",
+   "slot": 1,
+   "ability": "ability_artist_homingbrush",
+   "name": "Living Ink",
+   "file": "violet-1-living-ink.png"
+  },
+  {
+   "hero": "artist",
+   "hero_name": "Violet",
+   "slot": 2,
+   "ability": "ability_artist_rollingprojectile",
+   "name": "Flow State",
+   "file": "violet-2-flow-state.png"
+  },
+  {
+   "hero": "artist",
+   "hero_name": "Violet",
+   "slot": 3,
+   "ability": "ability_artist_tether",
+   "name": "Still Life",
+   "file": "violet-3-still-life.png"
+  },
+  {
+   "hero": "artist",
+   "hero_name": "Violet",
+   "slot": 4,
+   "ability": "ability_artist_bamboogrove",
+   "name": "Abstract Landscape",
+   "file": "violet-4-abstract-landscape.png"
+  },
+  {
+   "hero": "viscous",
+   "hero_name": "Viscous",
+   "slot": 1,
+   "ability": "viscous_goo_grenade",
+   "name": "Splatter",
+   "file": "viscous-1-splatter.png"
+  },
+  {
+   "hero": "viscous",
+   "hero_name": "Viscous",
+   "slot": 2,
+   "ability": "viscous_restorative_goo",
+   "name": "The Cube",
+   "file": "viscous-2-the-cube.png"
+  },
+  {
+   "hero": "viscous",
+   "hero_name": "Viscous",
+   "slot": 3,
+   "ability": "viscous_telepunch",
+   "name": "Puddle Punch",
+   "file": "viscous-3-puddle-punch.png"
+  },
+  {
+   "hero": "viscous",
+   "hero_name": "Viscous",
+   "slot": 4,
+   "ability": "viscous_goo_bowling_ball",
+   "name": "Goo Ball",
+   "file": "viscous-4-goo-ball.png"
+  },
+  {
+   "hero": "viper",
+   "hero_name": "Vyper",
+   "slot": 1,
+   "ability": "ability_viper_debuffdagger",
+   "name": "Screwjab Dagger",
+   "file": "vyper-1-screwjab-dagger.png"
+  },
+  {
+   "hero": "viper",
+   "hero_name": "Vyper",
+   "slot": 2,
+   "ability": "ability_viper_venom",
+   "name": "Lethal Venom",
+   "file": "vyper-2-lethal-venom.png"
+  },
+  {
+   "hero": "viper",
+   "hero_name": "Vyper",
+   "slot": 3,
+   "ability": "ability_viper_snakedash",
+   "name": "Slither",
+   "file": "vyper-3-slither.png"
+  },
+  {
+   "hero": "viper",
+   "hero_name": "Vyper",
+   "slot": 4,
+   "ability": "ability_viper_petrifybola",
+   "name": "Petrifying Bola",
+   "file": "vyper-4-petrifying-bola.png"
+  },
+  {
+   "hero": "warden",
+   "hero_name": "Warden",
+   "slot": 1,
+   "ability": "ability_warden_crowd_control",
+   "name": "Alchemical Flask",
+   "file": "warden-1-alchemical-flask.png"
+  },
+  {
+   "hero": "warden",
+   "hero_name": "Warden",
+   "slot": 2,
+   "ability": "ability_warden_high_alert",
+   "name": "Willpower",
+   "file": "warden-2-willpower.png"
+  },
+  {
+   "hero": "warden",
+   "hero_name": "Warden",
+   "slot": 3,
+   "ability": "ability_warden_lock_down",
+   "name": "Binding Word",
+   "file": "warden-3-binding-word.png"
+  },
+  {
+   "hero": "warden",
+   "hero_name": "Warden",
+   "slot": 4,
+   "ability": "ability_warden_riot_protocol",
+   "name": "Last Stand",
+   "file": "warden-4-last-stand.png"
+  },
+  {
+   "hero": "wraith",
+   "hero_name": "Wraith",
+   "slot": 1,
+   "ability": "citadel_ability_card_toss",
+   "name": "Card Trick",
+   "file": "wraith-1-card-trick.png"
+  },
+  {
+   "hero": "wraith",
+   "hero_name": "Wraith",
+   "slot": 2,
+   "ability": "citadel_ability_projectmind",
+   "name": "Project Mind",
+   "file": "wraith-2-project-mind.png"
+  },
+  {
+   "hero": "wraith",
+   "hero_name": "Wraith",
+   "slot": 3,
+   "ability": "citadel_ability_wraith_rapidfire",
+   "name": "Full Auto",
+   "file": "wraith-3-full-auto.png"
+  },
+  {
+   "hero": "wraith",
+   "hero_name": "Wraith",
+   "slot": 4,
+   "ability": "citadel_ability_psychic_lift",
+   "name": "Telekinesis",
+   "file": "wraith-4-telekinesis.png"
+  },
+  {
+   "hero": "yamato",
+   "hero_name": "Yamato",
+   "slot": 1,
+   "ability": "citadel_ability_power_slash",
+   "name": "Power Slash",
+   "file": "yamato-1-power-slash.png"
+  },
+  {
+   "hero": "yamato",
+   "hero_name": "Yamato",
+   "slot": 2,
+   "ability": "citadel_ability_flying_strike",
+   "name": "Flying Slash",
+   "file": "yamato-2-flying-slash.png"
+  },
+  {
+   "hero": "yamato",
+   "hero_name": "Yamato",
+   "slot": 3,
+   "ability": "citadel_ability_healing_slash",
+   "name": "Crimson Slash",
+   "file": "yamato-3-crimson-slash.png"
+  },
+  {
+   "hero": "yamato",
+   "hero_name": "Yamato",
+   "slot": 4,
+   "ability": "citadel_ability_infinity_slash",
+   "name": "Shadow Transformation",
+   "file": "yamato-4-shadow-transformation.png"
+  }
+ ]
+}

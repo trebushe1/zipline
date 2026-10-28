@@ -6,6 +6,7 @@ data/*
 !data/patches/
 !data/heroes/
 !data/items/
+!data/emoji/
 data/heroes/models/
 site/
 __pycache__/
