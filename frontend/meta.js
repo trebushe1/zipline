@@ -200,8 +200,10 @@ async function drawPatchShot(p, W = 1080, H = 1080) {
   const byKey = new Map(p.rows.map((r) => [r.key, r]));
   const top = Math.round(ty + titleSize * 1.3 + sub * 3.2), bottom = H - pad - sub * 2.2;
   const colGap = Math.round(W * 0.03), colW = (W - pad * 2 - colGap) / 2;
-  const headH = Math.round(H * 0.05), cardGap = Math.round(H * 0.018);
-  const cardH = (bottom - top - headH - cardGap * 3) / 3;
+  // Five rows per column: portrait on the left, name and win rate in the middle, the change large on the right.
+  const ROWS = 5;
+  const headH = Math.round(H * 0.05), cardGap = Math.round(H * 0.012);
+  const cardH = (bottom - top - headH - cardGap * ROWS) / ROWS;
   const columns = [["УСИЛИЛИСЬ", p.winners, GREEN], ["ПРОСЕЛИ", p.losers, RED]];
   const portraits = new Map(await Promise.all([...p.winners, ...p.losers].map(async (k) => {
     const r = byKey.get(k);
@@ -222,7 +224,7 @@ async function drawPatchShot(p, W = 1080, H = 1080) {
       ctx.font = `500 ${sub}px ${MONO}`;
       ctx.fillText("заметных изменений нет", x + headH * 0.35, top + headH + cardGap + cardH / 2);
     }
-    keys.slice(0, 3).forEach((k, i) => {
+    keys.slice(0, ROWS).forEach((k, i) => {
       const r = byKey.get(k);
       if (!r) return;
       const y = top + headH + cardGap + i * (cardH + cardGap);
@@ -234,27 +236,34 @@ async function drawPatchShot(p, W = 1080, H = 1080) {
       ctx.fillRect(x, y, ph, ph);
       if (img) {
         const scale = Math.max(ph / img.naturalWidth, ph / img.naturalHeight);
-        const sw = ph / scale, sh = ph / scale;
-        ctx.drawImage(img, (img.naturalWidth - sw) / 2, 0, sw, sh, x, y, ph, ph);
+        const side = ph / scale;
+        ctx.drawImage(img, (img.naturalWidth - side) / 2, 0, side, side, x, y, ph, ph);
       }
       ctx.fillStyle = color;
       ctx.fillRect(x, y, Math.max(4, Math.round(W * 0.005)), cardH);
 
-      const tx = x + ph + cardH * 0.14, tw = colW - ph - cardH * 0.24;
-      ctx.textBaseline = "alphabetic";
-      // The name shrinks to fit before it is cut: «DEADMAN DANNY» stays whole.
-      let nameSize = Math.round(cardH * 0.16);
-      ctx.font = `800 ${nameSize}px ${MONO}`;
-      while (ctx.measureText(r.name.toUpperCase()).width > tw && nameSize > cardH * 0.09) ctx.font = `800 ${--nameSize}px ${MONO}`;
-      ctx.fillStyle = PAPER;
-      ctx.fillText(ellipsize(ctx, r.name.toUpperCase(), tw), tx, y + cardH * 0.3);
-      const deltaSize = Math.round(cardH * 0.3);
-      ctx.font = `800 ${deltaSize}px ${MONO}`;
+      // The change, right-aligned and large.
+      const inner = cardH * 0.16;
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "right";
+      ctx.font = `800 ${Math.round(cardH * 0.4)}px ${MONO}`;
       ctx.fillStyle = color;
-      ctx.fillText(signed(r.wrDelta), tx, y + cardH * 0.67);
-      ctx.font = `500 ${Math.round(cardH * 0.12)}px ${MONO}`;
+      const delta = signed(r.wrDelta);
+      ctx.fillText(delta, x + colW - inner, y + cardH / 2);
+      const dw = ctx.measureText(delta).width;
+      ctx.textAlign = "left";
+
+      // Name and win rate between the portrait and the change; the name shrinks to fit before it is cut.
+      const tx = x + ph + inner, tw = colW - ph - inner * 3 - dw;
+      ctx.textBaseline = "alphabetic";
+      let nameSize = Math.round(cardH * 0.22);
+      ctx.font = `800 ${nameSize}px ${MONO}`;
+      while (ctx.measureText(r.name.toUpperCase()).width > tw && nameSize > cardH * 0.12) ctx.font = `800 ${--nameSize}px ${MONO}`;
+      ctx.fillStyle = PAPER;
+      ctx.fillText(ellipsize(ctx, r.name.toUpperCase(), tw), tx, y + cardH * 0.47);
+      ctx.font = `500 ${Math.round(cardH * 0.16)}px ${MONO}`;
       ctx.fillStyle = "rgba(246, 246, 244, .75)";
-      ctx.fillText(ellipsize(ctx, `винрейт ${pct(r.wr)}`, tw), tx, y + cardH * 0.88);
+      ctx.fillText(ellipsize(ctx, `винрейт ${pct(r.wr)}`, tw), tx, y + cardH * 0.78);
     });
   });
 

@@ -39,6 +39,7 @@ PATCHES = config.ROOT / "data" / "patches" / "index.json"
 HIGH_RANK = 81  # average badge of the match: Oracle 1 and above
 MIN_HERO_MATCHES = {"all": 1500, "high": 400}
 MIN_ITEM_MATCHES = 20_000
+PATCH_MOVERS = 5  # winners and losers shown for a patch (page, picture, post)
 PATCH_POST_AFTER = 48 * 3600
 PATCH_POST_UNTIL = 96 * 3600  # an older patch is no news: skip its post
 WEEKLY_POST = (0, 7)  # Monday, 07:00 UTC = 10:00 Moscow
@@ -154,7 +155,7 @@ async def compute(client: httpx.AsyncClient) -> dict:
             after = await fetch(client, "hero-stats", start, min(now, start + WINDOW))
             before = await fetch(client, "hero-stats", start - WINDOW, start)
             rows = hero_table(after, before, heroes, MIN_HERO_MATCHES["all"] // 3)
-            up, down = movers(rows)
+            up, down = movers(rows, PATCH_MOVERS)
             out["patch"] = {"build": patch["build"], "file": patch["file"], "time": patch["time"],
                             "hours": round((min(now, start + WINDOW) - start) / 3600),
                             "games": round(sum(h["matches"] for h in after) / 12),
