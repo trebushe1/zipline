@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793210519163,
+  "at": 1793291847495,
   "new": 1,
   "error": null
  },
@@ -27,7 +27,7 @@
   {
    "user_id": "728690796907331654",
    "name": "Kaori",
-   "avatar": "https://cdn.discordapp.com/avatars/728690796907331654/cc35cab42880836bc40d4cb5a14b5b84.png?size=64",
+   "avatar": "https://cdn.discordapp.com/avatars/728690796907331654/38406a541aaa4b9191930b6914c20caf.png?size=64",
    "tracked": 1
   },
   {
@@ -80,6 +80,24 @@
   }
  ],
  "messages": [
+  {
+   "id": "1565403941259190425",
+   "author_id": "728690796907331654",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1279163694445625344",
+   "channel_name": "deadlock-chat",
+   "parent_channel_id": "1231286447131328544",
+   "thread_name": "**Current voice cast I could find:**",
+   "time": 1793291783395,
+   "edited_time": null,
+   "text": "negative",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": "1565373106095132823",
+   "url": "https://discord.com/channels/1231286446472691825/1279163694445625344/1565403941259190425",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1565037967549014067",
    "author_id": "1229609738828906517",
