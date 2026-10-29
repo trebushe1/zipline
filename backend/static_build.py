@@ -103,6 +103,8 @@ def export(last_poll: dict) -> None:
     bust_cache(SITE / "reddit.html", ("styles.css", "reddit.js"))
     bust_cache(SITE / "items.html", ("styles.css", "items.js"))
     bust_cache(SITE / "tierlist.html", ("styles.css", "tierlist.js"))
+    bust_cache(SITE / "meta.html", ("styles.css", "meta.js"))
+    (SITE / "meta.json").write_text(json.dumps(meta_snapshot(), ensure_ascii=False), encoding="utf-8")
     (SITE / "reddit.json").write_text(json.dumps(reddit_snapshot(), ensure_ascii=False), encoding="utf-8")
     if PATCHES.exists():
         shutil.copytree(PATCHES, SITE / "patches")
@@ -121,6 +123,19 @@ def export(last_poll: dict) -> None:
         {"generatedAt": int(time.time() * 1000), "status": status,
          "developers": devs, "messages": messages}, ensure_ascii=False), encoding="utf-8")
     (SITE / ".nojekyll").touch()
+
+
+def meta_snapshot() -> dict:
+    """The «Мета» page's numbers as of the build (the live collector refreshes Firebase)."""
+    data = {}
+    if config.FIREBASE_DB_URL:
+        try:
+            resp = httpx.get(f"{config.FIREBASE_DB_URL}/live/meta.json", timeout=20)
+            if resp.status_code == 200 and resp.json():
+                data = resp.json()
+        except httpx.HTTPError as exc:
+            print(f"::warning::meta snapshot from Firebase failed: {exc}")
+    return data | {"realtimeUrl": config.FIREBASE_DB_URL or None}
 
 
 def reddit_snapshot() -> dict:
