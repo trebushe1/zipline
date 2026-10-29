@@ -127,7 +127,7 @@ function renderBuild() {
         <input type="search" id="q" placeholder="Поиск: герой, файл, строка, параметр…" autocomplete="off" value="${escapeHtml(state.q)}">
       </label>
       <nav class="jump" aria-label="Разделы билда">
-        ${b.balance?.total ? `<a href="#sec-balance">Баланс <b>${num.format(b.balance.total)}</b></a>` : ""}
+        ${balanceFiltered(b.balance) ? `<a href="#sec-balance">Баланс${b.balance.total ? ` <b>${num.format(b.balance.total)}</b>` : ""}</a>` : ""}
         ${b.media ? `<a href="#sec-media">Было → стало <b>${Object.keys(b.media).length}</b></a>` : ""}
         ${visual.length ? `<a href="#sec-visual">Внешний вид <b>${visual.length}</b></a>` : ""}
         ${b.stringsTotal ? `<a href="#sec-strings">Тексты <b>${num.format(b.stringsTotal)}</b></a>` : ""}
@@ -163,7 +163,7 @@ function renderBody() {
 
   const sections = [];
   const balance = balanceFiltered(b.balance);
-  if (balance) sections.push(section("sec-balance", "Баланс", "Изменения цифр прямо из файлов игры — часто раньше официального патчноута. Зелёная стрелка — усиление, красная — ослабление.",
+  if (balance) sections.push(section("sec-balance", "Баланс", "Изменения цифр прямо из файлов игры — часто раньше официального патчноута. Зелёная стрелка — усиление, красная — ослабление. Новые герои и герои в разработке — отдельно, без стрелок.",
     balanceBlock(balance)));
   if (media.length) sections.push(section("sec-media", "Было → стало", "Изменённые модели и текстуры прямо из файлов игры. Нажмите на карточку: 3D-модели можно крутить мышью, «до» и «после» поворачиваются вместе.",
     galleryBlock(media)));
@@ -438,11 +438,11 @@ function balanceRowMatches(r) {
 }
 
 function balanceFiltered(bal) {
-  if (!bal?.total) return null;
+  if (!bal || !(bal.total || bal.released?.length || bal.dev)) return null;
   if (!state.q) return bal;
-  const heroes = bal.heroes.map((h) => matches(h.hero) ? h : { ...h,
+  const heroes = bal.heroes.map((h) => matches(h.hero) || h.status === "released" && h.stats.some((r) => matches(r.label.ru, r.label.en)) ? h : { ...h,
     sections: h.sections.map((s) => matches(s.name) ? s : { ...s, changes: s.changes.filter(balanceRowMatches) })
-      .filter((s) => s.changes.length) }).filter((h) => h.sections.length);
+      .filter((s) => s.changes.length) }).filter((h) => h.sections.length || (h.status === "released" && matches(h.hero)));
   const items = bal.items.filter((i) => matches(i.name) || i.changes.some(balanceRowMatches));
   return heroes.length || items.length ? { heroes, items } : null;
 }
@@ -474,11 +474,24 @@ function balanceCard(title, icon, rows) {
   </article>`;
 }
 
+function releaseCard(h) {
+  // A hero out of development: before this build its numbers were the template's placeholders.
+  return `<article class="panel param bal-card">
+    <header class="param-head"><strong>Стартовые характеристики</strong></header>
+    <table class="param-rows"><tbody>${h.stats.map((r) => `<tr><th>${escapeHtml(r.label.ru || r.label.en)}</th>
+      <td><span class="v-new">${escapeHtml(r.value)}${r.unit ? ` ${escapeHtml(r.unit)}` : ""}</span></td></tr>`).join("")}</tbody></table>
+  </article>`;
+}
+
 function balanceBlock(bal) {
+  const badge = (h) => h.status === "released" ? `<span class="str-badge new">теперь в игре</span>`
+    : h.status === "dev" ? `<span class="str-badge">в разработке</span>` : "";
   const heroes = bal.heroes.map((h) => `
     <div class="param-hero">
-      <h3 class="param-hero-title bal-hero"><img src="${heroIconOf(h.key)}" alt="" loading="lazy" onerror="this.remove()"><span class="is-hero">${escapeHtml(h.hero)}</span></h3>
-      <div class="params">${h.sections.map((s) => balanceCard(s.name,
+      <h3 class="param-hero-title bal-hero"><img src="${heroIconOf(h.key)}" alt="" loading="lazy" onerror="this.remove()"><span class="is-hero">${escapeHtml(h.hero)}</span>${badge(h)}</h3>
+      ${h.status === "released" ? `<p class="more-note">До этого билда герой был в разработке с цифрами-заготовками — поэтому здесь его стартовые значения, а не «было → стало».</p>` : ""}
+      ${h.status === "dev" ? `<p class="more-note">Герой ещё не вышел: это подготовка, а не баланс.</p>` : ""}
+      <div class="params">${h.status === "released" ? releaseCard(h) : ""}${h.sections.map((s) => balanceCard(s.name,
         s.kind === "ability" ? `heroes/abilities/${s.key}.png` : null, s.changes)).join("")}</div>
     </div>`).join("");
   const items = bal.items.length ? `

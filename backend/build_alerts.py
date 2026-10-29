@@ -22,7 +22,7 @@ BALANCE_LINES = 25  # the rest is on the site; a Telegram message holds 4096 cha
 
 def balance_text(bal: dict) -> list[str]:
     """Balance changes as Telegram lines: hero names in bold, at most BALANCE_LINES changes."""
-    out, shown = ["", "⚖️ <b>Баланс</b>"], 0
+    out, shown = ["", "⚖️ <b>Баланс</b>" if bal["total"] else "⚖️ <b>Герои</b>"], 0
     for line in balance.lines(bal):
         if not line.strip():
             continue
@@ -47,8 +47,9 @@ def format_build(entry: dict, summary: dict) -> str:
         lines.append(f"🆕 Новый герой в файлах: <b>{html.escape(', '.join(entry['newHeroes']))}</b>")
     lines.append("")
     lines += [f"• {html.escape(h)}" for h in entry["headline"]]
-    if (summary.get("balance") or {}).get("total"):
-        lines += balance_text(summary["balance"])
+    bal = summary.get("balance") or {}
+    if bal.get("total") or bal.get("released") or bal.get("dev"):
+        lines += balance_text(bal)
     if summary.get("media"):
         models = sum(m["kind"] == "model" for m in summary["media"].values())
         textures = len(summary["media"]) - models

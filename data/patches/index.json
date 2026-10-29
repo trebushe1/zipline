@@ -306,7 +306,7 @@
    "size": "major",
    "weight": 3647,
    "headline": [
-    "Баланс: 7 изменений — Nurse Harrow",
+    "Новый герой в игре: Nurse Harrow",
     "Nurse Harrow: новые модели: nurse ampoule, piece 01, piece 10 и ещё 8",
     "Карта и окружение: новые модели: nurse smelling salts bottle model, diner clock 01, diner kitchen pan 01 и ещё 37",
     "Юниты и нейтралы: переделаны модели: boss tier 01 brazier guardian, boss tier 02 sun walker, neutral drain creature и ещё 27",
@@ -320,7 +320,7 @@
     "strings": 2583,
     "vdata": 2225,
     "code": 9,
-    "balance": 7
+    "balance": 0
    },
    "file": "6801-37f9aebd.json"
   },
@@ -423,11 +423,11 @@
    "size": "major",
    "weight": 5162,
    "headline": [
-    "Баланс: 7 изменений — Violet, Nurse Harrow",
+    "Новый герой в игре: Violet",
+    "Герои в разработке: Nurse Harrow — 1 правка",
     "Violet: новые модели: ability crane model, artist gesture paper",
     "Юниты и нейтралы: переделаны модели: boss tier 01 brazier guardian, boss tier 02 sun walker, core amber и ещё 249",
-    "Карта и окружение: новые модели: artist ability1 brush heroselect model, artist ability1 brush model, artist charm brush model fx и ещё 28",
-    "Тексты игры: 2781 строка"
+    "Карта и окружение: новые модели: artist ability1 brush heroselect model, artist ability1 brush model, artist charm brush model fx и ещё 28"
    ],
    "newHeroes": [],
    "counts": {
@@ -437,7 +437,7 @@
     "strings": 2781,
     "vdata": 3705,
     "code": 72,
-    "balance": 7
+    "balance": 0
    },
    "file": "6790-9b616d30.json"
   },
@@ -515,7 +515,7 @@
    "size": "major",
    "weight": 2525,
    "headline": [
-    "Баланс: 6 изменений — Deadman Danny",
+    "Новый герой в игре: Deadman Danny",
     "Эффекты: текстуры: +25 текстур",
     "Deadman Danny: переделаны модели: deadpack",
     "Карта и окружение: новые модели: deadpack globules, deadpack missile model, diner chair 01 и ещё 9",
@@ -529,7 +529,7 @@
     "strings": 2678,
     "vdata": 2083,
     "code": 17,
-    "balance": 6
+    "balance": 0
    },
    "file": "6779-0c38f9d3.json"
   },
@@ -635,7 +635,7 @@
    "size": "major",
    "weight": 3200,
    "headline": [
-    "Баланс: 7 изменений — Solomon",
+    "Новый герой в игре: Solomon",
     "Solomon: новые модели: chessmaster board pieces fx model, chessmaster hand, chessmaster knightshield",
     "Карта и окружение: новые модели: chessmaster rook crown fx model, campus 01 chalice 01, campus 01 entablement 01 и ещё 42",
     "Интерфейс: текстуры: +31 текстура, изменено 1 текстура",
@@ -649,7 +649,7 @@
     "strings": 2739,
     "vdata": 2848,
     "code": 10,
-    "balance": 7
+    "balance": 0
    },
    "file": "6769-8f572f6e.json"
   },

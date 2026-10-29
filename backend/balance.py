@@ -257,6 +257,35 @@ def hero_changes(old: dict, new: dict, text: Text) -> list[dict]:
                         scaling=True))
 
 
+RELEASED = "EHeroDevState_Release"
+
+
+def dev_state(hero: dict) -> str:
+    """Release, PreRelease, ...; older builds have only the m_bInDevelopment flag."""
+    return hero.get("m_eHeroDevelopmentState") or ("EHeroDevState_InDevelopment" if is_on(hero.get("m_bInDevelopment"))
+                                                   else RELEASED)
+
+
+def release_stats(hero: dict, weapon: dict | None, text: Text) -> list[dict]:
+    """The numbers a hero comes out with (a hero in development carries the template's placeholders)."""
+    rows = []
+    stats = hero.get("m_mapStartingStats") or {}
+    for key, (ru, en) in HERO_STATS.items():
+        if (v := as_number(stats.get(key))[0]) is not None and key in (
+                "EMaxHealth", "EBaseHealthRegen", "EMaxMoveSpeed", "ESprintSpeed", "EStamina", "ELightMeleeDamage",
+                "EHeavyMeleeDamage", "ECritDamageBonusScale"):
+            rows.append({"label": {"ru": ru, "en": en}, "value": fmt(v), "unit": ""})
+    info = ((weapon or {}).get("m_mapWeaponInfos") or {}).get("primary") or {}
+    for field in ("m_flBulletDamage", "m_iBullets", "m_iClipSize", "m_flCycleTime", "m_reloadDuration"):
+        if (v := as_number(info.get(field))[0]) is not None:
+            ru, en = WEAPON_FIELDS[field]
+            rows.append({"label": {"ru": ru, "en": en}, "value": fmt(v), "unit": WEAPON_UNITS.get(field, "")})
+    for key, (ru, en) in LEVEL_UP.items():
+        if v := as_number((hero.get("m_mapStandardLevelUpUpgrades") or {}).get(key))[0]:
+            rows.append({"label": {"ru": ru, "en": en}, "value": fmt(v), "unit": ""})
+    return rows
+
+
 def playable(hero: dict) -> bool:
     return isinstance(hero, dict) and not is_on(hero.get("m_bDisabled")) and bool(hero.get("m_mapBoundAbilities"))
 
@@ -271,12 +300,19 @@ def diff(parent: str, sha: str) -> dict:
     heroes = []
     for key in sorted(new_he):
         hero, before = new_he[key], old_he.get(key)
-        if not key.startswith("hero_") or not playable(hero) or not playable(before):
+        if not key.startswith("hero_") or not playable(hero):
+            continue
+        weapon = hero["m_mapBoundAbilities"].get("ESlot_Weapon_Primary")
+        if dev_state(hero) == RELEASED and (not playable(before) or dev_state(before) != RELEASED):
+            # Out of development: its numbers so far were placeholders, so list what it comes out with.
+            heroes.append({"key": key, "hero": name(key), "status": "released",
+                           "stats": release_stats(hero, new_ab.get(weapon), text), "sections": []})
+            continue
+        if not playable(before):
             continue
         sections = []
         if rows := hero_changes(before, hero, text):
             sections.append({"kind": "stats", "name": "Характеристики", "changes": rows})
-        weapon = hero["m_mapBoundAbilities"].get("ESlot_Weapon_Primary")
         if weapon and weapon in old_ab and weapon in new_ab:
             if rows := weapon_changes(old_ab[weapon], new_ab[weapon], text):
                 sections.append({"kind": "weapon", "key": weapon, "name": "Оружие", "changes": rows})
@@ -286,7 +322,13 @@ def diff(parent: str, sha: str) -> dict:
                 if rows := ability_changes(old_ab[ability], new_ab[ability], text):
                     sections.append({"kind": "ability", "key": ability, "slot": slot_no, "name": name(ability),
                                      "changes": rows})
-        if sections:
+        if sections and dev_state(hero) != RELEASED:
+            # Tuning of a hero nobody plays yet: news, but neither a buff nor a nerf.
+            for s_ in sections:
+                for r in s_["changes"]:
+                    r.pop("dir", None)
+            heroes.append({"key": key, "hero": name(key), "status": "dev", "sections": sections})
+        elif sections:
             heroes.append({"key": key, "hero": name(key), "sections": sections})
 
     items = []
@@ -300,8 +342,28 @@ def diff(parent: str, sha: str) -> dict:
             items.append({"key": key, "name": name(key), "slot": SLOTS.get(new_items[key].get("m_eItemSlotType")),
                           "changes": rows})
 
-    total = sum(len(s["changes"]) for h in heroes for s in h["sections"]) + sum(max(1, len(i["changes"])) for i in items)
-    return {"heroes": heroes, "items": items, "total": total}
+    live = [h for h in heroes if not h.get("status")]
+    total = sum(len(s["changes"]) for h in live for s in h["sections"]) + sum(max(1, len(i["changes"])) for i in items)
+    return {"heroes": heroes, "items": items, "total": total,
+            "released": [h["hero"] for h in heroes if h.get("status") == "released"],
+            "dev": sum(len(s["changes"]) for h in heroes if h.get("status") == "dev" for s in h["sections"])}
+
+
+def headline(bal: dict | None) -> list[str]:
+    """Patch headline lines: released heroes, then balance of live heroes and items."""
+    from .patches import plural
+    if not bal:
+        return []
+    out = [f"Новый герой в игре: {name}" for name in bal.get("released", [])]
+    if bal["total"]:
+        who = [h["hero"] for h in bal["heroes"] if not h.get("status")][:4]
+        if bal["items"]:
+            who.append(f"предметы ({len(bal['items'])})")
+        out.append(f"Баланс: {plural(bal['total'], 'изменение', 'изменения', 'изменений')} — " + ", ".join(who))
+    if bal.get("dev"):
+        dev = [h["hero"] for h in bal["heroes"] if h.get("status") == "dev"]
+        out.append(f"Герои в разработке: {', '.join(dev)} — {plural(bal['dev'], 'правка', 'правки', 'правок')}")
+    return out
 
 
 def lines(balance: dict, limit: int | None = None) -> list[str]:
@@ -322,7 +384,14 @@ def lines(balance: dict, limit: int | None = None) -> list[str]:
         return f"{arrow.get(r.get('dir'), '▪️')} {tier}{lbl}: {old} → {new}{unit}"
 
     for h in balance["heroes"]:
-        out.append(f"\n{h['hero']}")
+        if h.get("status") == "released":
+            out.append(f"\n🆕 {h['hero']} — теперь в игре")
+            stats = ", ".join(f"{(r['label'].get('ru') or r['label']['en']).lower()} {r['value']}{(' ' + r['unit']) if r['unit'] else ''}"
+                              for r in h["stats"][:6])
+            if stats:
+                out.append(f"  ▪️ Стартовые: {stats}")
+            continue
+        out.append(f"\n{h['hero']}" + (" (в разработке)" if h.get("status") == "dev" else ""))
         for s in h["sections"]:
             for r in s["changes"]:
                 where = "" if s["kind"] == "stats" else f"{s['name']} — "
@@ -341,13 +410,13 @@ def lines(balance: dict, limit: int | None = None) -> list[str]:
 
 def backfill() -> int:
     """Adds the balance section to build summaries written before it existed."""
-    from .patches import OUT, entry, plural
+    from .patches import OUT, entry
     index_path = OUT / "index.json"
     index = json.loads(index_path.read_text("utf-8"))
     for item in index["builds"]:
         path = OUT / item["file"]
         summary = json.loads(path.read_text("utf-8"))
-        if "balance" in summary or not summary.get("parent"):
+        if not summary.get("parent"):
             continue
         try:
             bal = diff(summary["parent"], summary["sha"]) if summary["counts"].get("vdata") else None
@@ -355,10 +424,11 @@ def backfill() -> int:
             continue
         summary["balance"] = bal
         summary["counts"]["balance"] = bal["total"] if bal else 0
-        if bal and bal["total"]:
-            who = [h["hero"] for h in bal["heroes"]][:4] + ([f"предметы ({len(bal['items'])})"] if bal["items"] else [])
-            line = f"Баланс: {plural(bal['total'], 'изменение', 'изменения', 'изменений')} — " + ", ".join(who)
-            summary["headline"] = [line] + [h for h in summary["headline"] if not h.startswith("Параметры:")][:4]
+        lines_ = headline(bal)
+        rest = [h for h in summary["headline"]
+                if not h.startswith(("Баланс:", "Новый герой в игре:", "Герои в разработке:"))
+                and not (lines_ and h.startswith("Параметры:"))]
+        summary["headline"] = (lines_ + rest)[:5]
         path.write_text(json.dumps(summary, ensure_ascii=False, separators=(",", ":")), "utf-8")
         item.update({k: v for k, v in entry(summary, item["file"]).items() if k in ("headline", "counts")})
         print(f"build {summary['build']}: balance {bal['total'] if bal else 0}")

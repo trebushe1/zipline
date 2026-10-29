@@ -546,16 +546,14 @@ def summarise(commit: dict) -> dict:
     headline = []
     if new_heroes:
         headline.append("Новый герой в файлах: " + ", ".join(new_heroes))
-    if counts["balance"]:
-        who = [h["hero"] for h in bal["heroes"]][:4]
-        if bal["items"]:
-            who.append(f"предметы ({len(bal['items'])})")
-        headline.append(f"Баланс: {plural(counts['balance'], 'изменение', 'изменения', 'изменений')} — " + ", ".join(who))
+    if bal:
+        from . import balance  # imported here: balance builds on this module
+        headline += balance.headline(bal)
     for s in visual[:3]:
         headline.append(f"{s['title']}: {s['notes'][0][0].lower() + s['notes'][0][1:]}" if s["notes"] else s["title"])
     if strings:
         headline.append(f"Тексты игры: {plural(len(strings), 'строка', 'строки', 'строк')}")
-    if vdata and not counts["balance"]:
+    if vdata and not (bal and (bal["total"] or bal["released"] or bal["dev"])):
         headline.append(f"Параметры: {plural(counts['vdata'], 'значение', 'значения', 'значений')}")
     if not headline:
         headline.append("Изменения только в коде игры" if counts["code"] else "Только техническое обновление")
