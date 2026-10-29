@@ -1,4 +1,4 @@
-"""Telegram emoji packs: every hero's head and every ability, and every shop item, as 100×100 custom emoji.
+"""Telegram emoji packs: every hero's head and every ability, every shop item, and text symbols, as 100×100 emoji.
 
 An ability is our post template in miniature: a printed photo card taped to the chat. From the outside in:
 a dark ink line, a paper rim, a frame in the hero's colour, a near-black inside with a dry-brush stroke,
@@ -15,6 +15,8 @@ spirit purple), the cards leaning a little each their own way. The picture is wh
 so it gets as much of the 100 px as the edge allows; the tier already shows in the picture's background
 (light for tier 1, dark for tier 4). Street Brawl's legendaries (tier 5) are left out.
 
+Symbols for posts (arrows, dots, dashes, quotes...) are cut out of paper in our green: see backend/emoji_symbols.py.
+
 The double edge (ink line + paper rim) is what lets one design work on every Telegram theme: on a dark
 chat the rim stands out, on a light one the line, on the mid-tone default wallpaper both. `--check` measures
 it against Telegram's backgrounds. The frame keeps the hero's own colour (bordeaux stays dark, yellow
@@ -23,7 +25,7 @@ stays light); its tones are derived in CIELAB from one PALETTE entry per hero.
 Reads data/heroes/index.json, the card portraits in data/heroes/icons/ and the ability icons in
 data/heroes/abilities/ (see backend/heroes.py), data/items/index.json and the shop icons in data/items/icons/
 (see backend/items.py); writes data/emoji/<hero>-0-head.png, data/emoji/<hero>-<slot>-<ability>.png,
-data/emoji/items/<tab>-<tier>-<item>.png and data/emoji/index.json. All noise is seeded, so the same
+data/emoji/items/<tab>-<tier>-<item>.png, data/emoji/symbols/<nn>-<symbol>.png and data/emoji/index.json. All noise is seeded, so the same
 icons and palette give the same pixels.
 
     python -m backend.emoji            # draw the whole pack
@@ -492,6 +494,13 @@ def main() -> int:
         written.add(file)
         entries.append({"item": it["key"], "tab": it["slot"], "tier": it["tier"], "key": it["key"],
                         "name": it["name"]["en"], "name_ru": it["name"].get("ru", ""), "file": file})
+    from .emoji_symbols import SYMBOLS, draw_symbol  # it builds on the helpers above
+    (OUT / "symbols").mkdir(exist_ok=True)
+    for n, (key, (en, ru, _)) in enumerate(SYMBOLS.items(), 1):
+        file = f"symbols/{n:02d}-{key}.png"
+        draw_symbol(key).save(OUT / file, optimize=True)
+        written.add(file)
+        entries.append({"symbol": key, "key": f"symbol_{key}", "name": en, "name_ru": ru, "file": file})
     for old in OUT.rglob("*.png"):
         if old.relative_to(OUT).as_posix() not in written:
             old.unlink()

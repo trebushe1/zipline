@@ -3164,6 +3164,272 @@
    "name": "Vortex Web",
    "name_ru": "Паутинный вихрь",
    "file": "items/spirit-4-vortex-web.png"
+  },
+  {
+   "symbol": "arrow-right",
+   "key": "symbol_arrow-right",
+   "name": "arrow right",
+   "name_ru": "стрелка вправо",
+   "file": "symbols/01-arrow-right.png"
+  },
+  {
+   "symbol": "arrow-left",
+   "key": "symbol_arrow-left",
+   "name": "arrow left",
+   "name_ru": "стрелка влево",
+   "file": "symbols/02-arrow-left.png"
+  },
+  {
+   "symbol": "arrow-up",
+   "key": "symbol_arrow-up",
+   "name": "arrow up",
+   "name_ru": "стрелка вверх",
+   "file": "symbols/03-arrow-up.png"
+  },
+  {
+   "symbol": "arrow-down",
+   "key": "symbol_arrow-down",
+   "name": "arrow down",
+   "name_ru": "стрелка вниз",
+   "file": "symbols/04-arrow-down.png"
+  },
+  {
+   "symbol": "arrow-up-right",
+   "key": "symbol_arrow-up-right",
+   "name": "arrow up right",
+   "name_ru": "стрелка вверх вправо",
+   "file": "symbols/05-arrow-up-right.png"
+  },
+  {
+   "symbol": "arrow-down-right",
+   "key": "symbol_arrow-down-right",
+   "name": "arrow down right",
+   "name_ru": "стрелка вниз вправо",
+   "file": "symbols/06-arrow-down-right.png"
+  },
+  {
+   "symbol": "arrow-down-left",
+   "key": "symbol_arrow-down-left",
+   "name": "arrow down left",
+   "name_ru": "стрелка вниз влево",
+   "file": "symbols/07-arrow-down-left.png"
+  },
+  {
+   "symbol": "arrow-up-left",
+   "key": "symbol_arrow-up-left",
+   "name": "arrow up left",
+   "name_ru": "стрелка вверх влево",
+   "file": "symbols/08-arrow-up-left.png"
+  },
+  {
+   "symbol": "dot-center",
+   "key": "symbol_dot-center",
+   "name": "middle dot",
+   "name_ru": "точка по центру",
+   "file": "symbols/09-dot-center.png"
+  },
+  {
+   "symbol": "bullet",
+   "key": "symbol_bullet",
+   "name": "bullet",
+   "name_ru": "кружок",
+   "file": "symbols/10-bullet.png"
+  },
+  {
+   "symbol": "diamond",
+   "key": "symbol_diamond",
+   "name": "diamond",
+   "name_ru": "ромб",
+   "file": "symbols/11-diamond.png"
+  },
+  {
+   "symbol": "star",
+   "key": "symbol_star",
+   "name": "star",
+   "name_ru": "звезда",
+   "file": "symbols/12-star.png"
+  },
+  {
+   "symbol": "sparkle",
+   "key": "symbol_sparkle",
+   "name": "sparkle",
+   "name_ru": "искра",
+   "file": "symbols/13-sparkle.png"
+  },
+  {
+   "symbol": "play",
+   "key": "symbol_play",
+   "name": "play",
+   "name_ru": "плей",
+   "file": "symbols/14-play.png"
+  },
+  {
+   "symbol": "lightning",
+   "key": "symbol_lightning",
+   "name": "lightning",
+   "name_ru": "молния",
+   "file": "symbols/15-lightning.png"
+  },
+  {
+   "symbol": "dash",
+   "key": "symbol_dash",
+   "name": "dash",
+   "name_ru": "тире",
+   "file": "symbols/16-dash.png"
+  },
+  {
+   "symbol": "hyphen",
+   "key": "symbol_hyphen",
+   "name": "hyphen",
+   "name_ru": "дефис",
+   "file": "symbols/17-hyphen.png"
+  },
+  {
+   "symbol": "quote-open",
+   "key": "symbol_quote-open",
+   "name": "quote open",
+   "name_ru": "кавычка открывающая",
+   "file": "symbols/18-quote-open.png"
+  },
+  {
+   "symbol": "quote-close",
+   "key": "symbol_quote-close",
+   "name": "quote close",
+   "name_ru": "кавычка закрывающая",
+   "file": "symbols/19-quote-close.png"
+  },
+  {
+   "symbol": "quote-low",
+   "key": "symbol_quote-low",
+   "name": "low quote",
+   "name_ru": "нижняя кавычка",
+   "file": "symbols/20-quote-low.png"
+  },
+  {
+   "symbol": "quote-high",
+   "key": "symbol_quote-high",
+   "name": "high quote",
+   "name_ru": "верхняя кавычка",
+   "file": "symbols/21-quote-high.png"
+  },
+  {
+   "symbol": "exclamation",
+   "key": "symbol_exclamation",
+   "name": "exclamation",
+   "name_ru": "восклицательный знак",
+   "file": "symbols/22-exclamation.png"
+  },
+  {
+   "symbol": "question",
+   "key": "symbol_question",
+   "name": "question",
+   "name_ru": "вопросительный знак",
+   "file": "symbols/23-question.png"
+  },
+  {
+   "symbol": "period",
+   "key": "symbol_period",
+   "name": "period",
+   "name_ru": "точка",
+   "file": "symbols/24-period.png"
+  },
+  {
+   "symbol": "comma",
+   "key": "symbol_comma",
+   "name": "comma",
+   "name_ru": "запятая",
+   "file": "symbols/25-comma.png"
+  },
+  {
+   "symbol": "colon",
+   "key": "symbol_colon",
+   "name": "colon",
+   "name_ru": "двоеточие",
+   "file": "symbols/26-colon.png"
+  },
+  {
+   "symbol": "ellipsis",
+   "key": "symbol_ellipsis",
+   "name": "ellipsis",
+   "name_ru": "многоточие",
+   "file": "symbols/27-ellipsis.png"
+  },
+  {
+   "symbol": "paren-open",
+   "key": "symbol_paren-open",
+   "name": "bracket open",
+   "name_ru": "скобка открывающая",
+   "file": "symbols/28-paren-open.png"
+  },
+  {
+   "symbol": "paren-close",
+   "key": "symbol_paren-close",
+   "name": "bracket close",
+   "name_ru": "скобка закрывающая",
+   "file": "symbols/29-paren-close.png"
+  },
+  {
+   "symbol": "plus",
+   "key": "symbol_plus",
+   "name": "plus",
+   "name_ru": "плюс",
+   "file": "symbols/30-plus.png"
+  },
+  {
+   "symbol": "minus",
+   "key": "symbol_minus",
+   "name": "minus",
+   "name_ru": "минус",
+   "file": "symbols/31-minus.png"
+  },
+  {
+   "symbol": "equals",
+   "key": "symbol_equals",
+   "name": "equals",
+   "name_ru": "равно",
+   "file": "symbols/32-equals.png"
+  },
+  {
+   "symbol": "check",
+   "key": "symbol_check",
+   "name": "check",
+   "name_ru": "галочка",
+   "file": "symbols/33-check.png"
+  },
+  {
+   "symbol": "cross",
+   "key": "symbol_cross",
+   "name": "cross",
+   "name_ru": "крестик",
+   "file": "symbols/34-cross.png"
+  },
+  {
+   "symbol": "slash",
+   "key": "symbol_slash",
+   "name": "slash",
+   "name_ru": "слэш",
+   "file": "symbols/35-slash.png"
+  },
+  {
+   "symbol": "hash",
+   "key": "symbol_hash",
+   "name": "hash",
+   "name_ru": "решётка",
+   "file": "symbols/36-hash.png"
+  },
+  {
+   "symbol": "percent",
+   "key": "symbol_percent",
+   "name": "percent",
+   "name_ru": "процент",
+   "file": "symbols/37-percent.png"
+  },
+  {
+   "symbol": "numero",
+   "key": "symbol_numero",
+   "name": "numero",
+   "name_ru": "номер",
+   "file": "symbols/38-numero.png"
   }
  ]
 }

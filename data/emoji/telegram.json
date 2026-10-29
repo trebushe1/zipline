@@ -4858,6 +4858,467 @@
      ]
     }
    }
+  },
+  "zipline_symbols_by_zipline_emoji_bot": {
+   "title": "@zipline symbols",
+   "emoji": {
+    "symbol_arrow-right": {
+     "file": "symbols/01-arrow-right.png",
+     "sha": "27aa6c7f93e87cfe",
+     "id": "AgADFq0AAkS0IEs",
+     "alt": [
+      "➡️"
+     ],
+     "keywords": [
+      "arrow right",
+      "стрелка вправо"
+     ]
+    },
+    "symbol_arrow-left": {
+     "file": "symbols/02-arrow-left.png",
+     "sha": "644ce63d53da76a1",
+     "id": "AgADNaYAAmduIUs",
+     "alt": [
+      "⬅️"
+     ],
+     "keywords": [
+      "arrow left",
+      "стрелка влево"
+     ]
+    },
+    "symbol_arrow-up": {
+     "file": "symbols/03-arrow-up.png",
+     "sha": "a85733858ae14ff5",
+     "id": "AgAD3KcAAoIPGUs",
+     "alt": [
+      "⬆️"
+     ],
+     "keywords": [
+      "arrow up",
+      "стрелка вверх"
+     ]
+    },
+    "symbol_arrow-down": {
+     "file": "symbols/04-arrow-down.png",
+     "sha": "31e8c51fa478e26e",
+     "id": "AgADMa8AAicTIEs",
+     "alt": [
+      "⬇️"
+     ],
+     "keywords": [
+      "arrow down",
+      "стрелка вниз"
+     ]
+    },
+    "symbol_arrow-up-right": {
+     "file": "symbols/05-arrow-up-right.png",
+     "sha": "d69d4cb755fa2714",
+     "id": "AgADJKQAApFmGEs",
+     "alt": [
+      "↗️"
+     ],
+     "keywords": [
+      "arrow up right",
+      "стрелка вверх вправо"
+     ]
+    },
+    "symbol_arrow-down-right": {
+     "file": "symbols/06-arrow-down-right.png",
+     "sha": "93385d177903469a",
+     "id": "AgADTa4AAgTjIEs",
+     "alt": [
+      "↘️"
+     ],
+     "keywords": [
+      "arrow down right",
+      "стрелка вниз вправо"
+     ]
+    },
+    "symbol_arrow-down-left": {
+     "file": "symbols/07-arrow-down-left.png",
+     "sha": "831c41c45e23eb92",
+     "id": "AgADQqcAAg0gIUs",
+     "alt": [
+      "↙️"
+     ],
+     "keywords": [
+      "arrow down left",
+      "стрелка вниз влево"
+     ]
+    },
+    "symbol_arrow-up-left": {
+     "file": "symbols/08-arrow-up-left.png",
+     "sha": "6bffb6158d6b2c96",
+     "id": "AgADTKwAAuT8IEs",
+     "alt": [
+      "↖️"
+     ],
+     "keywords": [
+      "arrow up left",
+      "стрелка вверх влево"
+     ]
+    },
+    "symbol_dot-center": {
+     "file": "symbols/09-dot-center.png",
+     "sha": "2af543cf29547476",
+     "id": "AgAD8qkAAkWUIUs",
+     "alt": [
+      "▪️"
+     ],
+     "keywords": [
+      "middle dot",
+      "точка по центру"
+     ]
+    },
+    "symbol_bullet": {
+     "file": "symbols/10-bullet.png",
+     "sha": "4e2e3864e3600ff7",
+     "id": "AgADUKIAAuXlGUs",
+     "alt": [
+      "⚫"
+     ],
+     "keywords": [
+      "bullet",
+      "кружок"
+     ]
+    },
+    "symbol_diamond": {
+     "file": "symbols/11-diamond.png",
+     "sha": "15a70974764af1af",
+     "id": "AgAD27MAApKkIEs",
+     "alt": [
+      "🔷"
+     ],
+     "keywords": [
+      "diamond",
+      "ромб"
+     ]
+    },
+    "symbol_star": {
+     "file": "symbols/12-star.png",
+     "sha": "f145da02a100be5e",
+     "id": "AgADVqsAAqWLIUs",
+     "alt": [
+      "⭐"
+     ],
+     "keywords": [
+      "star",
+      "звезда"
+     ]
+    },
+    "symbol_sparkle": {
+     "file": "symbols/13-sparkle.png",
+     "sha": "154f571a15e6f6bf",
+     "id": "AgADC6sAAuJSIUs",
+     "alt": [
+      "✨"
+     ],
+     "keywords": [
+      "sparkle",
+      "искра"
+     ]
+    },
+    "symbol_play": {
+     "file": "symbols/14-play.png",
+     "sha": "c81f254ca3d15268",
+     "id": "AgADGqkAAk6fGUs",
+     "alt": [
+      "▶️"
+     ],
+     "keywords": [
+      "play",
+      "плей"
+     ]
+    },
+    "symbol_lightning": {
+     "file": "symbols/15-lightning.png",
+     "sha": "e3c97d7a651b43b3",
+     "id": "AgADoqkAAgRTIUs",
+     "alt": [
+      "⚡"
+     ],
+     "keywords": [
+      "lightning",
+      "молния"
+     ]
+    },
+    "symbol_dash": {
+     "file": "symbols/16-dash.png",
+     "sha": "4ae9d0c2aaa3c486",
+     "id": "AgAD1rEAAlHbIUs",
+     "alt": [
+      "➖"
+     ],
+     "keywords": [
+      "dash",
+      "тире"
+     ]
+    },
+    "symbol_hyphen": {
+     "file": "symbols/17-hyphen.png",
+     "sha": "105782231a194c69",
+     "id": "AgADTKwAAtAaIUs",
+     "alt": [
+      "➖"
+     ],
+     "keywords": [
+      "hyphen",
+      "дефис"
+     ]
+    },
+    "symbol_quote-open": {
+     "file": "symbols/18-quote-open.png",
+     "sha": "4b0076afb9ee779d",
+     "id": "AgADUKYAAjBWGUs",
+     "alt": [
+      "💬"
+     ],
+     "keywords": [
+      "quote open",
+      "кавычка открывающая"
+     ]
+    },
+    "symbol_quote-close": {
+     "file": "symbols/19-quote-close.png",
+     "sha": "26e777e97510285c",
+     "id": "AgAD-rcAAngfGEs",
+     "alt": [
+      "💬"
+     ],
+     "keywords": [
+      "quote close",
+      "кавычка закрывающая"
+     ]
+    },
+    "symbol_quote-low": {
+     "file": "symbols/20-quote-low.png",
+     "sha": "87009b3bb11c515d",
+     "id": "AgAD1K0AAhYeGEs",
+     "alt": [
+      "💬"
+     ],
+     "keywords": [
+      "low quote",
+      "нижняя кавычка"
+     ]
+    },
+    "symbol_quote-high": {
+     "file": "symbols/21-quote-high.png",
+     "sha": "89dbad1dc6699566",
+     "id": "AgADHq8AAmX-GEs",
+     "alt": [
+      "💬"
+     ],
+     "keywords": [
+      "high quote",
+      "верхняя кавычка"
+     ]
+    },
+    "symbol_exclamation": {
+     "file": "symbols/22-exclamation.png",
+     "sha": "3ab449875d2b167c",
+     "id": "AgADFagAAtCuIEs",
+     "alt": [
+      "❗"
+     ],
+     "keywords": [
+      "exclamation",
+      "восклицательный знак"
+     ]
+    },
+    "symbol_question": {
+     "file": "symbols/23-question.png",
+     "sha": "5e495e9bf05a0ce5",
+     "id": "AgADq7AAAuWnGEs",
+     "alt": [
+      "❓"
+     ],
+     "keywords": [
+      "question",
+      "вопросительный знак"
+     ]
+    },
+    "symbol_period": {
+     "file": "symbols/24-period.png",
+     "sha": "5a5a8e4eade1c284",
+     "id": "AgADiK8AAqvCIEs",
+     "alt": [
+      "⏺️"
+     ],
+     "keywords": [
+      "period",
+      "точка"
+     ]
+    },
+    "symbol_comma": {
+     "file": "symbols/25-comma.png",
+     "sha": "e189aaa417c9c94f",
+     "id": "AgADLKEAAv4qIEs",
+     "alt": [
+      "〰️"
+     ],
+     "keywords": [
+      "comma",
+      "запятая"
+     ]
+    },
+    "symbol_colon": {
+     "file": "symbols/26-colon.png",
+     "sha": "231211ffe9b926c8",
+     "id": "AgAD7qYAAn9QGUs",
+     "alt": [
+      "🔣"
+     ],
+     "keywords": [
+      "colon",
+      "двоеточие"
+     ]
+    },
+    "symbol_ellipsis": {
+     "file": "symbols/27-ellipsis.png",
+     "sha": "57e8bd5382c028e0",
+     "id": "AgADQq4AArkpIUs",
+     "alt": [
+      "💭"
+     ],
+     "keywords": [
+      "ellipsis",
+      "многоточие"
+     ]
+    },
+    "symbol_paren-open": {
+     "file": "symbols/28-paren-open.png",
+     "sha": "78e9a7538b35f174",
+     "id": "AgADGaoAAiISGUs",
+     "alt": [
+      "🔘"
+     ],
+     "keywords": [
+      "bracket open",
+      "скобка открывающая"
+     ]
+    },
+    "symbol_paren-close": {
+     "file": "symbols/29-paren-close.png",
+     "sha": "1c34816277f354a0",
+     "id": "AgADpa8AAg4nIUs",
+     "alt": [
+      "🔘"
+     ],
+     "keywords": [
+      "bracket close",
+      "скобка закрывающая"
+     ]
+    },
+    "symbol_plus": {
+     "file": "symbols/30-plus.png",
+     "sha": "b4a4674961d4c8d5",
+     "id": "AgADWK0AAtATGEs",
+     "alt": [
+      "➕"
+     ],
+     "keywords": [
+      "plus",
+      "плюс"
+     ]
+    },
+    "symbol_minus": {
+     "file": "symbols/31-minus.png",
+     "sha": "e4b62693eb6bd105",
+     "id": "AgADnqEAAmNHIUs",
+     "alt": [
+      "➖"
+     ],
+     "keywords": [
+      "minus",
+      "минус"
+     ]
+    },
+    "symbol_equals": {
+     "file": "symbols/32-equals.png",
+     "sha": "7e4203ad47240342",
+     "id": "AgADd64AAuvWIEs",
+     "alt": [
+      "🟰"
+     ],
+     "keywords": [
+      "equals",
+      "равно"
+     ]
+    },
+    "symbol_check": {
+     "file": "symbols/33-check.png",
+     "sha": "756481b17e0cabc6",
+     "id": "AgAD7LYAAqtXIEs",
+     "alt": [
+      "✔️"
+     ],
+     "keywords": [
+      "check",
+      "галочка"
+     ]
+    },
+    "symbol_cross": {
+     "file": "symbols/34-cross.png",
+     "sha": "118ef5038dec7d5c",
+     "id": "AgADzbgAAg_VGEs",
+     "alt": [
+      "✖️"
+     ],
+     "keywords": [
+      "cross",
+      "крестик"
+     ]
+    },
+    "symbol_slash": {
+     "file": "symbols/35-slash.png",
+     "sha": "e256570a23604800",
+     "id": "AgADua0AAuoqGEs",
+     "alt": [
+      "➗"
+     ],
+     "keywords": [
+      "slash",
+      "слэш"
+     ]
+    },
+    "symbol_hash": {
+     "file": "symbols/36-hash.png",
+     "sha": "3e8009e55d514926",
+     "id": "AgADHK4AAtkVIUs",
+     "alt": [
+      "#️⃣"
+     ],
+     "keywords": [
+      "hash",
+      "решётка"
+     ]
+    },
+    "symbol_percent": {
+     "file": "symbols/37-percent.png",
+     "sha": "8b1b766113fa5caa",
+     "id": "AgADEbIAApkdIEs",
+     "alt": [
+      "💯"
+     ],
+     "keywords": [
+      "percent",
+      "процент"
+     ]
+    },
+    "symbol_numero": {
+     "file": "symbols/38-numero.png",
+     "sha": "a87128dcc22ce890",
+     "id": "AgAD56MAAs9UGUs",
+     "alt": [
+      "🔢"
+     ],
+     "keywords": [
+      "numero",
+      "номер"
+     ]
+    }
+   }
   }
  }
 }

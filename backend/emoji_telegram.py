@@ -1,8 +1,8 @@
 """Publish the emoji packs (data/emoji, see backend/emoji.py) as Telegram custom emoji sets, and keep them in step.
 
-A set holds at most 200 emoji, so the heroes are split by the hero's first letter and the shop items get a set
-of their own (SETS); inside a set the order is the pack's: each hero's head, then abilities 1–4; items by shop
-tab, tier and name. The sets are made by a bot of their own
+A set holds at most 200 emoji, so the heroes are split by the hero's first letter, and the shop items and the
+text symbols get a set each (SETS); inside a set the order is the pack's: each hero's head, then abilities 1–4;
+items by shop tab, tier and name; symbols as listed in backend/emoji_symbols.py. The sets are made by a bot of their own
 (TELEGRAM_EMOJI_BOT_TOKEN): Telegram ends a bot's set names in _by_<bot>, and the name is the public link, so
 the notification bot never makes them. They belong to the user in TELEGRAM_CHAT_ID (the owner's private chat
 with the notification bot: there the chat id is the user id), who has to press Start in the emoji bot once. A missing set is created; otherwise only what changed is changed:
@@ -12,7 +12,7 @@ hero_<hero> for a head): checksum and Telegram's id.
 
 Each emoji also carries an ordinary emoji (ALT): Telegram shows it where custom emoji are not drawn and
 offers the custom one when it is typed; and keywords for search (the hero in English and Russian and the
-ability, or the item in English and Russian and its shop tab).
+ability; the item in English and Russian and its shop tab; the symbol's name in English and Russian).
 
     python -m backend.emoji_telegram --dry-run   # what would change; only reads from Telegram
     python -m backend.emoji_telegram             # create or update the sets
@@ -31,12 +31,13 @@ from .media import log
 
 PACK = config.ROOT / "data" / "emoji"
 STATE = PACK / "telegram.json"
-# (heroes or items, first letters of the hero, set name, title). "_by_<bot username>" is added to the name here.
+# (heroes, items or symbols; first letters of the hero; set name; title). "_by_<bot username>" is added to the name here.
 # A set's name is its link and can never change; its title follows this list.
 SETS = [
     ("hero", "abcdefghijkl", "zipline_ability_al", "@zipline ability A–L"),
     ("hero", "mnopqrstuvwxyz", "zipline_ability_mz", "@zipline ability M–Z"),
     ("item", None, "zipline_items", "@zipline items"),
+    ("symbol", None, "zipline_symbols", "@zipline symbols"),
 ]
 TAB_RU = {"weapon": "оружие", "vitality": "живучесть", "spirit": "дух"}  # as on the site's shop page
 FIRST_BATCH = 50  # createNewStickerSet takes at most 50, the rest are added one by one
@@ -101,6 +102,16 @@ ALT = {
     "hero_warden": "👮",                                     # Warden
     "hero_wraith": "🃏",                                     # Wraith
     "hero_yamato": "⚔️",                                     # Yamato
+    # Symbols: symbol_<key>
+    "symbol_arrow-right": "➡️", "symbol_arrow-left": "⬅️", "symbol_arrow-up": "⬆️", "symbol_arrow-down": "⬇️",
+    "symbol_arrow-up-right": "↗️", "symbol_arrow-down-right": "↘️", "symbol_arrow-down-left": "↙️", "symbol_arrow-up-left": "↖️",
+    "symbol_dot-center": "▪️", "symbol_bullet": "⚫", "symbol_diamond": "🔷", "symbol_star": "⭐", "symbol_sparkle": "✨",
+    "symbol_play": "▶️", "symbol_lightning": "⚡", "symbol_dash": "➖", "symbol_hyphen": "➖",
+    "symbol_quote-open": "💬", "symbol_quote-close": "💬", "symbol_quote-low": "💬", "symbol_quote-high": "💬",
+    "symbol_exclamation": "❗", "symbol_question": "❓", "symbol_period": "⏺️", "symbol_comma": "〰️", "symbol_colon": "🔣",
+    "symbol_ellipsis": "💭", "symbol_paren-open": "🔘", "symbol_paren-close": "🔘", "symbol_plus": "➕", "symbol_minus": "➖",
+    "symbol_equals": "🟰", "symbol_check": "✔️", "symbol_cross": "✖️", "symbol_slash": "➗", "symbol_hash": "#️⃣",
+    "symbol_percent": "💯", "symbol_numero": "🔢",
     # Items: by item key
     "upgrade_close_range": "🎯",                             # Close Quarters
     "upgrade_clip_size": "🔫",                               # Extended Magazine
@@ -480,6 +491,8 @@ def alt(entry: dict) -> list[str]:
 def keywords(entry: dict) -> list[str]:
     if "item" in entry:
         words = (entry["name"].lower(), entry.get("name_ru", "").lower(), TAB_RU.get(entry["tab"], ""))
+    elif "symbol" in entry:
+        words = (entry["name"], entry["name_ru"])
     else:
         words = (entry["hero_name"].lower(), HERO_RU.get(entry["hero"], ""), entry["name"].lower())
     out, total = [], 0
@@ -508,7 +521,7 @@ def save(state: dict) -> None:
 
 def set_of(entry: dict) -> int:
     """Which of SETS a pack entry goes to: items to the items set, a hero by its first letter (The Doorman under D)."""
-    kind = "item" if "item" in entry else "hero"
+    kind = next((k for k in ("item", "symbol") if k in entry), "hero")
     letter = re.sub(r"^the ", "", entry.get("hero_name", "").lower())[:1]
     fits = [i for i, (k, letters, _, _) in enumerate(SETS) if k == kind and (letters is None or letter in letters)]
     return fits[0] if fits else max(i for i, (k, *_) in enumerate(SETS) if k == kind)
@@ -642,7 +655,7 @@ def main() -> int:
         return 1
     for e in pack:
         if e["key"] not in ALT:
-            log(f"no ordinary emoji for {e['hero_name']}: {e['name']} ({e['key']}): {NO_ALT} until it is added to ALT")
+            log(f"no ordinary emoji for {e['name']} ({e['key']}): {NO_ALT} until it is added to ALT")
 
     bot = Bot(token)
     bot_name = bot.call("getMe")["username"]
