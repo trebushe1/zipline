@@ -5317,6 +5317,18 @@
       "numero",
       "номер"
      ]
+    },
+    "symbol_arrow-down-red": {
+     "file": "symbols/05-arrow-down-red.png",
+     "sha": "23f6319cd74618fa",
+     "id": "AgADyasAAoqSGUs",
+     "alt": [
+      "🔻"
+     ],
+     "keywords": [
+      "arrow down red",
+      "стрелка вниз красная"
+     ]
     }
    }
   }

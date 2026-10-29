@@ -103,7 +103,7 @@ ALT = {
     "hero_wraith": "🃏",                                     # Wraith
     "hero_yamato": "⚔️",                                     # Yamato
     # Symbols: symbol_<key>
-    "symbol_arrow-right": "➡️", "symbol_arrow-left": "⬅️", "symbol_arrow-up": "⬆️", "symbol_arrow-down": "⬇️",
+    "symbol_arrow-right": "➡️", "symbol_arrow-left": "⬅️", "symbol_arrow-up": "⬆️", "symbol_arrow-down": "⬇️", "symbol_arrow-down-red": "🔻",
     "symbol_arrow-up-right": "↗️", "symbol_arrow-down-right": "↘️", "symbol_arrow-down-left": "↙️", "symbol_arrow-up-left": "↖️",
     "symbol_dot-center": "▪️", "symbol_bullet": "⚫", "symbol_diamond": "🔷", "symbol_star": "⭐", "symbol_sparkle": "✨",
     "symbol_play": "▶️", "symbol_lightning": "⚡", "symbol_dash": "➖", "symbol_hyphen": "➖",

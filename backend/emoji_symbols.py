@@ -16,6 +16,9 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter
 from .emoji import K, LINE, PAPER, RIM, S, SIZE, band, brush, grain, grow, over, solid
 
 GREENS = {"fill": (36, 138, 98), "light": (96, 196, 146), "deep": (20, 70, 52), "ink": (8, 28, 20)}
+REDS = {"fill": (186, 58, 43), "light": (236, 118, 94), "deep": (94, 26, 20), "ink": (30, 8, 6)}  # the site's --danger
+# A symbol drawn exactly like another one (same cuts, lean and brush), in another colour.
+VARIANTS = {"arrow-down-red": ("arrow-down", REDS)}
 W = 15  # the width of a strip, the same for every symbol so they sit together in a line of text
 
 
@@ -104,6 +107,7 @@ SYMBOLS = {
     "arrow-left": ("arrow left", "стрелка влево", lambda: arrow(180)),
     "arrow-up": ("arrow up", "стрелка вверх", lambda: arrow(-90)),
     "arrow-down": ("arrow down", "стрелка вниз", lambda: arrow(90)),
+    "arrow-down-red": ("arrow down red", "стрелка вниз красная", lambda: arrow(90)),
     "arrow-up-right": ("arrow up right", "стрелка вверх вправо", lambda: arrow(-45, 66)),
     "arrow-down-right": ("arrow down right", "стрелка вниз вправо", lambda: arrow(45, 66)),
     "arrow-down-left": ("arrow down left", "стрелка вниз влево", lambda: arrow(135, 66)),
@@ -158,7 +162,8 @@ def nudge(mask: Image.Image, dx: float, dy: float) -> Image.Image:
 
 
 def draw_symbol(key: str) -> Image.Image:
-    seed = sum(map(ord, key))
+    base, colours = VARIANTS.get(key, (key, GREENS))
+    seed = sum(map(ord, base))
     rnd = random.Random(seed)
     lean = rnd.uniform(-2, 2) if key.startswith(STRAIGHT) else rnd.uniform(-4, 4)
     shapes = rotate(jitter(SYMBOLS[key][2](), seed), lean)
@@ -169,10 +174,10 @@ def draw_symbol(key: str) -> Image.Image:
     rim = grow(m, RIM)
     line = grow(rim, LINE)
     img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
-    over(img, solid(GREENS["deep"], nudge(line, 2.4, 2.4)))
-    over(img, solid(GREENS["ink"], line))
+    over(img, solid(colours["deep"], nudge(line, 2.4, 2.4)))
+    over(img, solid(colours["ink"], line))
     over(img, solid(PAPER, rim))
-    over(img, solid(GREENS["fill"], m))
+    over(img, solid(colours["fill"], m))
     stroke, angle = band((0, 30), (100, 62), 22)
-    over(img, solid(GREENS["light"], ImageChops.multiply(brush(stroke, -angle, seed), m)))
+    over(img, solid(colours["light"], ImageChops.multiply(brush(stroke, -angle, seed), m)))
     return grain(img.resize((SIZE, SIZE), Image.LANCZOS), 5)
