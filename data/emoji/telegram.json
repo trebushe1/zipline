@@ -2825,6 +2825,2039 @@
      ]
     }
    }
+  },
+  "zipline_items_by_zipline_emoji_bot": {
+   "title": "@zipline items",
+   "emoji": {
+    "upgrade_close_range": {
+     "file": "items/weapon-1-close-quarters.png",
+     "sha": "d48369139fd26295",
+     "id": "AgADZK4AAuY3IEs",
+     "alt": [
+      "🎯"
+     ],
+     "keywords": [
+      "close quarters",
+      "ближняя дистанция",
+      "оружие"
+     ]
+    },
+    "upgrade_clip_size": {
+     "file": "items/weapon-1-extended-magazine.png",
+     "sha": "b13bc6f62e212280",
+     "id": "AgADqKQAAg2LIUs",
+     "alt": [
+      "🔫"
+     ],
+     "keywords": [
+      "extended magazine",
+      "увеличенный магазин",
+      "оружие"
+     ]
+    },
+    "upgrade_headshot_booster": {
+     "file": "items/weapon-1-headshot-booster.png",
+     "sha": "3f916b1d83281664",
+     "id": "AgADHK4AAh6iGEs",
+     "alt": [
+      "🎯"
+     ],
+     "keywords": [
+      "headshot booster",
+      "усилитель выстрелов в голову",
+      "оружие"
+     ]
+    },
+    "upgrade_high_velocity_mag": {
+     "file": "items/weapon-1-high-velocity-rounds.png",
+     "sha": "daf8ac35f5735a33",
+     "id": "AgADQqcAAsyDGEs",
+     "alt": [
+      "💨"
+     ],
+     "keywords": [
+      "high-velocity rounds",
+      "скоростные патроны",
+      "оружие"
+     ]
+    },
+    "upgrade_non_player_bonus": {
+     "file": "items/weapon-1-monster-rounds.png",
+     "sha": "c875e135c97acab2",
+     "id": "AgAD96kAAvneGEs",
+     "alt": [
+      "👹"
+     ],
+     "keywords": [
+      "monster rounds",
+      "чудовищные патроны",
+      "оружие"
+     ]
+    },
+    "upgrade_rapid_rounds": {
+     "file": "items/weapon-1-rapid-rounds.png",
+     "sha": "3f2e448543d871b6",
+     "id": "AgADnLEAAt3FIEs",
+     "alt": [
+      "⏩"
+     ],
+     "keywords": [
+      "rapid rounds",
+      "спешная стрельба",
+      "оружие"
+     ]
+    },
+    "upgrade_medic_bullets": {
+     "file": "items/weapon-1-restorative-shot.png",
+     "sha": "54f6e1e4ce8ac438",
+     "id": "AgADXLAAAjHUGEs",
+     "alt": [
+      "💉"
+     ],
+     "keywords": [
+      "restorative shot",
+      "живительный выстрел",
+      "оружие"
+     ]
+    },
+    "upgrade_active_reload": {
+     "file": "items/weapon-2-active-reload.png",
+     "sha": "fbb9b7c0684b0b5f",
+     "id": "AgADsKkAAnvBIEs",
+     "alt": [
+      "🔄"
+     ],
+     "keywords": [
+      "active reload",
+      "активная перезарядка",
+      "оружие"
+     ]
+    },
+    "upgrade_fleetfoot_boots": {
+     "file": "items/weapon-2-fleetfoot.png",
+     "sha": "d138d50af4adecb6",
+     "id": "AgADSa0AAjQHIUs",
+     "alt": [
+      "👟"
+     ],
+     "keywords": [
+      "fleetfoot",
+      "проворная поступь",
+      "оружие"
+     ]
+    },
+    "upgrade_intensifying_clip": {
+     "file": "items/weapon-2-intensifying-magazine.png",
+     "sha": "2478b5faa3928400",
+     "id": "AgADG7AAAu12IUs",
+     "alt": [
+      "📈"
+     ],
+     "keywords": [
+      "intensifying magazine",
+      "усиливающий магазин",
+      "оружие"
+     ]
+    },
+    "upgrade_kinetic_sash": {
+     "file": "items/weapon-2-kinetic-dash.png",
+     "sha": "d77bc93c47911ffa",
+     "id": "AgADXqwAAt6eGEs",
+     "alt": [
+      "🐎"
+     ],
+     "keywords": [
+      "kinetic dash",
+      "кинетический рывок",
+      "оружие"
+     ]
+    },
+    "upgrade_long_range": {
+     "file": "items/weapon-2-long-range.png",
+     "sha": "140f651d989df2ba",
+     "id": "AgAD3aYAAqBfGUs",
+     "alt": [
+      "🔭"
+     ],
+     "keywords": [
+      "long range",
+      "дальняя дистанция",
+      "оружие"
+     ]
+    },
+    "upgrade_melee_charge": {
+     "file": "items/weapon-2-melee-charge.png",
+     "sha": "9ceaef691eb01b4f",
+     "id": "AgADUa4AAoXQIUs",
+     "alt": [
+      "👊"
+     ],
+     "keywords": [
+      "melee charge",
+      "удар с зарядом",
+      "оружие"
+     ]
+    },
+    "upgrade_crackshot": {
+     "file": "items/weapon-2-mystic-shot.png",
+     "sha": "e83c4c8b8dd40b51",
+     "id": "AgADlrAAAuC2GUs",
+     "alt": [
+      "🔮"
+     ],
+     "keywords": [
+      "mystic shot",
+      "мистический выстрел",
+      "оружие"
+     ]
+    },
+    "upgrade_pristine_emblem": {
+     "file": "items/weapon-2-opening-rounds.png",
+     "sha": "f990c79460b3214f",
+     "id": "AgADH68AAibjGEs",
+     "alt": [
+      "💪"
+     ],
+     "keywords": [
+      "opening rounds",
+      "вскрывающие патроны",
+      "оружие"
+     ]
+    },
+    "upgrade_rechargingbullets": {
+     "file": "items/weapon-2-recharging-rush.png",
+     "sha": "4f98cff9b7bf83ed",
+     "id": "AgADn6wAApF0GUs",
+     "alt": [
+      "⚡"
+     ],
+     "keywords": [
+      "recharging rush",
+      "прилив перезарядки",
+      "оружие"
+     ]
+    },
+    "upgrade_slowing_bullets": {
+     "file": "items/weapon-2-slowing-bullets.png",
+     "sha": "a9231cd4751ff7ea",
+     "id": "AgADDbEAAtkpGEs",
+     "alt": [
+      "🐢"
+     ],
+     "keywords": [
+      "slowing bullets",
+      "замедляющие пули",
+      "оружие"
+     ]
+    },
+    "upgrade_tech_defense_shredders": {
+     "file": "items/weapon-2-spirit-shredder.png",
+     "sha": "e5a8102815311dfb",
+     "id": "AgADaq0AAnRcGUs",
+     "alt": [
+      "😈"
+     ],
+     "keywords": [
+      "spirit shredder",
+      "душегубные пули",
+      "оружие"
+     ]
+    },
+    "upgrade_split_shot": {
+     "file": "items/weapon-2-split-shot.png",
+     "sha": "161134ceea4cfc2c",
+     "id": "AgAD1KoAAu7iGEs",
+     "alt": [
+      "🔱"
+     ],
+     "keywords": [
+      "split shot",
+      "веерный выстрел",
+      "оружие"
+     ]
+    },
+    "upgrade_weapon_backstabber": {
+     "file": "items/weapon-2-stalker.png",
+     "sha": "9392779d99335ece",
+     "id": "AgADK68AAr5XIUs",
+     "alt": [
+      "🥷"
+     ],
+     "keywords": [
+      "stalker",
+      "преследователь",
+      "оружие"
+     ]
+    },
+    "upgrade_blitz_bullets": {
+     "file": "items/weapon-2-swift-striker.png",
+     "sha": "9017c0fcd12baa0d",
+     "id": "AgADybMAAhRbGEs",
+     "alt": [
+      "🦅"
+     ],
+     "keywords": [
+      "swift striker",
+      "быстрый стрелок",
+      "оружие"
+     ]
+    },
+    "upgrade_titan_round": {
+     "file": "items/weapon-2-titanic-magazine.png",
+     "sha": "c18758aed420d4ef",
+     "id": "AgADs6wAAjSRGEs",
+     "alt": [
+      "🌾"
+     ],
+     "keywords": [
+      "titanic magazine",
+      "титанический магазин",
+      "оружие"
+     ]
+    },
+    "upgrade_headshot_booster2": {
+     "file": "items/weapon-2-weakening-headshot.png",
+     "sha": "b06c1febb0f862a1",
+     "id": "AgADt6sAArwAARlL",
+     "alt": [
+      "🤕"
+     ],
+     "keywords": [
+      "weakening headshot",
+      "ослабляющий выстрел в голову",
+      "оружие"
+     ]
+    },
+    "upgrade_thermal_detonator": {
+     "file": "items/weapon-3-alchemical-fire.png",
+     "sha": "705d0dc419296acd",
+     "id": "AgADa7AAAqp3GEs",
+     "alt": [
+      "🧪"
+     ],
+     "keywords": [
+      "alchemical fire",
+      "алхимический огонь",
+      "оружие"
+     ]
+    },
+    "upgrade_bulletshredimbue": {
+     "file": "items/weapon-3-ballistic-enchantment.png",
+     "sha": "d253afa8af2d37cb",
+     "id": "AgAD4KQAAjqNGUs",
+     "alt": [
+      "✨"
+     ],
+     "keywords": [
+      "ballistic enchantment",
+      "баллистические чары",
+      "оружие"
+     ]
+    },
+    "upgrade_berserker": {
+     "file": "items/weapon-3-berserker.png",
+     "sha": "46d565170179016c",
+     "id": "AgAD8LQAAvu5IEs",
+     "alt": [
+      "🪓"
+     ],
+     "keywords": [
+      "berserker",
+      "берсерк",
+      "оружие"
+     ]
+    },
+    "upgrade_blood_tribute": {
+     "file": "items/weapon-3-blood-tribute.png",
+     "sha": "fc7096c2bd889ee3",
+     "id": "AgADBK8AAlVPIUs",
+     "alt": [
+      "🩸"
+     ],
+     "keywords": [
+      "blood tribute",
+      "кровавая дань",
+      "оружие"
+     ]
+    },
+    "upgrade_burst_fire": {
+     "file": "items/weapon-3-burst-fire.png",
+     "sha": "75c476051a9d08da",
+     "id": "AgAD_K0AAiQ7GUs",
+     "alt": [
+      "🐍"
+     ],
+     "keywords": [
+      "burst fire",
+      "шквальный огонь",
+      "оружие"
+     ]
+    },
+    "upgrade_non_player_bonus_sacrifice": {
+     "file": "items/weapon-3-cultist-sacrifice.png",
+     "sha": "3e16dd4e30368b00",
+     "id": "AgADJqkAAk1gGUs",
+     "alt": [
+      "📯"
+     ],
+     "keywords": [
+      "cultist sacrifice",
+      "жертвенный ритуал",
+      "оружие"
+     ]
+    },
+    "upgrade_reinforcing_casings": {
+     "file": "items/weapon-3-escalating-resilience.png",
+     "sha": "54091f556100583d",
+     "id": "AgADta0AAiOmGUs",
+     "alt": [
+      "🛡️"
+     ],
+     "keywords": [
+      "escalating resilience",
+      "растущая стойкость",
+      "оружие"
+     ]
+    },
+    "upgrade_express_shot": {
+     "file": "items/weapon-3-express-shot.png",
+     "sha": "ea35a89147e5a6b7",
+     "id": "AgADFqwAAijHIUs",
+     "alt": [
+      "🌐"
+     ],
+     "keywords": [
+      "express shot",
+      "экспресс-выстрел",
+      "оружие"
+     ]
+    },
+    "upgrade_headhunter": {
+     "file": "items/weapon-3-headhunter.png",
+     "sha": "8767bf690d69c66c",
+     "id": "AgADKaMAA9MZSw",
+     "alt": [
+      "🎭"
+     ],
+     "keywords": [
+      "headhunter",
+      "охотник за головами",
+      "оружие"
+     ]
+    },
+    "upgrade_dps_aura": {
+     "file": "items/weapon-3-heroic-aura.png",
+     "sha": "8742f3761f50c57b",
+     "id": "AgADVakAAjAmGEs",
+     "alt": [
+      "👑"
+     ],
+     "keywords": [
+      "heroic aura",
+      "героическая аура",
+      "оружие"
+     ]
+    },
+    "upgrade_hollow_point_rounds": {
+     "file": "items/weapon-3-hollow-point.png",
+     "sha": "9de1910e9fcb9df0",
+     "id": "AgADNLwAAgv7IUs",
+     "alt": [
+      "💥"
+     ],
+     "keywords": [
+      "hollow point",
+      "разрывник",
+      "оружие"
+     ]
+    },
+    "upgrade_bullet_armor_reduction_aura": {
+     "file": "items/weapon-3-hunters-aura.png",
+     "sha": "019ca6f978a1988b",
+     "id": "AgADjaoAAr9cIUs",
+     "alt": [
+      "🐺"
+     ],
+     "keywords": [
+      "hunter's aura",
+      "аура охотника",
+      "оружие"
+     ]
+    },
+    "upgrade_close_quarter_combat": {
+     "file": "items/weapon-3-point-blank.png",
+     "sha": "791f0affd3328d19",
+     "id": "AgADL6MAAgrEIUs",
+     "alt": [
+      "🔫"
+     ],
+     "keywords": [
+      "point blank",
+      "стрельба в упор",
+      "оружие"
+     ]
+    },
+    "upgrade_cloaking_device_active": {
+     "file": "items/weapon-3-shadow-weave.png",
+     "sha": "05d1fdf4ee7f6a92",
+     "id": "AgAD96oAAr0qGEs",
+     "alt": [
+      "🐈‍⬛"
+     ],
+     "keywords": [
+      "shadow weave",
+      "сплетение теней",
+      "оружие"
+     ]
+    },
+    "upgrade_sharpshooter": {
+     "file": "items/weapon-3-sharpshooter.png",
+     "sha": "9ee3d58ea0228758",
+     "id": "AgAD1asAAoqpIUs",
+     "alt": [
+      "🎯"
+     ],
+     "keywords": [
+      "sharpshooter",
+      "прицельная стрельба",
+      "оружие"
+     ]
+    },
+    "upgrade_spellslinger_headshots": {
+     "file": "items/weapon-3-spirit-rend.png",
+     "sha": "0bcefe2bd8daa791",
+     "id": "AgADNaUAAv2TIEs",
+     "alt": [
+      "💜"
+     ],
+     "keywords": [
+      "spirit rend",
+      "спиритический разрыв",
+      "оружие"
+     ]
+    },
+    "upgrade_chain_lightning": {
+     "file": "items/weapon-3-tesla-bullets.png",
+     "sha": "e2d70f020593a72f",
+     "id": "AgAD3bsAAh8_GEs",
+     "alt": [
+      "⚡"
+     ],
+     "keywords": [
+      "tesla bullets",
+      "тесла-пули",
+      "оружие"
+     ]
+    },
+    "upgrade_toxic_bullets": {
+     "file": "items/weapon-3-toxic-bullets.png",
+     "sha": "ad1502a926402fb8",
+     "id": "AgADf6UAAvZ0GEs",
+     "alt": [
+      "☠️"
+     ],
+     "keywords": [
+      "toxic bullets",
+      "токсичные пули",
+      "оружие"
+     ]
+    },
+    "upgrade_weighted_shots": {
+     "file": "items/weapon-3-weighted-shots.png",
+     "sha": "a178acb5b7c009ae",
+     "id": "AgAD36kAAgilIEs",
+     "alt": [
+      "🐘"
+     ],
+     "keywords": [
+      "weighted shots",
+      "утяжелённые выстрелы",
+      "оружие"
+     ]
+    },
+    "upgrade_aprounds": {
+     "file": "items/weapon-4-armor-piercer.png",
+     "sha": "cbd9adfc9a7f4be7",
+     "id": "AgADrbYAArR6IUs",
+     "alt": [
+      "🛡️"
+     ],
+     "keywords": [
+      "armor piercer",
+      "бронебой",
+      "оружие"
+     ]
+    },
+    "upgrade_capacitor": {
+     "file": "items/weapon-4-capacitor.png",
+     "sha": "5c0af84ce1731c20",
+     "id": "AgADnKwAAk-GIEs",
+     "alt": [
+      "🔋"
+     ],
+     "keywords": [
+      "capacitor",
+      "конденсатор",
+      "оружие"
+     ]
+    },
+    "upgrade_banshee_slugs": {
+     "file": "items/weapon-4-crippling-headshot.png",
+     "sha": "4d8e22ae122978a5",
+     "id": "AgADJ7UAAmoqGUs",
+     "alt": [
+      "💀"
+     ],
+     "keywords": [
+      "crippling headshot",
+      "калечащий выстрел в голову",
+      "оружие"
+     ]
+    },
+    "upgrade_crushing_fists": {
+     "file": "items/weapon-4-crushing-fists.png",
+     "sha": "5692e96e1a3d2016",
+     "id": "AgADbq4AAthIGUs",
+     "alt": [
+      "👊"
+     ],
+     "keywords": [
+      "crushing fists",
+      "сокрушительные кулаки",
+      "оружие"
+     ]
+    },
+    "upgrade_fervor": {
+     "file": "items/weapon-4-frenzy.png",
+     "sha": "616bf6cc164ba35b",
+     "id": "AgADCqcAAjMnGEs",
+     "alt": [
+      "😤"
+     ],
+     "keywords": [
+      "frenzy",
+      "ярость",
+      "оружие"
+     ]
+    },
+    "upgrade_glass_cannon": {
+     "file": "items/weapon-4-glass-cannon.png",
+     "sha": "a4a2fb29bcad452c",
+     "id": "AgADXLEAAolGGUs",
+     "alt": [
+      "💀"
+     ],
+     "keywords": [
+      "glass cannon",
+      "стеклянная пушка",
+      "оружие"
+     ]
+    },
+    "upgrade_critshot": {
+     "file": "items/weapon-4-lucky-shot.png",
+     "sha": "9c92e11fec0a22e3",
+     "id": "AgADGrEAApKBIEs",
+     "alt": [
+      "🍀"
+     ],
+     "keywords": [
+      "lucky shot",
+      "удачный выстрел",
+      "оружие"
+     ]
+    },
+    "upgrade_ricochet": {
+     "file": "items/weapon-4-ricochet.png",
+     "sha": "94d51dd04d001198",
+     "id": "AgAD-7EAAmVZGEs",
+     "alt": [
+      "⭐"
+     ],
+     "keywords": [
+      "ricochet",
+      "рикошет",
+      "оружие"
+     ]
+    },
+    "upgrade_proc_silence": {
+     "file": "items/weapon-4-silencer.png",
+     "sha": "a7172308bd0235bb",
+     "id": "AgADIq8AAgxJGUs",
+     "alt": [
+      "🤫"
+     ],
+     "keywords": [
+      "silencer",
+      "глушитель",
+      "оружие"
+     ]
+    },
+    "upgrade_enchanted_holsters": {
+     "file": "items/weapon-4-spellslinger.png",
+     "sha": "596116f08434d1c6",
+     "id": "AgADh60AAgW8IUs",
+     "alt": [
+      "👉"
+     ],
+     "keywords": [
+      "spellslinger",
+      "метатель чар",
+      "оружие"
+     ]
+    },
+    "upgrade_tech_overflow": {
+     "file": "items/weapon-4-spiritual-overflow.png",
+     "sha": "58ca15233b6b89e1",
+     "id": "AgADSaoAAqsoGEs",
+     "alt": [
+      "🏆"
+     ],
+     "keywords": [
+      "spiritual overflow",
+      "спиритическое переполнение",
+      "оружие"
+     ]
+    },
+    "upgrade_health": {
+     "file": "items/vitality-1-extra-health.png",
+     "sha": "9b5b3aa5ca62e0fa",
+     "id": "AgADEKkAAq2KGUs",
+     "alt": [
+      "❤️"
+     ],
+     "keywords": [
+      "extra health",
+      "добавочное здоровье",
+      "живучесть"
+     ]
+    },
+    "upgrade_endurance": {
+     "file": "items/vitality-1-extra-regen.png",
+     "sha": "793c91f1df560fea",
+     "id": "AgAD-6gAAs_yGEs",
+     "alt": [
+      "🩹"
+     ],
+     "keywords": [
+      "extra regen",
+      "добавочное восстановление",
+      "живучесть"
+     ]
+    },
+    "upgrade_improved_stamina": {
+     "file": "items/vitality-1-extra-stamina.png",
+     "sha": "e37d40305f7efb77",
+     "id": "AgAD7KoAAiOPGEs",
+     "alt": [
+      "🐎"
+     ],
+     "keywords": [
+      "extra stamina",
+      "добавочная выносливость",
+      "живучесть"
+     ]
+    },
+    "upgrade_grit": {
+     "file": "items/vitality-1-grit.png",
+     "sha": "033d7471b78f30c5",
+     "id": "AgADfqwAApx_GUs",
+     "alt": [
+      "🛡️"
+     ],
+     "keywords": [
+      "grit",
+      "крепость",
+      "живучесть"
+     ]
+    },
+    "upgrade_health_stimpak": {
+     "file": "items/vitality-1-healing-rite.png",
+     "sha": "c65f6f8b5217bf89",
+     "id": "AgADn6cAAkzsIEs",
+     "alt": [
+      "🕯️"
+     ],
+     "keywords": [
+      "healing rite",
+      "обряд лечения",
+      "живучесть"
+     ]
+    },
+    "upgrade_lifestrike_gauntlets": {
+     "file": "items/vitality-1-melee-lifesteal.png",
+     "sha": "32a93f70acf9c735",
+     "id": "AgAD1KUAAtVcGEs",
+     "alt": [
+      "🤜"
+     ],
+     "keywords": [
+      "melee lifesteal",
+      "ударная кража здоровья",
+      "живучесть"
+     ]
+    },
+    "upgrade_melee_rebuttal": {
+     "file": "items/vitality-1-rebuttal.png",
+     "sha": "a43476e3e09f7f8c",
+     "id": "AgAD1rMAArwFGUs",
+     "alt": [
+      "🐂"
+     ],
+     "keywords": [
+      "rebuttal",
+      "отпор",
+      "живучесть"
+     ]
+    },
+    "upgrade_sprint_booster": {
+     "file": "items/vitality-1-sprint-boots.png",
+     "sha": "a2f8b6f6b09597ad",
+     "id": "AgADo6YAAj0yGUs",
+     "alt": [
+      "👢"
+     ],
+     "keywords": [
+      "sprint boots",
+      "беговые ботинки",
+      "живучесть"
+     ]
+    },
+    "upgrade_regenerating_bullet_shield": {
+     "file": "items/vitality-2-battle-vest.png",
+     "sha": "e308a559b5b70799",
+     "id": "AgADca4AAgJxIUs",
+     "alt": [
+      "🦺"
+     ],
+     "keywords": [
+      "battle vest",
+      "боевой жилет",
+      "живучесть"
+     ]
+    },
+    "upgrade_vampire": {
+     "file": "items/vitality-2-bullet-lifesteal.png",
+     "sha": "b9311e31079ead9c",
+     "id": "AgADsKQAApmIGEs",
+     "alt": [
+      "🧛"
+     ],
+     "keywords": [
+      "bullet lifesteal",
+      "пулевая кража здоровья",
+      "живучесть"
+     ]
+    },
+    "upgrade_debuff_reducer": {
+     "file": "items/vitality-2-debuff-reducer.png",
+     "sha": "fe86596b2eacde33",
+     "id": "AgADP7AAAitAGEs",
+     "alt": [
+      "⬇️"
+     ],
+     "keywords": [
+      "debuff reducer",
+      "уменьшитель эффектов",
+      "живучесть"
+     ]
+    },
+    "upgrade_magic_shield": {
+     "file": "items/vitality-2-enchanters-emblem.png",
+     "sha": "c260519107b22ffd",
+     "id": "AgADdLAAAoXXIUs",
+     "alt": [
+      "💠"
+     ],
+     "keywords": [
+      "enchanter's emblem",
+      "эмблема заклинателя",
+      "живучесть"
+     ]
+    },
+    "upgrade_cardio_calibrator": {
+     "file": "items/vitality-2-enduring-speed.png",
+     "sha": "c29f14fcff963b2a",
+     "id": "AgADdqQAAi9lGEs",
+     "alt": [
+      "🏃"
+     ],
+     "keywords": [
+      "enduring speed",
+      "скоростная стойкость",
+      "живучесть"
+     ]
+    },
+    "upgrade_guardian_ward": {
+     "file": "items/vitality-2-guardian-ward.png",
+     "sha": "e1641068f27129f0",
+     "id": "AgADoagAAyUgSw",
+     "alt": [
+      "🗡️"
+     ],
+     "keywords": [
+      "guardian ward",
+      "заслон стража",
+      "живучесть"
+     ]
+    },
+    "upgrade_healbane": {
+     "file": "items/vitality-2-healbane.png",
+     "sha": "34517e2f17765775",
+     "id": "AgADP7EAAgipIUs",
+     "alt": [
+      "💀"
+     ],
+     "keywords": [
+      "healbane",
+      "гроза целителей",
+      "живучесть"
+     ]
+    },
+    "upgrade_healing_booster": {
+     "file": "items/vitality-2-healing-booster.png",
+     "sha": "321e2de1074c33d3",
+     "id": "AgADF6YAAvk6IUs",
+     "alt": [
+      "💚"
+     ],
+     "keywords": [
+      "healing booster",
+      "усилитель лечения",
+      "живучесть"
+     ]
+    },
+    "upgrade_vex_barrier": {
+     "file": "items/vitality-2-reactive-barrier.png",
+     "sha": "7b5f9c5eda7a8f8e",
+     "id": "AgADFaMAAkj7GEs",
+     "alt": [
+      "🛡️"
+     ],
+     "keywords": [
+      "reactive barrier",
+      "барьерная реакция",
+      "живучесть"
+     ]
+    },
+    "upgrade_restorative_locket": {
+     "file": "items/vitality-2-restorative-locket.png",
+     "sha": "201f5b116569d122",
+     "id": "AgADRacAAr-XIUs",
+     "alt": [
+      "📿"
+     ],
+     "keywords": [
+      "restorative locket",
+      "живительный медальон",
+      "живучесть"
+     ]
+    },
+    "upgrade_return_fire": {
+     "file": "items/vitality-2-return-fire.png",
+     "sha": "6c5fa256b609d38f",
+     "id": "AgADw6kAApjjGUs",
+     "alt": [
+      "↩️"
+     ],
+     "keywords": [
+      "return fire",
+      "обратный огонь",
+      "живучесть"
+     ]
+    },
+    "upgrade_health_stealing_magic": {
+     "file": "items/vitality-2-spirit-lifesteal.png",
+     "sha": "472074d0da23451a",
+     "id": "AgADm7EAAosKIUs",
+     "alt": [
+      "👁️"
+     ],
+     "keywords": [
+      "spirit lifesteal",
+      "спиритическая кража здоровья",
+      "живучесть"
+     ]
+    },
+    "upgrade_spirit_bubble": {
+     "file": "items/vitality-2-spirit-shielding.png",
+     "sha": "3d6b150e69513779",
+     "id": "AgADZaUAAqF-GEs",
+     "alt": [
+      "🫧"
+     ],
+     "keywords": [
+      "spirit shielding",
+      "спиритическая защита",
+      "живучесть"
+     ]
+    },
+    "upgrade_trophy_collector": {
+     "file": "items/vitality-2-trophy-collector.png",
+     "sha": "e8a1a5b643a02fa6",
+     "id": "AgADu60AAn5bGEs",
+     "alt": [
+      "🏆"
+     ],
+     "keywords": [
+      "trophy collector",
+      "собиратель трофеев",
+      "живучесть"
+     ]
+    },
+    "upgrade_weapon_shielding": {
+     "file": "items/vitality-2-weapon-shielding.png",
+     "sha": "f69b3d9dbe134834",
+     "id": "AgAD5aIAAms4GEs",
+     "alt": [
+      "🛡️"
+     ],
+     "keywords": [
+      "weapon shielding",
+      "оружейная защита",
+      "живучесть"
+     ]
+    },
+    "upgrade_improved_bullet_armor": {
+     "file": "items/vitality-3-bullet-resilience.png",
+     "sha": "aa0b68338637fe3e",
+     "id": "AgADzKUAAt0jGUs",
+     "alt": [
+      "🦾"
+     ],
+     "keywords": [
+      "bullet resilience",
+      "пулевая стойкость",
+      "живучесть"
+     ]
+    },
+    "upgrade_counterspell": {
+     "file": "items/vitality-3-counterspell.png",
+     "sha": "87803100d5c3b6c9",
+     "id": "AgADsqsAAvUEGUs",
+     "alt": [
+      "✋"
+     ],
+     "keywords": [
+      "counterspell",
+      "контрчары",
+      "живучесть"
+     ]
+    },
+    "upgrade_reduce_debuff_duration": {
+     "file": "items/vitality-3-dispel-magic.png",
+     "sha": "47b95011222faae4",
+     "id": "AgAD16oAAi_ZGUs",
+     "alt": [
+      "✂️"
+     ],
+     "keywords": [
+      "dispel magic",
+      "развеивание магии",
+      "живучесть"
+     ]
+    },
+    "upgrade_chonky": {
+     "file": "items/vitality-3-fortitude.png",
+     "sha": "6340286d46a1447c",
+     "id": "AgADscMAAidFGEs",
+     "alt": [
+      "🦁"
+     ],
+     "keywords": [
+      "fortitude",
+      "выдержка",
+      "живучесть"
+     ]
+    },
+    "upgrade_fury_trance": {
+     "file": "items/vitality-3-fury-trance.png",
+     "sha": "8812327f4d86ab6f",
+     "id": "AgADMrAAAtCWGEs",
+     "alt": [
+      "😡"
+     ],
+     "keywords": [
+      "fury trance",
+      "яростный экстаз",
+      "живучесть"
+     ]
+    },
+    "upgrade_health_nova": {
+     "file": "items/vitality-3-healing-nova.png",
+     "sha": "b7e05423a440c36e",
+     "id": "AgADH7AAAuBaGUs",
+     "alt": [
+      "💚"
+     ],
+     "keywords": [
+      "healing nova",
+      "вспышка исцеления",
+      "живучесть"
+     ]
+    },
+    "upgrade_boxing_glove": {
+     "file": "items/vitality-3-lifestrike.png",
+     "sha": "cccc983ab3467882",
+     "id": "AgADyKQAAgwlIEs",
+     "alt": [
+      "🥊"
+     ],
+     "keywords": [
+      "lifestrike",
+      "витальный удар",
+      "живучесть"
+     ]
+    },
+    "upgrade_rocket_booster": {
+     "file": "items/vitality-3-majestic-leap.png",
+     "sha": "274881c62d3c0507",
+     "id": "AgADs60AAvXkIEs",
+     "alt": [
+      "🦘"
+     ],
+     "keywords": [
+      "majestic leap",
+      "грациозный скачок",
+      "живучесть"
+     ]
+    },
+    "upgrade_metal_skin": {
+     "file": "items/vitality-3-metal-skin.png",
+     "sha": "39692e8933d3980f",
+     "id": "AgADE58AAtgaGEs",
+     "alt": [
+      "🤖"
+     ],
+     "keywords": [
+      "metal skin",
+      "металлическая кожа",
+      "живучесть"
+     ]
+    },
+    "upgrade_rescue_beam": {
+     "file": "items/vitality-3-rescue-beam.png",
+     "sha": "c634b628a9b24fea",
+     "id": "AgADaqYAAhk4IEs",
+     "alt": [
+      "🚑"
+     ],
+     "keywords": [
+      "rescue beam",
+      "спасательный луч",
+      "живучесть"
+     ]
+    },
+    "upgrade_tech_purge": {
+     "file": "items/vitality-3-spirit-resilience.png",
+     "sha": "867523ec23c89bcf",
+     "id": "AgADYLYAArycGUs",
+     "alt": [
+      "🧘"
+     ],
+     "keywords": [
+      "spirit resilience",
+      "спиритическая стойкость",
+      "живучесть"
+     ]
+    },
+    "upgrade_superior_stamina": {
+     "file": "items/vitality-3-stamina-mastery.png",
+     "sha": "d4ef8dd1be8139ee",
+     "id": "AgADhagAAm8hGUs",
+     "alt": [
+      "🐎"
+     ],
+     "keywords": [
+      "stamina mastery",
+      "превосходная выносливость",
+      "живучесть"
+     ]
+    },
+    "upgrade_veil_walker": {
+     "file": "items/vitality-3-veil-walker.png",
+     "sha": "fad553425a531a1f",
+     "id": "AgADmK4AAh53GEs",
+     "alt": [
+      "🚶"
+     ],
+     "keywords": [
+      "veil walker",
+      "незримый покров",
+      "живучесть"
+     ]
+    },
+    "upgrade_warp_stone": {
+     "file": "items/vitality-3-warp-stone.png",
+     "sha": "c6996fd8b66b64cf",
+     "id": "AgAD7rAAAvDJGUs",
+     "alt": [
+      "💎"
+     ],
+     "keywords": [
+      "warp stone",
+      "камень переноса",
+      "живучесть"
+     ]
+    },
+    "upgrade_cheat_death": {
+     "file": "items/vitality-4-cheat-death.png",
+     "sha": "43b380b31bd8a00e",
+     "id": "AgADwroAAnKoIUs",
+     "alt": [
+      "🃏"
+     ],
+     "keywords": [
+      "cheat death",
+      "обман смерти",
+      "живучесть"
+     ]
+    },
+    "upgrade_colossus": {
+     "file": "items/vitality-4-colossus.png",
+     "sha": "b6a24679c0786cce",
+     "id": "AgADn6QAAlnSGEs",
+     "alt": [
+      "🗿"
+     ],
+     "keywords": [
+      "colossus",
+      "колосс",
+      "живучесть"
+     ]
+    },
+    "upgrade_divine_barrier": {
+     "file": "items/vitality-4-divine-barrier.png",
+     "sha": "75e3fd8178dc1648",
+     "id": "AgADsqkAAnGxGEs",
+     "alt": [
+      "🪽"
+     ],
+     "keywords": [
+      "divine barrier",
+      "божественный барьер",
+      "живучесть"
+     ]
+    },
+    "upgrade_diviners_kevlar": {
+     "file": "items/vitality-4-diviners-kevlar.png",
+     "sha": "621a6d8b93ddbb54",
+     "id": "AgAD2KoAAhIlGUs",
+     "alt": [
+      "🔰"
+     ],
+     "keywords": [
+      "diviner's kevlar",
+      "доспех прорицателя",
+      "живучесть"
+     ]
+    },
+    "upgrade_healbuff": {
+     "file": "items/vitality-4-healing-tempo.png",
+     "sha": "80e896898542b9f0",
+     "id": "AgADIaYAAjxKGUs",
+     "alt": [
+      "🥁"
+     ],
+     "keywords": [
+      "healing tempo",
+      "целебный темп",
+      "живучесть"
+     ]
+    },
+    "upgrade_auto_cleanse": {
+     "file": "items/vitality-4-indomitable.png",
+     "sha": "6d287fafc4fc3c14",
+     "id": "AgADtKsAAi8QGEs",
+     "alt": [
+      "⛓️"
+     ],
+     "keywords": [
+      "indomitable",
+      "непреклонность",
+      "живучесть"
+     ]
+    },
+    "upgrade_infuser": {
+     "file": "items/vitality-4-infuser.png",
+     "sha": "bfa3497f748fa8ea",
+     "id": "AgADuqgAAqnlIEs",
+     "alt": [
+      "🖐️"
+     ],
+     "keywords": [
+      "infuser",
+      "насытитель",
+      "живучесть"
+     ]
+    },
+    "upgrade_inhibitor": {
+     "file": "items/vitality-4-inhibitor.png",
+     "sha": "5514690264573dcf",
+     "id": "AgAD_agAAv9kGUs",
+     "alt": [
+      "🚫"
+     ],
+     "keywords": [
+      "inhibitor",
+      "ограничитель",
+      "живучесть"
+     ]
+    },
+    "upgrade_juggernaut": {
+     "file": "items/vitality-4-juggernaut.png",
+     "sha": "6bfe0f7917785209",
+     "id": "AgADiaMAAg-SGUs",
+     "alt": [
+      "🐗"
+     ],
+     "keywords": [
+      "juggernaut",
+      "громила",
+      "живучесть"
+     ]
+    },
+    "upgrade_damage_recycler": {
+     "file": "items/vitality-4-leech.png",
+     "sha": "65b8340de4323c78",
+     "id": "AgADUKIAAj1OGEs",
+     "alt": [
+      "🩸"
+     ],
+     "keywords": [
+      "leech",
+      "кровопийца",
+      "живучесть"
+     ]
+    },
+    "upgrade_phantom_strike": {
+     "file": "items/vitality-4-phantom-strike.png",
+     "sha": "0e9d2f1945790413",
+     "id": "AgADAcEAApE0IUs",
+     "alt": [
+      "👻"
+     ],
+     "keywords": [
+      "phantom strike",
+      "фантомный удар",
+      "живучесть"
+     ]
+    },
+    "upgrade_deflecting_armor": {
+     "file": "items/vitality-4-plated-armor.png",
+     "sha": "41e53d4402800077",
+     "id": "AgADprQAAjLVIUs",
+     "alt": [
+      "🦺"
+     ],
+     "keywords": [
+      "plated armor",
+      "латная броня",
+      "живучесть"
+     ]
+    },
+    "upgrade_siphon_bullets": {
+     "file": "items/vitality-4-siphon-bullets.png",
+     "sha": "4f445798c32f78f7",
+     "id": "AgADFKMAArhoGEs",
+     "alt": [
+      "🌹"
+     ],
+     "keywords": [
+      "siphon bullets",
+      "вытягивающие пули",
+      "живучесть"
+     ]
+    },
+    "upgrade_spellbreaker": {
+     "file": "items/vitality-4-spellbreaker.png",
+     "sha": "73c15b23c7d23b76",
+     "id": "AgADJrEAApXyIUs",
+     "alt": [
+      "🪄"
+     ],
+     "keywords": [
+      "spellbreaker",
+      "разрушитель чар",
+      "живучесть"
+     ]
+    },
+    "upgrade_unstoppable": {
+     "file": "items/vitality-4-unstoppable.png",
+     "sha": "9534a550b78b3cae",
+     "id": "AgADSrEAApMpGEs",
+     "alt": [
+      "🧍"
+     ],
+     "keywords": [
+      "unstoppable",
+      "неудержимость",
+      "живучесть"
+     ]
+    },
+    "upgrade_surging_power": {
+     "file": "items/vitality-4-vampiric-burst.png",
+     "sha": "4f6ee6b1a7fb7eb6",
+     "id": "AgADjaQAAuNAGUs",
+     "alt": [
+      "🦇"
+     ],
+     "keywords": [
+      "vampiric burst",
+      "порыв вампиризма",
+      "живучесть"
+     ]
+    },
+    "upgrade_absorbing_armor": {
+     "file": "items/vitality-4-witchmail.png",
+     "sha": "228459fd65902eaa",
+     "id": "AgADWbEAAhv8GUs",
+     "alt": [
+      "🧙"
+     ],
+     "keywords": [
+      "witchmail",
+      "ведьмовской доспех",
+      "живучесть"
+     ]
+    },
+    "upgrade_extra_charge": {
+     "file": "items/spirit-1-extra-charge.png",
+     "sha": "d3939accaefce498",
+     "id": "AgAD4qoAAkszGEs",
+     "alt": [
+      "🔋"
+     ],
+     "keywords": [
+      "extra charge",
+      "добавочные заряды",
+      "дух"
+     ]
+    },
+    "upgrade_improved_spirit": {
+     "file": "items/spirit-1-extra-spirit.png",
+     "sha": "32a78e3f9d59ea2c",
+     "id": "AgADy64AAnHlGUs",
+     "alt": [
+      "🔥"
+     ],
+     "keywords": [
+      "extra spirit",
+      "добавочный спиритизм",
+      "дух"
+     ]
+    },
+    "upgrade_goose_egg": {
+     "file": "items/spirit-1-golden-goose-egg.png",
+     "sha": "74d7d1519f489fdb",
+     "id": "AgADGLIAArzYIUs",
+     "alt": [
+      "🥚"
+     ],
+     "keywords": [
+      "golden goose egg",
+      "золотое гусиное яйцо",
+      "дух"
+     ]
+    },
+    "upgrade_magic_burst": {
+     "file": "items/spirit-1-mystic-burst.png",
+     "sha": "0a6fdcc520bf6090",
+     "id": "AgADPacAAkTQGUs",
+     "alt": [
+      "✴️"
+     ],
+     "keywords": [
+      "mystic burst",
+      "мистический импульс",
+      "дух"
+     ]
+    },
+    "upgrade_magic_reach": {
+     "file": "items/spirit-1-mystic-expansion.png",
+     "sha": "bbf74c08c9888ba4",
+     "id": "AgADV6kAAqmMIUs",
+     "alt": [
+      "↔️"
+     ],
+     "keywords": [
+      "mystic expansion",
+      "мистическое расширение",
+      "дух"
+     ]
+    },
+    "upgrade_mystic_regeneration": {
+     "file": "items/spirit-1-mystic-regeneration.png",
+     "sha": "b492e5440c7155f0",
+     "id": "AgADv6sAAprNIUs",
+     "alt": [
+      "💜"
+     ],
+     "keywords": [
+      "mystic regeneration",
+      "мистическое восстановление",
+      "дух"
+     ]
+    },
+    "upgrade_withering_whip": {
+     "file": "items/spirit-1-rusted-barrel.png",
+     "sha": "9379e74c8e031687",
+     "id": "AgADvKwAArBqGUs",
+     "alt": [
+      "🔫"
+     ],
+     "keywords": [
+      "rusted barrel",
+      "ржавый ствол",
+      "дух"
+     ]
+    },
+    "upgrade_acolytes_glove": {
+     "file": "items/spirit-1-spirit-strike.png",
+     "sha": "947038aa1663fa87",
+     "id": "AgAD960AAj3JGUs",
+     "alt": [
+      "🥊"
+     ],
+     "keywords": [
+      "spirit strike",
+      "спиритический удар",
+      "дух"
+     ]
+    },
+    "upgrade_arcane_surge": {
+     "file": "items/spirit-2-arcane-surge.png",
+     "sha": "2c87f8a53ab5a14e",
+     "id": "AgADya0AArd6GEs",
+     "alt": [
+      "🦄"
+     ],
+     "keywords": [
+      "arcane surge",
+      "колдовской порыв",
+      "дух"
+     ]
+    },
+    "upgrade_bullet_resist_shredder": {
+     "file": "items/spirit-2-bullet-resist-shredder.png",
+     "sha": "ab243ea62713aaf0",
+     "id": "AgADYKEAAjagGEs",
+     "alt": [
+      "🛡️"
+     ],
+     "keywords": [
+      "bullet resist shredder",
+      "измельчитель пулестойкости",
+      "дух"
+     ]
+    },
+    "upgrade_cold_front": {
+     "file": "items/spirit-2-cold-front.png",
+     "sha": "c4e88ca3a03e8bf1",
+     "id": "AgADOaEAApUYGUs",
+     "alt": [
+      "❄️"
+     ],
+     "keywords": [
+      "cold front",
+      "холодный фронт",
+      "дух"
+     ]
+    },
+    "upgrade_magic_tempo": {
+     "file": "items/spirit-2-compress-cooldown.png",
+     "sha": "7fb35077c31ebf68",
+     "id": "AgAD8acAAresGEs",
+     "alt": [
+      "⏱️"
+     ],
+     "keywords": [
+      "compress cooldown",
+      "сжатая перезарядка умения",
+      "дух"
+     ]
+    },
+    "upgrade_arcane_extension": {
+     "file": "items/spirit-2-duration-extender.png",
+     "sha": "c45acc5d183e6c1a",
+     "id": "AgADt6AAAj9BIUs",
+     "alt": [
+      "⏳"
+     ],
+     "keywords": [
+      "duration extender",
+      "увеличитель длительности",
+      "дух"
+     ]
+    },
+    "upgrade_soaring_spirit": {
+     "file": "items/spirit-2-improved-spirit.png",
+     "sha": "1bc24c5fd559542f",
+     "id": "AgADxa8AAhlcIUs",
+     "alt": [
+      "🔥"
+     ],
+     "keywords": [
+      "improved spirit",
+      "улучшенный спиритизм",
+      "дух"
+     ]
+    },
+    "upgrade_magic_slow": {
+     "file": "items/spirit-2-mystic-slow.png",
+     "sha": "c10711225fa20c9e",
+     "id": "AgADF6MAAu4HGEs",
+     "alt": [
+      "⛓️"
+     ],
+     "keywords": [
+      "mystic slow",
+      "мистическое замедление",
+      "дух"
+     ]
+    },
+    "upgrade_magic_vulnerability": {
+     "file": "items/spirit-2-mystic-vulnerability.png",
+     "sha": "8657363fc9610575",
+     "id": "AgADtasAAuSaGUs",
+     "alt": [
+      "👁️"
+     ],
+     "keywords": [
+      "mystic vulnerability",
+      "мистическая уязвимость",
+      "дух"
+     ]
+    },
+    "upgrade_quick_silver": {
+     "file": "items/spirit-2-quicksilver-reload.png",
+     "sha": "1c76d1c50fb531ef",
+     "id": "AgADxqkAApV-GEs",
+     "alt": [
+      "🔄"
+     ],
+     "keywords": [
+      "quicksilver reload",
+      "ртутная перезарядка",
+      "дух"
+     ]
+    },
+    "upgrade_containment": {
+     "file": "items/spirit-2-slowing-hex.png",
+     "sha": "1c41ab579a400cd2",
+     "id": "AgADhrIAAgKNGUs",
+     "alt": [
+      "🐌"
+     ],
+     "keywords": [
+      "slowing hex",
+      "замедляющие чары",
+      "дух"
+     ]
+    },
+    "upgrade_spirit_sap": {
+     "file": "items/spirit-2-spirit-sap.png",
+     "sha": "7f63f4a64da54540",
+     "id": "AgADuqcAAiUFIEs",
+     "alt": [
+      "💧"
+     ],
+     "keywords": [
+      "spirit sap",
+      "спиритическое истощение",
+      "дух"
+     ]
+    },
+    "upgrade_suppressor": {
+     "file": "items/spirit-2-suppressor.png",
+     "sha": "9c6aaa4bf72723b9",
+     "id": "AgADXawAAiDbGUs",
+     "alt": [
+      "🔗"
+     ],
+     "keywords": [
+      "suppressor",
+      "подавитель",
+      "дух"
+     ]
+    },
+    "upgrade_rupture": {
+     "file": "items/spirit-3-decay.png",
+     "sha": "ba3d0002e1892681",
+     "id": "AgADlrEAAkxwIEs",
+     "alt": [
+      "🦴"
+     ],
+     "keywords": [
+      "decay",
+      "разложение",
+      "дух"
+     ]
+    },
+    "upgrade_greater_withering_whip": {
+     "file": "items/spirit-3-disarming-hex.png",
+     "sha": "bcd4037714028ca0",
+     "id": "AgADzq0AAozQGUs",
+     "alt": [
+      "🖐️"
+     ],
+     "keywords": [
+      "disarming hex",
+      "чары обезоруживания",
+      "дух"
+     ]
+    },
+    "upgrade_tech_range": {
+     "file": "items/spirit-3-greater-expansion.png",
+     "sha": "1318b976fddee6f4",
+     "id": "AgAD_LUAAs7GIUs",
+     "alt": [
+      "📡"
+     ],
+     "keywords": [
+      "greater expansion",
+      "усиленное расширение",
+      "дух"
+     ]
+    },
+    "upgrade_target_stun": {
+     "file": "items/spirit-3-knockdown.png",
+     "sha": "b0b413ce38abed45",
+     "id": "AgADY7QAAlQGGEs",
+     "alt": [
+      "🔨"
+     ],
+     "keywords": [
+      "knockdown",
+      "нокдаун",
+      "дух"
+     ]
+    },
+    "upgrade_resonant_healing": {
+     "file": "items/spirit-3-radiant-regeneration.png",
+     "sha": "aac594b2d525ca27",
+     "id": "AgADe68AAt6UGEs",
+     "alt": [
+      "💚"
+     ],
+     "keywords": [
+      "radiant regeneration",
+      "сияющее восстановление",
+      "дух"
+     ]
+    },
+    "upgrade_rapid_recharge": {
+     "file": "items/spirit-3-rapid-recharge.png",
+     "sha": "55dbe203e5848d08",
+     "id": "AgADyK8AAnvDGUs",
+     "alt": [
+      "⚡"
+     ],
+     "keywords": [
+      "rapid recharge",
+      "спешные заряды",
+      "дух"
+     ]
+    },
+    "upgrade_targeted_silence": {
+     "file": "items/spirit-3-silence-wave.png",
+     "sha": "c0ced4ccb189b9a0",
+     "id": "AgADtrkAAm8mGUs",
+     "alt": [
+      "🔇"
+     ],
+     "keywords": [
+      "silence wave",
+      "волна безмолвия",
+      "дух"
+     ]
+    },
+    "upgrade_spirit_snatch": {
+     "file": "items/spirit-3-spirit-snatch.png",
+     "sha": "abd5d0ef46d0663f",
+     "id": "AgADMawAApujIUs",
+     "alt": [
+      "🌀"
+     ],
+     "keywords": [
+      "spirit snatch",
+      "похищение спиритизма",
+      "дух"
+     ]
+    },
+    "upgrade_cooldown_reduction": {
+     "file": "items/spirit-3-superior-cooldown.png",
+     "sha": "13eb5f833582effe",
+     "id": "AgADUacAAuLIGUs",
+     "alt": [
+      "⏱️"
+     ],
+     "keywords": [
+      "superior cooldown",
+      "превосходная перезарядка умений",
+      "дух"
+     ]
+    },
+    "upgrade_imbued_duration_extender": {
+     "file": "items/spirit-3-superior-duration.png",
+     "sha": "4a93397aaff47a9b",
+     "id": "AgADwKsAAuadIEs",
+     "alt": [
+      "⌛"
+     ],
+     "keywords": [
+      "superior duration",
+      "превосходная длительность",
+      "дух"
+     ]
+    },
+    "upgrade_magic_storm": {
+     "file": "items/spirit-3-surge-of-power.png",
+     "sha": "c6680fb34d562fb8",
+     "id": "AgADvasAAr2aGUs",
+     "alt": [
+      "🌩️"
+     ],
+     "keywords": [
+      "surge of power",
+      "прилив мощи",
+      "дух"
+     ]
+    },
+    "upgrade_magic_shock": {
+     "file": "items/spirit-3-tankbuster.png",
+     "sha": "e6c5a3ee90e9f9eb",
+     "id": "AgADyKYAAtF8IEs",
+     "alt": [
+      "💣"
+     ],
+     "keywords": [
+      "tankbuster",
+      "гроза танков",
+      "дух"
+     ]
+    },
+    "upgrade_tech_damage_pulse": {
+     "file": "items/spirit-3-torment-pulse.png",
+     "sha": "d518903fbb823ce7",
+     "id": "AgADWKgAAjsjGUs",
+     "alt": [
+      "💓"
+     ],
+     "keywords": [
+      "torment pulse",
+      "терзающий пульс",
+      "дух"
+     ]
+    },
+    "upgrade_arctic_blast": {
+     "file": "items/spirit-4-arctic-blast.png",
+     "sha": "ec2bbc8fe11d9d0a",
+     "id": "AgADGKYAAlyBGEs",
+     "alt": [
+      "🥶"
+     ],
+     "keywords": [
+      "arctic blast",
+      "арктический взрыв",
+      "дух"
+     ]
+    },
+    "upgrade_boundless_spirit": {
+     "file": "items/spirit-4-boundless-spirit.png",
+     "sha": "7c21faacdb9c8d3b",
+     "id": "AgADwq8AAv80GEs",
+     "alt": [
+      "💫"
+     ],
+     "keywords": [
+      "boundless spirit",
+      "безграничный спиритизм",
+      "дух"
+     ]
+    },
+    "upgrade_glitch": {
+     "file": "items/spirit-4-cursed-relic.png",
+     "sha": "bc91426b7e36890d",
+     "id": "AgADPqcAAvNAGEs",
+     "alt": [
+      "🗿"
+     ],
+     "keywords": [
+      "cursed relic",
+      "проклятая реликвия",
+      "дух"
+     ]
+    },
+    "upgrade_ability_power_shard": {
+     "file": "items/spirit-4-echo-shard.png",
+     "sha": "d617bb7e38a884d9",
+     "id": "AgAD6akAAgLHIUs",
+     "alt": [
+      "🔷"
+     ],
+     "keywords": [
+      "echo shard",
+      "осколок эха",
+      "дух"
+     ]
+    },
+    "upgrade_escalating_exposure": {
+     "file": "items/spirit-4-escalating-exposure.png",
+     "sha": "5a08e6b9c8a983a9",
+     "id": "AgADl6oAAi7sIUs",
+     "alt": [
+      "☢️"
+     ],
+     "keywords": [
+      "escalating exposure",
+      "растущее воздействие",
+      "дух"
+     ]
+    },
+    "upgrade_self_bubble": {
+     "file": "items/spirit-4-ethereal-shift.png",
+     "sha": "e981a03618172fd7",
+     "id": "AgADubAAAr3WGEs",
+     "alt": [
+      "🌫️"
+     ],
+     "keywords": [
+      "ethereal shift",
+      "развоплощение",
+      "дух"
+     ]
+    },
+    "upgrade_focus_lens": {
+     "file": "items/spirit-4-focus-lens.png",
+     "sha": "a090caf28a88970b",
+     "id": "AgADjK4AAsCSGUs",
+     "alt": [
+      "🔍"
+     ],
+     "keywords": [
+      "focus lens",
+      "фокусная линза",
+      "дух"
+     ]
+    },
+    "upgrade_ultimate_burst": {
+     "file": "items/spirit-4-lightning-scroll.png",
+     "sha": "ed2d5ee837eab583",
+     "id": "AgADGKQAAgowIEs",
+     "alt": [
+      "📜"
+     ],
+     "keywords": [
+      "lightning scroll",
+      "свиток молнии",
+      "дух"
+     ]
+    },
+    "upgrade_magic_carpet": {
+     "file": "items/spirit-4-magic-carpet.png",
+     "sha": "21a0a3e8ff6a6aaf",
+     "id": "AgADLvAAArGdGUs",
+     "alt": [
+      "🧞"
+     ],
+     "keywords": [
+      "magic carpet",
+      "ковёр-самолёт",
+      "дух"
+     ]
+    },
+    "upgrade_ethereal_bullets": {
+     "file": "items/spirit-4-mercurial-magnum.png",
+     "sha": "20b03acf48a3949f",
+     "id": "AgADtLMAAg3oGUs",
+     "alt": [
+      "🔫"
+     ],
+     "keywords": [
+      "mercurial magnum",
+      "ртутный магнум",
+      "дух"
+     ]
+    },
+    "upgrade_mystic_reverb": {
+     "file": "items/spirit-4-mystic-reverb.png",
+     "sha": "c5ce1db30d33362b",
+     "id": "AgADn6wAAuMjGUs",
+     "alt": [
+      "〰️"
+     ],
+     "keywords": [
+      "mystic reverb",
+      "мистический отзвук",
+      "дух"
+     ]
+    },
+    "upgrade_ability_refresher": {
+     "file": "items/spirit-4-refresher.png",
+     "sha": "05d6e01eb622aa69",
+     "id": "AgADRKgAAoWbIEs",
+     "alt": [
+      "♻️"
+     ],
+     "keywords": [
+      "refresher",
+      "обновитель",
+      "дух"
+     ]
+    },
+    "upgrade_discord": {
+     "file": "items/spirit-4-scourge.png",
+     "sha": "69dfb08231e32552",
+     "id": "AgADbqQAAjjtIEs",
+     "alt": [
+      "😈"
+     ],
+     "keywords": [
+      "scourge",
+      "кара",
+      "дух"
+     ]
+    },
+    "upgrade_spirit_burn": {
+     "file": "items/spirit-4-spirit-burn.png",
+     "sha": "d982a03c9a98ce5e",
+     "id": "AgADDLMAAhpbIUs",
+     "alt": [
+      "🔥"
+     ],
+     "keywords": [
+      "spirit burn",
+      "спиритический ожог",
+      "дух"
+     ]
+    },
+    "upgrade_transcendent_cooldown": {
+     "file": "items/spirit-4-transcendent-cooldown.png",
+     "sha": "b8599c332af05ebf",
+     "id": "AgADTK4AAumDGEs",
+     "alt": [
+      "🌌"
+     ],
+     "keywords": [
+      "transcendent cooldown",
+      "трансцендентная перезарядка",
+      "дух"
+     ]
+    },
+    "upgrade_aoe_root": {
+     "file": "items/spirit-4-vortex-web.png",
+     "sha": "5dbf151d795b815d",
+     "id": "AgAD1qUAAvN5GEs",
+     "alt": [
+      "🕸️"
+     ],
+     "keywords": [
+      "vortex web",
+      "паутинный вихрь",
+      "дух"
+     ]
+    }
+   }
   }
  }
 }

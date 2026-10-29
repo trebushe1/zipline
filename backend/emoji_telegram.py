@@ -1,7 +1,8 @@
-"""Publish the emoji pack (data/emoji, see backend/emoji.py) as Telegram custom emoji sets, and keep them in step.
+"""Publish the emoji packs (data/emoji, see backend/emoji.py) as Telegram custom emoji sets, and keep them in step.
 
-A set holds at most 200 emoji, so the pack is split by the hero's first letter (SETS); inside a set the
-order is the pack's: each hero's head, then abilities 1–4. The sets are made by a bot of their own
+A set holds at most 200 emoji, so the heroes are split by the hero's first letter and the shop items get a set
+of their own (SETS); inside a set the order is the pack's: each hero's head, then abilities 1–4; items by shop
+tab, tier and name. The sets are made by a bot of their own
 (TELEGRAM_EMOJI_BOT_TOKEN): Telegram ends a bot's set names in _by_<bot>, and the name is the public link, so
 the notification bot never makes them. They belong to the user in TELEGRAM_CHAT_ID (the owner's private chat
 with the notification bot: there the chat id is the user id), who has to press Start in the emoji bot once. A missing set is created; otherwise only what changed is changed:
@@ -10,7 +11,8 @@ follow SETS. What is in each set is remembered in data/emoji/telegram.json, by e
 hero_<hero> for a head): checksum and Telegram's id.
 
 Each emoji also carries an ordinary emoji (ALT): Telegram shows it where custom emoji are not drawn and
-offers the custom one when it is typed; and keywords for search (the hero in English and Russian, the ability).
+offers the custom one when it is typed; and keywords for search (the hero in English and Russian and the
+ability, or the item in English and Russian and its shop tab).
 
     python -m backend.emoji_telegram --dry-run   # what would change; only reads from Telegram
     python -m backend.emoji_telegram             # create or update the sets
@@ -29,12 +31,14 @@ from .media import log
 
 PACK = config.ROOT / "data" / "emoji"
 STATE = PACK / "telegram.json"
-# (first letters of the hero, set name, title). Telegram appends nothing: "_by_<bot username>" is added here.
+# (heroes or items, first letters of the hero, set name, title). "_by_<bot username>" is added to the name here.
 # A set's name is its link and can never change; its title follows this list.
 SETS = [
-    ("abcdefghijkl", "zipline_ability_al", "@zipline ability A–L"),
-    ("mnopqrstuvwxyz", "zipline_ability_mz", "@zipline ability M–Z"),
+    ("hero", "abcdefghijkl", "zipline_ability_al", "@zipline ability A–L"),
+    ("hero", "mnopqrstuvwxyz", "zipline_ability_mz", "@zipline ability M–Z"),
+    ("item", None, "zipline_items", "@zipline items"),
 ]
+TAB_RU = {"weapon": "оружие", "vitality": "живучесть", "spirit": "дух"}  # as on the site's shop page
 FIRST_BATCH = 50  # createNewStickerSet takes at most 50, the rest are added one by one
 MAX_SET = 200  # Telegram's limit for a custom emoji set
 KEYWORDS_LENGTH = 64  # Telegram's limit for all keywords of one emoji together
@@ -97,6 +101,163 @@ ALT = {
     "hero_warden": "👮",                                     # Warden
     "hero_wraith": "🃏",                                     # Wraith
     "hero_yamato": "⚔️",                                     # Yamato
+    # Items: by item key
+    "upgrade_close_range": "🎯",                             # Close Quarters
+    "upgrade_clip_size": "🔫",                               # Extended Magazine
+    "upgrade_headshot_booster": "🎯",                        # Headshot Booster
+    "upgrade_high_velocity_mag": "💨",                       # High-Velocity Rounds
+    "upgrade_non_player_bonus": "👹",                        # Monster Rounds
+    "upgrade_rapid_rounds": "⏩",                            # Rapid Rounds
+    "upgrade_medic_bullets": "💉",                           # Restorative Shot
+    "upgrade_active_reload": "🔄",                           # Active Reload
+    "upgrade_fleetfoot_boots": "👟",                         # Fleetfoot
+    "upgrade_intensifying_clip": "📈",                       # Intensifying Magazine
+    "upgrade_kinetic_sash": "🐎",                            # Kinetic Dash
+    "upgrade_long_range": "🔭",                              # Long Range
+    "upgrade_melee_charge": "👊",                            # Melee Charge
+    "upgrade_crackshot": "🔮",                               # Mystic Shot
+    "upgrade_pristine_emblem": "💪",                         # Opening Rounds
+    "upgrade_rechargingbullets": "⚡",                       # Recharging Rush
+    "upgrade_slowing_bullets": "🐢",                         # Slowing Bullets
+    "upgrade_tech_defense_shredders": "😈",                  # Spirit Shredder
+    "upgrade_split_shot": "🔱",                              # Split Shot
+    "upgrade_weapon_backstabber": "🥷",                      # Stalker
+    "upgrade_blitz_bullets": "🦅",                           # Swift Striker
+    "upgrade_titan_round": "🌾",                             # Titanic Magazine
+    "upgrade_headshot_booster2": "🤕",                       # Weakening Headshot
+    "upgrade_thermal_detonator": "🧪",                       # Alchemical Fire
+    "upgrade_bulletshredimbue": "✨",                        # Ballistic Enchantment
+    "upgrade_berserker": "🪓",                               # Berserker
+    "upgrade_blood_tribute": "🩸",                           # Blood Tribute
+    "upgrade_burst_fire": "🐍",                              # Burst Fire
+    "upgrade_non_player_bonus_sacrifice": "📯",              # Cultist Sacrifice
+    "upgrade_reinforcing_casings": "🛡️",                    # Escalating Resilience
+    "upgrade_express_shot": "🌐",                            # Express Shot
+    "upgrade_headhunter": "🎭",                              # Headhunter
+    "upgrade_dps_aura": "👑",                                # Heroic Aura
+    "upgrade_hollow_point_rounds": "💥",                     # Hollow Point
+    "upgrade_bullet_armor_reduction_aura": "🐺",             # Hunter's Aura
+    "upgrade_close_quarter_combat": "🔫",                    # Point Blank
+    "upgrade_cloaking_device_active": "🐈‍⬛",                # Shadow Weave
+    "upgrade_sharpshooter": "🎯",                            # Sharpshooter
+    "upgrade_spellslinger_headshots": "💜",                  # Spirit Rend
+    "upgrade_chain_lightning": "⚡",                         # Tesla Bullets
+    "upgrade_toxic_bullets": "☠️",                          # Toxic Bullets
+    "upgrade_weighted_shots": "🐘",                          # Weighted Shots
+    "upgrade_aprounds": "🛡️",                               # Armor Piercer
+    "upgrade_capacitor": "🔋",                               # Capacitor
+    "upgrade_banshee_slugs": "💀",                           # Crippling Headshot
+    "upgrade_crushing_fists": "👊",                          # Crushing Fists
+    "upgrade_fervor": "😤",                                  # Frenzy
+    "upgrade_glass_cannon": "💀",                            # Glass Cannon
+    "upgrade_critshot": "🍀",                                # Lucky Shot
+    "upgrade_ricochet": "⭐",                                # Ricochet
+    "upgrade_proc_silence": "🤫",                            # Silencer
+    "upgrade_enchanted_holsters": "👉",                      # Spellslinger
+    "upgrade_tech_overflow": "🏆",                           # Spiritual Overflow
+    "upgrade_health": "❤️",                                 # Extra Health
+    "upgrade_endurance": "🩹",                               # Extra Regen
+    "upgrade_improved_stamina": "🐎",                        # Extra Stamina
+    "upgrade_grit": "🛡️",                                   # Grit
+    "upgrade_health_stimpak": "🕯️",                         # Healing Rite
+    "upgrade_lifestrike_gauntlets": "🤜",                    # Melee Lifesteal
+    "upgrade_melee_rebuttal": "🐂",                          # Rebuttal
+    "upgrade_sprint_booster": "👢",                          # Sprint Boots
+    "upgrade_regenerating_bullet_shield": "🦺",              # Battle Vest
+    "upgrade_vampire": "🧛",                                 # Bullet Lifesteal
+    "upgrade_debuff_reducer": "⬇️",                         # Debuff Reducer
+    "upgrade_magic_shield": "💠",                            # Enchanter's Emblem
+    "upgrade_cardio_calibrator": "🏃",                       # Enduring Speed
+    "upgrade_guardian_ward": "🗡️",                          # Guardian Ward
+    "upgrade_healbane": "💀",                                # Healbane
+    "upgrade_healing_booster": "💚",                         # Healing Booster
+    "upgrade_vex_barrier": "🛡️",                            # Reactive Barrier
+    "upgrade_restorative_locket": "📿",                      # Restorative Locket
+    "upgrade_return_fire": "↩️",                            # Return Fire
+    "upgrade_health_stealing_magic": "👁️",                  # Spirit Lifesteal
+    "upgrade_spirit_bubble": "🫧",                           # Spirit Shielding
+    "upgrade_trophy_collector": "🏆",                        # Trophy Collector
+    "upgrade_weapon_shielding": "🛡️",                       # Weapon Shielding
+    "upgrade_improved_bullet_armor": "🦾",                   # Bullet Resilience
+    "upgrade_counterspell": "✋",                            # Counterspell
+    "upgrade_reduce_debuff_duration": "✂️",                 # Dispel Magic
+    "upgrade_chonky": "🦁",                                  # Fortitude
+    "upgrade_fury_trance": "😡",                             # Fury Trance
+    "upgrade_health_nova": "💚",                             # Healing Nova
+    "upgrade_boxing_glove": "🥊",                            # Lifestrike
+    "upgrade_rocket_booster": "🦘",                          # Majestic Leap
+    "upgrade_metal_skin": "🤖",                              # Metal Skin
+    "upgrade_rescue_beam": "🚑",                             # Rescue Beam
+    "upgrade_tech_purge": "🧘",                              # Spirit Resilience
+    "upgrade_superior_stamina": "🐎",                        # Stamina Mastery
+    "upgrade_veil_walker": "🚶",                             # Veil Walker
+    "upgrade_warp_stone": "💎",                              # Warp Stone
+    "upgrade_cheat_death": "🃏",                             # Cheat Death
+    "upgrade_colossus": "🗿",                                # Colossus
+    "upgrade_divine_barrier": "🪽",                          # Divine Barrier
+    "upgrade_diviners_kevlar": "🔰",                         # Diviner's Kevlar
+    "upgrade_healbuff": "🥁",                                # Healing Tempo
+    "upgrade_auto_cleanse": "⛓️",                           # Indomitable
+    "upgrade_infuser": "🖐️",                                # Infuser
+    "upgrade_inhibitor": "🚫",                               # Inhibitor
+    "upgrade_juggernaut": "🐗",                              # Juggernaut
+    "upgrade_damage_recycler": "🩸",                         # Leech
+    "upgrade_phantom_strike": "👻",                          # Phantom Strike
+    "upgrade_deflecting_armor": "🦺",                        # Plated Armor
+    "upgrade_siphon_bullets": "🌹",                          # Siphon Bullets
+    "upgrade_spellbreaker": "🪄",                            # Spellbreaker
+    "upgrade_unstoppable": "🧍",                             # Unstoppable
+    "upgrade_surging_power": "🦇",                           # Vampiric Burst
+    "upgrade_absorbing_armor": "🧙",                         # Witchmail
+    "upgrade_extra_charge": "🔋",                            # Extra Charge
+    "upgrade_improved_spirit": "🔥",                         # Extra Spirit
+    "upgrade_goose_egg": "🥚",                               # Golden Goose Egg
+    "upgrade_magic_burst": "✴️",                            # Mystic Burst
+    "upgrade_magic_reach": "↔️",                            # Mystic Expansion
+    "upgrade_mystic_regeneration": "💜",                     # Mystic Regeneration
+    "upgrade_withering_whip": "🔫",                          # Rusted Barrel
+    "upgrade_acolytes_glove": "🥊",                          # Spirit Strike
+    "upgrade_arcane_surge": "🦄",                            # Arcane Surge
+    "upgrade_bullet_resist_shredder": "🛡️",                 # Bullet Resist Shredder
+    "upgrade_cold_front": "❄️",                             # Cold Front
+    "upgrade_magic_tempo": "⏱️",                            # Compress Cooldown
+    "upgrade_arcane_extension": "⏳",                        # Duration Extender
+    "upgrade_soaring_spirit": "🔥",                          # Improved Spirit
+    "upgrade_magic_slow": "⛓️",                             # Mystic Slow
+    "upgrade_magic_vulnerability": "👁️",                    # Mystic Vulnerability
+    "upgrade_quick_silver": "🔄",                            # Quicksilver Reload
+    "upgrade_containment": "🐌",                             # Slowing Hex
+    "upgrade_spirit_sap": "💧",                              # Spirit Sap
+    "upgrade_suppressor": "🔗",                              # Suppressor
+    "upgrade_rupture": "🦴",                                 # Decay
+    "upgrade_greater_withering_whip": "🖐️",                 # Disarming Hex
+    "upgrade_tech_range": "📡",                              # Greater Expansion
+    "upgrade_target_stun": "🔨",                             # Knockdown
+    "upgrade_resonant_healing": "💚",                        # Radiant Regeneration
+    "upgrade_rapid_recharge": "⚡",                          # Rapid Recharge
+    "upgrade_targeted_silence": "🔇",                        # Silence Wave
+    "upgrade_spirit_snatch": "🌀",                           # Spirit Snatch
+    "upgrade_cooldown_reduction": "⏱️",                     # Superior Cooldown
+    "upgrade_imbued_duration_extender": "⌛",                # Superior Duration
+    "upgrade_magic_storm": "🌩️",                            # Surge of Power
+    "upgrade_magic_shock": "💣",                             # Tankbuster
+    "upgrade_tech_damage_pulse": "💓",                       # Torment Pulse
+    "upgrade_arctic_blast": "🥶",                            # Arctic Blast
+    "upgrade_boundless_spirit": "💫",                        # Boundless Spirit
+    "upgrade_glitch": "🗿",                                  # Cursed Relic
+    "upgrade_ability_power_shard": "🔷",                     # Echo Shard
+    "upgrade_escalating_exposure": "☢️",                    # Escalating Exposure
+    "upgrade_self_bubble": "🌫️",                            # Ethereal Shift
+    "upgrade_focus_lens": "🔍",                              # Focus Lens
+    "upgrade_ultimate_burst": "📜",                          # Lightning Scroll
+    "upgrade_magic_carpet": "🧞",                            # Magic Carpet
+    "upgrade_ethereal_bullets": "🔫",                        # Mercurial Magnum
+    "upgrade_mystic_reverb": "〰️",                          # Mystic Reverb
+    "upgrade_ability_refresher": "♻️",                      # Refresher
+    "upgrade_discord": "😈",                                 # Scourge
+    "upgrade_spirit_burn": "🔥",                             # Spirit Burn
+    "upgrade_transcendent_cooldown": "🌌",                   # Transcendent Cooldown
+    "upgrade_aoe_root": "🕸️",                               # Vortex Web
     "citadel_ability_bull_heal": "🩸",                       # Abrams: Siphon Life
     "citadel_ability_bull_charge": "🐂",                     # Abrams: Shoulder Charge
     "citadel_ability_passive_beefy": "❤️‍🔥",                # Abrams: Infernal Resilience
@@ -274,7 +435,7 @@ ALT = {
     "citadel_ability_healing_slash": "🩸",                   # Yamato: Crimson Slash
     "citadel_ability_infinity_slash": "🌑",                  # Yamato: Shadow Transformation
 }
-NO_ALT = "🎮"  # a new hero or ability before it gets its own emoji here
+NO_ALT = "🎮"  # a new hero, ability or item before it gets its own emoji here
 
 
 class TelegramError(Exception):
@@ -317,8 +478,12 @@ def alt(entry: dict) -> list[str]:
 
 
 def keywords(entry: dict) -> list[str]:
+    if "item" in entry:
+        words = (entry["name"].lower(), entry.get("name_ru", "").lower(), TAB_RU.get(entry["tab"], ""))
+    else:
+        words = (entry["hero_name"].lower(), HERO_RU.get(entry["hero"], ""), entry["name"].lower())
     out, total = [], 0
-    for k in (entry["hero_name"].lower(), HERO_RU.get(entry["hero"], ""), entry["name"].lower()):
+    for k in words:
         if k and k not in out and total + len(k) <= KEYWORDS_LENGTH:
             out.append(k)
             total += len(k)
@@ -342,9 +507,11 @@ def save(state: dict) -> None:
 # ── Sync ───────────────────────────────────────────────
 
 def set_of(entry: dict) -> int:
-    """Which of SETS a pack entry goes to: by the hero's first letter, The Doorman under D."""
-    letter = re.sub(r"^the ", "", entry["hero_name"].lower())[:1]
-    return next((i for i, (letters, _, _) in enumerate(SETS) if letter in letters), len(SETS) - 1)
+    """Which of SETS a pack entry goes to: items to the items set, a hero by its first letter (The Doorman under D)."""
+    kind = "item" if "item" in entry else "hero"
+    letter = re.sub(r"^the ", "", entry.get("hero_name", "").lower())[:1]
+    fits = [i for i, (k, letters, _, _) in enumerate(SETS) if k == kind and (letters is None or letter in letters)]
+    return fits[0] if fits else max(i for i, (k, *_) in enumerate(SETS) if k == kind)
 
 
 def plan(pack: list[dict], known: dict, current: dict) -> list[tuple[str, dict | str]]:
@@ -431,7 +598,7 @@ def create(bot: Bot, owner: str, name: str, title: str, pack: list[dict], state:
 # ── Main ───────────────────────────────────────────────
 
 def problems(parts: list[list[dict]]) -> list[str]:
-    out = [f"{SETS[i][2]}: {len(p)} emoji, Telegram takes at most {MAX_SET} in one set: split SETS further"
+    out = [f"{SETS[i][3]}: {len(p)} emoji, Telegram takes at most {MAX_SET} in one set: split SETS further"
            for i, p in enumerate(parts) if len(p) > MAX_SET]
     for e in (e for p in parts for e in p):
         with Image.open(PACK / e["file"]) as im:
@@ -480,7 +647,7 @@ def main() -> int:
     bot = Bot(token)
     bot_name = bot.call("getMe")["username"]
     state = load_state()
-    for (_, base, title), part in zip(SETS, parts):
+    for (_, _, base, title), part in zip(SETS, parts):
         name = f"{base}_by_{bot_name}"
         mine = state["sets"].setdefault(name, {"title": title, "emoji": {}})
         known = mine["emoji"]

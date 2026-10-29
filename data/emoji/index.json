@@ -1760,6 +1760,1410 @@
    "key": "citadel_ability_infinity_slash",
    "name": "Shadow Transformation",
    "file": "yamato-4-shadow-transformation.png"
+  },
+  {
+   "item": "upgrade_close_range",
+   "tab": "weapon",
+   "tier": 1,
+   "key": "upgrade_close_range",
+   "name": "Close Quarters",
+   "name_ru": "Ближняя дистанция",
+   "file": "items/weapon-1-close-quarters.png"
+  },
+  {
+   "item": "upgrade_clip_size",
+   "tab": "weapon",
+   "tier": 1,
+   "key": "upgrade_clip_size",
+   "name": "Extended Magazine",
+   "name_ru": "Увеличенный магазин",
+   "file": "items/weapon-1-extended-magazine.png"
+  },
+  {
+   "item": "upgrade_headshot_booster",
+   "tab": "weapon",
+   "tier": 1,
+   "key": "upgrade_headshot_booster",
+   "name": "Headshot Booster",
+   "name_ru": "Усилитель выстрелов в голову",
+   "file": "items/weapon-1-headshot-booster.png"
+  },
+  {
+   "item": "upgrade_high_velocity_mag",
+   "tab": "weapon",
+   "tier": 1,
+   "key": "upgrade_high_velocity_mag",
+   "name": "High-Velocity Rounds",
+   "name_ru": "Скоростные патроны",
+   "file": "items/weapon-1-high-velocity-rounds.png"
+  },
+  {
+   "item": "upgrade_non_player_bonus",
+   "tab": "weapon",
+   "tier": 1,
+   "key": "upgrade_non_player_bonus",
+   "name": "Monster Rounds",
+   "name_ru": "Чудовищные патроны",
+   "file": "items/weapon-1-monster-rounds.png"
+  },
+  {
+   "item": "upgrade_rapid_rounds",
+   "tab": "weapon",
+   "tier": 1,
+   "key": "upgrade_rapid_rounds",
+   "name": "Rapid Rounds",
+   "name_ru": "Спешная стрельба",
+   "file": "items/weapon-1-rapid-rounds.png"
+  },
+  {
+   "item": "upgrade_medic_bullets",
+   "tab": "weapon",
+   "tier": 1,
+   "key": "upgrade_medic_bullets",
+   "name": "Restorative Shot",
+   "name_ru": "Живительный выстрел",
+   "file": "items/weapon-1-restorative-shot.png"
+  },
+  {
+   "item": "upgrade_active_reload",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_active_reload",
+   "name": "Active Reload",
+   "name_ru": "Активная перезарядка",
+   "file": "items/weapon-2-active-reload.png"
+  },
+  {
+   "item": "upgrade_fleetfoot_boots",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_fleetfoot_boots",
+   "name": "Fleetfoot",
+   "name_ru": "Проворная поступь",
+   "file": "items/weapon-2-fleetfoot.png"
+  },
+  {
+   "item": "upgrade_intensifying_clip",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_intensifying_clip",
+   "name": "Intensifying Magazine",
+   "name_ru": "Усиливающий магазин",
+   "file": "items/weapon-2-intensifying-magazine.png"
+  },
+  {
+   "item": "upgrade_kinetic_sash",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_kinetic_sash",
+   "name": "Kinetic Dash",
+   "name_ru": "Кинетический рывок",
+   "file": "items/weapon-2-kinetic-dash.png"
+  },
+  {
+   "item": "upgrade_long_range",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_long_range",
+   "name": "Long Range",
+   "name_ru": "Дальняя дистанция",
+   "file": "items/weapon-2-long-range.png"
+  },
+  {
+   "item": "upgrade_melee_charge",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_melee_charge",
+   "name": "Melee Charge",
+   "name_ru": "Удар с зарядом",
+   "file": "items/weapon-2-melee-charge.png"
+  },
+  {
+   "item": "upgrade_crackshot",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_crackshot",
+   "name": "Mystic Shot",
+   "name_ru": "Мистический выстрел",
+   "file": "items/weapon-2-mystic-shot.png"
+  },
+  {
+   "item": "upgrade_pristine_emblem",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_pristine_emblem",
+   "name": "Opening Rounds",
+   "name_ru": "Вскрывающие патроны",
+   "file": "items/weapon-2-opening-rounds.png"
+  },
+  {
+   "item": "upgrade_rechargingbullets",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_rechargingbullets",
+   "name": "Recharging Rush",
+   "name_ru": "Прилив перезарядки",
+   "file": "items/weapon-2-recharging-rush.png"
+  },
+  {
+   "item": "upgrade_slowing_bullets",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_slowing_bullets",
+   "name": "Slowing Bullets",
+   "name_ru": "Замедляющие пули",
+   "file": "items/weapon-2-slowing-bullets.png"
+  },
+  {
+   "item": "upgrade_tech_defense_shredders",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_tech_defense_shredders",
+   "name": "Spirit Shredder",
+   "name_ru": "Душегубные пули",
+   "file": "items/weapon-2-spirit-shredder.png"
+  },
+  {
+   "item": "upgrade_split_shot",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_split_shot",
+   "name": "Split Shot",
+   "name_ru": "Веерный выстрел",
+   "file": "items/weapon-2-split-shot.png"
+  },
+  {
+   "item": "upgrade_weapon_backstabber",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_weapon_backstabber",
+   "name": "Stalker",
+   "name_ru": "Преследователь",
+   "file": "items/weapon-2-stalker.png"
+  },
+  {
+   "item": "upgrade_blitz_bullets",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_blitz_bullets",
+   "name": "Swift Striker",
+   "name_ru": "Быстрый стрелок",
+   "file": "items/weapon-2-swift-striker.png"
+  },
+  {
+   "item": "upgrade_titan_round",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_titan_round",
+   "name": "Titanic Magazine",
+   "name_ru": "Титанический магазин",
+   "file": "items/weapon-2-titanic-magazine.png"
+  },
+  {
+   "item": "upgrade_headshot_booster2",
+   "tab": "weapon",
+   "tier": 2,
+   "key": "upgrade_headshot_booster2",
+   "name": "Weakening Headshot",
+   "name_ru": "Ослабляющий выстрел в голову",
+   "file": "items/weapon-2-weakening-headshot.png"
+  },
+  {
+   "item": "upgrade_thermal_detonator",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_thermal_detonator",
+   "name": "Alchemical Fire",
+   "name_ru": "Алхимический огонь",
+   "file": "items/weapon-3-alchemical-fire.png"
+  },
+  {
+   "item": "upgrade_bulletshredimbue",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_bulletshredimbue",
+   "name": "Ballistic Enchantment",
+   "name_ru": "Баллистические чары",
+   "file": "items/weapon-3-ballistic-enchantment.png"
+  },
+  {
+   "item": "upgrade_berserker",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_berserker",
+   "name": "Berserker",
+   "name_ru": "Берсерк",
+   "file": "items/weapon-3-berserker.png"
+  },
+  {
+   "item": "upgrade_blood_tribute",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_blood_tribute",
+   "name": "Blood Tribute",
+   "name_ru": "Кровавая дань",
+   "file": "items/weapon-3-blood-tribute.png"
+  },
+  {
+   "item": "upgrade_burst_fire",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_burst_fire",
+   "name": "Burst Fire",
+   "name_ru": "Шквальный огонь",
+   "file": "items/weapon-3-burst-fire.png"
+  },
+  {
+   "item": "upgrade_non_player_bonus_sacrifice",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_non_player_bonus_sacrifice",
+   "name": "Cultist Sacrifice",
+   "name_ru": "Жертвенный ритуал",
+   "file": "items/weapon-3-cultist-sacrifice.png"
+  },
+  {
+   "item": "upgrade_reinforcing_casings",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_reinforcing_casings",
+   "name": "Escalating Resilience",
+   "name_ru": "Растущая стойкость",
+   "file": "items/weapon-3-escalating-resilience.png"
+  },
+  {
+   "item": "upgrade_express_shot",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_express_shot",
+   "name": "Express Shot",
+   "name_ru": "Экспресс-выстрел",
+   "file": "items/weapon-3-express-shot.png"
+  },
+  {
+   "item": "upgrade_headhunter",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_headhunter",
+   "name": "Headhunter",
+   "name_ru": "Охотник за головами",
+   "file": "items/weapon-3-headhunter.png"
+  },
+  {
+   "item": "upgrade_dps_aura",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_dps_aura",
+   "name": "Heroic Aura",
+   "name_ru": "Героическая аура",
+   "file": "items/weapon-3-heroic-aura.png"
+  },
+  {
+   "item": "upgrade_hollow_point_rounds",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_hollow_point_rounds",
+   "name": "Hollow Point",
+   "name_ru": "Разрывник",
+   "file": "items/weapon-3-hollow-point.png"
+  },
+  {
+   "item": "upgrade_bullet_armor_reduction_aura",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_bullet_armor_reduction_aura",
+   "name": "Hunter's Aura",
+   "name_ru": "Аура охотника",
+   "file": "items/weapon-3-hunters-aura.png"
+  },
+  {
+   "item": "upgrade_close_quarter_combat",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_close_quarter_combat",
+   "name": "Point Blank",
+   "name_ru": "Стрельба в упор",
+   "file": "items/weapon-3-point-blank.png"
+  },
+  {
+   "item": "upgrade_cloaking_device_active",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_cloaking_device_active",
+   "name": "Shadow Weave",
+   "name_ru": "Сплетение теней",
+   "file": "items/weapon-3-shadow-weave.png"
+  },
+  {
+   "item": "upgrade_sharpshooter",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_sharpshooter",
+   "name": "Sharpshooter",
+   "name_ru": "Прицельная стрельба",
+   "file": "items/weapon-3-sharpshooter.png"
+  },
+  {
+   "item": "upgrade_spellslinger_headshots",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_spellslinger_headshots",
+   "name": "Spirit Rend",
+   "name_ru": "Спиритический разрыв",
+   "file": "items/weapon-3-spirit-rend.png"
+  },
+  {
+   "item": "upgrade_chain_lightning",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_chain_lightning",
+   "name": "Tesla Bullets",
+   "name_ru": "Тесла-пули",
+   "file": "items/weapon-3-tesla-bullets.png"
+  },
+  {
+   "item": "upgrade_toxic_bullets",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_toxic_bullets",
+   "name": "Toxic Bullets",
+   "name_ru": "Токсичные пули",
+   "file": "items/weapon-3-toxic-bullets.png"
+  },
+  {
+   "item": "upgrade_weighted_shots",
+   "tab": "weapon",
+   "tier": 3,
+   "key": "upgrade_weighted_shots",
+   "name": "Weighted Shots",
+   "name_ru": "Утяжелённые выстрелы",
+   "file": "items/weapon-3-weighted-shots.png"
+  },
+  {
+   "item": "upgrade_aprounds",
+   "tab": "weapon",
+   "tier": 4,
+   "key": "upgrade_aprounds",
+   "name": "Armor Piercer",
+   "name_ru": "Бронебой",
+   "file": "items/weapon-4-armor-piercer.png"
+  },
+  {
+   "item": "upgrade_capacitor",
+   "tab": "weapon",
+   "tier": 4,
+   "key": "upgrade_capacitor",
+   "name": "Capacitor",
+   "name_ru": "Конденсатор",
+   "file": "items/weapon-4-capacitor.png"
+  },
+  {
+   "item": "upgrade_banshee_slugs",
+   "tab": "weapon",
+   "tier": 4,
+   "key": "upgrade_banshee_slugs",
+   "name": "Crippling Headshot",
+   "name_ru": "Калечащий выстрел в голову",
+   "file": "items/weapon-4-crippling-headshot.png"
+  },
+  {
+   "item": "upgrade_crushing_fists",
+   "tab": "weapon",
+   "tier": 4,
+   "key": "upgrade_crushing_fists",
+   "name": "Crushing Fists",
+   "name_ru": "Сокрушительные кулаки",
+   "file": "items/weapon-4-crushing-fists.png"
+  },
+  {
+   "item": "upgrade_fervor",
+   "tab": "weapon",
+   "tier": 4,
+   "key": "upgrade_fervor",
+   "name": "Frenzy",
+   "name_ru": "Ярость",
+   "file": "items/weapon-4-frenzy.png"
+  },
+  {
+   "item": "upgrade_glass_cannon",
+   "tab": "weapon",
+   "tier": 4,
+   "key": "upgrade_glass_cannon",
+   "name": "Glass Cannon",
+   "name_ru": "Стеклянная пушка",
+   "file": "items/weapon-4-glass-cannon.png"
+  },
+  {
+   "item": "upgrade_critshot",
+   "tab": "weapon",
+   "tier": 4,
+   "key": "upgrade_critshot",
+   "name": "Lucky Shot",
+   "name_ru": "Удачный выстрел",
+   "file": "items/weapon-4-lucky-shot.png"
+  },
+  {
+   "item": "upgrade_ricochet",
+   "tab": "weapon",
+   "tier": 4,
+   "key": "upgrade_ricochet",
+   "name": "Ricochet",
+   "name_ru": "Рикошет",
+   "file": "items/weapon-4-ricochet.png"
+  },
+  {
+   "item": "upgrade_proc_silence",
+   "tab": "weapon",
+   "tier": 4,
+   "key": "upgrade_proc_silence",
+   "name": "Silencer",
+   "name_ru": "Глушитель",
+   "file": "items/weapon-4-silencer.png"
+  },
+  {
+   "item": "upgrade_enchanted_holsters",
+   "tab": "weapon",
+   "tier": 4,
+   "key": "upgrade_enchanted_holsters",
+   "name": "Spellslinger",
+   "name_ru": "Метатель чар",
+   "file": "items/weapon-4-spellslinger.png"
+  },
+  {
+   "item": "upgrade_tech_overflow",
+   "tab": "weapon",
+   "tier": 4,
+   "key": "upgrade_tech_overflow",
+   "name": "Spiritual Overflow",
+   "name_ru": "Спиритическое переполнение",
+   "file": "items/weapon-4-spiritual-overflow.png"
+  },
+  {
+   "item": "upgrade_health",
+   "tab": "vitality",
+   "tier": 1,
+   "key": "upgrade_health",
+   "name": "Extra Health",
+   "name_ru": "Добавочное здоровье",
+   "file": "items/vitality-1-extra-health.png"
+  },
+  {
+   "item": "upgrade_endurance",
+   "tab": "vitality",
+   "tier": 1,
+   "key": "upgrade_endurance",
+   "name": "Extra Regen",
+   "name_ru": "Добавочное восстановление",
+   "file": "items/vitality-1-extra-regen.png"
+  },
+  {
+   "item": "upgrade_improved_stamina",
+   "tab": "vitality",
+   "tier": 1,
+   "key": "upgrade_improved_stamina",
+   "name": "Extra Stamina",
+   "name_ru": "Добавочная выносливость",
+   "file": "items/vitality-1-extra-stamina.png"
+  },
+  {
+   "item": "upgrade_grit",
+   "tab": "vitality",
+   "tier": 1,
+   "key": "upgrade_grit",
+   "name": "Grit",
+   "name_ru": "Крепость",
+   "file": "items/vitality-1-grit.png"
+  },
+  {
+   "item": "upgrade_health_stimpak",
+   "tab": "vitality",
+   "tier": 1,
+   "key": "upgrade_health_stimpak",
+   "name": "Healing Rite",
+   "name_ru": "Обряд лечения",
+   "file": "items/vitality-1-healing-rite.png"
+  },
+  {
+   "item": "upgrade_lifestrike_gauntlets",
+   "tab": "vitality",
+   "tier": 1,
+   "key": "upgrade_lifestrike_gauntlets",
+   "name": "Melee Lifesteal",
+   "name_ru": "Ударная кража здоровья",
+   "file": "items/vitality-1-melee-lifesteal.png"
+  },
+  {
+   "item": "upgrade_melee_rebuttal",
+   "tab": "vitality",
+   "tier": 1,
+   "key": "upgrade_melee_rebuttal",
+   "name": "Rebuttal",
+   "name_ru": "Отпор",
+   "file": "items/vitality-1-rebuttal.png"
+  },
+  {
+   "item": "upgrade_sprint_booster",
+   "tab": "vitality",
+   "tier": 1,
+   "key": "upgrade_sprint_booster",
+   "name": "Sprint Boots",
+   "name_ru": "Беговые ботинки",
+   "file": "items/vitality-1-sprint-boots.png"
+  },
+  {
+   "item": "upgrade_regenerating_bullet_shield",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_regenerating_bullet_shield",
+   "name": "Battle Vest",
+   "name_ru": "Боевой жилет",
+   "file": "items/vitality-2-battle-vest.png"
+  },
+  {
+   "item": "upgrade_vampire",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_vampire",
+   "name": "Bullet Lifesteal",
+   "name_ru": "Пулевая кража здоровья",
+   "file": "items/vitality-2-bullet-lifesteal.png"
+  },
+  {
+   "item": "upgrade_debuff_reducer",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_debuff_reducer",
+   "name": "Debuff Reducer",
+   "name_ru": "Уменьшитель эффектов",
+   "file": "items/vitality-2-debuff-reducer.png"
+  },
+  {
+   "item": "upgrade_magic_shield",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_magic_shield",
+   "name": "Enchanter's Emblem",
+   "name_ru": "Эмблема заклинателя",
+   "file": "items/vitality-2-enchanters-emblem.png"
+  },
+  {
+   "item": "upgrade_cardio_calibrator",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_cardio_calibrator",
+   "name": "Enduring Speed",
+   "name_ru": "Скоростная стойкость",
+   "file": "items/vitality-2-enduring-speed.png"
+  },
+  {
+   "item": "upgrade_guardian_ward",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_guardian_ward",
+   "name": "Guardian Ward",
+   "name_ru": "Заслон стража",
+   "file": "items/vitality-2-guardian-ward.png"
+  },
+  {
+   "item": "upgrade_healbane",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_healbane",
+   "name": "Healbane",
+   "name_ru": "Гроза целителей",
+   "file": "items/vitality-2-healbane.png"
+  },
+  {
+   "item": "upgrade_healing_booster",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_healing_booster",
+   "name": "Healing Booster",
+   "name_ru": "Усилитель лечения",
+   "file": "items/vitality-2-healing-booster.png"
+  },
+  {
+   "item": "upgrade_vex_barrier",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_vex_barrier",
+   "name": "Reactive Barrier",
+   "name_ru": "Барьерная реакция",
+   "file": "items/vitality-2-reactive-barrier.png"
+  },
+  {
+   "item": "upgrade_restorative_locket",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_restorative_locket",
+   "name": "Restorative Locket",
+   "name_ru": "Живительный медальон",
+   "file": "items/vitality-2-restorative-locket.png"
+  },
+  {
+   "item": "upgrade_return_fire",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_return_fire",
+   "name": "Return Fire",
+   "name_ru": "Обратный огонь",
+   "file": "items/vitality-2-return-fire.png"
+  },
+  {
+   "item": "upgrade_health_stealing_magic",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_health_stealing_magic",
+   "name": "Spirit Lifesteal",
+   "name_ru": "Спиритическая кража здоровья",
+   "file": "items/vitality-2-spirit-lifesteal.png"
+  },
+  {
+   "item": "upgrade_spirit_bubble",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_spirit_bubble",
+   "name": "Spirit Shielding",
+   "name_ru": "Спиритическая защита",
+   "file": "items/vitality-2-spirit-shielding.png"
+  },
+  {
+   "item": "upgrade_trophy_collector",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_trophy_collector",
+   "name": "Trophy Collector",
+   "name_ru": "Собиратель трофеев",
+   "file": "items/vitality-2-trophy-collector.png"
+  },
+  {
+   "item": "upgrade_weapon_shielding",
+   "tab": "vitality",
+   "tier": 2,
+   "key": "upgrade_weapon_shielding",
+   "name": "Weapon Shielding",
+   "name_ru": "Оружейная защита",
+   "file": "items/vitality-2-weapon-shielding.png"
+  },
+  {
+   "item": "upgrade_improved_bullet_armor",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_improved_bullet_armor",
+   "name": "Bullet Resilience",
+   "name_ru": "Пулевая стойкость",
+   "file": "items/vitality-3-bullet-resilience.png"
+  },
+  {
+   "item": "upgrade_counterspell",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_counterspell",
+   "name": "Counterspell",
+   "name_ru": "Контрчары",
+   "file": "items/vitality-3-counterspell.png"
+  },
+  {
+   "item": "upgrade_reduce_debuff_duration",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_reduce_debuff_duration",
+   "name": "Dispel Magic",
+   "name_ru": "Развеивание магии",
+   "file": "items/vitality-3-dispel-magic.png"
+  },
+  {
+   "item": "upgrade_chonky",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_chonky",
+   "name": "Fortitude",
+   "name_ru": "Выдержка",
+   "file": "items/vitality-3-fortitude.png"
+  },
+  {
+   "item": "upgrade_fury_trance",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_fury_trance",
+   "name": "Fury Trance",
+   "name_ru": "Яростный экстаз",
+   "file": "items/vitality-3-fury-trance.png"
+  },
+  {
+   "item": "upgrade_health_nova",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_health_nova",
+   "name": "Healing Nova",
+   "name_ru": "Вспышка исцеления",
+   "file": "items/vitality-3-healing-nova.png"
+  },
+  {
+   "item": "upgrade_boxing_glove",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_boxing_glove",
+   "name": "Lifestrike",
+   "name_ru": "Витальный удар",
+   "file": "items/vitality-3-lifestrike.png"
+  },
+  {
+   "item": "upgrade_rocket_booster",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_rocket_booster",
+   "name": "Majestic Leap",
+   "name_ru": "Грациозный скачок",
+   "file": "items/vitality-3-majestic-leap.png"
+  },
+  {
+   "item": "upgrade_metal_skin",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_metal_skin",
+   "name": "Metal Skin",
+   "name_ru": "Металлическая кожа",
+   "file": "items/vitality-3-metal-skin.png"
+  },
+  {
+   "item": "upgrade_rescue_beam",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_rescue_beam",
+   "name": "Rescue Beam",
+   "name_ru": "Спасательный луч",
+   "file": "items/vitality-3-rescue-beam.png"
+  },
+  {
+   "item": "upgrade_tech_purge",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_tech_purge",
+   "name": "Spirit Resilience",
+   "name_ru": "Спиритическая стойкость",
+   "file": "items/vitality-3-spirit-resilience.png"
+  },
+  {
+   "item": "upgrade_superior_stamina",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_superior_stamina",
+   "name": "Stamina Mastery",
+   "name_ru": "Превосходная выносливость",
+   "file": "items/vitality-3-stamina-mastery.png"
+  },
+  {
+   "item": "upgrade_veil_walker",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_veil_walker",
+   "name": "Veil Walker",
+   "name_ru": "Незримый покров",
+   "file": "items/vitality-3-veil-walker.png"
+  },
+  {
+   "item": "upgrade_warp_stone",
+   "tab": "vitality",
+   "tier": 3,
+   "key": "upgrade_warp_stone",
+   "name": "Warp Stone",
+   "name_ru": "Камень переноса",
+   "file": "items/vitality-3-warp-stone.png"
+  },
+  {
+   "item": "upgrade_cheat_death",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_cheat_death",
+   "name": "Cheat Death",
+   "name_ru": "Обман смерти",
+   "file": "items/vitality-4-cheat-death.png"
+  },
+  {
+   "item": "upgrade_colossus",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_colossus",
+   "name": "Colossus",
+   "name_ru": "Колосс",
+   "file": "items/vitality-4-colossus.png"
+  },
+  {
+   "item": "upgrade_divine_barrier",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_divine_barrier",
+   "name": "Divine Barrier",
+   "name_ru": "Божественный барьер",
+   "file": "items/vitality-4-divine-barrier.png"
+  },
+  {
+   "item": "upgrade_diviners_kevlar",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_diviners_kevlar",
+   "name": "Diviner's Kevlar",
+   "name_ru": "Доспех прорицателя",
+   "file": "items/vitality-4-diviners-kevlar.png"
+  },
+  {
+   "item": "upgrade_healbuff",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_healbuff",
+   "name": "Healing Tempo",
+   "name_ru": "Целебный темп",
+   "file": "items/vitality-4-healing-tempo.png"
+  },
+  {
+   "item": "upgrade_auto_cleanse",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_auto_cleanse",
+   "name": "Indomitable",
+   "name_ru": "Непреклонность",
+   "file": "items/vitality-4-indomitable.png"
+  },
+  {
+   "item": "upgrade_infuser",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_infuser",
+   "name": "Infuser",
+   "name_ru": "Насытитель",
+   "file": "items/vitality-4-infuser.png"
+  },
+  {
+   "item": "upgrade_inhibitor",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_inhibitor",
+   "name": "Inhibitor",
+   "name_ru": "Ограничитель",
+   "file": "items/vitality-4-inhibitor.png"
+  },
+  {
+   "item": "upgrade_juggernaut",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_juggernaut",
+   "name": "Juggernaut",
+   "name_ru": "Громила",
+   "file": "items/vitality-4-juggernaut.png"
+  },
+  {
+   "item": "upgrade_damage_recycler",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_damage_recycler",
+   "name": "Leech",
+   "name_ru": "Кровопийца",
+   "file": "items/vitality-4-leech.png"
+  },
+  {
+   "item": "upgrade_phantom_strike",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_phantom_strike",
+   "name": "Phantom Strike",
+   "name_ru": "Фантомный удар",
+   "file": "items/vitality-4-phantom-strike.png"
+  },
+  {
+   "item": "upgrade_deflecting_armor",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_deflecting_armor",
+   "name": "Plated Armor",
+   "name_ru": "Латная броня",
+   "file": "items/vitality-4-plated-armor.png"
+  },
+  {
+   "item": "upgrade_siphon_bullets",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_siphon_bullets",
+   "name": "Siphon Bullets",
+   "name_ru": "Вытягивающие пули",
+   "file": "items/vitality-4-siphon-bullets.png"
+  },
+  {
+   "item": "upgrade_spellbreaker",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_spellbreaker",
+   "name": "Spellbreaker",
+   "name_ru": "Разрушитель чар",
+   "file": "items/vitality-4-spellbreaker.png"
+  },
+  {
+   "item": "upgrade_unstoppable",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_unstoppable",
+   "name": "Unstoppable",
+   "name_ru": "Неудержимость",
+   "file": "items/vitality-4-unstoppable.png"
+  },
+  {
+   "item": "upgrade_surging_power",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_surging_power",
+   "name": "Vampiric Burst",
+   "name_ru": "Порыв вампиризма",
+   "file": "items/vitality-4-vampiric-burst.png"
+  },
+  {
+   "item": "upgrade_absorbing_armor",
+   "tab": "vitality",
+   "tier": 4,
+   "key": "upgrade_absorbing_armor",
+   "name": "Witchmail",
+   "name_ru": "Ведьмовской доспех",
+   "file": "items/vitality-4-witchmail.png"
+  },
+  {
+   "item": "upgrade_extra_charge",
+   "tab": "spirit",
+   "tier": 1,
+   "key": "upgrade_extra_charge",
+   "name": "Extra Charge",
+   "name_ru": "Добавочные заряды",
+   "file": "items/spirit-1-extra-charge.png"
+  },
+  {
+   "item": "upgrade_improved_spirit",
+   "tab": "spirit",
+   "tier": 1,
+   "key": "upgrade_improved_spirit",
+   "name": "Extra Spirit",
+   "name_ru": "Добавочный спиритизм",
+   "file": "items/spirit-1-extra-spirit.png"
+  },
+  {
+   "item": "upgrade_goose_egg",
+   "tab": "spirit",
+   "tier": 1,
+   "key": "upgrade_goose_egg",
+   "name": "Golden Goose Egg",
+   "name_ru": "Золотое гусиное яйцо",
+   "file": "items/spirit-1-golden-goose-egg.png"
+  },
+  {
+   "item": "upgrade_magic_burst",
+   "tab": "spirit",
+   "tier": 1,
+   "key": "upgrade_magic_burst",
+   "name": "Mystic Burst",
+   "name_ru": "Мистический импульс",
+   "file": "items/spirit-1-mystic-burst.png"
+  },
+  {
+   "item": "upgrade_magic_reach",
+   "tab": "spirit",
+   "tier": 1,
+   "key": "upgrade_magic_reach",
+   "name": "Mystic Expansion",
+   "name_ru": "Мистическое расширение",
+   "file": "items/spirit-1-mystic-expansion.png"
+  },
+  {
+   "item": "upgrade_mystic_regeneration",
+   "tab": "spirit",
+   "tier": 1,
+   "key": "upgrade_mystic_regeneration",
+   "name": "Mystic Regeneration",
+   "name_ru": "Мистическое восстановление",
+   "file": "items/spirit-1-mystic-regeneration.png"
+  },
+  {
+   "item": "upgrade_withering_whip",
+   "tab": "spirit",
+   "tier": 1,
+   "key": "upgrade_withering_whip",
+   "name": "Rusted Barrel",
+   "name_ru": "Ржавый ствол",
+   "file": "items/spirit-1-rusted-barrel.png"
+  },
+  {
+   "item": "upgrade_acolytes_glove",
+   "tab": "spirit",
+   "tier": 1,
+   "key": "upgrade_acolytes_glove",
+   "name": "Spirit Strike",
+   "name_ru": "Спиритический удар",
+   "file": "items/spirit-1-spirit-strike.png"
+  },
+  {
+   "item": "upgrade_arcane_surge",
+   "tab": "spirit",
+   "tier": 2,
+   "key": "upgrade_arcane_surge",
+   "name": "Arcane Surge",
+   "name_ru": "Колдовской порыв",
+   "file": "items/spirit-2-arcane-surge.png"
+  },
+  {
+   "item": "upgrade_bullet_resist_shredder",
+   "tab": "spirit",
+   "tier": 2,
+   "key": "upgrade_bullet_resist_shredder",
+   "name": "Bullet Resist Shredder",
+   "name_ru": "Измельчитель пулестойкости",
+   "file": "items/spirit-2-bullet-resist-shredder.png"
+  },
+  {
+   "item": "upgrade_cold_front",
+   "tab": "spirit",
+   "tier": 2,
+   "key": "upgrade_cold_front",
+   "name": "Cold Front",
+   "name_ru": "Холодный фронт",
+   "file": "items/spirit-2-cold-front.png"
+  },
+  {
+   "item": "upgrade_magic_tempo",
+   "tab": "spirit",
+   "tier": 2,
+   "key": "upgrade_magic_tempo",
+   "name": "Compress Cooldown",
+   "name_ru": "Сжатая перезарядка умения",
+   "file": "items/spirit-2-compress-cooldown.png"
+  },
+  {
+   "item": "upgrade_arcane_extension",
+   "tab": "spirit",
+   "tier": 2,
+   "key": "upgrade_arcane_extension",
+   "name": "Duration Extender",
+   "name_ru": "Увеличитель длительности",
+   "file": "items/spirit-2-duration-extender.png"
+  },
+  {
+   "item": "upgrade_soaring_spirit",
+   "tab": "spirit",
+   "tier": 2,
+   "key": "upgrade_soaring_spirit",
+   "name": "Improved Spirit",
+   "name_ru": "Улучшенный спиритизм",
+   "file": "items/spirit-2-improved-spirit.png"
+  },
+  {
+   "item": "upgrade_magic_slow",
+   "tab": "spirit",
+   "tier": 2,
+   "key": "upgrade_magic_slow",
+   "name": "Mystic Slow",
+   "name_ru": "Мистическое замедление",
+   "file": "items/spirit-2-mystic-slow.png"
+  },
+  {
+   "item": "upgrade_magic_vulnerability",
+   "tab": "spirit",
+   "tier": 2,
+   "key": "upgrade_magic_vulnerability",
+   "name": "Mystic Vulnerability",
+   "name_ru": "Мистическая уязвимость",
+   "file": "items/spirit-2-mystic-vulnerability.png"
+  },
+  {
+   "item": "upgrade_quick_silver",
+   "tab": "spirit",
+   "tier": 2,
+   "key": "upgrade_quick_silver",
+   "name": "Quicksilver Reload",
+   "name_ru": "Ртутная перезарядка",
+   "file": "items/spirit-2-quicksilver-reload.png"
+  },
+  {
+   "item": "upgrade_containment",
+   "tab": "spirit",
+   "tier": 2,
+   "key": "upgrade_containment",
+   "name": "Slowing Hex",
+   "name_ru": "Замедляющие чары",
+   "file": "items/spirit-2-slowing-hex.png"
+  },
+  {
+   "item": "upgrade_spirit_sap",
+   "tab": "spirit",
+   "tier": 2,
+   "key": "upgrade_spirit_sap",
+   "name": "Spirit Sap",
+   "name_ru": "Спиритическое истощение",
+   "file": "items/spirit-2-spirit-sap.png"
+  },
+  {
+   "item": "upgrade_suppressor",
+   "tab": "spirit",
+   "tier": 2,
+   "key": "upgrade_suppressor",
+   "name": "Suppressor",
+   "name_ru": "Подавитель",
+   "file": "items/spirit-2-suppressor.png"
+  },
+  {
+   "item": "upgrade_rupture",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_rupture",
+   "name": "Decay",
+   "name_ru": "Разложение",
+   "file": "items/spirit-3-decay.png"
+  },
+  {
+   "item": "upgrade_greater_withering_whip",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_greater_withering_whip",
+   "name": "Disarming Hex",
+   "name_ru": "Чары обезоруживания",
+   "file": "items/spirit-3-disarming-hex.png"
+  },
+  {
+   "item": "upgrade_tech_range",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_tech_range",
+   "name": "Greater Expansion",
+   "name_ru": "Усиленное расширение",
+   "file": "items/spirit-3-greater-expansion.png"
+  },
+  {
+   "item": "upgrade_target_stun",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_target_stun",
+   "name": "Knockdown",
+   "name_ru": "Нокдаун",
+   "file": "items/spirit-3-knockdown.png"
+  },
+  {
+   "item": "upgrade_resonant_healing",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_resonant_healing",
+   "name": "Radiant Regeneration",
+   "name_ru": "Сияющее восстановление",
+   "file": "items/spirit-3-radiant-regeneration.png"
+  },
+  {
+   "item": "upgrade_rapid_recharge",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_rapid_recharge",
+   "name": "Rapid Recharge",
+   "name_ru": "Спешные заряды",
+   "file": "items/spirit-3-rapid-recharge.png"
+  },
+  {
+   "item": "upgrade_targeted_silence",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_targeted_silence",
+   "name": "Silence Wave",
+   "name_ru": "Волна безмолвия",
+   "file": "items/spirit-3-silence-wave.png"
+  },
+  {
+   "item": "upgrade_spirit_snatch",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_spirit_snatch",
+   "name": "Spirit Snatch",
+   "name_ru": "Похищение спиритизма",
+   "file": "items/spirit-3-spirit-snatch.png"
+  },
+  {
+   "item": "upgrade_cooldown_reduction",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_cooldown_reduction",
+   "name": "Superior Cooldown",
+   "name_ru": "Превосходная перезарядка умений",
+   "file": "items/spirit-3-superior-cooldown.png"
+  },
+  {
+   "item": "upgrade_imbued_duration_extender",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_imbued_duration_extender",
+   "name": "Superior Duration",
+   "name_ru": "Превосходная длительность",
+   "file": "items/spirit-3-superior-duration.png"
+  },
+  {
+   "item": "upgrade_magic_storm",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_magic_storm",
+   "name": "Surge of Power",
+   "name_ru": "Прилив мощи",
+   "file": "items/spirit-3-surge-of-power.png"
+  },
+  {
+   "item": "upgrade_magic_shock",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_magic_shock",
+   "name": "Tankbuster",
+   "name_ru": "Гроза танков",
+   "file": "items/spirit-3-tankbuster.png"
+  },
+  {
+   "item": "upgrade_tech_damage_pulse",
+   "tab": "spirit",
+   "tier": 3,
+   "key": "upgrade_tech_damage_pulse",
+   "name": "Torment Pulse",
+   "name_ru": "Терзающий пульс",
+   "file": "items/spirit-3-torment-pulse.png"
+  },
+  {
+   "item": "upgrade_arctic_blast",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_arctic_blast",
+   "name": "Arctic Blast",
+   "name_ru": "Арктический взрыв",
+   "file": "items/spirit-4-arctic-blast.png"
+  },
+  {
+   "item": "upgrade_boundless_spirit",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_boundless_spirit",
+   "name": "Boundless Spirit",
+   "name_ru": "Безграничный спиритизм",
+   "file": "items/spirit-4-boundless-spirit.png"
+  },
+  {
+   "item": "upgrade_glitch",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_glitch",
+   "name": "Cursed Relic",
+   "name_ru": "Проклятая реликвия",
+   "file": "items/spirit-4-cursed-relic.png"
+  },
+  {
+   "item": "upgrade_ability_power_shard",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_ability_power_shard",
+   "name": "Echo Shard",
+   "name_ru": "Осколок эха",
+   "file": "items/spirit-4-echo-shard.png"
+  },
+  {
+   "item": "upgrade_escalating_exposure",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_escalating_exposure",
+   "name": "Escalating Exposure",
+   "name_ru": "Растущее воздействие",
+   "file": "items/spirit-4-escalating-exposure.png"
+  },
+  {
+   "item": "upgrade_self_bubble",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_self_bubble",
+   "name": "Ethereal Shift",
+   "name_ru": "Развоплощение",
+   "file": "items/spirit-4-ethereal-shift.png"
+  },
+  {
+   "item": "upgrade_focus_lens",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_focus_lens",
+   "name": "Focus Lens",
+   "name_ru": "Фокусная линза",
+   "file": "items/spirit-4-focus-lens.png"
+  },
+  {
+   "item": "upgrade_ultimate_burst",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_ultimate_burst",
+   "name": "Lightning Scroll",
+   "name_ru": "Свиток молнии",
+   "file": "items/spirit-4-lightning-scroll.png"
+  },
+  {
+   "item": "upgrade_magic_carpet",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_magic_carpet",
+   "name": "Magic Carpet",
+   "name_ru": "Ковёр-самолёт",
+   "file": "items/spirit-4-magic-carpet.png"
+  },
+  {
+   "item": "upgrade_ethereal_bullets",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_ethereal_bullets",
+   "name": "Mercurial Magnum",
+   "name_ru": "Ртутный Магнум",
+   "file": "items/spirit-4-mercurial-magnum.png"
+  },
+  {
+   "item": "upgrade_mystic_reverb",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_mystic_reverb",
+   "name": "Mystic Reverb",
+   "name_ru": "Мистический отзвук",
+   "file": "items/spirit-4-mystic-reverb.png"
+  },
+  {
+   "item": "upgrade_ability_refresher",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_ability_refresher",
+   "name": "Refresher",
+   "name_ru": "Обновитель",
+   "file": "items/spirit-4-refresher.png"
+  },
+  {
+   "item": "upgrade_discord",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_discord",
+   "name": "Scourge",
+   "name_ru": "Кара",
+   "file": "items/spirit-4-scourge.png"
+  },
+  {
+   "item": "upgrade_spirit_burn",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_spirit_burn",
+   "name": "Spirit Burn",
+   "name_ru": "Спиритический ожог",
+   "file": "items/spirit-4-spirit-burn.png"
+  },
+  {
+   "item": "upgrade_transcendent_cooldown",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_transcendent_cooldown",
+   "name": "Transcendent Cooldown",
+   "name_ru": "Трансцендентная перезарядка",
+   "file": "items/spirit-4-transcendent-cooldown.png"
+  },
+  {
+   "item": "upgrade_aoe_root",
+   "tab": "spirit",
+   "tier": 4,
+   "key": "upgrade_aoe_root",
+   "name": "Vortex Web",
+   "name_ru": "Паутинный вихрь",
+   "file": "items/spirit-4-vortex-web.png"
   }
  ]
 }

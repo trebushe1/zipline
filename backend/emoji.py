@@ -1,4 +1,4 @@
-"""Telegram emoji pack: every hero's head and every ability as a 100×100 custom emoji.
+"""Telegram emoji packs: every hero's head and every ability, and every shop item, as 100×100 custom emoji.
 
 An ability is our post template in miniature: a printed photo card taped to the chat. From the outside in:
 a dark ink line, a paper rim, a frame in the hero's colour, a near-black inside with a dry-brush stroke,
@@ -9,14 +9,21 @@ A head is cut out of the hero's card portrait like a magazine clipping, with no 
 silhouette above, a round cut through the shoulders, the same ink line and paper rim, and a second print in
 the hero's colour slightly off register. In the pack each head comes right before its hero's abilities.
 
+An item is the shop's own illustration printed as a photo and fixed to the chat with two corners of tape:
+the same ink line and paper rim, a thin frame in the colour of its shop tab (weapon orange, vitality green,
+spirit purple), the cards leaning a little each their own way. The picture is what makes an item readable,
+so it gets as much of the 100 px as the edge allows; the tier already shows in the picture's background
+(light for tier 1, dark for tier 4). Street Brawl's legendaries (tier 5) are left out.
+
 The double edge (ink line + paper rim) is what lets one design work on every Telegram theme: on a dark
 chat the rim stands out, on a light one the line, on the mid-tone default wallpaper both. `--check` measures
 it against Telegram's backgrounds. The frame keeps the hero's own colour (bordeaux stays dark, yellow
 stays light); its tones are derived in CIELAB from one PALETTE entry per hero.
 
 Reads data/heroes/index.json, the card portraits in data/heroes/icons/ and the ability icons in
-data/heroes/abilities/ (see backend/heroes.py), writes data/emoji/<hero>-0-head.png,
-data/emoji/<hero>-<slot>-<ability>.png and data/emoji/index.json. All noise is seeded, so the same
+data/heroes/abilities/ (see backend/heroes.py), data/items/index.json and the shop icons in data/items/icons/
+(see backend/items.py); writes data/emoji/<hero>-0-head.png, data/emoji/<hero>-<slot>-<ability>.png,
+data/emoji/items/<tab>-<tier>-<item>.png and data/emoji/index.json. All noise is seeded, so the same
 icons and palette give the same pixels.
 
     python -m backend.emoji            # draw the whole pack
@@ -29,6 +36,7 @@ import math
 import random
 import re
 import sys
+import zlib
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
@@ -36,6 +44,7 @@ from . import config
 from .media import log
 
 HEROES = config.ROOT / "data" / "heroes"
+ITEMS = config.ROOT / "data" / "items"
 OUT = config.ROOT / "data" / "emoji"
 SIZE = 100  # Telegram's custom emoji: exactly 100×100
 K = 4  # drawn at 4× and scaled down
@@ -322,6 +331,74 @@ def draw_head(card_file: str, t: dict, key: str) -> Image.Image:
     return grain(img.resize((SIZE, SIZE), Image.LANCZOS), 5)
 
 
+# ── Items ──────────────────────────────────────────────
+
+ITEM_COLOUR = {"weapon": "#d38a39", "vitality": "#7cae46", "spirit": "#a77ddc"}  # the shop tabs' own (styles.css)
+ITEM_TABS = ["weapon", "vitality", "spirit"]  # in the shop's order
+STREET_BRAWL = 5  # the tier of Street Brawl's legendaries: not in the pack
+ITEM_CARD, ITEM_FRAME = (9, 10, 91, 92), 4.2  # a bigger card and a thinner frame than an ability's: the picture first
+ITEM_LEAN = [-4, 3, -2.5, 4.5, -3.5, 2]
+ITEM_TIER_ON_TAPE = False  # True: one tape on top with the tier written on it in marker, instead of two corners
+
+
+def numeral(img: Image.Image, n: int, cx: float, cy: float, h: float, color, ang: float = 0, seed: int = 0) -> None:
+    """A roman numeral 1–4 written by hand in marker, centred on (cx, cy), h px tall, turned by ang degrees."""
+    rnd = random.Random(seed)
+    strokes, x, gap = [], 0.0, h * .38
+    for ch in {1: "I", 2: "II", 3: "III", 4: "IV"}[n]:
+        if ch == "I":
+            strokes.append([(x, 0), (x, h)])
+            x += gap
+        else:
+            strokes.append([(x - h * .05, 0), (x + h * .25, h), (x + h * .55, 0)])
+            x += h * .55 + gap
+    width, a = x - gap, math.radians(ang)
+    m = Image.new("L", (S, S), 0)
+    d = ImageDraw.Draw(m)
+    pen = h * .26
+    for stroke in strokes:
+        pts = []
+        for px, py in stroke:
+            px, py = px - width / 2 + rnd.uniform(-.25, .25), py - h / 2 + rnd.uniform(-.3, .3)
+            pts.append(((cx + px * math.cos(a) - py * math.sin(a)) * K, (cy + px * math.sin(a) + py * math.cos(a)) * K))
+        d.line(pts, fill=255, width=round(pen * K), joint="curve")
+        for qx, qy in (pts[0], pts[-1]):
+            d.ellipse([qx - pen * K / 2, qy - pen * K / 2, qx + pen * K / 2, qy + pen * K / 2], fill=255)
+    over(img, solid(color, m))
+
+
+def draw_item(icon: str, t: dict, tier: int, seed: int) -> Image.Image:
+    x0, y0, x1, y1 = ITEM_CARD
+    card = rect(x0, y0, x1, y1)
+    layer = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    over(layer, solid(t["ink"], card.filter(ImageFilter.MaxFilter(round(LINE * K) * 2 + 1))))
+    over(layer, solid(PAPER, card))
+    over(layer, solid(t["frame"], rect(x0 + RIM, y0 + RIM, x1 - RIM, y1 - RIM)))
+    box = round((x1 - x0 - 2 * (RIM + ITEM_FRAME)) * K)
+    art = Image.open(ITEMS / "icons" / icon).convert("RGBA")
+    art = art.crop((3, 3, art.width - 3, art.height - 3)).resize((box, box), Image.LANCZOS)  # the icon's soft edge off
+    layer.alpha_composite(art, (round((x0 + RIM + ITEM_FRAME) * K), round((y0 + RIM + ITEM_FRAME) * K)))
+    lean = ITEM_LEAN[seed % len(ITEM_LEAN)]
+    layer = layer.rotate(lean, resample=Image.BICUBIC, center=(S / 2, S / 2))
+    img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    shadow = layer.getchannel("A").filter(ImageFilter.GaussianBlur(K * 1.6)).point(lambda v: round(v * .38))
+    over(img, solid((0, 0, 0), shifted(shadow, 1.2, 2.4)))
+    over(img, layer)
+    if ITEM_TIER_ON_TAPE:
+        ang = -lean * 1.5 - 2
+        tape(img, 50 + lean * .7, 10.5, ang, w=30, h=12, seed=seed)
+        numeral(img, tier, 50 + lean * .7, 10.5, 8, (40, 36, 30), ang=ang, seed=seed)
+    else:
+        tape(img, 14, 15, -45 + lean, w=22, h=8.5, seed=seed)
+        tape(img, 86, 15, 45 + lean, w=22, h=8.5, seed=seed + 1)
+    return grain(img.resize((SIZE, SIZE), Image.LANCZOS), 5)
+
+
+def item_order(item: dict) -> tuple:
+    """As in the shop sorted by tier: weapon, vitality, spirit; tier 1 to 4; by name."""
+    return ITEM_TABS.index(item["slot"]), item["tier"], item["name"]["en"].lower()
+
+
 # ── Pack ───────────────────────────────────────────────
 
 def slug(text: str) -> str:
@@ -407,15 +484,23 @@ def main() -> int:
         for a in sorted(h["abilities"], key=lambda a: a["slot"]):
             add(draw(a["icon"], t, a["slot"], seed=h["id"]), a["slot"], a["key"], a["name"],
                 f"{slug(h['name'])}-{a['slot']}-{slug(a['name'])}.png")
-    for old in OUT.glob("*.png"):
-        if old.name not in written:
+    (OUT / "items").mkdir(exist_ok=True)
+    for it in sorted((i for i in json.loads((ITEMS / "index.json").read_text("utf-8"))["items"]
+                      if i["tier"] < STREET_BRAWL), key=item_order):
+        file = f"items/{it['slot']}-{it['tier']}-{slug(it['name']['en'])}.png"
+        draw_item(it["icon"], tones(ITEM_COLOUR[it["slot"]]), it["tier"], seed=zlib.crc32(it["key"].encode())).save(OUT / file, optimize=True)
+        written.add(file)
+        entries.append({"item": it["key"], "tab": it["slot"], "tier": it["tier"], "key": it["key"],
+                        "name": it["name"]["en"], "name_ru": it["name"].get("ru", ""), "file": file})
+    for old in OUT.rglob("*.png"):
+        if old.relative_to(OUT).as_posix() not in written:
             old.unlink()
     (OUT / "index.json").write_text(json.dumps({"build": index["build"], "emoji": entries},
                                                ensure_ascii=False, indent=1) + "\n", "utf-8")
     log(f"build {index['build']}: {len(entries)} emoji in {OUT.relative_to(config.ROOT)}")
     if "--check" in sys.argv:
         log("edge contrast against Telegram's backgrounds:")
-        return check(sorted(OUT.glob("*.png")))
+        return check(sorted(OUT.rglob("*.png")))
     return 0
 
 
