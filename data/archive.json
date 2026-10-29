@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793291847495,
+  "at": 1793299228142,
   "new": 1,
   "error": null
  },
@@ -95,7 +95,7 @@
    "embeds": [],
    "reply_to": "1565373106095132823",
    "url": "https://discord.com/channels/1231286446472691825/1279163694445625344/1565403941259190425",
-   "text_ru": null,
+   "text_ru": "отрицательный",
    "embeds_ru": null
   },
   {
