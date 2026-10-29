@@ -13,10 +13,31 @@ import sys
 
 import httpx
 
-from . import config, telegram
+from . import balance, config, telegram
 from .patches import OUT, plural
 
 SIZE = {"major": "Крупный патч", "update": "Обновление", "hotfix": "Небольшая правка"}
+BALANCE_LINES = 25  # the rest is on the site; a Telegram message holds 4096 characters
+
+
+def balance_text(bal: dict) -> list[str]:
+    """Balance changes as Telegram lines: hero names in bold, at most BALANCE_LINES changes."""
+    out, shown = ["", "⚖️ <b>Баланс</b>"], 0
+    for line in balance.lines(bal):
+        if not line.strip():
+            continue
+        if not line.startswith("  "):  # a hero or "Предметы"
+            if shown >= BALANCE_LINES:
+                break
+            out.append(f"\n<b>{html.escape(line.strip(), quote=False)}</b>")
+            continue
+        if shown >= BALANCE_LINES:
+            continue
+        out.append(html.escape(line.strip(), quote=False))
+        shown += 1
+    if bal["total"] > shown:
+        out.append(f"…и ещё {plural(bal['total'] - shown, 'изменение', 'изменения', 'изменений')} на сайте")
+    return out
 
 
 def format_build(entry: dict, summary: dict) -> str:
@@ -26,6 +47,8 @@ def format_build(entry: dict, summary: dict) -> str:
         lines.append(f"🆕 Новый герой в файлах: <b>{html.escape(', '.join(entry['newHeroes']))}</b>")
     lines.append("")
     lines += [f"• {html.escape(h)}" for h in entry["headline"]]
+    if (summary.get("balance") or {}).get("total"):
+        lines += balance_text(summary["balance"])
     if summary.get("media"):
         models = sum(m["kind"] == "model" for m in summary["media"].values())
         textures = len(summary["media"]) - models

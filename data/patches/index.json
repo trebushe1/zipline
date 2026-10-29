@@ -46,7 +46,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 1,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6819-17462b25.json"
   },
@@ -67,7 +68,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6817-04d261bf.json"
   },
@@ -88,7 +90,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6815-7fd2af79.json",
    "media": 2
@@ -110,7 +113,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 1
+    "code": 1,
+    "balance": 0
    },
    "file": "6814-e95b323b.json"
   },
@@ -132,7 +136,8 @@
     "removed": 0,
     "strings": 1,
     "vdata": 2,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6813-a94d8b45.json"
   },
@@ -153,7 +158,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 2
+    "code": 2,
+    "balance": 0
    },
    "file": "6812-0abfe676.json",
    "media": 1
@@ -176,7 +182,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 1
+    "code": 1,
+    "balance": 0
    },
    "file": "6810-c90ff498.json",
    "media": 1
@@ -198,7 +205,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6807-3207c160.json"
   },
@@ -219,7 +227,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6806-67a51eae.json"
   },
@@ -240,7 +249,8 @@
     "removed": 0,
     "strings": 2,
     "vdata": 0,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6805-88c2fe5c.json"
   },
@@ -261,7 +271,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6803-6b29d730.json"
   },
@@ -282,7 +293,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6802-be9aeb5c.json"
   },
@@ -294,11 +306,11 @@
    "size": "major",
    "weight": 3647,
    "headline": [
+    "Баланс: 7 изменений — Nurse Harrow",
     "Nurse Harrow: новые модели: nurse ampoule, piece 01, piece 10 и ещё 8",
     "Карта и окружение: новые модели: nurse smelling salts bottle model, diner clock 01, diner kitchen pan 01 и ещё 37",
     "Юниты и нейтралы: переделаны модели: boss tier 01 brazier guardian, boss tier 02 sun walker, neutral drain creature и ещё 27",
-    "Тексты игры: 2583 строки",
-    "Параметры: 2225 значений"
+    "Тексты игры: 2583 строки"
    ],
    "newHeroes": [],
    "counts": {
@@ -307,7 +319,8 @@
     "removed": 10,
     "strings": 2583,
     "vdata": 2225,
-    "code": 9
+    "code": 9,
+    "balance": 7
    },
    "file": "6801-37f9aebd.json"
   },
@@ -328,7 +341,8 @@
     "removed": 0,
     "strings": 1,
     "vdata": 0,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6796-2e024f9b.json"
   },
@@ -349,7 +363,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6795-19650b26.json"
   },
@@ -371,7 +386,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 1,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6794-df119204.json"
   },
@@ -394,7 +410,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 0
+    "code": 0,
+    "balance": 0
    },
    "file": "6793-0ba033e3.json"
   },
@@ -406,11 +423,11 @@
    "size": "major",
    "weight": 5162,
    "headline": [
+    "Баланс: 7 изменений — Violet, Nurse Harrow",
     "Violet: новые модели: ability crane model, artist gesture paper",
     "Юниты и нейтралы: переделаны модели: boss tier 01 brazier guardian, boss tier 02 sun walker, core amber и ещё 249",
     "Карта и окружение: новые модели: artist ability1 brush heroselect model, artist ability1 brush model, artist charm brush model fx и ещё 28",
-    "Тексты игры: 2781 строка",
-    "Параметры: 3705 значений"
+    "Тексты игры: 2781 строка"
    ],
    "newHeroes": [],
    "counts": {
@@ -419,7 +436,8 @@
     "removed": 7,
     "strings": 2781,
     "vdata": 3705,
-    "code": 72
+    "code": 72,
+    "balance": 7
    },
    "file": "6790-9b616d30.json"
   },
@@ -440,7 +458,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 77
+    "code": 77,
+    "balance": 0
    },
    "file": "6785-4e0f960a.json"
   },
@@ -452,7 +471,7 @@
    "size": "hotfix",
    "weight": 14,
    "headline": [
-    "Параметры: 46 значений"
+    "Баланс: 23 изменения — Baba, Deadman Danny"
    ],
    "newHeroes": [],
    "counts": {
@@ -461,7 +480,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 46,
-    "code": 2
+    "code": 2,
+    "balance": 23
    },
    "file": "6785-c9e64807.json"
   },
@@ -482,7 +502,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 3
+    "code": 3,
+    "balance": 0
    },
    "file": "6782-a9e0c695.json"
   },
@@ -494,11 +515,11 @@
    "size": "major",
    "weight": 2525,
    "headline": [
+    "Баланс: 6 изменений — Deadman Danny",
     "Эффекты: текстуры: +25 текстур",
     "Deadman Danny: переделаны модели: deadpack",
     "Карта и окружение: новые модели: deadpack globules, deadpack missile model, diner chair 01 и ещё 9",
-    "Тексты игры: 2678 строк",
-    "Параметры: 2083 значения"
+    "Тексты игры: 2678 строк"
    ],
    "newHeroes": [],
    "counts": {
@@ -507,7 +528,8 @@
     "removed": 7,
     "strings": 2678,
     "vdata": 2083,
-    "code": 17
+    "code": 17,
+    "balance": 6
    },
    "file": "6779-0c38f9d3.json"
   },
@@ -528,7 +550,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 97
+    "code": 97,
+    "balance": 0
    },
    "file": "6774-130feff2.json"
   },
@@ -551,7 +574,8 @@
     "removed": 0,
     "strings": 7,
     "vdata": 1,
-    "code": 2
+    "code": 2,
+    "balance": 0
    },
    "file": "6774-2d87734c.json"
   },
@@ -574,7 +598,8 @@
     "removed": 9,
     "strings": 7,
     "vdata": 1,
-    "code": 2
+    "code": 2,
+    "balance": 0
    },
    "file": "6769-9a617c88.json"
   },
@@ -597,7 +622,8 @@
     "removed": 0,
     "strings": 7,
     "vdata": 1,
-    "code": 2
+    "code": 2,
+    "balance": 0
    },
    "file": "6773-a2d10221.json"
   },
@@ -609,11 +635,11 @@
    "size": "major",
    "weight": 3200,
    "headline": [
+    "Баланс: 7 изменений — Solomon",
     "Solomon: новые модели: chessmaster board pieces fx model, chessmaster hand, chessmaster knightshield",
     "Карта и окружение: новые модели: chessmaster rook crown fx model, campus 01 chalice 01, campus 01 entablement 01 и ещё 42",
     "Интерфейс: текстуры: +31 текстура, изменено 1 текстура",
-    "Тексты игры: 2739 строк",
-    "Параметры: 2848 значений"
+    "Тексты игры: 2739 строк"
    ],
    "newHeroes": [],
    "counts": {
@@ -622,7 +648,8 @@
     "removed": 10,
     "strings": 2739,
     "vdata": 2848,
-    "code": 10
+    "code": 10,
+    "balance": 7
    },
    "file": "6769-8f572f6e.json"
   },
@@ -644,7 +671,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 2,
-    "code": 2
+    "code": 2,
+    "balance": 0
    },
    "file": "6766-8d6e36ad.json"
   },
@@ -665,7 +693,8 @@
     "removed": 0,
     "strings": 0,
     "vdata": 0,
-    "code": 2
+    "code": 2,
+    "balance": 0
    },
    "file": "6765-d8e74a10.json"
   }

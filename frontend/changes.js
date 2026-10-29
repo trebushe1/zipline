@@ -127,6 +127,7 @@ function renderBuild() {
         <input type="search" id="q" placeholder="Поиск: герой, файл, строка, параметр…" autocomplete="off" value="${escapeHtml(state.q)}">
       </label>
       <nav class="jump" aria-label="Разделы билда">
+        ${b.balance?.total ? `<a href="#sec-balance">Баланс <b>${num.format(b.balance.total)}</b></a>` : ""}
         ${b.media ? `<a href="#sec-media">Было → стало <b>${Object.keys(b.media).length}</b></a>` : ""}
         ${visual.length ? `<a href="#sec-visual">Внешний вид <b>${visual.length}</b></a>` : ""}
         ${b.stringsTotal ? `<a href="#sec-strings">Тексты <b>${num.format(b.stringsTotal)}</b></a>` : ""}
@@ -161,6 +162,9 @@ function renderBody() {
   const media = Object.entries(b.media || {}).filter(([p, m]) => matches(p, m.subject));
 
   const sections = [];
+  const balance = balanceFiltered(b.balance);
+  if (balance) sections.push(section("sec-balance", "Баланс", "Изменения цифр прямо из файлов игры — часто раньше официального патчноута. Зелёная стрелка — усиление, красная — ослабление.",
+    balanceBlock(balance)));
   if (media.length) sections.push(section("sec-media", "Было → стало", "Изменённые модели и текстуры прямо из файлов игры. Нажмите на карточку: 3D-модели можно крутить мышью, «до» и «после» поворачиваются вместе.",
     galleryBlock(media)));
   if (visual.length) sections.push(section("sec-visual", "Внешний вид", "Модели, текстуры, материалы и эффекты — что можно увидеть в игре. Нажмите на путь файла, чтобы скопировать его для Source 2 Viewer.",
@@ -424,6 +428,68 @@ function paramRow(r) {
     change = `<span class="v-old"><del>${escapeHtml(o) || "∅"}</del></span>`;
   }
   return `<tr><th>${escapeHtml(r.label)}${r.ctx ? `<small>${escapeHtml(r.ctx)}</small>` : ""}</th><td>${change}</td></tr>`;
+}
+
+// ── Balance ────────────────────────────────────────────
+// Read by meaning (backend/balance.py): heroes → stats, weapon, abilities; then shop items.
+
+function balanceRowMatches(r) {
+  return matches(r.label.ru, r.label.en, r.old, r.new);
+}
+
+function balanceFiltered(bal) {
+  if (!bal?.total) return null;
+  if (!state.q) return bal;
+  const heroes = bal.heroes.map((h) => matches(h.hero) ? h : { ...h,
+    sections: h.sections.map((s) => matches(s.name) ? s : { ...s, changes: s.changes.filter(balanceRowMatches) })
+      .filter((s) => s.changes.length) }).filter((h) => h.sections.length);
+  const items = bal.items.filter((i) => matches(i.name) || i.changes.some(balanceRowMatches));
+  return heroes.length || items.length ? { heroes, items } : null;
+}
+
+function heroIconOf(key) {
+  return `heroes/icons/${key.replace(/^hero_/, "")}.webp`;
+}
+
+function balanceRow(r) {
+  const label = r.label.ru || r.label.en;
+  const unit = r.unit ? ` ${escapeHtml(r.unit)}` : "";
+  const tier = r.tier ? `<small>Улучшение ${r.tier}</small>` : "";
+  let value;
+  if (r.status === "removed") {
+    value = `<span class="v-old"><del>${escapeHtml(r.old)}${unit}</del></span> <span class="str-badge gone">убрано</span>`;
+  } else if (r.status === "added") {
+    value = `<span class="v-new">${escapeHtml(r.new)}${unit}</span> <span class="str-badge new">новое</span>`;
+  } else {
+    const mark = r.dir ? `<span class="delta ${r.dir === "buff" ? "up" : "down"}" title="${r.dir === "buff" ? "усиление" : "ослабление"}">${r.dir === "buff" ? "▲" : "▼"}</span>` : "";
+    value = `<span class="v-old">${escapeHtml(r.old ?? "—")}</span><span class="arrow">→</span><span class="v-new">${escapeHtml(r.new ?? "—")}${unit}</span>${mark}`;
+  }
+  return `<tr class="bal-${r.dir || "neutral"}"><th>${escapeHtml(label)}${tier}</th><td>${value}</td></tr>`;
+}
+
+function balanceCard(title, icon, rows) {
+  return `<article class="panel param bal-card">
+    <header class="param-head">${icon ? `<img class="bal-icon" src="${icon}" alt="" loading="lazy" onerror="this.remove()">` : ""}<strong>${escapeHtml(title)}</strong></header>
+    <table class="param-rows"><tbody>${rows.map(balanceRow).join("")}</tbody></table>
+  </article>`;
+}
+
+function balanceBlock(bal) {
+  const heroes = bal.heroes.map((h) => `
+    <div class="param-hero">
+      <h3 class="param-hero-title bal-hero"><img src="${heroIconOf(h.key)}" alt="" loading="lazy" onerror="this.remove()"><span class="is-hero">${escapeHtml(h.hero)}</span></h3>
+      <div class="params">${h.sections.map((s) => balanceCard(s.name,
+        s.kind === "ability" ? `heroes/abilities/${s.key}.png` : null, s.changes)).join("")}</div>
+    </div>`).join("");
+  const items = bal.items.length ? `
+    <div class="param-hero">
+      <h3 class="param-hero-title">Предметы</h3>
+      <div class="params">${bal.items.map((i) => i.status
+        ? `<article class="panel param bal-card"><header class="param-head"><img class="bal-icon" src="items/thumbs/${i.key}.webp" alt="" loading="lazy" onerror="this.remove()"><strong>${escapeHtml(i.name)}</strong>
+            <span class="str-badge ${i.status === "added" ? "new" : "gone"}">${i.status === "added" ? "новый предмет" : "убран из магазина"}</span></header></article>`
+        : balanceCard(i.name, `items/thumbs/${i.key}.webp`, i.changes)).join("")}</div>
+    </div>` : "";
+  return heroes + items;
 }
 
 // ── Interactions ───────────────────────────────────────

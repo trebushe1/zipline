@@ -424,6 +424,13 @@ ins { text-decoration: none; background: var(--green-wash); color: var(--accent)
 .delta { margin-left: 6px; font-size: 10px; }
 .delta.up { color: var(--accent); }
 .delta.down { color: var(--danger); }
+/* Balance: hero / ability / item icons next to the titles. */
+.bal-hero { display: flex; align-items: center; gap: 8px; }
+.bal-hero img { width: 26px; height: 26px; object-fit: cover; border-radius: var(--radius); }
+.bal-card .param-head { flex-wrap: nowrap; }
+.bal-icon { width: 28px; height: 28px; flex: none; object-fit: contain; border-radius: var(--radius); background: var(--surface); }
+.bal-card tr.bal-buff td .v-new { color: var(--accent); }
+.bal-card tr.bal-nerf td .v-new { color: var(--danger); }
 
 .live-bar { width: 100%; margin: 0 0 18px; position: sticky; top: 8px; z-index: 5; }
 .build-media { margin-left: auto; font-family: var(--mono); font-size: 10px; font-weight: 800; padding: 1px 5px; background: var(--slab); color: #fff; white-space: nowrap; }

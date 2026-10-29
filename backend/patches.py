@@ -523,6 +523,13 @@ def summarise(commit: dict) -> dict:
         if path.endswith(".vdata") and path.startswith(f"{GAME}/pak01_dir/"):
             vdata.extend(vdata_changes(parent, sha, path, loc, heroes))
     vdata.sort(key=lambda e: (e["hero"] is None, e["hero"] or "", e["file"], e["key"]))
+    bal = None
+    if any(p.endswith(".vdata") for p in changed_paths):
+        from . import balance  # imported here: balance builds on this module
+        try:
+            bal = balance.diff(parent, sha)
+        except balance.Missing:
+            pass
 
     steam_inf = show(sha, f"{GAME}/steam.inf")
     version_date = " ".join(re.findall(r"^Version(?:Date|Time)=(.+)$", steam_inf, re.M))
@@ -532,17 +539,23 @@ def summarise(commit: dict) -> dict:
         "strings": len(strings), "vdata": sum(e["total"] for e in vdata), "code": sum(
             1 for p in changed_paths if p.startswith(("game/citadel/bin", "game/bin", "DumpSource2", "Protobufs")))}
     visual = [s for s in subjects if s["visual"]]
-    weight = sum(s["weight"] for s in subjects) + len(strings) * 0.2 + counts["vdata"] * 0.3
+    counts["balance"] = bal["total"] if bal else 0
+    weight = sum(s["weight"] for s in subjects) + len(strings) * 0.2 + counts["vdata"] * 0.3 + counts["balance"] * 3
     size = "major" if weight > 400 or new_heroes else "update" if weight > 25 else "hotfix" if weight > 0 else "empty"
 
     headline = []
     if new_heroes:
         headline.append("Новый герой в файлах: " + ", ".join(new_heroes))
+    if counts["balance"]:
+        who = [h["hero"] for h in bal["heroes"]][:4]
+        if bal["items"]:
+            who.append(f"предметы ({len(bal['items'])})")
+        headline.append(f"Баланс: {plural(counts['balance'], 'изменение', 'изменения', 'изменений')} — " + ", ".join(who))
     for s in visual[:3]:
         headline.append(f"{s['title']}: {s['notes'][0][0].lower() + s['notes'][0][1:]}" if s["notes"] else s["title"])
     if strings:
         headline.append(f"Тексты игры: {plural(len(strings), 'строка', 'строки', 'строк')}")
-    if vdata:
+    if vdata and not counts["balance"]:
         headline.append(f"Параметры: {plural(counts['vdata'], 'значение', 'значения', 'значений')}")
     if not headline:
         headline.append("Изменения только в коде игры" if counts["code"] else "Только техническое обновление")
@@ -552,7 +565,7 @@ def summarise(commit: dict) -> dict:
         "versionDate": version_date, "size": size, "weight": round(weight),
         "headline": headline[:5], "newHeroes": new_heroes, "counts": counts,
         "subjects": subjects, "strings": strings[:MAX_STRINGS], "stringsTotal": len(strings),
-        "vdata": vdata[:MAX_VDATA_ENTITIES], "vdataTotal": len(vdata),
+        "vdata": vdata[:MAX_VDATA_ENTITIES], "vdataTotal": len(vdata), "balance": bal,
     }
 
 
