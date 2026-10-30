@@ -1,7 +1,34 @@
 {
- "updatedAt": 1793396636118,
+ "updatedAt": 1793397605762,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6831,
+   "sha": "7d5eb3d2ede12e9cf68c26dae5576f8e6eb81878",
+   "time": 1793397596666,
+   "versionDate": "Oct 30 2026 14:53:42",
+   "size": "hotfix",
+   "weight": 3,
+   "headline": [
+    "Баланс: 1 изменение — предметы (1)"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 1,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 1,
+    "code": 0,
+    "balance": 1
+   },
+   "file": "6831-m79275514.json",
+   "manifest": "4734298675079275514",
+   "alert": {
+    "id": 25,
+    "media": false
+   }
+  },
   {
    "build": 6829,
    "sha": "85594ce33ae378879719e29e4be386e6f0dfbc26",
@@ -681,31 +708,7 @@
     "balance": 0
    },
    "file": "6774-2d87734c.json"
-  },
-  {
-   "build": 6769,
-   "sha": "9a617c88fca0e50d2338892f8e7e7d8859e8b3ab",
-   "time": 1791587378000,
-   "versionDate": "Oct 09 2026 13:38:46",
-   "size": "hotfix",
-   "weight": 6,
-   "headline": [
-    "Solomon: переделаны модели: chessmaster hand",
-    "Тексты игры: 7 строк",
-    "Параметры: 1 значение"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 0,
-    "changed": 12,
-    "removed": 9,
-    "strings": 7,
-    "vdata": 1,
-    "code": 2,
-    "balance": 0
-   },
-   "file": "6769-9a617c88.json"
   }
  ],
- "notifiedUpTo": 1793396635501
+ "notifiedUpTo": 1793397596666
 }
