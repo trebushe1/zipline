@@ -1,7 +1,34 @@
 {
- "updatedAt": 1793393630394,
+ "updatedAt": 1793394353285,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6827,
+   "sha": "c25faa49592df08cf813c2365d88ef562940805c",
+   "time": 1793394345163,
+   "versionDate": "Oct 30 2026 13:58:16",
+   "size": "hotfix",
+   "weight": 1,
+   "headline": [
+    "Параметры: 1 значение"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 3,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 1,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6827-m78884986.json",
+   "manifest": "7154591329278884986",
+   "alert": {
+    "id": 21,
+    "media": false
+   }
+  },
   {
    "build": 6826,
    "sha": "42e2e5c0d61dbb6a993bd966bd6df8d4181fdd2d",
@@ -684,30 +711,7 @@
     "balance": 0
    },
    "file": "6769-8f572f6e.json"
-  },
-  {
-   "build": 6766,
-   "sha": "8d6e36ad340799bb17a8655dd5f180ab8084c6a8",
-   "time": 1791500768000,
-   "versionDate": "Oct 08 2026 15:58:12",
-   "size": "hotfix",
-   "weight": 4,
-   "headline": [
-    "Baba: переделаны модели: baba",
-    "Параметры: 2 значения"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 0,
-    "changed": 2,
-    "removed": 0,
-    "strings": 0,
-    "vdata": 2,
-    "code": 2,
-    "balance": 0
-   },
-   "file": "6766-8d6e36ad.json"
   }
  ],
- "notifiedUpTo": 1793393617563
+ "notifiedUpTo": 1793394345163
 }
