@@ -1,7 +1,30 @@
 {
- "updatedAt": 1793394353285,
+ "updatedAt": 1793395354813,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6828,
+   "sha": "19d8ae9fd71bd84b1aa9a3f9b5cb00a792166bf8",
+   "time": 1793395354061,
+   "versionDate": "Oct 30 2026 14:14:26",
+   "size": "empty",
+   "weight": 0,
+   "headline": [
+    "Только техническое обновление"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6828-m70601443.json",
+   "manifest": "5739150258570601443"
+  },
   {
    "build": 6827,
    "sha": "c25faa49592df08cf813c2365d88ef562940805c",
@@ -685,33 +708,7 @@
     "balance": 0
    },
    "file": "6773-a2d10221.json"
-  },
-  {
-   "build": 6769,
-   "sha": "8f572f6e834a7b7d5a8678147818099074a59cf8",
-   "time": 1791579736000,
-   "versionDate": "Oct 09 2026 13:38:46",
-   "size": "major",
-   "weight": 3200,
-   "headline": [
-    "Новый герой в игре: Solomon",
-    "Solomon: новые модели: chessmaster board pieces fx model, chessmaster hand, chessmaster knightshield",
-    "Карта и окружение: новые модели: chessmaster rook crown fx model, campus 01 chalice 01, campus 01 entablement 01 и ещё 42",
-    "Интерфейс: текстуры: +31 текстура, изменено 1 текстура",
-    "Тексты игры: 2739 строк"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 3365,
-    "changed": 988,
-    "removed": 10,
-    "strings": 2739,
-    "vdata": 2848,
-    "code": 10,
-    "balance": 0
-   },
-   "file": "6769-8f572f6e.json"
   }
  ],
- "notifiedUpTo": 1793394345163
+ "notifiedUpTo": 1793395354061
 }
