@@ -175,9 +175,9 @@
   "upgrade_withering_whip": "0029f8b60f"
  },
  "loc_ru": {
-  "game/citadel/resource/localization/citadel_attributes/citadel_attributes_russian.txt": "60ceb4e9b6a947ad5bf3c9a8ba9f9e6ba4cc2dc2",
-  "game/citadel/resource/localization/citadel_gc_mod_names/citadel_gc_mod_names_russian.txt": "07f2471d1a2bc60b2536afe47a8a047d3dab016c",
-  "game/citadel/resource/localization/citadel_mods/citadel_mods_russian.txt": "2a04e810a62d3677d38d4fc07de5031af57c41dc"
+  "game/citadel/resource/localization/citadel_attributes/citadel_attributes_russian.txt": "fac96d63b7bd3cc944144882a55db94a5bea1eae",
+  "game/citadel/resource/localization/citadel_gc_mod_names/citadel_gc_mod_names_russian.txt": "8a8fe1e4ec13bbea02252c3132d4d01df5958b31",
+  "game/citadel/resource/localization/citadel_mods/citadel_mods_russian.txt": "4d7e060f8d321c7b39f054052e2702905d4cc14c"
  },
  "version": 1
 }
