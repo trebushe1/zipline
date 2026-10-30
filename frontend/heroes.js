@@ -975,7 +975,7 @@ async function abilityCanvas(ability, size, withKey) {
     ctx.roundRect(x, y, w, h, 3 * k);
     ctx.fill();
     ctx.fillStyle = "#f4f1ec";
-    ctx.font = `700 ${Math.round(13 * k)}px "IBM Plex Sans", system-ui, sans-serif`;
+    ctx.font = `700 ${Math.round(13 * k)}px "Anonymous Pro", ui-monospace, monospace`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(String(ability.slot), c, y + h / 2 + 0.5 * k);

@@ -132,7 +132,7 @@ function apply(d) {
 
 // ── The picture «who won and lost from the patch» ─────
 // Same look as the tier list picture: dark paper, green eyebrow, the title on a white label, our logo.
-const MONO = '"JetBrains Mono", ui-monospace, monospace';
+const MONO = '"Anonymous Pro", ui-monospace, monospace';
 const GREEN = "#3cc493", RED = "#e2694a", PAPER = "#f6f6f4";
 
 const images = new Map();
@@ -156,7 +156,7 @@ function ellipsize(ctx, text, width) {
 }
 
 async function drawPatchShot(p, W = 1080, H = 1080) {
-  await Promise.all([`800 20px ${MONO}`, `700 20px ${MONO}`, `500 20px ${MONO}`].map((f) => document.fonts.load(f).catch(() => null)));
+  await Promise.all([`700 20px ${MONO}`, `400 20px ${MONO}`].map((f) => document.fonts.load(f).catch(() => null)));
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
@@ -184,7 +184,7 @@ async function drawPatchShot(p, W = 1080, H = 1080) {
   ctx.fillStyle = GREEN;
   ctx.fillText("КТО ВЫИГРАЛ И ПРОИГРАЛ ОТ ПАТЧА", pad, pad);
   const titleSize = Math.round(H * 0.06);
-  ctx.font = `800 ${titleSize}px ${MONO}`;
+  ctx.font = `700 ${titleSize}px ${MONO}`;
   const title = ellipsize(ctx, `ПАТЧ ${p.build}`, titleW - titleSize * 0.6);
   const ty = pad + eyebrow * 1.9;
   ctx.fillStyle = PAPER;
@@ -192,7 +192,7 @@ async function drawPatchShot(p, W = 1080, H = 1080) {
   ctx.fillStyle = "#111";
   ctx.fillText(title, pad + titleSize * 0.3, ty + titleSize * 0.18);
   const sub = Math.round(H * 0.02);
-  ctx.font = `500 ${sub}px ${MONO}`;
+  ctx.font = `400 ${sub}px ${MONO}`;
   ctx.fillStyle = "rgba(246, 246, 244, .7)";
   ctx.fillText(`${p.hours} ч после патча · ${games(p.games)} · винрейт, все ранги`, pad, ty + titleSize * 1.3 + sub * 0.9);
 
@@ -215,13 +215,13 @@ async function drawPatchShot(p, W = 1080, H = 1080) {
     ctx.fillStyle = color;
     ctx.fillRect(x, top, colW, headH);
     ctx.fillStyle = "#15120e";
-    ctx.font = `800 ${Math.round(headH * 0.5)}px ${MONO}`;
+    ctx.font = `700 ${Math.round(headH * 0.5)}px ${MONO}`;
     ctx.textBaseline = "middle";
     ctx.fillText(label, x + headH * 0.35, top + headH / 2);
 
     if (!keys.length) {
       ctx.fillStyle = "rgba(246, 246, 244, .5)";
-      ctx.font = `500 ${sub}px ${MONO}`;
+      ctx.font = `400 ${sub}px ${MONO}`;
       ctx.fillText("заметных изменений нет", x + headH * 0.35, top + headH + cardGap + cardH / 2);
     }
     keys.slice(0, ROWS).forEach((k, i) => {
@@ -246,7 +246,7 @@ async function drawPatchShot(p, W = 1080, H = 1080) {
       const inner = cardH * 0.16;
       ctx.textBaseline = "middle";
       ctx.textAlign = "right";
-      ctx.font = `800 ${Math.round(cardH * 0.4)}px ${MONO}`;
+      ctx.font = `700 ${Math.round(cardH * 0.4)}px ${MONO}`;
       ctx.fillStyle = color;
       const delta = signed(r.wrDelta);
       ctx.fillText(delta, x + colW - inner, y + cardH / 2);
@@ -257,18 +257,18 @@ async function drawPatchShot(p, W = 1080, H = 1080) {
       const tx = x + ph + inner, tw = colW - ph - inner * 3 - dw;
       ctx.textBaseline = "alphabetic";
       let nameSize = Math.round(cardH * 0.22);
-      ctx.font = `800 ${nameSize}px ${MONO}`;
-      while (ctx.measureText(r.name.toUpperCase()).width > tw && nameSize > cardH * 0.12) ctx.font = `800 ${--nameSize}px ${MONO}`;
+      ctx.font = `700 ${nameSize}px ${MONO}`;
+      while (ctx.measureText(r.name.toUpperCase()).width > tw && nameSize > cardH * 0.12) ctx.font = `700 ${--nameSize}px ${MONO}`;
       ctx.fillStyle = PAPER;
       ctx.fillText(ellipsize(ctx, r.name.toUpperCase(), tw), tx, y + cardH * 0.47);
-      ctx.font = `500 ${Math.round(cardH * 0.16)}px ${MONO}`;
+      ctx.font = `400 ${Math.round(cardH * 0.16)}px ${MONO}`;
       ctx.fillStyle = "rgba(246, 246, 244, .75)";
       ctx.fillText(ellipsize(ctx, `винрейт ${pct(r.wr)}`, tw), tx, y + cardH * 0.78);
     });
   });
 
   ctx.textBaseline = "alphabetic";
-  ctx.font = `500 ${Math.round(sub * 0.85)}px ${MONO}`;
+  ctx.font = `400 ${Math.round(sub * 0.85)}px ${MONO}`;
   ctx.fillStyle = "rgba(246, 246, 244, .45)";
   ctx.fillText("Сравнение с неделей до патча · данные deadlock-api.com", pad, H - pad + sub * 0.2);
   return canvas;

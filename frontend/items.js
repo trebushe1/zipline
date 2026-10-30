@@ -1209,8 +1209,8 @@ function viewAction(act) {
 const SLOT_COLOR = {
   weapon: ["#d38a39", "#5c3a14"], vitality: ["#7cae46", "#33501b"], spirit: ["#a77ddc", "#45306a"],
 };
-const MONO = '"JetBrains Mono", ui-monospace, monospace';
-const SANS = '"IBM Plex Sans", system-ui, sans-serif';
+const MONO = '"Anonymous Pro", ui-monospace, monospace';
+const SANS = '"Anonymous Pro", ui-monospace, monospace';
 
 function fitLines(ctx, text, width, max) {
   const words = String(text).split(/\s+/).filter(Boolean), lines = [];
@@ -1237,7 +1237,7 @@ function fitLines(ctx, text, width, max) {
 const tryImage = (src) => src ? Promise.race([loadImage(src).catch(() => null), new Promise((r) => setTimeout(() => r(null), 10_000))]) : Promise.resolve(null);
 
 async function drawBuildShot(b, W, H) {
-  await Promise.all([`800 20px ${MONO}`, `600 20px ${SANS}`, `400 20px ${SANS}`].map((f) => document.fonts.load(f).catch(() => null)));
+  await Promise.all([`700 20px ${MONO}`, `400 20px ${MONO}`].map((f) => document.fonts.load(f).catch(() => null)));
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
@@ -1283,8 +1283,8 @@ async function drawBuildShot(b, W, H) {
   ctx.fillStyle = "#3cc493";
   ctx.fillText(`БИЛД DEADLOCK${hero ? ` · ${hero.name.toUpperCase()}` : ""}`, x, pad);
   let titleSize = Math.round(H * (wide ? 0.05 : 0.045));
-  ctx.font = `800 ${titleSize}px ${MONO}`;
-  while (ctx.measureText(b.name.toUpperCase()).width > titleW && titleSize > 18) ctx.font = `800 ${--titleSize}px ${MONO}`;
+  ctx.font = `700 ${titleSize}px ${MONO}`;
+  while (ctx.measureText(b.name.toUpperCase()).width > titleW && titleSize > 18) ctx.font = `700 ${--titleSize}px ${MONO}`;
   const title = fitLines(ctx, b.name.toUpperCase(), titleW, 1)[0];
   const ty = pad + eyebrow * 1.9, tw = ctx.measureText(title).width;
   ctx.fillStyle = "#f6f6f4";
@@ -1304,7 +1304,7 @@ async function drawBuildShot(b, W, H) {
   }
   // Totals: souls, then each section; the sections move to a second row when one does not hold them.
   const ts = Math.round(H * 0.022), chipH = ts * 1.7, chipGap = ts * 0.5;
-  ctx.font = `800 ${ts}px ${MONO}`;
+  ctx.font = `700 ${ts}px ${MONO}`;
   const total = `${souls(cost.total)} душ · ${plural(cost.count, "предмет", "предмета", "предметов")}`;
   const totalW = ctx.measureText(total).width + ts * 1.2;
   ctx.font = `700 ${Math.round(ts * 0.75)}px ${MONO}`;
@@ -1318,7 +1318,7 @@ async function drawBuildShot(b, W, H) {
   ctx.textBaseline = "middle";
   ctx.fillStyle = "#0a4a36";
   ctx.fillRect(x, y, totalW, chipH);
-  ctx.font = `800 ${ts}px ${MONO}`;
+  ctx.font = `700 ${ts}px ${MONO}`;
   ctx.fillStyle = "#fff";
   ctx.fillText(total, x + ts * 0.6, y + chipH / 2);
   let cx = oneRow ? x + totalW + chipGap : x;
@@ -1372,7 +1372,7 @@ async function drawBuildShot(b, W, H) {
       ctx.fillStyle = "rgba(255,255,255,.08)";
       ctx.fillRect(bx + 2, by + 2, bw - 4, head);
       const hs = Math.round(head * 0.46);
-      ctx.font = `800 ${hs}px ${MONO}`;
+      ctx.font = `700 ${hs}px ${MONO}`;
       ctx.textBaseline = "middle";
       ctx.fillStyle = "#fff";
       const costText = souls(catCost(p.cat));
@@ -1419,7 +1419,7 @@ async function drawBuildShot(b, W, H) {
           ctx.lineTo(tx + size, ty2 + ts2);
           ctx.closePath();
           ctx.fill();
-          ctx.font = `800 ${Math.round(size * 0.1)}px ${MONO}`;
+          ctx.font = `700 ${Math.round(size * 0.1)}px ${MONO}`;
           ctx.fillStyle = "#15120e";
           ctx.textAlign = "right";
           ctx.textBaseline = "top";
@@ -1428,7 +1428,7 @@ async function drawBuildShot(b, W, H) {
         }
         if (it?.active && size >= 40) {
           const as = Math.round(size * 0.1);
-          ctx.font = `800 ${as}px ${MONO}`;
+          ctx.font = `700 ${as}px ${MONO}`;
           ctx.textBaseline = "middle";
           ctx.fillStyle = "#f3efe6";
           ctx.fillRect(tx + 4, ty2 + 4, ctx.measureText("АКТ").width + as * 0.6, as * 1.4);
@@ -1436,7 +1436,7 @@ async function drawBuildShot(b, W, H) {
           ctx.fillText(it.active === "toggle" ? "ВКЛ" : "АКТ", tx + 4 + as * 0.3, ty2 + 4 + as * 0.72);
         }
         const ns = Math.max(8, Math.round(size * 0.115));
-        ctx.font = `600 ${ns}px ${SANS}`;
+        ctx.font = `700 ${ns}px ${SANS}`;
         ctx.fillStyle = "#fff";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
@@ -1452,7 +1452,7 @@ async function drawBuildShot(b, W, H) {
       ctx.restore();
     }
   } else if (!cats.length) {
-    ctx.font = `600 ${Math.round(H * 0.03)}px ${SANS}`;
+    ctx.font = `700 ${Math.round(H * 0.03)}px ${SANS}`;
     ctx.fillStyle = "#8a8f88";
     ctx.fillText("В билде пока нет предметов", pad, top + H * 0.05);
   }

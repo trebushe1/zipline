@@ -219,7 +219,7 @@ function wireDrag() {
 // ── The picture ────────────────────────────────────────
 // Drawn on a canvas of the exact size, so it holds only the tier list: no buttons, no page around it.
 // The portraits get the largest size at which every tier fits.
-const MONO = '"JetBrains Mono", ui-monospace, monospace';
+const MONO = '"Anonymous Pro", ui-monospace, monospace';
 
 const images = new Map();
 function loadImage(src) {
@@ -259,7 +259,7 @@ function shotLayout(counts, width, room, rowGap) {
 }
 
 async function drawTierShot(W, H) {
-  await Promise.all([`800 20px ${MONO}`, `700 20px ${MONO}`].map((f) => document.fonts.load(f).catch(() => null)));
+  await Promise.all([`700 20px ${MONO}`, `400 20px ${MONO}`].map((f) => document.fonts.load(f).catch(() => null)));
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
@@ -289,8 +289,8 @@ async function drawTierShot(W, H) {
   ctx.fillText(`ТИР-ЛИСТ DEADLOCK · ${new Date().toLocaleDateString("ru-RU")}`, pad, pad);
   const name = (state.title.trim() || DEFAULT_TITLE).toUpperCase();
   let titleSize = Math.round(H * 0.045);
-  ctx.font = `800 ${titleSize}px ${MONO}`;
-  while (ctx.measureText(name).width + titleSize * 0.6 > titleW && titleSize > 30) ctx.font = `800 ${--titleSize}px ${MONO}`;
+  ctx.font = `700 ${titleSize}px ${MONO}`;
+  while (ctx.measureText(name).width + titleSize * 0.6 > titleW && titleSize > 30) ctx.font = `700 ${--titleSize}px ${MONO}`;
   const title = ellipsize(ctx, name, titleW - titleSize * 0.6);
   const ty = pad + eyebrow * 1.9;
   ctx.fillStyle = "#f6f6f4";
@@ -316,7 +316,7 @@ async function drawTierShot(W, H) {
     ctx.fillStyle = t.color;
     ctx.fillRect(pad, y, labelW, rowH);
     ctx.fillStyle = "#15120e";
-    ctx.font = `800 ${Math.round(Math.min(labelW * 0.5, rowH * 0.5))}px ${MONO}`;
+    ctx.font = `700 ${Math.round(Math.min(labelW * 0.5, rowH * 0.5))}px ${MONO}`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(t.id, pad + labelW / 2, y + rowH / 2);
@@ -342,7 +342,7 @@ async function drawTierShot(W, H) {
       shade.addColorStop(1, "rgba(0, 0, 0, .85)");
       ctx.fillStyle = shade;
       ctx.fillRect(tx, ty2 + tileH - ns * 3, size, ns * 3);
-      ctx.font = `800 ${ns}px ${MONO}`;
+      ctx.font = `700 ${ns}px ${MONO}`;
       ctx.fillStyle = "#fff";
       ctx.textBaseline = "alphabetic";
       ctx.fillText(ellipsize(ctx, hero.name.toUpperCase(), size - 6), tx + size / 2, ty2 + tileH - ns * 0.55);
