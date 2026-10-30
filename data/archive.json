@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793299228142,
+  "at": 1793393611186,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,36 @@
   }
  ],
  "messages": [
+  {
+   "id": "1565830867832537222",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231311070786752579",
+   "channel_name": "announcements",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1793393570622,
+   "edited_time": null,
+   "text": "@everyone https://store.steampowered.com/news/app/1422450/view/680765564125186045",
+   "attachments": [],
+   "embeds": [
+    {
+     "title": "Deadlock - Halloween 2026 + Gameplay Update - Steam News",
+     "description": "As Halloween draws near, the residents of The Cursed Apple have put out some decorations to celebrate their favorite holiday. The Hideout gains a spooky new look, our heroes don masks, and NYC is now littered with pumpkins and curious Halloween Cauldrons that grant willing trick-or-treaters delicious candy.New this year - Halloween Cauldrons:\nAs...",
+     "url": "https://store.steampowered.com/news/app/1422450/view/680765564125186045",
+     "image": "https://clan.fastly.steamstatic.com/images/45164767/cad54194de04b56ebbfae6c3d908ee8dd018e337.png"
+    }
+   ],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1565830867832537222",
+   "text_ru": null,
+   "embeds_ru": [
+    {
+     "title": "Deadlock — Хэллоуин 2026 + обновление игрового процесса — Новости Steam",
+     "description": "В преддверии Хэллоуина жители Проклятого Яблока установили украшения, чтобы отпраздновать свой любимый праздник. Убежище приобретает новый жуткий вид, наши герои надевают маски, а Нью-Йорк теперь завален тыквами и любопытными Хэллоуинскими котлами, которые дарят желающим угостить вкусные конфеты. Новинка этого года — Хэллоуинские котлы:\nКак..."
+    }
+   ]
+  },
   {
    "id": "1565403941259190425",
    "author_id": "728690796907331654",
