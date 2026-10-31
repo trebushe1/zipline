@@ -1,7 +1,35 @@
 {
- "updatedAt": 1793398846242,
+ "updatedAt": 1793418217859,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6835,
+   "sha": "7854d1a8e8875117d7638fa5e77f2bd92771411a",
+   "time": 1793418217112,
+   "versionDate": "Oct 30 2026 20:31:48",
+   "size": "update",
+   "weight": 53,
+   "headline": [
+    "Карта и окружение: новые модели: park railing 01b str 128a, park railing 01b str 32a, park railing 01b str 96a",
+    "Baba: переделаны модели: baba pigeon transform"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 3,
+    "changed": 10,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6835-m14424653.json",
+   "manifest": "3592147562014424653",
+   "alert": {
+    "id": 29,
+    "media": false
+   }
+  },
   {
    "build": 6833,
    "sha": "f10f853eefcf0319899e0d01233e720e13d7b7f0",
@@ -689,29 +717,7 @@
     "balance": 0
    },
    "file": "6779-0c38f9d3.json"
-  },
-  {
-   "build": 6774,
-   "sha": "130feff271b4ce5689f4d78f6ec0aa21910be6be",
-   "time": 1791897303000,
-   "versionDate": "Oct 09 2026 16:19:46",
-   "size": "empty",
-   "weight": 0,
-   "headline": [
-    "Изменения только в коде игры"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 0,
-    "changed": 0,
-    "removed": 0,
-    "strings": 0,
-    "vdata": 0,
-    "code": 97,
-    "balance": 0
-   },
-   "file": "6774-130feff2.json"
   }
  ],
- "notifiedUpTo": 1793398837217
+ "notifiedUpTo": 1793418217112
 }
