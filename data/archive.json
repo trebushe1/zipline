@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793459006200,
+  "at": 1793459486666,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,32 @@
   }
  ],
  "messages": [
+  {
+   "id": "1566107248651145327",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231286447131328544",
+   "channel_name": "deadlock-chat",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1793459464944,
+   "edited_time": null,
+   "text": "this doesn't do what you want?",
+   "attachments": [
+    {
+     "url": "https://cdn.discordapp.com/attachments/1231286447131328544/1566107247979790427/image.png?ex=6ae75688&is=6ae60508&hm=416834b02b0ccf9faa0709fe44d931c06efcbacc0589fbdd1b05dc180d9ec7df&",
+     "name": "image.png",
+     "type": "image/webp",
+     "width": 556,
+     "height": 346
+    }
+   ],
+   "embeds": [],
+   "reply_to": "1566105917328457750",
+   "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1566107248651145327",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1566105237847285844",
    "author_id": "1229609738828906517",
