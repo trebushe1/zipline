@@ -27,8 +27,9 @@
    "manifest": "3592147562014424653",
    "alert": {
     "id": 29,
-    "media": false
-   }
+    "media": true
+   },
+   "media": 3
   },
   {
    "build": 6833,
@@ -280,8 +281,7 @@
     "code": 0,
     "balance": 0
    },
-   "file": "6815-7fd2af79.json",
-   "media": 2
+   "file": "6815-7fd2af79.json"
   },
   {
    "build": 6814,
