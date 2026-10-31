@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793458166106,
+  "at": 1793458346130,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,24 @@
   }
  ],
  "messages": [
+  {
+   "id": "1566102401419706442",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231286447131328544",
+   "channel_name": "deadlock-chat",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1793458309274,
+   "edited_time": null,
+   "text": "ok yeah see the bug, it's fixed for when the next client update is out",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": "1566101640774418583",
+   "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1566102401419706442",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1566101640774418583",
    "author_id": "1229609738828906517",
