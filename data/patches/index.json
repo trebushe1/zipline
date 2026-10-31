@@ -1,7 +1,34 @@
 {
- "updatedAt": 1793418217859,
+ "updatedAt": 1793455331307,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6836,
+   "sha": "814f7cb85ec973d5762feef9220e597de8ca24cf",
+   "time": 1793455323696,
+   "versionDate": "Oct 31 2026 06:55:04",
+   "size": "hotfix",
+   "weight": 17,
+   "headline": [
+    "Параметры: 56 значений"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 1,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 56,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6836-m30964888.json",
+   "manifest": "4662622728130964888",
+   "alert": {
+    "id": 31,
+    "media": false
+   }
+  },
   {
    "build": 6835,
    "sha": "7854d1a8e8875117d7638fa5e77f2bd92771411a",
@@ -691,33 +718,7 @@
     "balance": 0
    },
    "file": "6782-a9e0c695.json"
-  },
-  {
-   "build": 6779,
-   "sha": "0c38f9d31c4905e0fe1a292afe91aa3d01044baf",
-   "time": 1791925330000,
-   "versionDate": "Oct 13 2026 13:33:25",
-   "size": "major",
-   "weight": 2525,
-   "headline": [
-    "Новый герой в игре: Deadman Danny",
-    "Эффекты: текстуры: +25 текстур",
-    "Deadman Danny: переделаны модели: deadpack",
-    "Карта и окружение: новые модели: deadpack globules, deadpack missile model, diner chair 01 и ещё 9",
-    "Тексты игры: 2678 строк"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 3375,
-    "changed": 922,
-    "removed": 7,
-    "strings": 2678,
-    "vdata": 2083,
-    "code": 17,
-    "balance": 0
-   },
-   "file": "6779-0c38f9d3.json"
   }
  ],
- "notifiedUpTo": 1793418217112
+ "notifiedUpTo": 1793455323696
 }
