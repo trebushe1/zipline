@@ -193,6 +193,8 @@ def references(data: bytes) -> list[str]:
 
 def game_root(files: SteamFiles, manifest: str, gameinfo: str, work: Path) -> Path:
     """Source2Viewer resolves dependencies through gameinfo.gi search paths: game/citadel/<path>."""
+    if "SearchPaths" not in gameinfo:  # without it nothing a model uses is found, and it still "converts"
+        raise ValueError(f"not a gameinfo.gi: {gameinfo[:80]!r}")
     citadel = work / f"root-{manifest}" / "game" / "citadel"
     if not citadel.exists():
         # Downloads are done by now; a symlink would not do, the loader resolves it back to pak01_dir.

@@ -34,11 +34,13 @@ from .patches import GAME, HEROES_VDATA, PAK_LIST, REPO, build_commits, load_loc
 
 OUT = config.ROOT / "data" / "heroes"
 HEROES_TAG = "heroes"
-MODEL_VERSION = 3  # bump to convert every hero again after changing the conversion
+MODEL_VERSION = 4  # bump to convert every hero again after changing the conversion
 VRF_VERSION = "20.1"  # first release that exports Deadlock's animation graph clips to glTF
 GLTFPACK_VERSION = "v1.3"
 COLOR_SIZE = 4096  # colour keeps the game's own resolution (2048 for most heroes, 4096 for some): quality first
 NORMAL_SIZE = 2048  # surface detail
+MAX_REJECTED = 3  # stop early when the conversion itself is broken: nothing would pass
+MIN_TEXTURE_BYTES = 100_000  # the smallest hero has well over this much
 TEXTURE_SIZE = 1024  # roughness, metalness, occlusion and glow masks: smooth, so small is enough
 ICON_HEIGHT = 384
 
@@ -401,6 +403,22 @@ def hide_off_meshes(doc: dict, vrf: str, model: Path) -> None:
             node.pop("skin", None)
 
 
+def model_problem(glb: bytes, animations: int, old: dict, forced: bool) -> str | None:
+    """Why a converted hero must not replace the published one. A conversion that loses the materials or
+    clips still "works" and gives a small white statue, so the result itself is checked. A much smaller
+    or poorer model than the published one is suspicious too; converting by hand (HEROES_ONLY) overrides that."""
+    doc, binary = read_glb(glb)
+    views = doc.get("bufferViews", [])
+    textures = sum(views[i["bufferView"]]["byteLength"] for i in doc.get("images", []) if "bufferView" in i)
+    if textures < MIN_TEXTURE_BYTES:
+        return f"only {textures} bytes of textures"
+    if not animations:
+        return "no animations"
+    if not forced and old.get("bytes") and (len(glb) < old["bytes"] * 0.4 or animations < (old.get("animations") or 0) * 0.5):
+        return f"{len(glb) / 1e6:.1f} MB and {animations} animations, was {old['bytes'] / 1e6:.1f} MB and {old.get('animations')}"
+    return None
+
+
 def read_glb(data: bytes) -> tuple[dict, bytes]:
     json_len = struct.unpack_from("<I", data, 12)[0]
     doc = json.loads(data[20:20 + json_len])
@@ -685,6 +703,7 @@ def main() -> int:
     ui = {name: path for name, path in UI_ASSETS.items()
           if icon_crcs.get(name) != crcs.get(path) or not (OUT / "ui" / name).exists()}
 
+    rejected, attempted = [], 0
     if todo or icons or ui:
         manifest = manifest_id(build["sha"])
         sfd, vrf = tool_paths()[0], vrf_path()
@@ -695,7 +714,7 @@ def main() -> int:
             fetch_all(files, {h["model"] for h in todo} | {h["card"] for h in todo}
                       | {p for h in todo for p in clip_paths(h["model"], crcs)} | {a["image"] for a in icons}
                       | set(ui.values()))
-            citadel = game_root(files, manifest, build["sha"], work)
+            citadel = game_root(files, manifest, show(build["sha"], f"{GAME}/gameinfo.gi"), work)
             for name, path in ui.items():
                 blob = convert_ui_asset(vrf, citadel, path, work / "tmp" / f"ui-{name}")
                 if blob:
@@ -716,6 +735,7 @@ def main() -> int:
                 existing = set()
             for h in todo:
                 key = h["key"]
+                attempted += 1
                 log(f"{h['name']}: converting {h['model']}")
                 icon = convert_icon(vrf, citadel, h["card"], work / "tmp" / f"{key}-icon")
                 if icon:
@@ -726,6 +746,13 @@ def main() -> int:
                 if not made:
                     continue
                 glb, anims, count = made
+                if problem := model_problem(glb, count, old.get(key, {}), bool(os.environ.get("HEROES_ONLY"))):
+                    # Keep the published model; the changed fingerprint brings the hero back next run.
+                    log(f"::error::{h['name']}: not published: {problem}")
+                    rejected.append(h["name"])
+                    if len(rejected) >= MAX_REJECTED and len(rejected) == attempted:
+                        raise RuntimeError(f"every hero so far failed the check: {rejected}")
+                    continue
                 deps[key] = used
                 digest = fingerprint(used, crcs)
                 entry = {"hash": digest, "file": f"{key}-{digest}.glb", "anims": f"{key}-{digest}.anim",
@@ -743,7 +770,7 @@ def main() -> int:
         finally:
             shutil.rmtree(work, ignore_errors=True)
     write_index(index_path, deps_path, build, heroes, old, deps)
-    return 0
+    return 1 if rejected else 0  # the failed run is the alert; what passed is still published
 
 
 def reachable(citadel: Path, roots: set[str]) -> list[str]:
@@ -782,7 +809,7 @@ def raw(dest: Path, key: str) -> int:
     manifest = manifest_id(build["sha"])
     files = SteamFiles(tool_paths()[0], dest, [manifest])
     fetch_all(files, {hero["model"], hero["card"]} | clip_paths(hero["model"], crcs))
-    game_root(files, manifest, build["sha"], dest)
+    game_root(files, manifest, show(build["sha"], f"{GAME}/gameinfo.gi"), dest)
     log(f"{len(files.requested)} files requested")
     return 0
 
