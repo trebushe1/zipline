@@ -1,7 +1,30 @@
 {
- "updatedAt": 1793457364424,
+ "updatedAt": 1793472622516,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6839,
+   "sha": "1a4c8bfef6d909e54bba145508e7582957353e56",
+   "time": 1793472621888,
+   "versionDate": "Oct 31 2026 11:19:12",
+   "size": "empty",
+   "weight": 0,
+   "headline": [
+    "Только техническое обновление"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6839-m63423297.json",
+   "manifest": "7481470845663423297"
+  },
   {
    "build": 6837,
    "sha": "33678ad2bed4aab69c9a232976c7ff772bfccd1b",
@@ -697,29 +720,7 @@
     "balance": 0
    },
    "file": "6785-4e0f960a.json"
-  },
-  {
-   "build": 6785,
-   "sha": "c9e648071661aaaa794507bb304cf52679eb2a10",
-   "time": 1792034072000,
-   "versionDate": "Oct 14 2026 20:01:37",
-   "size": "hotfix",
-   "weight": 14,
-   "headline": [
-    "Баланс: 23 изменения — Baba, Deadman Danny"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 0,
-    "changed": 2,
-    "removed": 0,
-    "strings": 0,
-    "vdata": 46,
-    "code": 2,
-    "balance": 23
-   },
-   "file": "6785-c9e64807.json"
   }
  ],
- "notifiedUpTo": 1793457363762
+ "notifiedUpTo": 1793472621888
 }
