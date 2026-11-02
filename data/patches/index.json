@@ -1,7 +1,34 @@
 {
- "updatedAt": 1793644745062,
+ "updatedAt": 1793655589869,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6842,
+   "sha": "c25c7b0c95908403039bdb64dd993603dfbcfff9",
+   "time": 1793655580746,
+   "versionDate": "Nov 02 2026 13:16:15",
+   "size": "hotfix",
+   "weight": 21,
+   "headline": [
+    "Параметры: 69 значений"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 4,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 69,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6842-m30894641.json",
+   "manifest": "1725068050630894641",
+   "alert": {
+    "id": 48,
+    "media": false
+   }
+  },
   {
    "build": 6841,
    "sha": "df84f4f7d7ca24625d77a40035d840b761b6799b",
@@ -697,33 +724,7 @@
     "balance": 0
    },
    "file": "6793-0ba033e3.json"
-  },
-  {
-   "build": 6790,
-   "sha": "9b616d3093a7f3e25e852ec93c9b818c5d2c94ed",
-   "time": 1792184516000,
-   "versionDate": "Oct 16 2026 13:44:07",
-   "size": "major",
-   "weight": 5162,
-   "headline": [
-    "Новый герой в игре: Violet",
-    "Герои в разработке: Nurse Harrow — 1 правка",
-    "Violet: новые модели: ability crane model, artist gesture paper",
-    "Юниты и нейтралы: переделаны модели: boss tier 01 brazier guardian, boss tier 02 sun walker, core amber и ещё 249",
-    "Карта и окружение: новые модели: artist ability1 brush heroselect model, artist ability1 brush model, artist charm brush model fx и ещё 28"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 3813,
-    "changed": 2552,
-    "removed": 7,
-    "strings": 2781,
-    "vdata": 3705,
-    "code": 72,
-    "balance": 0
-   },
-   "file": "6790-9b616d30.json"
   }
  ],
- "notifiedUpTo": 1793644744098
+ "notifiedUpTo": 1793655580746
 }
