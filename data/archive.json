@@ -1,8 +1,8 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793476707781,
-  "new": 6,
+  "at": 1793644361143,
+  "new": 1,
   "error": null
  },
  "developers": [
@@ -80,6 +80,24 @@
   }
  ],
  "messages": [
+  {
+   "id": "1566882463542812793",
+   "author_id": "728690796907331654",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1279163694445625344",
+   "channel_name": "deadlock-chat",
+   "parent_channel_id": "1231286447131328544",
+   "thread_name": "**Current voice cast I could find:**",
+   "time": 1793644290577,
+   "edited_time": null,
+   "text": "oh that's weird... ill look into that",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": "1565844362758193303",
+   "url": "https://discord.com/channels/1231286446472691825/1279163694445625344/1566882463542812793",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1566107248651145327",
    "author_id": "1229609738828906517",
