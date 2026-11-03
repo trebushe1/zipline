@@ -1,7 +1,35 @@
 {
- "updatedAt": 1793655589869,
+ "updatedAt": 1793738566428,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6844,
+   "sha": "03f6662102f0e8351ec0bab08b780aa9758701f7",
+   "time": 1793738564667,
+   "versionDate": "Nov 03 2026 12:35:18",
+   "size": "update",
+   "weight": 99,
+   "headline": [
+    "Карта и окружение: переделаны модели: factory roof access b",
+    "Тексты игры: 467 строк"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 75,
+    "removed": 0,
+    "strings": 467,
+    "vdata": 0,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6844-m92267677.json",
+   "manifest": "3348871753292267677",
+   "alert": {
+    "id": 50,
+    "media": false
+   }
+  },
   {
    "build": 6842,
    "sha": "c25c7b0c95908403039bdb64dd993603dfbcfff9",
@@ -700,31 +728,7 @@
     "balance": 0
    },
    "file": "6794-df119204.json"
-  },
-  {
-   "build": 6793,
-   "sha": "0ba033e3eea00d658d63e03719295cf5039e8057",
-   "time": 1792192431000,
-   "versionDate": "Oct 16 2026 16:05:45",
-   "size": "update",
-   "weight": 90,
-   "headline": [
-    "Violet: переделаны модели: artist",
-    "Baba: переделаны модели: baba",
-    "Карта и окружение: переделаны модели: deadpack missile model"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 8,
-    "changed": 278,
-    "removed": 0,
-    "strings": 0,
-    "vdata": 0,
-    "code": 0,
-    "balance": 0
-   },
-   "file": "6793-0ba033e3.json"
   }
  ],
- "notifiedUpTo": 1793655580746
+ "notifiedUpTo": 1793738564667
 }
