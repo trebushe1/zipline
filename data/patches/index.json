@@ -1,7 +1,34 @@
 {
- "updatedAt": 1793738566428,
+ "updatedAt": 1793765774484,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6848,
+   "sha": "068578578508b5352b9a18a81102edc5dc877232",
+   "time": 1793765767785,
+   "versionDate": "Nov 03 2026 19:52:58",
+   "size": "hotfix",
+   "weight": 1,
+   "headline": [
+    "Параметры: 3 значения"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 2,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 3,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6848-m24661415.json",
+   "manifest": "7023502151624661415",
+   "alert": {
+    "id": 52,
+    "media": false
+   }
+  },
   {
    "build": 6844,
    "sha": "03f6662102f0e8351ec0bab08b780aa9758701f7",
@@ -705,30 +732,7 @@
     "balance": 0
    },
    "file": "6795-19650b26.json"
-  },
-  {
-   "build": 6794,
-   "sha": "df1192043fd269aee7edf4dffdfb4cfc03d05f64",
-   "time": 1792272772000,
-   "versionDate": "Oct 17 2026 13:55:49",
-   "size": "hotfix",
-   "weight": 10,
-   "headline": [
-    "Юниты и нейтралы: переделаны модели: trooper zipline container, trooper zipline container amber, trooper zipline container sapphire",
-    "Параметры: 1 значение"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 0,
-    "changed": 4,
-    "removed": 0,
-    "strings": 0,
-    "vdata": 1,
-    "code": 0,
-    "balance": 0
-   },
-   "file": "6794-df119204.json"
   }
  ],
- "notifiedUpTo": 1793738564667
+ "notifiedUpTo": 1793765767785
 }
