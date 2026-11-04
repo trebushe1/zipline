@@ -1,7 +1,35 @@
 {
- "updatedAt": 1793765774484,
+ "updatedAt": 1793828421413,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6849,
+   "sha": "dcdf7faf93035f7d7b174a6c28e510579456f537",
+   "time": 1793828413923,
+   "versionDate": "Nov 04 2026 13:30:53",
+   "size": "hotfix",
+   "weight": 1,
+   "headline": [
+    "Тексты игры: 1 строка",
+    "Параметры: 2 значения"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 2,
+    "removed": 0,
+    "strings": 1,
+    "vdata": 2,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6849-m50085574.json",
+   "manifest": "1211173859950085574",
+   "alert": {
+    "id": 54,
+    "media": false
+   }
+  },
   {
    "build": 6848,
    "sha": "068578578508b5352b9a18a81102edc5dc877232",
@@ -710,29 +738,7 @@
     "balance": 0
    },
    "file": "6796-2e024f9b.json"
-  },
-  {
-   "build": 6795,
-   "sha": "19650b264547f3f95280f57e27f4ba4817fd8374",
-   "time": 1792298449000,
-   "versionDate": "Oct 17 2026 20:53:46",
-   "size": "hotfix",
-   "weight": 3,
-   "headline": [
-    "Rem: переделаны модели: familiar helper attached"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 0,
-    "changed": 1,
-    "removed": 0,
-    "strings": 0,
-    "vdata": 0,
-    "code": 0,
-    "balance": 0
-   },
-   "file": "6795-19650b26.json"
   }
  ],
- "notifiedUpTo": 1793765767785
+ "notifiedUpTo": 1793828413923
 }
