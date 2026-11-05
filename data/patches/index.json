@@ -1,7 +1,34 @@
 {
- "updatedAt": 1793911243707,
+ "updatedAt": 1793912304581,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6857,
+   "sha": "a024a6a135ea3d451a098f4e42417fac9c94561a",
+   "time": 1793912303513,
+   "versionDate": "Nov 05 2026 12:51:20",
+   "size": "hotfix",
+   "weight": 1,
+   "headline": [
+    "Тексты игры: 4 строки"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 2,
+    "removed": 0,
+    "strings": 4,
+    "vdata": 0,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6857-m14336643.json",
+   "manifest": "5276872409314336643",
+   "alert": {
+    "id": 76,
+    "media": false
+   }
+  },
   {
    "build": 6855,
    "sha": "b76e8fec04631a4a9b478a714aa0869eb054540f",
@@ -736,29 +763,7 @@
     "balance": 0
    },
    "file": "6806-67a51eae.json"
-  },
-  {
-   "build": 6805,
-   "sha": "88c2fe5caca830c9cb32493df85cd113a2c22584",
-   "time": 1792538659000,
-   "versionDate": "Oct 20 2026 15:46:55",
-   "size": "hotfix",
-   "weight": 0,
-   "headline": [
-    "Тексты игры: 2 строки"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 0,
-    "changed": 0,
-    "removed": 0,
-    "strings": 2,
-    "vdata": 0,
-    "code": 0,
-    "balance": 0
-   },
-   "file": "6805-88c2fe5c.json"
   }
  ],
- "notifiedUpTo": 1793911235066
+ "notifiedUpTo": 1793912303513
 }
