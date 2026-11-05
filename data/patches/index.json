@@ -1,7 +1,34 @@
 {
- "updatedAt": 1793908743731,
+ "updatedAt": 1793910351786,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6854,
+   "sha": "c1142445d73f93f987bc796b41223d35a5295d4b",
+   "time": 1793910342860,
+   "versionDate": "Nov 05 2026 12:06:24",
+   "size": "hotfix",
+   "weight": 1,
+   "headline": [
+    "Параметры: 3 значения"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 1,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 3,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6854-m25997367.json",
+   "manifest": "5428136821525997367",
+   "alert": {
+    "id": 67,
+    "media": false
+   }
+  },
   {
    "build": 6853,
    "sha": "ed76e524acefbb905d98176111207816101d13e8",
@@ -726,29 +753,7 @@
     "balance": 0
    },
    "file": "6803-6b29d730.json"
-  },
-  {
-   "build": 6802,
-   "sha": "be9aeb5c21f89d947158da54d1e38ea21ef2b75d",
-   "time": 1792534702000,
-   "versionDate": "Oct 20 2026 14:57:32",
-   "size": "update",
-   "weight": 111,
-   "headline": [
-    "Карта и окружение: новые модели: diner portrait 01, diner portrait 02, diner portrait 03 и ещё 9"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 16,
-    "changed": 7,
-    "removed": 0,
-    "strings": 0,
-    "vdata": 0,
-    "code": 0,
-    "balance": 0
-   },
-   "file": "6802-be9aeb5c.json"
   }
  ],
- "notifiedUpTo": 1793908735515
+ "notifiedUpTo": 1793910342860
 }
