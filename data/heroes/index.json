@@ -34,11 +34,11 @@
      "icon": "citadel_ability_bull_leap.png"
     }
    ],
-   "hash": "99a529223fe6",
-   "file": "atlas-99a529223fe6.glb",
-   "anims": "atlas-99a529223fe6.anim",
-   "bytes": 8640713,
-   "animations": 12
+   "hash": "a16e62a1dbe4",
+   "file": "atlas-a16e62a1dbe4.glb",
+   "anims": "atlas-a16e62a1dbe4.anim",
+   "bytes": 9671779,
+   "animations": 18
   },
   {
    "key": "fencer",
@@ -71,11 +71,11 @@
      "icon": "ability_fencer_ultimate.png"
     }
    ],
-   "hash": "de7ad37dac77",
-   "file": "fencer-de7ad37dac77.glb",
-   "anims": "fencer-de7ad37dac77.anim",
-   "bytes": 4235921,
-   "animations": 12
+   "hash": "5cdbbc3f698b",
+   "file": "fencer-5cdbbc3f698b.glb",
+   "anims": "fencer-5cdbbc3f698b.anim",
+   "bytes": 5422643,
+   "animations": 17
   },
   {
    "key": "baba",
@@ -108,11 +108,11 @@
      "icon": "ability_baba_ultimate_2.png"
     }
    ],
-   "hash": "ccb7bcf9474c",
-   "file": "baba-ccb7bcf9474c.glb",
-   "anims": "baba-ccb7bcf9474c.anim",
-   "bytes": 8386344,
-   "animations": 9
+   "hash": "15d0461b6a39",
+   "file": "baba-15d0461b6a39.glb",
+   "anims": "baba-15d0461b6a39.anim",
+   "bytes": 8713804,
+   "animations": 15
   },
   {
    "key": "bebop",
@@ -145,11 +145,11 @@
      "icon": "citadel_ability_bebop_laser_beam.png"
     }
    ],
-   "hash": "6d1fc4c3659b",
-   "file": "bebop-6d1fc4c3659b.glb",
-   "anims": "bebop-6d1fc4c3659b.anim",
-   "bytes": 10049629,
-   "animations": 14
+   "hash": "4fd1ebf33bb7",
+   "file": "bebop-4fd1ebf33bb7.glb",
+   "anims": "bebop-4fd1ebf33bb7.anim",
+   "bytes": 10258173,
+   "animations": 19
   },
   {
    "key": "punkgoat",
@@ -182,11 +182,11 @@
      "icon": "ability_punkgoat_tether.png"
     }
    ],
-   "hash": "0d178b55325c",
-   "file": "punkgoat-0d178b55325c.glb",
-   "anims": "punkgoat-0d178b55325c.anim",
-   "bytes": 7685483,
-   "animations": 13
+   "hash": "8124aa311128",
+   "file": "punkgoat-8124aa311128.glb",
+   "anims": "punkgoat-8124aa311128.anim",
+   "bytes": 7741797,
+   "animations": 18
   },
   {
    "key": "nano",
@@ -219,11 +219,11 @@
      "icon": "ability_nano_shadow_pulse.png"
     }
    ],
-   "hash": "d78382600846",
-   "file": "nano-d78382600846.glb",
-   "anims": "nano-d78382600846.anim",
-   "bytes": 2259574,
-   "animations": 12
+   "hash": "a9d3357ef0f0",
+   "file": "nano-a9d3357ef0f0.glb",
+   "anims": "nano-a9d3357ef0f0.anim",
+   "bytes": 2587769,
+   "animations": 18
   },
   {
    "key": "unicorn",
@@ -256,11 +256,11 @@
      "icon": "ability_unicorn_dazzlingorb.png"
     }
    ],
-   "hash": "9b0a83abc6cb",
-   "file": "unicorn-9b0a83abc6cb.glb",
-   "anims": "unicorn-9b0a83abc6cb.anim",
-   "bytes": 9480439,
-   "animations": 15
+   "hash": "17c100e464ee",
+   "file": "unicorn-17c100e464ee.glb",
+   "anims": "unicorn-17c100e464ee.anim",
+   "bytes": 10606805,
+   "animations": 23
   },
   {
    "key": "deadpack",
@@ -293,11 +293,11 @@
      "icon": "ability_deadpack_ultimate.png"
     }
    ],
-   "hash": "97d1af0e00bb",
-   "file": "deadpack-97d1af0e00bb.glb",
-   "anims": "deadpack-97d1af0e00bb.anim",
-   "bytes": 17513547,
-   "animations": 7
+   "hash": "1b61a63d3d97",
+   "file": "deadpack-1b61a63d3d97.glb",
+   "anims": "deadpack-1b61a63d3d97.anim",
+   "bytes": 17586501,
+   "animations": 11
   },
   {
    "key": "drifter",
@@ -330,11 +330,11 @@
      "icon": "drifter_darkness.png"
     }
    ],
-   "hash": "1d03d75f8a4b",
-   "file": "drifter-1d03d75f8a4b.glb",
-   "anims": "drifter-1d03d75f8a4b.anim",
-   "bytes": 4104756,
-   "animations": 17
+   "hash": "ea7c784b260f",
+   "file": "drifter-ea7c784b260f.glb",
+   "anims": "drifter-ea7c784b260f.anim",
+   "bytes": 4236916,
+   "animations": 25
   },
   {
    "key": "dynamo",
@@ -367,11 +367,11 @@
      "icon": "citadel_ability_self_vacuum.png"
     }
    ],
-   "hash": "0b79e10673a4",
-   "file": "dynamo-0b79e10673a4.glb",
-   "anims": "dynamo-0b79e10673a4.anim",
-   "bytes": 11313709,
-   "animations": 13
+   "hash": "8f77529efe65",
+   "file": "dynamo-8f77529efe65.glb",
+   "anims": "dynamo-8f77529efe65.anim",
+   "bytes": 12230984,
+   "animations": 18
   },
   {
    "key": "necro",
@@ -404,11 +404,11 @@
      "icon": "ability_necro_gravestone.png"
     }
    ],
-   "hash": "3b2fe2a7c524",
-   "file": "necro-3b2fe2a7c524.glb",
-   "anims": "necro-3b2fe2a7c524.anim",
-   "bytes": 6361341,
-   "animations": 13
+   "hash": "2ff8c417d59f",
+   "file": "necro-2ff8c417d59f.glb",
+   "anims": "necro-2ff8c417d59f.anim",
+   "bytes": 6493628,
+   "animations": 20
   },
   {
    "key": "orion",
@@ -441,11 +441,11 @@
      "icon": "ability_guided_arrow.png"
     }
    ],
-   "hash": "43a6710c4793",
-   "file": "orion-43a6710c4793.glb",
-   "anims": "orion-43a6710c4793.anim",
-   "bytes": 3747172,
-   "animations": 11
+   "hash": "b1beb22d8638",
+   "file": "orion-b1beb22d8638.glb",
+   "anims": "orion-b1beb22d8638.anim",
+   "bytes": 4165003,
+   "animations": 15
   },
   {
    "key": "haze",
@@ -478,11 +478,11 @@
      "icon": "ability_bullet_flurry.png"
     }
    ],
-   "hash": "f0eb9c06dfe4",
-   "file": "haze-f0eb9c06dfe4.glb",
-   "anims": "haze-f0eb9c06dfe4.anim",
-   "bytes": 1456784,
-   "animations": 13
+   "hash": "a0ffc2993969",
+   "file": "haze-a0ffc2993969.glb",
+   "anims": "haze-a0ffc2993969.anim",
+   "bytes": 1527983,
+   "animations": 18
   },
   {
    "key": "astro",
@@ -515,11 +515,11 @@
      "icon": "ability_gravity_lasso.png"
     }
    ],
-   "hash": "fe23b0482005",
-   "file": "astro-fe23b0482005.glb",
-   "anims": "astro-fe23b0482005.anim",
-   "bytes": 2173355,
-   "animations": 12
+   "hash": "d533e830b9c5",
+   "file": "astro-d533e830b9c5.glb",
+   "anims": "astro-d533e830b9c5.anim",
+   "bytes": 2265416,
+   "animations": 19
   },
   {
    "key": "inferno",
@@ -552,11 +552,11 @@
      "icon": "ability_fire_bomb.png"
     }
    ],
-   "hash": "8d856f94bcc6",
-   "file": "inferno-8d856f94bcc6.glb",
-   "anims": "inferno-8d856f94bcc6.anim",
-   "bytes": 2571060,
-   "animations": 12
+   "hash": "532af300f29c",
+   "file": "inferno-532af300f29c.glb",
+   "anims": "inferno-532af300f29c.anim",
+   "bytes": 2641801,
+   "animations": 16
   },
   {
    "key": "tengu",
@@ -589,11 +589,11 @@
      "icon": "citadel_ability_tengu_airlift.png"
     }
    ],
-   "hash": "fc7fc9f4a0c5",
-   "file": "tengu-fc7fc9f4a0c5.glb",
-   "anims": "tengu-fc7fc9f4a0c5.anim",
-   "bytes": 5864541,
-   "animations": 7
+   "hash": "6ff9dcddd61a",
+   "file": "tengu-6ff9dcddd61a.glb",
+   "anims": "tengu-6ff9dcddd61a.anim",
+   "bytes": 5966762,
+   "animations": 13
   },
   {
    "key": "kelvin",
@@ -626,11 +626,11 @@
      "icon": "ability_ice_dome.png"
     }
    ],
-   "hash": "4a976f5f8b9f",
-   "file": "kelvin-4a976f5f8b9f.glb",
-   "anims": "kelvin-4a976f5f8b9f.anim",
-   "bytes": 6949860,
-   "animations": 11
+   "hash": "adf6acb86e9a",
+   "file": "kelvin-adf6acb86e9a.glb",
+   "anims": "kelvin-adf6acb86e9a.anim",
+   "bytes": 7036367,
+   "animations": 17
   },
   {
    "key": "ghost",
@@ -663,11 +663,11 @@
      "icon": "ability_health_swap.png"
     }
    ],
-   "hash": "359acbb3e339",
-   "file": "ghost-359acbb3e339.glb",
-   "anims": "ghost-359acbb3e339.anim",
-   "bytes": 6622299,
-   "animations": 12
+   "hash": "1d116fe6a61a",
+   "file": "ghost-1d116fe6a61a.glb",
+   "anims": "ghost-1d116fe6a61a.anim",
+   "bytes": 8831192,
+   "animations": 18
   },
   {
    "key": "lash",
@@ -700,11 +700,11 @@
      "icon": "citadel_ability_lash_ultimate.png"
     }
    ],
-   "hash": "8083aa3ff106",
-   "file": "lash-8083aa3ff106.glb",
-   "anims": "lash-8083aa3ff106.anim",
-   "bytes": 4596120,
-   "animations": 14
+   "hash": "05cad5ffb087",
+   "file": "lash-05cad5ffb087.glb",
+   "anims": "lash-05cad5ffb087.anim",
+   "bytes": 4705418,
+   "animations": 20
   },
   {
    "key": "forge",
@@ -737,11 +737,11 @@
      "icon": "citadel_ability_rocket_barrage.png"
     }
    ],
-   "hash": "0cc26997bf12",
-   "file": "forge-0cc26997bf12.glb",
-   "anims": "forge-0cc26997bf12.anim",
-   "bytes": 16607063,
-   "animations": 11
+   "hash": "5ea857eb7e9c",
+   "file": "forge-5ea857eb7e9c.glb",
+   "anims": "forge-5ea857eb7e9c.anim",
+   "bytes": 16892730,
+   "animations": 15
   },
   {
    "key": "vampirebat",
@@ -774,11 +774,11 @@
      "icon": "ability_vampirebat_batswarm.png"
     }
    ],
-   "hash": "0c8a4988f3f1",
-   "file": "vampirebat-0c8a4988f3f1.glb",
-   "anims": "vampirebat-0c8a4988f3f1.anim",
-   "bytes": 4448762,
-   "animations": 9
+   "hash": "4b69533b4d7a",
+   "file": "vampirebat-4b69533b4d7a.glb",
+   "anims": "vampirebat-4b69533b4d7a.anim",
+   "bytes": 4569812,
+   "animations": 14
   },
   {
    "key": "mirage",
@@ -811,11 +811,11 @@
      "icon": "mirage_teleport.png"
     }
    ],
-   "hash": "07a827ceb550",
-   "file": "mirage-07a827ceb550.glb",
-   "anims": "mirage-07a827ceb550.anim",
-   "bytes": 3997939,
-   "animations": 12
+   "hash": "be42f11966d3",
+   "file": "mirage-be42f11966d3.glb",
+   "anims": "mirage-be42f11966d3.anim",
+   "bytes": 4496969,
+   "animations": 19
   },
   {
    "key": "krill",
@@ -848,11 +848,11 @@
      "icon": "ability_ult_combo.png"
     }
    ],
-   "hash": "42496221a540",
-   "file": "krill-42496221a540.glb",
-   "anims": "krill-42496221a540.anim",
-   "bytes": 3383444,
-   "animations": 8
+   "hash": "eff7b5927e93",
+   "file": "krill-eff7b5927e93.glb",
+   "anims": "krill-eff7b5927e93.anim",
+   "bytes": 3556023,
+   "animations": 14
   },
   {
    "key": "nurse",
@@ -885,11 +885,11 @@
      "icon": "ability_nurse_fear.png"
     }
    ],
-   "hash": "1995ab7a0186",
-   "file": "nurse-1995ab7a0186.glb",
-   "anims": "nurse-1995ab7a0186.anim",
-   "bytes": 10966915,
-   "animations": 10
+   "hash": "05741958033a",
+   "file": "nurse-05741958033a.glb",
+   "anims": "nurse-05741958033a.anim",
+   "bytes": 11099176,
+   "animations": 14
   },
   {
    "key": "bookworm",
@@ -922,11 +922,11 @@
      "icon": "ability_bookworm_knightcharge.png"
     }
    ],
-   "hash": "b867dff2a2c5",
-   "file": "bookworm-b867dff2a2c5.glb",
-   "anims": "bookworm-b867dff2a2c5.anim",
-   "bytes": 3090388,
-   "animations": 10
+   "hash": "a62038aa7bf8",
+   "file": "bookworm-a62038aa7bf8.glb",
+   "anims": "bookworm-a62038aa7bf8.anim",
+   "bytes": 3205035,
+   "animations": 16
   },
   {
    "key": "chrono",
@@ -959,11 +959,11 @@
      "icon": "citadel_ability_chrono_swap.png"
     }
    ],
-   "hash": "89fd89604ed8",
-   "file": "chrono-89fd89604ed8.glb",
-   "anims": "chrono-89fd89604ed8.anim",
-   "bytes": 3915311,
-   "animations": 11
+   "hash": "2fa0ac2e2eaf",
+   "file": "chrono-2fa0ac2e2eaf.glb",
+   "anims": "chrono-2fa0ac2e2eaf.anim",
+   "bytes": 4482129,
+   "animations": 15
   },
   {
    "key": "synth",
@@ -996,11 +996,11 @@
      "icon": "synth_affliction.png"
     }
    ],
-   "hash": "0a9c7db24268",
-   "file": "synth-0a9c7db24268.glb",
-   "anims": "synth-0a9c7db24268.anim",
-   "bytes": 5076626,
-   "animations": 12
+   "hash": "f3f00a394196",
+   "file": "synth-f3f00a394196.glb",
+   "anims": "synth-f3f00a394196.anim",
+   "bytes": 7005914,
+   "animations": 21
   },
   {
    "key": "ratking",
@@ -1033,11 +1033,11 @@
      "icon": "ability_ratking_standard_bearer.png"
     }
    ],
-   "hash": "3785e699a66b",
-   "file": "ratking-3785e699a66b.glb",
-   "anims": "ratking-3785e699a66b.anim",
-   "bytes": 15582558,
-   "animations": 12
+   "hash": "2ecc150854df",
+   "file": "ratking-2ecc150854df.glb",
+   "anims": "ratking-2ecc150854df.anim",
+   "bytes": 15958591,
+   "animations": 17
   },
   {
    "key": "familiar",
@@ -1070,11 +1070,11 @@
      "icon": "ability_familiar_ability01.png"
     }
    ],
-   "hash": "8621448ed287",
-   "file": "familiar-8621448ed287.glb",
-   "anims": "familiar-8621448ed287.anim",
-   "bytes": 5809028,
-   "animations": 7
+   "hash": "f8ad2aeb317d",
+   "file": "familiar-f8ad2aeb317d.glb",
+   "anims": "familiar-f8ad2aeb317d.anim",
+   "bytes": 6409928,
+   "animations": 12
   },
   {
    "key": "gigawatt",
@@ -1107,11 +1107,11 @@
      "icon": "citadel_ability_storm_cloud.png"
     }
    ],
-   "hash": "1dfc13cc528a",
-   "file": "gigawatt-1dfc13cc528a.glb",
-   "anims": "gigawatt-1dfc13cc528a.anim",
-   "bytes": 2546564,
-   "animations": 12
+   "hash": "fa854ea37e56",
+   "file": "gigawatt-fa854ea37e56.glb",
+   "anims": "gigawatt-fa854ea37e56.anim",
+   "bytes": 2618392,
+   "animations": 16
   },
   {
    "key": "shiv",
@@ -1144,11 +1144,11 @@
      "icon": "citadel_ability_shiv_killing_blow.png"
     }
    ],
-   "hash": "ce8ca441d370",
-   "file": "shiv-ce8ca441d370.glb",
-   "anims": "shiv-ce8ca441d370.anim",
-   "bytes": 8906013,
-   "animations": 12
+   "hash": "fd82341c6253",
+   "file": "shiv-fd82341c6253.glb",
+   "anims": "shiv-fd82341c6253.anim",
+   "bytes": 8992883,
+   "animations": 17
   },
   {
    "key": "werewolf",
@@ -1181,11 +1181,11 @@
      "icon": "ability_werewolf_transformation.png"
     }
    ],
-   "hash": "c8344584ecbd",
-   "file": "werewolf-c8344584ecbd.glb",
-   "anims": "werewolf-c8344584ecbd.anim",
-   "bytes": 8800859,
-   "animations": 12
+   "hash": "21f36b1e852e",
+   "file": "werewolf-21f36b1e852e.glb",
+   "anims": "werewolf-21f36b1e852e.anim",
+   "bytes": 8880446,
+   "animations": 16
   },
   {
    "key": "magician",
@@ -1218,11 +1218,11 @@
      "icon": "ability_magician_copyult.png"
     }
    ],
-   "hash": "1e3a5b58e1d3",
-   "file": "magician-1e3a5b58e1d3.glb",
-   "anims": "magician-1e3a5b58e1d3.anim",
-   "bytes": 1250027,
-   "animations": 10
+   "hash": "331059f829c5",
+   "file": "magician-331059f829c5.glb",
+   "anims": "magician-331059f829c5.anim",
+   "bytes": 1358918,
+   "animations": 14
   },
   {
    "key": "chessmaster",
@@ -1255,11 +1255,11 @@
      "icon": "ability_chessmaster_queen.png"
     }
    ],
-   "hash": "3fc3023e924b",
-   "file": "chessmaster-3fc3023e924b.glb",
-   "anims": "chessmaster-3fc3023e924b.anim",
-   "bytes": 6290325,
-   "animations": 15
+   "hash": "eafd7bf3a67f",
+   "file": "chessmaster-eafd7bf3a67f.glb",
+   "anims": "chessmaster-eafd7bf3a67f.anim",
+   "bytes": 6451847,
+   "animations": 21
   },
   {
    "key": "doorman",
@@ -1292,11 +1292,11 @@
      "icon": "ability_doorman_hotel.png"
     }
    ],
-   "hash": "74bf5a32eaaa",
-   "file": "doorman-74bf5a32eaaa.glb",
-   "anims": "doorman-74bf5a32eaaa.anim",
-   "bytes": 5168914,
-   "animations": 12
+   "hash": "b051682a0c83",
+   "file": "doorman-b051682a0c83.glb",
+   "anims": "doorman-b051682a0c83.anim",
+   "bytes": 5260278,
+   "animations": 18
   },
   {
    "key": "priest",
@@ -1329,11 +1329,11 @@
      "icon": "ability_priest_weaponswap.png"
     }
    ],
-   "hash": "192ba31ea193",
-   "file": "priest-192ba31ea193.glb",
-   "anims": "priest-192ba31ea193.anim",
-   "bytes": 6632420,
-   "animations": 25
+   "hash": "a4f61bf50bdb",
+   "file": "priest-a4f61bf50bdb.glb",
+   "anims": "priest-a4f61bf50bdb.anim",
+   "bytes": 6935361,
+   "animations": 40
   },
   {
    "key": "frank",
@@ -1366,11 +1366,11 @@
      "icon": "ability_frank_revive.png"
     }
    ],
-   "hash": "b0e5c2db673b",
-   "file": "frank-b0e5c2db673b.glb",
-   "anims": "frank-b0e5c2db673b.anim",
-   "bytes": 6261676,
-   "animations": 10
+   "hash": "1ce28b18c9ff",
+   "file": "frank-1ce28b18c9ff.glb",
+   "anims": "frank-1ce28b18c9ff.anim",
+   "bytes": 6400199,
+   "animations": 15
   },
   {
    "key": "hornet",
@@ -1403,11 +1403,11 @@
      "icon": "citadel_ability_hornet_snipe.png"
     }
    ],
-   "hash": "b0efb3504231",
-   "file": "hornet-b0efb3504231.glb",
-   "anims": "hornet-b0efb3504231.anim",
-   "bytes": 3589758,
-   "animations": 9
+   "hash": "c7cb286a8de5",
+   "file": "hornet-c7cb286a8de5.glb",
+   "anims": "hornet-c7cb286a8de5.anim",
+   "bytes": 3632934,
+   "animations": 13
   },
   {
    "key": "artist",
@@ -1440,11 +1440,11 @@
      "icon": "ability_artist_bamboogrove.png"
     }
    ],
-   "hash": "2891ed53838c",
-   "file": "artist-2891ed53838c.glb",
-   "anims": "artist-2891ed53838c.anim",
-   "bytes": 11454633,
-   "animations": 13
+   "hash": "94cf66ec0774",
+   "file": "artist-94cf66ec0774.glb",
+   "anims": "artist-94cf66ec0774.anim",
+   "bytes": 11675841,
+   "animations": 20
   },
   {
    "key": "viscous",
@@ -1477,11 +1477,11 @@
      "icon": "viscous_goo_bowling_ball.png"
     }
    ],
-   "hash": "446a13bf0fa1",
-   "file": "viscous-446a13bf0fa1.glb",
-   "anims": "viscous-446a13bf0fa1.anim",
-   "bytes": 1433434,
-   "animations": 11
+   "hash": "6901f15b3aa8",
+   "file": "viscous-6901f15b3aa8.glb",
+   "anims": "viscous-6901f15b3aa8.anim",
+   "bytes": 1502269,
+   "animations": 17
   },
   {
    "key": "viper",
@@ -1514,11 +1514,11 @@
      "icon": "ability_viper_petrifybola.png"
     }
    ],
-   "hash": "63d0942e0052",
-   "file": "viper-63d0942e0052.glb",
-   "anims": "viper-63d0942e0052.anim",
-   "bytes": 1984323,
-   "animations": 12
+   "hash": "b38c2ed013fe",
+   "file": "viper-b38c2ed013fe.glb",
+   "anims": "viper-b38c2ed013fe.anim",
+   "bytes": 2072531,
+   "animations": 18
   },
   {
    "key": "warden",
@@ -1551,11 +1551,11 @@
      "icon": "ability_warden_riot_protocol.png"
     }
    ],
-   "hash": "6709957525ba",
-   "file": "warden-6709957525ba.glb",
-   "anims": "warden-6709957525ba.anim",
-   "bytes": 2264444,
-   "animations": 12
+   "hash": "569e22d825cb",
+   "file": "warden-569e22d825cb.glb",
+   "anims": "warden-569e22d825cb.anim",
+   "bytes": 2993968,
+   "animations": 18
   },
   {
    "key": "wraith",
@@ -1588,11 +1588,11 @@
      "icon": "citadel_ability_psychic_lift.png"
     }
    ],
-   "hash": "c9665883af5e",
-   "file": "wraith-c9665883af5e.glb",
-   "anims": "wraith-c9665883af5e.anim",
-   "bytes": 6056886,
-   "animations": 14
+   "hash": "2decae6ada1c",
+   "file": "wraith-2decae6ada1c.glb",
+   "anims": "wraith-2decae6ada1c.anim",
+   "bytes": 6706891,
+   "animations": 18
   },
   {
    "key": "yamato",
@@ -1625,11 +1625,11 @@
      "icon": "citadel_ability_infinity_slash.png"
     }
    ],
-   "hash": "cbfd5f62bac1",
-   "file": "yamato-cbfd5f62bac1.glb",
-   "anims": "yamato-cbfd5f62bac1.anim",
-   "bytes": 5339857,
-   "animations": 12
+   "hash": "ec65d4566710",
+   "file": "yamato-ec65d4566710.glb",
+   "anims": "yamato-ec65d4566710.anim",
+   "bytes": 6912907,
+   "animations": 16
   }
  ]
 }
