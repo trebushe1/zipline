@@ -29,8 +29,9 @@
    "manifest": "862331407601123826",
    "alert": {
     "id": 61,
-    "media": false
-   }
+    "media": true
+   },
+   "media": 18
   },
   {
    "build": 6851,
@@ -296,8 +297,7 @@
    "alert": {
     "id": 29,
     "media": true
-   },
-   "media": 3
+   }
   },
   {
    "build": 6833,
