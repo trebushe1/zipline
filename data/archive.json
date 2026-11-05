@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793909429305,
+  "at": 1793909489799,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,24 @@
   }
  ],
  "messages": [
+  {
+   "id": "1567994661484765225",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231311070786752579",
+   "channel_name": "announcements",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1793909459230,
+   "edited_time": null,
+   "text": "We are fixing a timer bug and then the new season will be active",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1567994661484765225",
+   "text_ru": "Исправляем ошибку таймера и тогда новый сезон будет активен",
+   "embeds_ru": null
+  },
   {
    "id": "1567994366021206041",
    "author_id": "1229609738828906517",
