@@ -1,7 +1,37 @@
 {
- "updatedAt": 1793855038234,
+ "updatedAt": 1793908743731,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6853,
+   "sha": "ed76e524acefbb905d98176111207816101d13e8",
+   "time": 1793908735515,
+   "versionDate": "Nov 05 2026 11:38:04",
+   "size": "update",
+   "weight": 149,
+   "headline": [
+    "Карта и окружение: новые модели: ranked plaque s0 ascendent, ranked plaque s0 bronze, ranked plaque s0 diamond и ещё 9",
+    "Интерфейс: текстуры: +6 текстур",
+    "Тексты игры: 20 строк",
+    "Параметры: 19 значений"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 23,
+    "changed": 16,
+    "removed": 0,
+    "strings": 20,
+    "vdata": 19,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6853-m01123826.json",
+   "manifest": "862331407601123826",
+   "alert": {
+    "id": 61,
+    "media": false
+   }
+  },
   {
    "build": 6851,
    "sha": "6ebae8715d5a367cb4082934ee4dd7b24ed6be0c",
@@ -718,33 +748,7 @@
     "balance": 0
    },
    "file": "6802-be9aeb5c.json"
-  },
-  {
-   "build": 6801,
-   "sha": "37f9aebdc62766aa13748f73309b9b8120549833",
-   "time": 1792530142000,
-   "versionDate": "Oct 20 2026 13:53:46",
-   "size": "major",
-   "weight": 3647,
-   "headline": [
-    "Новый герой в игре: Nurse Harrow",
-    "Nurse Harrow: новые модели: nurse ampoule, piece 01, piece 10 и ещё 8",
-    "Карта и окружение: новые модели: nurse smelling salts bottle model, diner clock 01, diner kitchen pan 01 и ещё 37",
-    "Юниты и нейтралы: переделаны модели: boss tier 01 brazier guardian, boss tier 02 sun walker, neutral drain creature и ещё 27",
-    "Тексты игры: 2583 строки"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 3682,
-    "changed": 667,
-    "removed": 10,
-    "strings": 2583,
-    "vdata": 2225,
-    "code": 9,
-    "balance": 0
-   },
-   "file": "6801-37f9aebd.json"
   }
  ],
- "notifiedUpTo": 1793855027774
+ "notifiedUpTo": 1793908735515
 }
