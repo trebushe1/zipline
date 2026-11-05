@@ -1,7 +1,35 @@
 {
- "updatedAt": 1793828421413,
+ "updatedAt": 1793855038234,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6851,
+   "sha": "6ebae8715d5a367cb4082934ee4dd7b24ed6be0c",
+   "time": 1793855027774,
+   "versionDate": "Nov 04 2026 19:33:34",
+   "size": "update",
+   "weight": 135,
+   "headline": [
+    "Баланс: 40 изменений — Baba, Deadman Danny, Apollo, Mo & Krill, предметы (1)",
+    "Тексты игры: 4 строки"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 2,
+    "removed": 0,
+    "strings": 4,
+    "vdata": 46,
+    "code": 0,
+    "balance": 40
+   },
+   "file": "6851-m85547492.json",
+   "manifest": "1124591651485547492",
+   "alert": {
+    "id": 57,
+    "media": false
+   }
+  },
   {
    "build": 6849,
    "sha": "dcdf7faf93035f7d7b174a6c28e510579456f537",
@@ -716,29 +744,7 @@
     "balance": 0
    },
    "file": "6801-37f9aebd.json"
-  },
-  {
-   "build": 6796,
-   "sha": "2e024f9b5d2363465cea9516c6f2e7ee039ea9f7",
-   "time": 1792438109000,
-   "versionDate": "Oct 19 2026 11:58:27",
-   "size": "hotfix",
-   "weight": 0,
-   "headline": [
-    "Тексты игры: 1 строка"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 0,
-    "changed": 0,
-    "removed": 0,
-    "strings": 1,
-    "vdata": 0,
-    "code": 0,
-    "balance": 0
-   },
-   "file": "6796-2e024f9b.json"
   }
  ],
- "notifiedUpTo": 1793828413923
+ "notifiedUpTo": 1793855027774
 }
