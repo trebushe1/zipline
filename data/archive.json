@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793647421911,
+  "at": 1793855061638,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,31 @@
   }
  ],
  "messages": [
+  {
+   "id": "1567766355195986030",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231311070786752579",
+   "channel_name": "announcements",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1793855026769,
+   "edited_time": null,
+   "text": "https://store.steampowered.com/news/app/1422450/view/680766308468391944",
+   "attachments": [],
+   "embeds": [
+    {
+     "title": "Deadlock -  Minor Update - 11-04-2026 - Steam News",
+     "description": "- Healbane: Stacks now diminish 20% more aggressively (at 2 stacks 57.8%->54.7%, at 4 stacks 82.2% to 72%)\n- Apollo: Riposte - Pommel Hit now also disarms the enemy\n- Apollo: Riposte - Pummel hit now ends any preexisting parry on the target\n- Apollo: Riposte - T2 increased from +0.6s duration to +0.7s\n- Apollo: Itani Lo Sahn - T3 bonus damage in...",
+     "url": "https://store.steampowered.com/news/app/1422450/view/680766308468391944",
+     "image": "https://clan.akamai.steamstatic.com/images/45164767/568ff640318c8a81e2b5b4a22bf29e100ee144d9.png"
+    }
+   ],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1567766355195986030",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1566882463542812793",
    "author_id": "728690796907331654",
