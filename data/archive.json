@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793889068037,
+  "at": 1793908749553,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,31 @@
   }
  ],
  "messages": [
+  {
+   "id": "1567991531993047193",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231311070786752579",
+   "channel_name": "announcements",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1793908713101,
+   "edited_time": null,
+   "text": "@everyone https://store.steampowered.com/news/app/1422450/view/680766201707627248",
+   "attachments": [],
+   "embeds": [
+    {
+     "title": "Deadlock - Ranked - Beta Season 2 - Steam News",
+     "description": "Today marks the end of our first Ranked Beta Season. Players who participated in Beta Season 1 will receive their commemorative Hideout plaque of their highest achieved rank once the new season rolls over. Beta Season 2 begins now, and will end on Thursday March 11th 2027, lasting four months. Seasonal Rank Reset Ranked players will see their r...",
+     "url": "https://store.steampowered.com/news/app/1422450/view/680766201707627248",
+     "image": "https://clan.akamai.steamstatic.com/images/45164767/39afd583caa4d5429af57e82405b6f48c90e9c67.png"
+    }
+   ],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1567991531993047193",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1567766355195986030",
    "author_id": "1229609738828906517",
