@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793909489799,
+  "at": 1793910410665,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,24 @@
   }
  ],
  "messages": [
+  {
+   "id": "1567998488086839398",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231311070786752579",
+   "channel_name": "announcements",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1793910371563,
+   "edited_time": null,
+   "text": "@everyone Network should be back online now, sorry for the outage. Season 2 is active.",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1567998488086839398",
+   "text_ru": "@everyone Сеть должна снова подключиться к сети, извините за сбой. Второй сезон активен.",
+   "embeds_ru": null
+  },
   {
    "id": "1567994661484765225",
    "author_id": "1229609738828906517",
