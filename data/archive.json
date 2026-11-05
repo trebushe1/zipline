@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793908749553,
+  "at": 1793909210347,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,24 @@
   }
  ],
  "messages": [
+  {
+   "id": "1567993494470131785",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231311070786752579",
+   "channel_name": "announcements",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1793909180992,
+   "edited_time": null,
+   "text": "the new ranks will be visible shortly, in 5-10 minutes",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1567993494470131785",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1567991531993047193",
    "author_id": "1229609738828906517",
