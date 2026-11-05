@@ -38,6 +38,7 @@ function renderRoster() {
 // Only running and melee clips are converted (backend/heroes.py). Their names are file names from the
 // game, sometimes with the hero's code name in front (vampirebat_melee_hit); shown in plain Russian.
 const GROUPS = [
+  ["Зиплайн", /(^|_)zipline(_|$)/],
   ["Бег", /(^|_)(run|sprint)(_|$)/],
   ["Ближний бой", /(^|_)(melee|parry)(_|$)/],
 ];
@@ -62,11 +63,42 @@ const MELEE = [
 // «vampirebat_melee_hit» → «melee_hit»: drop a leading word that is not part of the move itself.
 const bareName = (name) => {
   const n = name.toLowerCase();
-  return /^(melee|parry|run|sprint|weapon|primary|out_of_combat|outofcombat)(_|$)/.test(n) ? n : n.replace(/^[a-z0-9]+_/, "");
+  return /^(melee|parry|run|sprint|weapon|primary|out_of_combat|outofcombat|zipline|jump)(_|$)/.test(n) ? n : n.replace(/^[a-z0-9]+_/, "");
 };
+
+// Zipline stages; a hero's own variant (with the crossbow, with the frog) is named after the stage.
+const ZIPLINE = [
+  [/^jump_zipline$/, "Прыжок на зиплайн"],
+  [/^zipline_grab$/, "Зацеп"],
+  [/^zipline_attached_start$/, "Зацеп и старт"],
+  [/^zipline_(attached_)?(loop|latched_loop)$/, "Едет"],
+  [/^zipline_(attached_)?boosted_loop$/, "Едет с ускорением"],
+  [/^zipline_awaiting_tether(_above)?$/, "Ждёт связку"],
+  [/^zipline_(tethered_reeling(_loop)?|attached_and_reeling|attached_reeling_loop)(_above)?$/, "Тянет по связке"],
+  [/^zipline_detach$/, "Отцеп"],
+  [/^zipline_ascend(_loop)?$/, "Подъём"],
+];
+const ZIPLINE_VARIANT = { crossbow: "с арбалетом", frog: "с жабой" };
+
+function prettyZipline(n) {
+  let variant = "";
+  for (const [word, label] of Object.entries(ZIPLINE_VARIANT)) {
+    if (n.includes(`_${word}`)) {
+      variant = ` (${label})`;
+      n = n.replace(`_${word}`, "");
+    }
+  }
+  const above = /_above$/.test(n) ? ", сверху" : /_ascend_loop$/.test(n) ? ", цикл" : "";
+  const stage = ZIPLINE.find(([re]) => re.test(n));
+  return stage ? `${stage[1]}${above}${variant}` : null;
+}
 
 function prettyAnim(name) {
   const n = bareName(name);
+  if (/(^|_)zipline(_|$)/.test(n)) {
+    const z = prettyZipline(n);
+    if (z) return z;
+  }
   for (const [re, label] of MELEE) {
     const m = n.match(re);
     if (m) return label(m);

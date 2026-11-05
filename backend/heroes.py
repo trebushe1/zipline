@@ -34,7 +34,7 @@ from .patches import GAME, HEROES_VDATA, PAK_LIST, REPO, build_commits, load_loc
 
 OUT = config.ROOT / "data" / "heroes"
 HEROES_TAG = "heroes"
-MODEL_VERSION = 4  # bump to convert every hero again after changing the conversion
+MODEL_VERSION = 5  # bump to convert every hero again after changing the conversion
 VRF_VERSION = "20.1"  # first release that exports Deadlock's animation graph clips to glTF
 GLTFPACK_VERSION = "v1.3"
 COLOR_SIZE = 4096  # colour keeps the game's own resolution (2048 for most heroes, 4096 for some): quality first
@@ -176,7 +176,7 @@ def vrf_path() -> str:
 
 # ── Which animations ───────────────────────────────────
 
-# Only running and melee: the forward run of each stance (out of combat, with the weapon, sprint) and
+# Running, melee and the zipline: the forward run of each stance (out of combat, with the weapon, sprint) and
 # every melee swing and parry. Strafing, crouched, item and syphon variants and aim layers are left out.
 STANCES = {"weapon", "primary", "out", "of", "combat", "outofcombat"}
 NOT_THESE = {"item", "syphon", "crouch", "barrage", "heal", "resupply", "sentry", "reload", "shoot", "death",
@@ -188,6 +188,8 @@ def keep_clip(name: str) -> bool:
     words = name.lower().split("_")
     if NOT_THESE & set(words):
         return False
+    if "zipline" in words:  # riding the zipline: every stage of it (abilities used on it are left out)
+        return True
     for i, word in enumerate(words):
         if word in ("melee", "parry"):
             return i <= 1
