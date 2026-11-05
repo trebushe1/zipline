@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793910529795,
+  "at": 1793910689226,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,24 @@
   }
  ],
  "messages": [
+  {
+   "id": "1567999698625630342",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231286447131328544",
+   "channel_name": "deadlock-chat",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1793910660178,
+   "edited_time": null,
+   "text": "We are fixing the unlock point requirements as well (its requiring 40 instead of 35 atm)",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1567999698625630342",
+   "text_ru": "Мы также исправляем требования к очкам разблокировки (требуется 40 вместо 35 атм)",
+   "embeds_ru": null
+  },
   {
    "id": "1567998991650783312",
    "author_id": "1229609738828906517",
