@@ -1,7 +1,37 @@
 {
- "updatedAt": 1793917138903,
+ "updatedAt": 1793926290661,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6860,
+   "sha": "70db40c5596a2ff368dff1d78a2a35305d65297d",
+   "time": 1793926281042,
+   "versionDate": "Nov 05 2026 16:40:40",
+   "size": "hotfix",
+   "weight": 20,
+   "headline": [
+    "Victor: переделаны модели: frank",
+    "Rem: переделаны модели: familiar, familiar wip",
+    "Интерфейс: текстуры: изменено 1 текстура",
+    "Параметры: 1 значение"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 14,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 1,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6860-m83788394.json",
+   "manifest": "2939123716983788394",
+   "alert": {
+    "id": 80,
+    "media": false
+   }
+  },
   {
    "build": 6858,
    "sha": "38eafaeb4c042e8f5d0385db00625e97d21d295d",
@@ -748,5 +778,5 @@
    "file": "6810-c90ff498.json"
   }
  ],
- "notifiedUpTo": 1793915334924
+ "notifiedUpTo": 1793926281042
 }
