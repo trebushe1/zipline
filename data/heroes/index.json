@@ -1,6 +1,6 @@
 {
- "build": 6853,
- "sha": "e6845876312af7aa73c9e273aa99c5446069250e",
+ "build": 6860,
+ "sha": "3cfcaf9ed882f2d85cc5d915315f754790b8ffb7",
  "tag": "heroes",
  "heroes": [
   {
@@ -1070,9 +1070,9 @@
      "icon": "ability_familiar_ability01.png"
     }
    ],
-   "hash": "f8ad2aeb317d",
-   "file": "familiar-f8ad2aeb317d.glb",
-   "anims": "familiar-f8ad2aeb317d.anim",
+   "hash": "4cb406827ccb",
+   "file": "familiar-4cb406827ccb.glb",
+   "anims": "familiar-4cb406827ccb.anim",
    "bytes": 6409928,
    "animations": 12
   },
@@ -1366,10 +1366,10 @@
      "icon": "ability_frank_revive.png"
     }
    ],
-   "hash": "1ce28b18c9ff",
-   "file": "frank-1ce28b18c9ff.glb",
-   "anims": "frank-1ce28b18c9ff.anim",
-   "bytes": 6400199,
+   "hash": "958bda9fac27",
+   "file": "frank-958bda9fac27.glb",
+   "anims": "frank-958bda9fac27.anim",
+   "bytes": 6410319,
    "animations": 15
   },
   {
