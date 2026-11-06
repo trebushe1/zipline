@@ -1,5 +1,5 @@
 {
- "updatedAt": 1793926290661,
+ "updatedAt": 1793928077697,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
   {
@@ -754,29 +754,6 @@
     "balance": 0
    },
    "file": "6812-0abfe676.json"
-  },
-  {
-   "build": 6810,
-   "sha": "c90ff498d244fc9a3e6722faf70e455c0b7a07f8",
-   "time": 1792611843000,
-   "versionDate": "Oct 21 2026 12:29:15",
-   "size": "update",
-   "weight": 65,
-   "headline": [
-    "Эффекты: текстуры: +6 текстур",
-    "Nurse Harrow: переделаны модели: nurse"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 20,
-    "changed": 64,
-    "removed": 0,
-    "strings": 0,
-    "vdata": 0,
-    "code": 1,
-    "balance": 0
-   },
-   "file": "6810-c90ff498.json"
   }
  ],
  "notifiedUpTo": 1793926281042
