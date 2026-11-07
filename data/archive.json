@@ -1,8 +1,8 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1794092809106,
-  "new": 1,
+  "at": 1794094271958,
+  "new": 2,
   "error": null
  },
  "developers": [
@@ -80,6 +80,42 @@
   }
  ],
  "messages": [
+  {
+   "id": "1568769677474406401",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231311070786752579",
+   "channel_name": "announcements",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1794094237441,
+   "edited_time": null,
+   "text": "Sorry for the outage",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1568769677474406401",
+   "text_ru": null,
+   "embeds_ru": null
+  },
+  {
+   "id": "1568769652631412747",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231311070786752579",
+   "channel_name": "announcements",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1794094231518,
+   "edited_time": null,
+   "text": "We should be back now",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1568769652631412747",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1568763557628350666",
    "author_id": "1229609738828906517",
