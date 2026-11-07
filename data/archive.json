@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1793911309918,
+  "at": 1794092809106,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,24 @@
   }
  ],
  "messages": [
+  {
+   "id": "1568763557628350666",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231311070786752579",
+   "channel_name": "announcements",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1794092778356,
+   "edited_time": null,
+   "text": "We are looking into server outages right now",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1568763557628350666",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1568002269947895891",
    "author_id": "1229609738828906517",
