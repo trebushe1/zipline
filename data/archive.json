@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1794245185700,
+  "at": 1794245224630,
   "new": 1,
   "error": null
  },
@@ -167,7 +167,7 @@
    "embeds": [],
    "reply_to": null,
    "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1568763557628350666",
-   "text_ru": null,
+   "text_ru": "Прямо сейчас мы изучаем сбои в работе серверов.",
    "embeds_ru": null
   },
   {
