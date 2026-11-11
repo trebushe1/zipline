@@ -1,5 +1,5 @@
 {
- "updatedAt": 1794433179066,
+ "updatedAt": 1794433186285,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
   {
@@ -759,28 +759,6 @@
     "balance": 0
    },
    "file": "6813-a94d8b45.json"
-  },
-  {
-   "build": 6812,
-   "sha": "0abfe676c64c7d24bd5340a46778e65a84be70ed",
-   "time": 1792620232000,
-   "versionDate": "Oct 21 2026 14:47:09",
-   "size": "hotfix",
-   "weight": 3,
-   "headline": [
-    "Интерфейс: текстуры: изменено 1 текстура"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 0,
-    "changed": 6,
-    "removed": 0,
-    "strings": 0,
-    "vdata": 0,
-    "code": 2,
-    "balance": 0
-   },
-   "file": "6812-0abfe676.json"
   }
  ],
  "notifiedUpTo": 1794433178237
