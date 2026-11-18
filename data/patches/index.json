@@ -1,5 +1,5 @@
 {
- "updatedAt": 1795041485375,
+ "updatedAt": 1795043277003,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
   {
@@ -766,28 +766,6 @@
     "balance": 0
    },
    "file": "6815-7fd2af79.json"
-  },
-  {
-   "build": 6814,
-   "sha": "e95b323b88d48c3fc4d80066ee603fb75060b248",
-   "time": 1792695278000,
-   "versionDate": "Oct 22 2026 11:09:14",
-   "size": "hotfix",
-   "weight": 10,
-   "headline": [
-    "Nurse Harrow: переделаны модели: nurse leech"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 2,
-    "changed": 9,
-    "removed": 0,
-    "strings": 0,
-    "vdata": 0,
-    "code": 1,
-    "balance": 0
-   },
-   "file": "6814-e95b323b.json"
   }
  ],
  "notifiedUpTo": 1795041484645
