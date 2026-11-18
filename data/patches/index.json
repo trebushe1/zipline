@@ -1,7 +1,30 @@
 {
- "updatedAt": 1795037881283,
+ "updatedAt": 1795041485375,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6864,
+   "sha": "0066a5dfbb84afcecd14aa9224d0345ce40bf916",
+   "time": 1795041484645,
+   "versionDate": "Nov 18 2026 14:12:48",
+   "size": "empty",
+   "weight": 0,
+   "headline": [
+    "Только техническое обновление"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6864-m98168750.json",
+   "manifest": "756140601198168750"
+  },
   {
    "build": 6863,
    "sha": "320afb012bb9048b109d0a8af54fa1006f809866",
@@ -767,5 +790,5 @@
    "file": "6814-e95b323b.json"
   }
  ],
- "notifiedUpTo": 1795037871173
+ "notifiedUpTo": 1795041484645
 }
