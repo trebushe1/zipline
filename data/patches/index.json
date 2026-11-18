@@ -1,7 +1,35 @@
 {
- "updatedAt": 1794433186285,
+ "updatedAt": 1795037872379,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6863,
+   "sha": "320afb012bb9048b109d0a8af54fa1006f809866",
+   "time": 1795037871173,
+   "versionDate": "Nov 18 2026 09:47:45",
+   "size": "major",
+   "weight": 1213,
+   "headline": [
+    "Baba: переделаны модели: baba",
+    "Карта и окружение: текстуры: удалено 2"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 4732,
+    "removed": 79,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6863-m85063041.json",
+   "manifest": "2884704357985063041",
+   "alert": {
+    "id": 92,
+    "media": false
+   }
+  },
   {
    "build": 6861,
    "sha": "89cd7daf301cc3df119069296039048446553296",
@@ -761,5 +789,5 @@
    "file": "6813-a94d8b45.json"
   }
  ],
- "notifiedUpTo": 1794433178237
+ "notifiedUpTo": 1795037871173
 }
