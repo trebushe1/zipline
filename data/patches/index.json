@@ -1,5 +1,5 @@
 {
- "updatedAt": 1795043277003,
+ "updatedAt": 1795166189393,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
   {
@@ -744,28 +744,6 @@
     "balance": 0
    },
    "file": "6817-04d261bf.json"
-  },
-  {
-   "build": 6815,
-   "sha": "7fd2af7964e1fd3fd612434f0957a5fb779beb1b",
-   "time": 1792699226000,
-   "versionDate": "Oct 22 2026 12:19:38",
-   "size": "hotfix",
-   "weight": 6,
-   "headline": [
-    "The Doorman: переделаны модели: doorman luggagetrolley, doorman luggagetrolley friendly"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 0,
-    "changed": 2,
-    "removed": 0,
-    "strings": 0,
-    "vdata": 0,
-    "code": 0,
-    "balance": 0
-   },
-   "file": "6815-7fd2af79.json"
   }
  ],
  "notifiedUpTo": 1795041484645
