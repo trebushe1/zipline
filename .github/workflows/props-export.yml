@@ -1,0 +1,38 @@
+name: Props export (one-off)
+
+# Map props as GLB for a manual render, the same way as the hero models. Runs only on the
+# temporary props-export branch; the models are a workflow artifact, nothing is committed.
+on:
+  push:
+    branches: [props-export]
+
+permissions:
+  contents: read
+
+jobs:
+  props:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ github.token }}
+      STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+      STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: |
+          pip install -q pillow numpy
+          echo "GAMETRACKING_DIR=$RUNNER_TEMP/gametracking" >> "$GITHUB_ENV"
+          echo "MEDIA_TOOLS_DIR=$RUNNER_TEMP/tools" >> "$GITHUB_ENV"
+
+      - run: python -m backend.props_export "$RUNNER_TEMP/out"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: props
+          path: ${{ runner.temp }}/out
+          retention-days: 3
