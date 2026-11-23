@@ -1,7 +1,35 @@
 {
- "updatedAt": 1795166189393,
+ "updatedAt": 1795462845613,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6865,
+   "sha": "eaddfb0354c0a78a6e2e25ecfdfc22902cfe1972",
+   "time": 1795462844075,
+   "versionDate": "Nov 23 2026 11:30:19",
+   "size": "update",
+   "weight": 74,
+   "headline": [
+    "Карта и окружение: новые модели: blockout cable 10 01, blockout cable anchor 01, blockout cable connector 01 и ещё 6",
+    "Эффекты: эффекты: изменено 3"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 11,
+    "changed": 3,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6865-m98485038.json",
+   "manifest": "2416908361898485038",
+   "alert": {
+    "id": 96,
+    "media": false
+   }
+  },
   {
    "build": 6864,
    "sha": "0066a5dfbb84afcecd14aa9224d0345ce40bf916",
@@ -746,5 +774,5 @@
    "file": "6817-04d261bf.json"
   }
  ],
- "notifiedUpTo": 1795041484645
+ "notifiedUpTo": 1795462844075
 }
