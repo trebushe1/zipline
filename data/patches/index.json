@@ -1,7 +1,35 @@
 {
- "updatedAt": 1795464640365,
+ "updatedAt": 1795550413885,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6866,
+   "sha": "feb0956180b921e623fa19e18501d7c355050301",
+   "time": 1795550404407,
+   "versionDate": "Nov 24 2026 11:36:01",
+   "size": "major",
+   "weight": 7247,
+   "headline": [
+    "Карта и окружение: переделаны модели: soul container",
+    "Параметры: 24145 значений"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 7,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 24145,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6866-m47462729.json",
+   "manifest": "5088399206847462729",
+   "alert": {
+    "id": 99,
+    "media": false
+   }
+  },
   {
    "build": 6865,
    "sha": "eaddfb0354c0a78a6e2e25ecfdfc22902cfe1972",
@@ -752,5 +780,5 @@
    "file": "6819-17462b25.json"
   }
  ],
- "notifiedUpTo": 1795462844075
+ "notifiedUpTo": 1795550404407
 }
