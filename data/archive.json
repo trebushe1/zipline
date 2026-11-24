@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1794245224630,
+  "at": 1795550420496,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,24 @@
   }
  ],
  "messages": [
+  {
+   "id": "1574877194566766725",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231286447131328544",
+   "channel_name": "deadlock-chat",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1795550382988,
+   "edited_time": null,
+   "text": "Client updated with some security fixes to issues reported in our HackerOne program",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231286447131328544/1574877194566766725",
+   "text_ru": "Клиент обновлен с некоторыми исправлениями безопасности для проблем, о которых сообщалось в нашей программе HackerOne.",
+   "embeds_ru": null
+  },
   {
    "id": "1568778068678676622",
    "author_id": "1229609738828906517",
