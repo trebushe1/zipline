@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1795563480990,
+  "at": 1795563821235,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,24 @@
   }
  ],
  "messages": [
+  {
+   "id": "1574933428170657815",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231311070786752579",
+   "channel_name": "announcements",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1795563790124,
+   "edited_time": null,
+   "text": "should be fixed now",
+   "attachments": [],
+   "embeds": [],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1574933428170657815",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1574932030179901506",
    "author_id": "1229609738828906517",
