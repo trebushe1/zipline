@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1795592604260,
+  "at": 1795592643750,
   "new": 1,
   "error": null
  },
@@ -113,7 +113,7 @@
    "embeds": [],
    "reply_to": null,
    "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1574932030179901506",
-   "text_ru": null,
+   "text_ru": "Мы разбираемся в причинах сбоев после обновления Steam.",
    "embeds_ru": null
   },
   {
