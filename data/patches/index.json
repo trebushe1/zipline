@@ -30,8 +30,9 @@
    "manifest": "618142853395406110",
    "alert": {
     "id": 108,
-    "media": false
-   }
+    "media": true
+   },
+   "media": 2
   },
   {
    "build": 6868,
