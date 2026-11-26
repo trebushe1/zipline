@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1795592643750,
+  "at": 1795713855556,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,31 @@
   }
  ],
  "messages": [
+  {
+   "id": "1575562711897477120",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231311070786752579",
+   "channel_name": "announcements",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1795713823056,
+   "edited_time": null,
+   "text": "@everyone https://store.steampowered.com/news/app/1422450/view/680768104678032838",
+   "attachments": [],
+   "embeds": [
+    {
+     "title": "Deadlock -  Minor Update - 11-26-2026 - Steam News",
+     "description": "- For one day a year, the people of New York gather beneath their floating idols to give thanks at Crowley’s Thanksgiving Day Parade.\n[ General ]\n- Hero base health reduced by 8%. The health is redistributed into boons, so total health at max boons is roughly the same.\n- Bullet damage growth per boon increased for all heroes by 5% (except for ...",
+     "url": "https://store.steampowered.com/news/app/1422450/view/680768104678032838",
+     "image": "https://clan.akamai.steamstatic.com/images/45164767/568ff640318c8a81e2b5b4a22bf29e100ee144d9.png"
+    }
+   ],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1575562711897477120",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1574933428170657815",
    "author_id": "1229609738828906517",
