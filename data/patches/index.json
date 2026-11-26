@@ -1,7 +1,38 @@
 {
- "updatedAt": 1795563760345,
+ "updatedAt": 1795713820480,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6871,
+   "sha": "16a877a07070903e76dc84c82c795cf4b49b56d7",
+   "time": 1795713808864,
+   "versionDate": "Nov 26 2026 09:08:58",
+   "size": "major",
+   "weight": 1422,
+   "headline": [
+    "Баланс: 224 изменения — Violet, Holliday, Abrams, Baba, предметы (5)",
+    "Герои в разработке: Generic Person, TargetDummy — 3 правки",
+    "Карта и окружение: новые модели: balloon manticat, balloon owl, balloon pizza model и ещё 4",
+    "Эффекты: эффекты: новых 15",
+    "Интерфейс: текстуры: +2 текстуры"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 100,
+    "changed": 53,
+    "removed": 0,
+    "strings": 109,
+    "vdata": 1393,
+    "code": 0,
+    "balance": 224
+   },
+   "file": "6871-m95406110.json",
+   "manifest": "618142853395406110",
+   "alert": {
+    "id": 108,
+    "media": false
+   }
+  },
   {
    "build": 6868,
    "sha": "e97e7abfe64060bf044615ba13fc3d51bc0ac197",
@@ -784,5 +815,5 @@
    "manifest": "2676828593797519091"
   }
  ],
- "notifiedUpTo": 1795563753625
+ "notifiedUpTo": 1795713808864
 }
