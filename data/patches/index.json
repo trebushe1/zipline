@@ -298,8 +298,7 @@
    "alert": {
     "id": 80,
     "media": true
-   },
-   "media": 1
+   }
   },
   {
    "build": 6858,
