@@ -1,7 +1,30 @@
 {
- "updatedAt": 1795756029084,
+ "updatedAt": 1795757365469,
  "source": "https://github.com/SteamDatabase/GameTracking-Deadlock",
  "builds": [
+  {
+   "build": 6873,
+   "sha": "db097721d781c958f30897b863509e331027e4ad",
+   "time": 1795757364856,
+   "versionDate": "Nov 26 2026 21:18:51",
+   "size": "empty",
+   "weight": 0,
+   "headline": [
+    "Только техническое обновление"
+   ],
+   "newHeroes": [],
+   "counts": {
+    "added": 0,
+    "changed": 0,
+    "removed": 0,
+    "strings": 0,
+    "vdata": 0,
+    "code": 0,
+    "balance": 0
+   },
+   "file": "6873-m03348358.json",
+   "manifest": "2973968928603348358"
+  },
   {
    "build": 6872,
    "sha": "9e393e3343f1edd070733868d7d2adc560a8cd1e",
@@ -781,38 +804,7 @@
     "id": 21,
     "media": false
    }
-  },
-  {
-   "build": 6826,
-   "sha": "42e2e5c0d61dbb6a993bd966bd6df8d4181fdd2d",
-   "time": 1793393617563,
-   "versionDate": "Oct 30 2026 13:42:11",
-   "size": "major",
-   "weight": 2612,
-   "headline": [
-    "Баланс: 189 изменений — Violet, Abrams, Baba, Paige, предметы (34)",
-    "Карта и окружение: новые модели: arch apartment ixia 01 ground entrance exterior 01, arch apartment ixia 01 ground entrance interior 01, arch apartment ixia 01 ground entrance middle 01 и ещё 39",
-    "Эффекты: текстуры: +1 текстура, удалено 1",
-    "Kelvin: переделаны модели: kelvin",
-    "Тексты игры: 578 строк"
-   ],
-   "newHeroes": [],
-   "counts": {
-    "added": 339,
-    "changed": 1527,
-    "removed": 8,
-    "strings": 578,
-    "vdata": 1704,
-    "code": 0,
-    "balance": 189
-   },
-   "file": "6826-m94034279.json",
-   "manifest": "3447976424094034279",
-   "alert": {
-    "id": 19,
-    "media": true
-   }
   }
  ],
- "notifiedUpTo": 1795756028181
+ "notifiedUpTo": 1795757364856
 }
