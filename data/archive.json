@@ -1,7 +1,7 @@
 {
  "lastPoll": {
   "ok": true,
-  "at": 1795763651182,
+  "at": 1795833296926,
   "new": 1,
   "error": null
  },
@@ -80,6 +80,31 @@
   }
  ],
  "messages": [
+  {
+   "id": "1576063655253119147",
+   "author_id": "1229609738828906517",
+   "guild_id": "1231286446472691825",
+   "channel_id": "1231311070786752579",
+   "channel_name": "announcements",
+   "parent_channel_id": null,
+   "thread_name": null,
+   "time": 1795833257259,
+   "edited_time": null,
+   "text": "https://store.steampowered.com/news/app/1422450/view/680768104678033231",
+   "attachments": [],
+   "embeds": [
+    {
+     "title": "Deadlock -  Minor Update - 11-27-2026 - Steam News",
+     "description": "- Apollo: Riposte - Now procs on melee hits\n- Apollo: Riposte - Cooldown reduced from 22s to 20s\n- Apollo: Riposte - T2 debuff duration increased from +1s to +1.25s\n- Baba: Base bullet resistance increased from -7% to -4%\n- Baba: Threadsap - Cooldown reduced from 28s to 26s\n- Baba: Threadsap - Spirit Damage Per Bullet increased from 12 + 0.26 to...",
+     "url": "https://store.steampowered.com/news/app/1422450/view/680768104678033231",
+     "image": "https://clan.fastly.steamstatic.com/images/45164767/568ff640318c8a81e2b5b4a22bf29e100ee144d9.png"
+    }
+   ],
+   "reply_to": null,
+   "url": "https://discord.com/channels/1231286446472691825/1231311070786752579/1576063655253119147",
+   "text_ru": null,
+   "embeds_ru": null
+  },
   {
    "id": "1575763191621886016",
    "author_id": "1229609738828906517",
